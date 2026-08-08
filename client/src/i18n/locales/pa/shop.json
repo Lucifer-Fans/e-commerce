@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "ਵਧੀਆ ਉਸਾਰੀ ਸਮੱਗਰੀ, ਹਾਰਡਵੇਅਰ ਅਤੇ ਔਜ਼ਾਰ",
+    "seoDescription": "ਪ੍ਰੀਮੀਅਮ ਪਲਾਈਵੁੱਡ, ਲੈਮੀਨੇਟ, ਹਾਰਡਵੇਅਰ, ਪੇਂਟ, ਪਾਵਰ ਟੂਲ ਅਤੇ ਇਲੈਕਟ੍ਰੀਕਲ ਖਰੀਦੋ। ਅਸਲੀ ਬ੍ਰਾਂਡ, ਸੁਰੱਖਿਅਤ ਭੁਗਤਾਨ ਅਤੇ ਤੇਜ਼ ਡਿਲੀਵਰੀ।",
+    "feedError": "ਉਤਪਾਦ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕੇ",
+    "forYou": "ਤੁਹਾਡੇ ਲਈ ਉਤਪਾਦ",
+    "topSelling": "ਸਭ ਤੋਂ ਵੱਧ ਵਿਕਣ ਵਾਲੇ ਉਤਪਾਦ",
+    "recentlyViewed": "ਹਾਲ ਹੀ ਵਿੱਚ ਵੇਖੇ",
+    "recentlyViewedSubtitle": "ਜਿੱਥੇ ਛੱਡਿਆ ਸੀ ਉੱਥੋਂ ਸ਼ੁਰੂ ਕਰੋ",
+    "ctaTitle": "ਕੁਝ ਵੱਡਾ ਬਣਾ ਰਹੇ ਹੋ?",
+    "ctaText": "{{count}} ਸ਼੍ਰੇਣੀਆਂ ਵਿੱਚ ਪੂਰਾ ਕੈਟਾਲਾਗ ਵੇਖੋ — ਟ੍ਰੇਡ ਕੀਮਤ, ਅਸਲੀ ਬ੍ਰਾਂਡ ਅਤੇ ਸਾਈਟ ਤੱਕ ਡਿਲੀਵਰੀ।",
+    "ctaTextAll": "ਪੂਰਾ ਕੈਟਾਲਾਗ ਵੇਖੋ — ਟ੍ਰੇਡ ਕੀਮਤ, ਅਸਲੀ ਬ੍ਰਾਂਡ ਅਤੇ ਸਾਈਟ ਤੱਕ ਡਿਲੀਵਰੀ।",
+    "ctaButton": "ਸਾਰੇ ਉਤਪਾਦ ਵੇਖੋ",
+    "sections": {
+      "for_you": {
+        "title": "ਤੁਹਾਡੇ ਲਈ ਉਤਪਾਦ",
+        "subtitle": "ਤੁਹਾਡੀ ਪਸੰਦ ਅਨੁਸਾਰ ਚੁਣੇ ਗਏ"
+      },
+      "top_selling": {
+        "title": "ਸਭ ਤੋਂ ਵੱਧ ਵਿਕਣ ਵਾਲੇ ਉਤਪਾਦ",
+        "subtitle": "ਜੋ ਸਾਰੇ ਖਰੀਦ ਰਹੇ ਹਨ"
+      },
+      "new_arrivals": {
+        "title": "ਨਵੇਂ ਉਤਪਾਦ",
+        "subtitle": "ਸਟੋਰ ਵਿੱਚ ਨਵਾਂ"
+      },
+      "best_deals": {
+        "title": "ਵਧੀਆ ਡੀਲ",
+        "subtitle": "ਹੁਣ ਸਭ ਤੋਂ ਵੱਡੀਆਂ ਛੋਟਾਂ"
+      },
+      "top_rated": {
+        "title": "ਸਭ ਤੋਂ ਵੱਧ ਰੇਟਿੰਗ",
+        "subtitle": "ਸਾਡੇ ਗਾਹਕਾਂ ਦੀ ਪਸੰਦ"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}” ਲਈ ਨਤੀਜੇ",
+    "seoDescription": "{{heading}} ਵੇਖੋ — ਅਸਲੀ ਬ੍ਰਾਂਡ, ਮੁਕਾਬਲੇਬਾਜ਼ ਕੀਮਤ ਅਤੇ ਤੇਜ਼ ਡਿਲੀਵਰੀ।",
+    "loading": "ਉਤਪਾਦ ਲੋਡ ਹੋ ਰਹੇ ਹਨ…",
+    "found_one": "{{count}} ਉਤਪਾਦ ਮਿਲਿਆ",
+    "found_other": "{{count}} ਉਤਪਾਦ ਮਿਲੇ",
+    "sortBy": "ਕ੍ਰਮਬੱਧ ਕਰੋ",
+    "sortAria": "ਉਤਪਾਦ ਕ੍ਰਮਬੱਧ ਕਰੋ",
+    "emptyTitle": "ਇਹਨਾਂ ਫਿਲਟਰਾਂ ਨਾਲ ਕੋਈ ਉਤਪਾਦ ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ",
+    "emptyMessage": "ਆਪਣੀ ਕੀਮਤ ਸੀਮਾ ਵਧਾਓ ਜਾਂ ਕੋਈ ਫਿਲਟਰ ਹਟਾਓ।"
+  },
+  "sort": {
+    "newest": "ਨਵੇਂ ਪਹਿਲਾਂ",
+    "popular": "ਪ੍ਰਸਿੱਧੀ",
+    "price_asc": "ਕੀਮਤ: ਘੱਟ ਤੋਂ ਵੱਧ",
+    "price_desc": "ਕੀਮਤ: ਵੱਧ ਤੋਂ ਘੱਟ",
+    "discount": "ਛੋਟ",
+    "rating": "ਗਾਹਕ ਰੇਟਿੰਗ",
+    "name_asc": "ਨਾਮ: ੳ ਤੋਂ ੜ"
+  },
+  "filters": {
+    "title": "ਫਿਲਟਰ",
+    "aria": "ਉਤਪਾਦ ਫਿਲਟਰ",
+    "close": "ਫਿਲਟਰ ਬੰਦ ਕਰੋ",
+    "reset": "ਫਿਲਟਰ ਰੀਸੈੱਟ ਕਰੋ",
+    "resetAll": "ਸਭ ਰੀਸੈੱਟ ਕਰੋ",
+    "removeFilter": "{{name}} ਫਿਲਟਰ ਹਟਾਓ",
+    "showCount_one": "{{count}} ਉਤਪਾਦ ਵਿਖਾਓ",
+    "showCount_other": "{{count}} ਉਤਪਾਦ ਵਿਖਾਓ",
+    "category": "ਸ਼੍ਰੇਣੀ",
+    "subCategory": "ਉਪ-ਸ਼੍ਰੇਣੀ",
+    "price": "ਕੀਮਤ",
+    "minPrice": "ਘੱਟੋ-ਘੱਟ ਕੀਮਤ",
+    "maxPrice": "ਵੱਧ ਤੋਂ ਵੱਧ ਕੀਮਤ",
+    "applyPrice": "ਕੀਮਤ ਲਾਗੂ ਕਰੋ",
+    "catalogueRange": "ਕੈਟਾਲਾਗ ਸੀਮਾ: {{min}} – {{max}}",
+    "brand": "ਬ੍ਰਾਂਡ",
+    "discount": "ਛੋਟ",
+    "discountAndAbove": "{{value}}% ਅਤੇ ਵੱਧ",
+    "customerRating": "ਗਾਹਕ ਰੇਟਿੰਗ",
+    "andUp": "ਅਤੇ ਉੱਪਰ",
+    "availabilityTitle": "ਉਪਲਬਧਤਾ",
+    "availability": {
+      "in_stock": "ਸਿਰਫ਼ ਸਟਾਕ ਵਿੱਚ",
+      "out_of_stock": "ਸਟਾਕ ਵਿੱਚ ਨਹੀਂ"
+    },
+    "chipMinPrice": "{{value}} ਤੋਂ",
+    "chipMaxPrice": "{{value}} ਤੱਕ",
+    "chipDiscount": "{{value}}% ਜਾਂ ਵੱਧ ਛੋਟ",
+    "chipRating": "{{value}} ਤਾਰੇ ਅਤੇ ਉੱਪਰ"
+  },
+  "grid": {
+    "emptyTitle": "ਕੋਈ ਉਤਪਾਦ ਨਹੀਂ ਮਿਲਿਆ",
+    "emptyMessage": "ਆਪਣੇ ਫਿਲਟਰ ਬਦਲੋ ਜਾਂ ਕੁਝ ਹੋਰ ਖੋਜੋ।"
+  },
+  "details": {
+    "notFoundTitle": "ਉਤਪਾਦ ਨਹੀਂ ਮਿਲਿਆ",
+    "notFoundMessage": "ਇਹ ਉਤਪਾਦ ਹਟਾਇਆ ਗਿਆ ਹੋ ਸਕਦਾ ਹੈ ਜਾਂ ਹੁਣ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।",
+    "loadErrorTitle": "ਇਹ ਉਤਪਾਦ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕਿਆ",
+    "browseAll": "ਸਾਰੇ ਉਤਪਾਦ ਵੇਖੋ",
+    "share": "ਇਹ ਉਤਪਾਦ ਸਾਂਝਾ ਕਰੋ",
+    "linkCopied": "ਲਿੰਕ ਕਲਿੱਪਬੋਰਡ 'ਤੇ ਕਾਪੀ ਹੋ ਗਿਆ",
+    "ratingsCount_one": "{{count}} ਰੇਟਿੰਗ",
+    "ratingsCount_other": "{{count}} ਰੇਟਿੰਗਾਂ",
+    "noRatings": "ਹਾਲੇ ਕੋਈ ਰੇਟਿੰਗ ਨਹੀਂ",
+    "youSave": "ਤੁਸੀਂ {{amount}} ਬਚਾਉਂਦੇ ਹੋ",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "ਇੱਕ ਵਿਕਲਪ ਚੁਣੋ",
+    "unitsAvailable_one": "{{count}} ਯੂਨਿਟ ਉਪਲਬਧ",
+    "unitsAvailable_other": "{{count}} ਯੂਨਿਟ ਉਪਲਬਧ",
+    "showingVariant": "<1>{{label}}</1> ਵਿਖਾ ਰਹੇ ਹਾਂ",
+    "keySpecs": "ਮੁੱਖ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+    "specWeight": "ਭਾਰ",
+    "specDimensions": "ਮਾਪ",
+    "inStockUnits_one": "ਸਟਾਕ ਵਿੱਚ ({{count}} ਯੂਨਿਟ)",
+    "inStockUnits_other": "ਸਟਾਕ ਵਿੱਚ ({{count}} ਯੂਨਿਟ)",
+    "relatedTitle": "ਸੰਬੰਧਿਤ ਉਤਪਾਦ",
+    "relatedSubtitle": "ਗਾਹਕਾਂ ਨੇ ਇਹ ਵੀ ਵੇਖੇ",
+    "delivery": {
+      "freeTitle": "ਮੁਫ਼ਤ ਡਿਲੀਵਰੀ",
+      "freeText": "ਇਹ ਵਸਤੂ ਮੁਫ਼ਤ ਭੇਜੀ ਜਾਂਦੀ ਹੈ",
+      "paidTitle": "ਡਿਲੀਵਰੀ ਖਰਚ ਲਾਗੂ",
+      "paidText": "₹{{amount}} ਤੋਂ ਉੱਪਰ ਮੁਫ਼ਤ",
+      "returnsTitle": "7 ਦਿਨਾਂ ਵਿੱਚ ਵਾਪਸੀ",
+      "returnsText": "ਬਿਨਾਂ ਝੰਜਟ ਬਦਲੀ",
+      "paymentTitle": "ਸੁਰੱਖਿਅਤ ਭੁਗਤਾਨ",
+      "paymentText": "Razorpay ਵੱਲੋਂ ਸੁਰੱਖਿਅਤ",
+      "weightTitle": "ਸ਼ਿਪਿੰਗ ਭਾਰ",
+      "genuineTitle": "ਅਸਲੀ ਉਤਪਾਦ",
+      "genuineText": "ਸਿੱਧੇ ਬ੍ਰਾਂਡਾਂ ਤੋਂ ਲਿਆ"
+    },
+    "rows": {
+      "brand": "ਬ੍ਰਾਂਡ",
+      "category": "ਸ਼੍ਰੇਣੀ",
+      "subCategory": "ਉਪ-ਸ਼੍ਰੇਣੀ",
+      "sku": "SKU",
+      "availability": "ਉਪਲਬਧਤਾ",
+      "tags": "ਟੈਗ"
+    }
+  },
+  "tabs": {
+    "description": "ਵਰਣਨ",
+    "details": "ਉਤਪਾਦ ਵੇਰਵੇ",
+    "features": "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",
+    "featuresWithCount": "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ({{count}})",
+    "reviews": "ਸਮੀਖਿਆਵਾਂ",
+    "reviewsWithCount": "ਸਮੀਖਿਆਵਾਂ ({{count}})",
+    "faqs": "ਆਮ ਸਵਾਲ",
+    "faqsWithCount": "ਆਮ ਸਵਾਲ ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "ਚੁਣੋ",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "ਅਣਉਪਲਬਧ",
+    "stateOutOfStock": "ਸਟਾਕ ਵਿੱਚ ਨਹੀਂ",
+    "reasonCombination": "ਇਸ ਸੁਮੇਲ ਵਿੱਚ ਉਪਲਬਧ ਨਹੀਂ"
+  },
+  "gallery": {
+    "viewImage": "ਤਸਵੀਰ {{index}} ਵੇਖੋ",
+    "image": "ਤਸਵੀਰ {{index}}",
+    "hoverToZoom": "ਜ਼ੂਮ ਲਈ ਹੋਵਰ ਕਰੋ",
+    "previousImage": "ਪਿਛਲੀ ਤਸਵੀਰ",
+    "nextImage": "ਅਗਲੀ ਤਸਵੀਰ",
+    "enlarged": "ਵੱਡੀ ਉਤਪਾਦ ਤਸਵੀਰ"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} ਰੇਟਿੰਗ",
+    "ratingsCount_other": "{{formatted}} ਰੇਟਿੰਗਾਂ",
+    "writeTitle": "ਸਮੀਖਿਆ ਲਿਖੋ",
+    "yourRating": "ਤੁਹਾਡੀ ਰੇਟਿੰਗ",
+    "starCount_one": "{{count}} ਤਾਰਾ",
+    "starCount_other": "{{count}} ਤਾਰੇ",
+    "titleLabel": "ਸਿਰਲੇਖ",
+    "titlePlaceholder": "ਆਪਣਾ ਤਜਰਬਾ ਸੰਖੇਪ ਵਿੱਚ ਦੱਸੋ",
+    "commentLabel": "ਤੁਹਾਡੀ ਸਮੀਖਿਆ",
+    "commentPlaceholder": "ਤੁਹਾਨੂੰ ਕੀ ਪਸੰਦ ਜਾਂ ਨਾਪਸੰਦ ਆਇਆ? ਇਹ ਉਤਪਾਦ ਤੁਸੀਂ ਕਿਵੇਂ ਵਰਤਿਆ?",
+    "optional": "(ਵਿਕਲਪਿਕ)",
+    "submit": "ਸਮੀਖਿਆ ਜਮ੍ਹਾਂ ਕਰੋ",
+    "submitFailed": "ਤੁਹਾਡੀ ਸਮੀਖਿਆ ਜਮ੍ਹਾਂ ਨਹੀਂ ਹੋ ਸਕੀ",
+    "pickRating": "ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਤਾਰਾ ਰੇਟਿੰਗ ਚੁਣੋ",
+    "thanks": "ਤੁਹਾਡੀ ਸਮੀਖਿਆ ਲਈ ਧੰਨਵਾਦ!",
+    "loginToReview": "ਸਮੀਖਿਆ ਲਿਖਣ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਲੌਗ ਇਨ ਕਰੋ",
+    "sortAria": "ਸਮੀਖਿਆਵਾਂ ਕ੍ਰਮਬੱਧ ਕਰੋ",
+    "filterAria": "ਰੇਟਿੰਗ ਅਨੁਸਾਰ ਫਿਲਟਰ ਕਰੋ",
+    "allRatings": "ਸਾਰੀਆਂ ਰੇਟਿੰਗਾਂ",
+    "anonymous": "ਗੁਮਨਾਮ",
+    "verified": "ਪ੍ਰਮਾਣਿਤ ਖਰੀਦ",
+    "emptyTitle": "ਹਾਲੇ ਕੋਈ ਸਮੀਖਿਆ ਨਹੀਂ",
+    "emptyMessage": "ਇਸ ਉਤਪਾਦ ਬਾਰੇ ਆਪਣਾ ਤਜਰਬਾ ਸਾਂਝਾ ਕਰਨ ਵਾਲੇ ਪਹਿਲੇ ਬਣੋ।",
+    "sort": {
+      "newest": "ਸਭ ਤੋਂ ਨਵੀਆਂ",
+      "helpful": "ਸਭ ਤੋਂ ਲਾਭਦਾਇਕ",
+      "highest": "ਸਭ ਤੋਂ ਵੱਧ ਰੇਟਿੰਗ",
+      "lowest": "ਸਭ ਤੋਂ ਘੱਟ ਰੇਟਿੰਗ"
+    }
+  },
+  "specs": {
+    "emptyTitle": "ਕੋਈ ਵਿਸ਼ੇਸ਼ਤਾ ਸੂਚੀਬੱਧ ਨਹੀਂ",
+    "emptyMessage": "ਇਸ ਉਤਪਾਦ ਦੀਆਂ ਵਿਸਤ੍ਰਿਤ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਹਾਲੇ ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤੀਆਂ ਗਈਆਂ।"
+  },
+  "faq": {
+    "emptyTitle": "ਹਾਲੇ ਕੋਈ ਸਵਾਲ ਨਹੀਂ",
+    "emptyMessage": "ਇਸ ਉਤਪਾਦ ਬਾਰੇ ਸਵਾਲ ਹੈ? ਸਾਡੀ ਸਹਾਇਤਾ ਟੀਮ ਨਾਲ ਸੰਪਰਕ ਕਰੋ, ਅਸੀਂ ਮਦਦ ਕਰਾਂਗੇ।"
+  }
+}

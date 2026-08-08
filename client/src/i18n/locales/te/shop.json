@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "నాణ్యమైన నిర్మాణ సామగ్రి, హార్డ్‌వేర్ మరియు పరికరాలు",
+    "seoDescription": "ప్రీమియం ప్లైవుడ్, లామినేట్‌లు, హార్డ్‌వేర్, పెయింట్‌లు, పవర్ టూల్స్ మరియు ఎలక్ట్రికల్స్ కొనండి. అసలైన బ్రాండ్‌లు, సురక్షిత చెల్లింపులు మరియు వేగవంతమైన డెలివరీ.",
+    "feedError": "ఉత్పత్తులను లోడ్ చేయలేకపోయాము",
+    "forYou": "మీ కోసం ఉత్పత్తులు",
+    "topSelling": "అత్యధికంగా అమ్ముడయ్యే ఉత్పత్తులు",
+    "recentlyViewed": "ఇటీవల చూసినవి",
+    "recentlyViewedSubtitle": "ఆపిన చోటి నుండి కొనసాగించండి",
+    "ctaTitle": "పెద్దదేదో నిర్మిస్తున్నారా?",
+    "ctaText": "{{count}} వర్గాలలో పూర్తి కేటలాగ్‌ను చూడండి — ట్రేడ్ ధరలు, అసలైన బ్రాండ్‌లు మరియు సైట్‌కే డెలివరీ.",
+    "ctaTextAll": "పూర్తి కేటలాగ్‌ను చూడండి — ట్రేడ్ ధరలు, అసలైన బ్రాండ్‌లు మరియు సైట్‌కే డెలివరీ.",
+    "ctaButton": "అన్ని ఉత్పత్తులను చూడండి",
+    "sections": {
+      "for_you": {
+        "title": "మీ కోసం ఉత్పత్తులు",
+        "subtitle": "మీ అభిరుచికి తగినట్లు ఎంపిక చేసినవి"
+      },
+      "top_selling": {
+        "title": "అత్యధికంగా అమ్ముడయ్యే ఉత్పత్తులు",
+        "subtitle": "అందరూ కొంటున్నవి"
+      },
+      "new_arrivals": {
+        "title": "కొత్త రాకలు",
+        "subtitle": "స్టోర్‌లో కొత్తది"
+      },
+      "best_deals": {
+        "title": "ఉత్తమ డీల్‌లు",
+        "subtitle": "ప్రస్తుతం అతిపెద్ద తగ్గింపులు"
+      },
+      "top_rated": {
+        "title": "అత్యధిక రేటింగ్",
+        "subtitle": "మా కస్టమర్‌లకు ఇష్టమైనవి"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}” కోసం ఫలితాలు",
+    "seoDescription": "{{heading}} చూడండి — అసలైన బ్రాండ్‌లు, పోటీ ధరలు మరియు వేగవంతమైన డెలివరీ.",
+    "loading": "ఉత్పత్తులు లోడ్ అవుతున్నాయి…",
+    "found_one": "{{count}} ఉత్పత్తి దొరికింది",
+    "found_other": "{{count}} ఉత్పత్తులు దొరికాయి",
+    "sortBy": "క్రమబద్ధీకరించు",
+    "sortAria": "ఉత్పత్తులను క్రమబద్ధీకరించు",
+    "emptyTitle": "ఈ ఫిల్టర్‌లకు ఏ ఉత్పత్తీ సరిపోలలేదు",
+    "emptyMessage": "మీ ధర పరిధిని విస్తరించండి లేదా ఒక ఫిల్టర్‌ను తీసివేయండి."
+  },
+  "sort": {
+    "newest": "కొత్తవి ముందు",
+    "popular": "ప్రజాదరణ",
+    "price_asc": "ధర: తక్కువ నుండి ఎక్కువ",
+    "price_desc": "ధర: ఎక్కువ నుండి తక్కువ",
+    "discount": "తగ్గింపు",
+    "rating": "కస్టమర్ రేటింగ్",
+    "name_asc": "పేరు: అ నుండి ఱ"
+  },
+  "filters": {
+    "title": "ఫిల్టర్‌లు",
+    "aria": "ఉత్పత్తి ఫిల్టర్‌లు",
+    "close": "ఫిల్టర్‌లను మూసివేయి",
+    "reset": "ఫిల్టర్‌లను రీసెట్ చేయి",
+    "resetAll": "అన్నీ రీసెట్ చేయి",
+    "removeFilter": "{{name}} ఫిల్టర్‌ను తీసివేయి",
+    "showCount_one": "{{count}} ఉత్పత్తిని చూపు",
+    "showCount_other": "{{count}} ఉత్పత్తులను చూపు",
+    "category": "వర్గం",
+    "subCategory": "ఉప-వర్గం",
+    "price": "ధర",
+    "minPrice": "కనిష్ట ధర",
+    "maxPrice": "గరిష్ట ధర",
+    "applyPrice": "ధరను వర్తింపజేయి",
+    "catalogueRange": "కేటలాగ్ పరిధి: {{min}} – {{max}}",
+    "brand": "బ్రాండ్",
+    "discount": "తగ్గింపు",
+    "discountAndAbove": "{{value}}% మరియు అంతకంటే ఎక్కువ",
+    "customerRating": "కస్టమర్ రేటింగ్",
+    "andUp": "మరియు పైన",
+    "availabilityTitle": "లభ్యత",
+    "availability": {
+      "in_stock": "స్టాక్‌లో ఉన్నవి మాత్రమే",
+      "out_of_stock": "స్టాక్‌లో లేదు"
+    },
+    "chipMinPrice": "{{value}} నుండి",
+    "chipMaxPrice": "{{value}} వరకు",
+    "chipDiscount": "{{value}}% లేదా అంతకంటే ఎక్కువ తగ్గింపు",
+    "chipRating": "{{value}} నక్షత్రాలు మరియు పైన"
+  },
+  "grid": {
+    "emptyTitle": "ఉత్పత్తులు ఏవీ కనుగొనబడలేదు",
+    "emptyMessage": "మీ ఫిల్టర్‌లను సర్దుబాటు చేయండి లేదా వేరేదైనా వెతకండి."
+  },
+  "details": {
+    "notFoundTitle": "ఉత్పత్తి కనుగొనబడలేదు",
+    "notFoundMessage": "ఈ ఉత్పత్తి తీసివేయబడి ఉండవచ్చు లేదా ఇకపై అందుబాటులో లేదు.",
+    "loadErrorTitle": "ఈ ఉత్పత్తిని లోడ్ చేయలేకపోయాము",
+    "browseAll": "అన్ని ఉత్పత్తులను చూడండి",
+    "share": "ఈ ఉత్పత్తిని షేర్ చేయి",
+    "linkCopied": "లింక్ క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది",
+    "ratingsCount_one": "{{count}} రేటింగ్",
+    "ratingsCount_other": "{{count}} రేటింగ్‌లు",
+    "noRatings": "ఇంకా రేటింగ్‌లు లేవు",
+    "youSave": "మీరు {{amount}} ఆదా చేస్తారు",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "ఒక ఎంపికను ఎంచుకోండి",
+    "unitsAvailable_one": "{{count}} యూనిట్ అందుబాటులో ఉంది",
+    "unitsAvailable_other": "{{count}} యూనిట్లు అందుబాటులో ఉన్నాయి",
+    "showingVariant": "<1>{{label}}</1> చూపబడుతోంది",
+    "keySpecs": "ముఖ్య వివరణలు",
+    "specWeight": "బరువు",
+    "specDimensions": "కొలతలు",
+    "inStockUnits_one": "స్టాక్‌లో ఉంది ({{count}} యూనిట్)",
+    "inStockUnits_other": "స్టాక్‌లో ఉంది ({{count}} యూనిట్లు)",
+    "relatedTitle": "సంబంధిత ఉత్పత్తులు",
+    "relatedSubtitle": "కస్టమర్‌లు వీటిని కూడా పరిశీలించారు",
+    "delivery": {
+      "freeTitle": "ఉచిత డెలివరీ",
+      "freeText": "ఈ వస్తువు ఉచితంగా పంపబడుతుంది",
+      "paidTitle": "డెలివరీ ఛార్జీలు వర్తిస్తాయి",
+      "paidText": "₹{{amount}} పైన ఉచితం",
+      "returnsTitle": "7 రోజుల రిటర్న్",
+      "returnsText": "ఇబ్బంది లేని మార్పిడి",
+      "paymentTitle": "సురక్షిత చెల్లింపు",
+      "paymentText": "Razorpay ద్వారా రక్షించబడింది",
+      "weightTitle": "షిప్పింగ్ బరువు",
+      "genuineTitle": "అసలైన ఉత్పత్తి",
+      "genuineText": "నేరుగా బ్రాండ్‌ల నుండి"
+    },
+    "rows": {
+      "brand": "బ్రాండ్",
+      "category": "వర్గం",
+      "subCategory": "ఉప-వర్గం",
+      "sku": "SKU",
+      "availability": "లభ్యత",
+      "tags": "ట్యాగ్‌లు"
+    }
+  },
+  "tabs": {
+    "description": "వివరణ",
+    "details": "ఉత్పత్తి వివరాలు",
+    "features": "లక్షణాలు",
+    "featuresWithCount": "లక్షణాలు ({{count}})",
+    "reviews": "సమీక్షలు",
+    "reviewsWithCount": "సమీక్షలు ({{count}})",
+    "faqs": "తరచుగా అడిగే ప్రశ్నలు",
+    "faqsWithCount": "తరచుగా అడిగే ప్రశ్నలు ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "ఎంచుకోండి",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "అందుబాటులో లేదు",
+    "stateOutOfStock": "స్టాక్‌లో లేదు",
+    "reasonCombination": "ఈ కలయికలో అందుబాటులో లేదు"
+  },
+  "gallery": {
+    "viewImage": "చిత్రం {{index}} చూడండి",
+    "image": "చిత్రం {{index}}",
+    "hoverToZoom": "జూమ్ కోసం హోవర్ చేయండి",
+    "previousImage": "మునుపటి చిత్రం",
+    "nextImage": "తదుపరి చిత్రం",
+    "enlarged": "పెద్ద ఉత్పత్తి చిత్రం"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} రేటింగ్",
+    "ratingsCount_other": "{{formatted}} రేటింగ్‌లు",
+    "writeTitle": "సమీక్ష రాయండి",
+    "yourRating": "మీ రేటింగ్",
+    "starCount_one": "{{count}} నక్షత్రం",
+    "starCount_other": "{{count}} నక్షత్రాలు",
+    "titleLabel": "శీర్షిక",
+    "titlePlaceholder": "మీ అనుభవాన్ని క్లుప్తంగా చెప్పండి",
+    "commentLabel": "మీ సమీక్ష",
+    "commentPlaceholder": "మీకు ఏమి నచ్చింది లేదా నచ్చలేదు? ఈ ఉత్పత్తిని ఎలా ఉపయోగించారు?",
+    "optional": "(ఐచ్ఛికం)",
+    "submit": "సమీక్షను సమర్పించు",
+    "submitFailed": "మీ సమీక్షను సమర్పించలేకపోయాము",
+    "pickRating": "దయచేసి నక్షత్ర రేటింగ్‌ను ఎంచుకోండి",
+    "thanks": "మీ సమీక్షకు ధన్యవాదాలు!",
+    "loginToReview": "సమీక్ష రాయడానికి దయచేసి లాగిన్ చేయండి",
+    "sortAria": "సమీక్షలను క్రమబద్ధీకరించు",
+    "filterAria": "రేటింగ్ ప్రకారం ఫిల్టర్ చేయి",
+    "allRatings": "అన్ని రేటింగ్‌లు",
+    "anonymous": "అనామక",
+    "verified": "ధృవీకరించిన కొనుగోలు",
+    "emptyTitle": "ఇంకా సమీక్షలు లేవు",
+    "emptyMessage": "ఈ ఉత్పత్తిపై మీ అనుభవాన్ని పంచుకునే మొదటి వ్యక్తి అవ్వండి.",
+    "sort": {
+      "newest": "అత్యంత ఇటీవలివి",
+      "helpful": "అత్యంత ఉపయోగకరమైనవి",
+      "highest": "అత్యధిక రేటింగ్",
+      "lowest": "అత్యల్ప రేటింగ్"
+    }
+  },
+  "specs": {
+    "emptyTitle": "వివరణలు ఏవీ జాబితా చేయబడలేదు",
+    "emptyMessage": "ఈ ఉత్పత్తికి వివరణాత్మక వివరణలు ఇంకా జోడించబడలేదు."
+  },
+  "faq": {
+    "emptyTitle": "ఇంకా ప్రశ్నలు లేవు",
+    "emptyMessage": "ఈ ఉత్పత్తి గురించి ప్రశ్న ఉందా? మా సపోర్ట్ టీమ్‌ను సంప్రదించండి, మేము సహాయం చేస్తాము."
+  }
+}

@@ -1,0 +1,60 @@
+version: 2
+
+updates:
+  # Keep the actions themselves current — this is what makes floating major tags
+  # (actions/checkout@v4) safe to rely on instead of hand-pinning SHAs.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    labels: [ dependencies, ci ]
+    commit-message:
+      prefix: ci
+
+  - package-ecosystem: npm
+    directory: /server
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels: [ dependencies, server ]
+    commit-message:
+      prefix: deps
+      prefix-development: deps-dev
+    groups:
+      # One PR for the routine patch/minor churn; majors still come separately
+      # so they get reviewed on their own merits.
+      server-minor-patch:
+        applies-to: version-updates
+        update-types: [ minor, patch ]
+
+  - package-ecosystem: npm
+    directory: /client
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels: [ dependencies, client ]
+    commit-message:
+      prefix: deps
+      prefix-development: deps-dev
+    groups:
+      client-minor-patch:
+        applies-to: version-updates
+        update-types: [ minor, patch ]
+
+  - package-ecosystem: npm
+    directory: /admin
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels: [ dependencies, admin ]
+    commit-message:
+      prefix: deps
+      prefix-development: deps-dev
+    groups:
+      admin-minor-patch:
+        applies-to: version-updates
+        update-types: [ minor, patch ]

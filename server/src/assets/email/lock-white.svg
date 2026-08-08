@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+  <!--
+    Padlock for the reset mail's button — a plain lock rather than the
+    masthead's shield, because the button is an action and the shield is a claim
+    about who sent this. Cut in white: it only ever sits on the brand-blue
+    button, and the keyhole is punched *through* to transparency so the button's
+    own colour shows in it. The shackle is 3.3px of ring — the storefront's 2/24
+    stroke scaled to this cut. Shown at 22.
+  -->
+  <path d="M12.4 21a9.6 9.6 0 0119.2 0h-3.3a6.3 6.3 0 00-12.6 0z" fill="#ffffff"/>
+  <path fill-rule="evenodd" fill="#ffffff"
+        d="M13.1 20h17.8a4.6 4.6 0 014.6 4.6v10.3a4.6 4.6 0 01-4.6 4.6H13.1a4.6 4.6 0 01-4.6-4.6V24.6A4.6 4.6 0 0113.1 20zm10.3 9.708V32.6a1.4 1.4 0 01-2.8 0v-2.892a2.7 2.7 0 112.8 0z"/>
+</svg>

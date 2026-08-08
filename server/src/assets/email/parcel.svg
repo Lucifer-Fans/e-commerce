@@ -1,0 +1,21 @@
+<svg width="164" height="132" viewBox="0 0 164 132" xmlns="http://www.w3.org/2000/svg"
+     fill="none" aria-hidden="true" style="display:block">
+  <!-- clouds -->
+  <path d="M38 24h16a7 7 0 100-13 11 11 0 00-20 4 6 6 0 004 9z" fill="#eef2fb"/>
+  <path d="M108 20h13a5 5 0 100-10 9 9 0 00-16 3 5 5 0 003 7z" fill="#eef2fb"/>
+  <!-- speed lines -->
+  <path d="M8 64h22M2 76h16M14 88h18" stroke="#c7d7f5" stroke-width="3" stroke-linecap="round"/>
+  <!-- carton: left and right faces first, lid painted over them -->
+  <path d="M44 52l38 14v40L44 92z" fill="#e0a03c"/>
+  <path d="M120 52L82 66v40l38-14z" fill="#f2b957"/>
+  <path d="M44 52l38-14 38 14-38 14z" fill="#f7c46b"/>
+  <!-- blue tape across the lid and down the near face -->
+  <path d="M69 43l38 14-12 4-38-14z" fill="#2f6fe4"/>
+  <path d="M95 61l12-4v14l-12 4z" fill="#1d4ed8"/>
+  <!-- dashed route -->
+  <path d="M86 108c14 10 30 6 34-6" stroke="#93b4f5" stroke-width="2.5"
+        stroke-linecap="round" stroke-dasharray="5 6"/>
+  <!-- pin -->
+  <path d="M133 60c9 0 16 7 16 16 0 12-16 26-16 26s-16-14-16-26c0-9 7-16 16-16z" fill="#2563eb"/>
+  <circle cx="133" cy="76" r="6" fill="#ffffff"/>
+</svg>

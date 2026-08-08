@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-ink-50 text-ink-800 font-sans antialiased;
+  }
+  /* Visible focus for keyboard users without ringing every mouse click. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2;
+  }
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-300 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-400;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
+           transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply btn bg-brand-600 text-white hover:bg-brand-700 active:scale-[.98] shadow-sm;
+  }
+  .btn-accent {
+    @apply btn bg-accent text-white hover:bg-accent-dark active:scale-[.98] shadow-sm;
+  }
+  .btn-outline {
+    @apply btn border border-ink-300 bg-white text-ink-700 hover:border-brand-500 hover:text-brand-600;
+  }
+  .btn-ghost {
+    @apply btn text-ink-600 hover:bg-ink-100;
+  }
+  .btn-danger {
+    @apply btn bg-danger text-white hover:bg-red-700;
+  }
+
+  .card {
+    @apply rounded-xl border border-ink-200 bg-white shadow-card;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-ink-300 bg-white px-3.5 py-2.5 text-sm text-ink-800
+           placeholder:text-ink-400 transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100
+           disabled:bg-ink-100;
+  }
+  .input-error {
+    @apply border-danger focus:border-danger focus:ring-red-100;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-700;
+  }
+  .error-text {
+    @apply mt-1 text-xs font-medium text-danger;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset;
+  }
+
+  .section-title {
+    @apply text-xl font-bold text-ink-900 sm:text-2xl;
+  }
+
+  /* Shimmer used by every loading skeleton. */
+  .skeleton {
+    @apply relative overflow-hidden bg-ink-200/70;
+  }
+  .skeleton::after {
+    @apply absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r
+           from-transparent via-white/60 to-transparent;
+    content: '';
+  }
+
+  /*
+   * A variant option that can't be bought right now. It stays on screen — the shopper
+   * needs to see that the size exists before they can ask why it isn't available — and is
+   * struck through corner to corner, the way every large storefront marks a sold-out
+   * option. Colour alone would not carry this, so the strike does the work.
+   */
+  .variant-unavailable {
+    @apply text-ink-400 opacity-60;
+    background-image: linear-gradient(
+      to top left,
+      transparent calc(50% - 0.5px),
+      currentColor calc(50% - 0.5px),
+      currentColor calc(50% + 0.5px),
+      transparent calc(50% + 0.5px)
+    );
+  }
+
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Clamp helpers for card titles. */
+  .line-clamp-1,
+  .line-clamp-2,
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .line-clamp-1 {
+    -webkit-line-clamp: 1;
+  }
+  .line-clamp-2 {
+    -webkit-line-clamp: 2;
+  }
+  .line-clamp-3 {
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* Admin-authored rich text (product description) needs sane default typography. */
+.rich-text h1 { @apply mb-3 mt-5 text-2xl font-bold text-ink-900; }
+.rich-text h2 { @apply mb-3 mt-5 text-xl font-bold text-ink-900; }
+.rich-text h3 { @apply mb-2 mt-4 text-lg font-semibold text-ink-900; }
+.rich-text p { @apply mb-3 leading-relaxed text-ink-600; }
+.rich-text ul { @apply mb-3 list-disc space-y-1.5 pl-5 text-ink-600; }
+.rich-text ol { @apply mb-3 list-decimal space-y-1.5 pl-5 text-ink-600; }
+.rich-text a { @apply text-brand-600 underline hover:text-brand-700; }
+.rich-text strong { @apply font-semibold text-ink-800; }
+.rich-text blockquote { @apply mb-3 border-l-4 border-ink-300 pl-4 italic text-ink-500; }
+.rich-text table { @apply mb-3 w-full border-collapse text-sm; }
+.rich-text th,
+.rich-text td { @apply border border-ink-200 px-3 py-2 text-left; }
+.rich-text th { @apply bg-ink-50 font-semibold text-ink-700; }

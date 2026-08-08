@@ -1,0 +1,169 @@
+{
+  "cart": {
+    "title": "Shopping Cart",
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} items",
+    "emptyTitle": "Your cart is empty",
+    "emptyMessage": "Looks like you haven't added anything yet. Start exploring our catalogue.",
+    "emptyButSaved": "You still have items saved for later below.",
+    "startShopping": "Start shopping",
+    "continueShopping": "Continue shopping",
+    "savedForLater": "Saved for later ({{count}})",
+    "saveForLater": "Save for later",
+    "savedToast": "Saved for later",
+    "moveToCart": "Move to cart",
+    "movedToCart": "Moved to cart",
+    "itemRemoved": "Item removed",
+    "removeTitle": "Remove this item?",
+    "removeMessage": "“{{name}}” will be removed from your cart.",
+    "updateFailed": "Could not update your cart",
+    "lineOutOfStock": "Out of stock — remove it to continue checkout",
+    "lineExceedsStock_one": "Only {{count}} available — quantity will be reduced at checkout",
+    "lineExceedsStock_other": "Only {{count}} available — quantity will be reduced at checkout",
+    "linePriceChanged": "Price changed since you added this (was {{was}})",
+    "unavailableWarning": "Some items are unavailable or exceed stock. Update your cart before checkout.",
+    "proceedToCheckout": "Proceed to Checkout",
+    "securePayments": "Safe and secure payments"
+  },
+
+  "wishlist": {
+    "title": "My Wishlist",
+    "emptyTitle": "Your wishlist is empty",
+    "emptyMessage": "Tap the heart on any product to save it here for later.",
+    "browse": "Browse products"
+  },
+
+  "coupon": {
+    "applyTitle": "Apply coupon",
+    "label": "Coupon code",
+    "placeholder": "Enter coupon code",
+    "enterCode": "Enter a coupon code",
+    "applied": "Coupon applied",
+    "applyFailed": "Could not apply this coupon",
+    "removed": "Coupon removed",
+    "codeApplied": "{{code}} applied",
+    "youSaved": "You saved {{amount}}",
+    "viewAvailable": "View available coupons ({{count}})",
+    "hideAvailable": "Hide available coupons ({{count}})",
+    "minOrder": "Min. order {{amount}}"
+  },
+
+  "summary": {
+    "title": "Price Details",
+    "subtotal_one": "Subtotal ({{count}} item)",
+    "subtotal_other": "Subtotal ({{count}} items)",
+    "coupon": "Coupon ({{code}})",
+    "delivery": "Delivery charges",
+    "free": "FREE",
+    "total": "Total Amount",
+    "savings": "You save {{amount}} on this order",
+    "freeShippingNudge": "Add {{amount}} more for free delivery"
+  },
+
+  "checkout": {
+    "title": "Checkout",
+    "orderTotal": "Order Total",
+    "emptyCartMessage": "Add something to your cart before checking out.",
+    "selectAddress": "Please select a delivery address",
+    "placeFailed": "Could not place your order",
+    "change": "Change",
+    "deliverHere": "Deliver to this address",
+    "summaryHeading_one": "Order Summary ({{count}} item)",
+    "summaryHeading_other": "Order Summary ({{count}} items)",
+    "qty": "Qty: {{count}}",
+    "continueToPayment": "Continue to payment",
+    "processing": "Processing…",
+    "placeOrder": "Place Order",
+    "payAmount": "Pay {{amount}}",
+    "completeSteps": "Complete the steps to place your order",
+    "encrypted": "Your information is encrypted and secure",
+    "legal": "By placing this order you agree to our <1>Terms of Service</1> and <2>Privacy Policy</2>.",
+    "steps": {
+      "address": "Delivery Address",
+      "review": "Order Summary",
+      "payment": "Payment"
+    }
+  },
+
+  "address": {
+    "addTitle": "Add a new address",
+    "editTitle": "Edit address",
+    "save": "Save address",
+    "update": "Update address",
+    "added": "Address added",
+    "updated": "Address updated",
+    "saveFailed": "Could not save this address",
+    "default": "Default",
+    "makeDefault": "Make this my default delivery address",
+    "typeLabel": "Address type",
+    "optional": "(Optional)",
+    "phoneLine": "Phone: {{phone}}",
+    "labels": {
+      "home": "Home",
+      "work": "Work",
+      "other": "Other"
+    },
+    "fields": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Recipient Name",
+      "phone": "Mobile Number",
+      "phonePlaceholder": "10 Digit Number",
+      "addressLine1": "Address Line 1",
+      "addressLine1Placeholder": "House / Flat No, Building, Street",
+      "addressLine2": "Address Line 2",
+      "addressLine2Placeholder": "Area, Colony, Sector",
+      "landmark": "Landmark",
+      "landmarkPlaceholder": "Nearby landmark",
+      "pincode": "Pincode",
+      "pincodePlaceholder": "6 Digit Pincode",
+      "city": "City",
+      "cityPlaceholder": "City",
+      "state": "State",
+      "statePlaceholder": "State",
+      "alternatePhone": "Alternate Phone",
+      "alternatePhonePlaceholder": "Alternate Phone"
+    },
+    "errors": {
+      "line1": "Enter your street address",
+      "city": "City is required",
+      "state": "State is required"
+    }
+  },
+
+  "payment": {
+    "methodTitle": "Payment Method",
+    "onlineTitle": "Pay online (Card / UPI / Net Banking)",
+    "onlineText": "Secured by Razorpay. Your card details never touch our servers.",
+    "onlineUnavailable": "Online payments are not configured on this store yet.",
+    "codTitle": "Cash on Delivery",
+    "codText": "Pay in cash when your order is handed over.",
+    "gatewayLoadFailed": "Could not load the payment gateway. Check your connection.",
+    "orderDescription": "Order {{number}}",
+    "cancelled": "Payment cancelled. Your order is saved as pending.",
+    "failed": "Payment failed. Please try again."
+  },
+
+  "confirm": {
+    "pill": "Order",
+    "title": "Order Confirm",
+    "subtitle": "Packing your items and handing them to our delivery partner",
+    "status": "Confirming your order…"
+  },
+
+  "success": {
+    "seoTitle": "Order Confirmed",
+    "notFound": "Order not found",
+    "title": "Order placed successfully!",
+    "subtitle": "Thank you for your order. A confirmation has been sent to your email.",
+    "orderNumber": "Order number",
+    "orderDate": "Order date",
+    "totalPaid": "Total paid",
+    "paidTitle": "Payment received",
+    "paidText": "Your payment was successful and your order is confirmed.",
+    "codText": "Please keep {{amount}} ready at the time of delivery.",
+    "items": "Items in this order",
+    "deliveringTo": "Delivering to",
+    "trackOrder": "Track this order",
+    "downloadInvoice": "Download invoice"
+  }
+}

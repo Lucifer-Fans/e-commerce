@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "गुणवत्तापूर्ण निर्माण सामग्री, हार्डवेयर और उपकरण",
+    "seoDescription": "प्रीमियम प्लाईवुड, लैमिनेट, हार्डवेयर, पेंट, पावर टूल्स और इलेक्ट्रिकल खरीदें। असली ब्रांड, सुरक्षित भुगतान और तेज़ डिलीवरी।",
+    "feedError": "उत्पाद लोड नहीं हो सके",
+    "forYou": "आपके लिए उत्पाद",
+    "topSelling": "सर्वाधिक बिकने वाले उत्पाद",
+    "recentlyViewed": "हाल ही में देखे गए",
+    "recentlyViewedSubtitle": "जहाँ छोड़ा था वहीं से शुरू करें",
+    "ctaTitle": "कुछ बड़ा बना रहे हैं?",
+    "ctaText": "{{count}} श्रेणियों में पूरा कैटलॉग देखें — ट्रेड प्राइसिंग, असली ब्रांड और साइट तक डिलीवरी।",
+    "ctaTextAll": "पूरा कैटलॉग देखें — ट्रेड प्राइसिंग, असली ब्रांड और साइट तक डिलीवरी।",
+    "ctaButton": "सभी उत्पाद देखें",
+    "sections": {
+      "for_you": {
+        "title": "आपके लिए उत्पाद",
+        "subtitle": "आपकी पसंद के अनुसार चुने गए"
+      },
+      "top_selling": {
+        "title": "सर्वाधिक बिकने वाले उत्पाद",
+        "subtitle": "जो सब खरीद रहे हैं"
+      },
+      "new_arrivals": {
+        "title": "नए उत्पाद",
+        "subtitle": "स्टोर में नया"
+      },
+      "best_deals": {
+        "title": "बेहतरीन डील",
+        "subtitle": "अभी सबसे बड़ी छूट"
+      },
+      "top_rated": {
+        "title": "सर्वोच्च रेटेड",
+        "subtitle": "हमारे ग्राहकों की पसंद"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}” के परिणाम",
+    "seoDescription": "{{heading}} देखें — असली ब्रांड, प्रतिस्पर्धी कीमत और तेज़ डिलीवरी।",
+    "loading": "उत्पाद लोड हो रहे हैं…",
+    "found_one": "{{count}} उत्पाद मिला",
+    "found_other": "{{count}} उत्पाद मिले",
+    "sortBy": "क्रमबद्ध करें",
+    "sortAria": "उत्पाद क्रमबद्ध करें",
+    "emptyTitle": "इन फ़िल्टर से कोई उत्पाद मेल नहीं खाता",
+    "emptyMessage": "अपनी कीमत सीमा बढ़ाएँ या कोई फ़िल्टर हटाकर देखें।"
+  },
+  "sort": {
+    "newest": "सबसे नए पहले",
+    "popular": "लोकप्रियता",
+    "price_asc": "कीमत: कम से ज़्यादा",
+    "price_desc": "कीमत: ज़्यादा से कम",
+    "discount": "छूट",
+    "rating": "ग्राहक रेटिंग",
+    "name_asc": "नाम: अ से ज्ञ"
+  },
+  "filters": {
+    "title": "फ़िल्टर",
+    "aria": "उत्पाद फ़िल्टर",
+    "close": "फ़िल्टर बंद करें",
+    "reset": "फ़िल्टर रीसेट करें",
+    "resetAll": "सभी रीसेट करें",
+    "removeFilter": "{{name}} फ़िल्टर हटाएँ",
+    "showCount_one": "{{count}} उत्पाद दिखाएँ",
+    "showCount_other": "{{count}} उत्पाद दिखाएँ",
+    "category": "श्रेणी",
+    "subCategory": "उप-श्रेणी",
+    "price": "कीमत",
+    "minPrice": "न्यूनतम कीमत",
+    "maxPrice": "अधिकतम कीमत",
+    "applyPrice": "कीमत लागू करें",
+    "catalogueRange": "कैटलॉग सीमा: {{min}} – {{max}}",
+    "brand": "ब्रांड",
+    "discount": "छूट",
+    "discountAndAbove": "{{value}}% और अधिक",
+    "customerRating": "ग्राहक रेटिंग",
+    "andUp": "और ऊपर",
+    "availabilityTitle": "उपलब्धता",
+    "availability": {
+      "in_stock": "केवल स्टॉक में",
+      "out_of_stock": "स्टॉक में नहीं"
+    },
+    "chipMinPrice": "{{value}} से",
+    "chipMaxPrice": "{{value}} तक",
+    "chipDiscount": "{{value}}% या अधिक छूट",
+    "chipRating": "{{value}} स्टार और ऊपर"
+  },
+  "grid": {
+    "emptyTitle": "कोई उत्पाद नहीं मिला",
+    "emptyMessage": "अपने फ़िल्टर बदलें या कुछ और खोजें।"
+  },
+  "details": {
+    "notFoundTitle": "उत्पाद नहीं मिला",
+    "notFoundMessage": "यह उत्पाद हटा दिया गया है या अब उपलब्ध नहीं है।",
+    "loadErrorTitle": "यह उत्पाद लोड नहीं हो सका",
+    "browseAll": "सभी उत्पाद देखें",
+    "share": "यह उत्पाद साझा करें",
+    "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी हो गया",
+    "ratingsCount_one": "{{count}} रेटिंग",
+    "ratingsCount_other": "{{count}} रेटिंग",
+    "noRatings": "अभी कोई रेटिंग नहीं",
+    "youSave": "आप {{amount}} बचाते हैं",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "एक विकल्प चुनें",
+    "unitsAvailable_one": "{{count}} इकाई उपलब्ध",
+    "unitsAvailable_other": "{{count}} इकाइयाँ उपलब्ध",
+    "showingVariant": "दिखा रहे हैं <1>{{label}}</1>",
+    "keySpecs": "मुख्य विनिर्देश",
+    "specWeight": "वज़न",
+    "specDimensions": "आयाम",
+    "inStockUnits_one": "स्टॉक में ({{count}} इकाई)",
+    "inStockUnits_other": "स्टॉक में ({{count}} इकाइयाँ)",
+    "relatedTitle": "संबंधित उत्पाद",
+    "relatedSubtitle": "ग्राहकों ने इन्हें भी देखा",
+    "delivery": {
+      "freeTitle": "मुफ़्त डिलीवरी",
+      "freeText": "यह वस्तु मुफ़्त भेजी जाती है",
+      "paidTitle": "डिलीवरी शुल्क लागू",
+      "paidText": "₹{{amount}} से ऊपर मुफ़्त",
+      "returnsTitle": "7 दिन में वापसी",
+      "returnsText": "बिना झंझट बदलाव",
+      "paymentTitle": "सुरक्षित भुगतान",
+      "paymentText": "Razorpay द्वारा सुरक्षित",
+      "weightTitle": "शिपिंग वज़न",
+      "genuineTitle": "असली उत्पाद",
+      "genuineText": "सीधे ब्रांड से मंगाया गया"
+    },
+    "rows": {
+      "brand": "ब्रांड",
+      "category": "श्रेणी",
+      "subCategory": "उप-श्रेणी",
+      "sku": "SKU",
+      "availability": "उपलब्धता",
+      "tags": "टैग"
+    }
+  },
+  "tabs": {
+    "description": "विवरण",
+    "details": "उत्पाद विवरण",
+    "features": "विशेषताएँ",
+    "featuresWithCount": "विशेषताएँ ({{count}})",
+    "reviews": "समीक्षाएँ",
+    "reviewsWithCount": "समीक्षाएँ ({{count}})",
+    "faqs": "सामान्य प्रश्न",
+    "faqsWithCount": "सामान्य प्रश्न ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "चुनें",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "अनुपलब्ध",
+    "stateOutOfStock": "स्टॉक में नहीं",
+    "reasonCombination": "इस संयोजन में उपलब्ध नहीं"
+  },
+  "gallery": {
+    "viewImage": "छवि {{index}} देखें",
+    "image": "छवि {{index}}",
+    "hoverToZoom": "ज़ूम के लिए होवर करें",
+    "previousImage": "पिछली छवि",
+    "nextImage": "अगली छवि",
+    "enlarged": "बड़ी उत्पाद छवि"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} रेटिंग",
+    "ratingsCount_other": "{{formatted}} रेटिंग",
+    "writeTitle": "समीक्षा लिखें",
+    "yourRating": "आपकी रेटिंग",
+    "starCount_one": "{{count}} स्टार",
+    "starCount_other": "{{count}} स्टार",
+    "titleLabel": "शीर्षक",
+    "titlePlaceholder": "अपने अनुभव को संक्षेप में बताएँ",
+    "commentLabel": "आपकी समीक्षा",
+    "commentPlaceholder": "आपको क्या पसंद या नापसंद आया? आपने इस उत्पाद का उपयोग कैसे किया?",
+    "optional": "(वैकल्पिक)",
+    "submit": "समीक्षा जमा करें",
+    "submitFailed": "आपकी समीक्षा जमा नहीं हो सकी",
+    "pickRating": "कृपया स्टार रेटिंग चुनें",
+    "thanks": "आपकी समीक्षा के लिए धन्यवाद!",
+    "loginToReview": "समीक्षा लिखने के लिए कृपया लॉग इन करें",
+    "sortAria": "समीक्षाएँ क्रमबद्ध करें",
+    "filterAria": "रेटिंग से फ़िल्टर करें",
+    "allRatings": "सभी रेटिंग",
+    "anonymous": "अनाम",
+    "verified": "सत्यापित खरीद",
+    "emptyTitle": "अभी कोई समीक्षा नहीं",
+    "emptyMessage": "इस उत्पाद पर अपना अनुभव साझा करने वाले पहले व्यक्ति बनें।",
+    "sort": {
+      "newest": "सबसे नई",
+      "helpful": "सबसे उपयोगी",
+      "highest": "सर्वाधिक रेटेड",
+      "lowest": "न्यूनतम रेटेड"
+    }
+  },
+  "specs": {
+    "emptyTitle": "कोई विनिर्देश सूचीबद्ध नहीं",
+    "emptyMessage": "इस उत्पाद के विस्तृत विनिर्देश अभी जोड़े नहीं गए हैं।"
+  },
+  "faq": {
+    "emptyTitle": "अभी कोई प्रश्न नहीं",
+    "emptyMessage": "इस उत्पाद के बारे में कोई प्रश्न है? हमारी सहायता टीम से संपर्क करें, हम मदद करेंगे।"
+  }
+}

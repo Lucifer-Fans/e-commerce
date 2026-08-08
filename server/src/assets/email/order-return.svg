@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52" fill="none">
+  <!--
+    Circular arrow for "Easy Returns", drawn to the same 2px-stroke-on-24px
+    weight as the step icons so the four benefits sit level. The ring is opened
+    between 318 and 40 degrees (clockwise from twelve) and the arrowhead is
+    dropped into the gap. 3.9px of ring on a 52px cut is 2/26. Shown at 26.
+  -->
+  <path d="M36.93 13.98a17 17 0 11-22.31.39l2.61 2.9a13.1 13.1 0 1017.19-2.3z" fill="#2563eb"/>
+  <path d="M8 13l16-6-2 16z" fill="#2563eb"/>
+</svg>

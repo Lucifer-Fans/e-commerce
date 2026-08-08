@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "ଗୁଣାତ୍ମକ ନିର୍ମାଣ ସାମଗ୍ରୀ, ହାର୍ଡୱେୟାର ଓ ଉପକରଣ",
+    "seoDescription": "ପ୍ରିମିୟମ ପ୍ଲାଏଉଡ, ଲାମିନେଟ, ହାର୍ଡୱେୟାର, ରଙ୍ଗ, ପାୱାର ଟୁଲ୍ସ ଓ ଇଲେକ୍ଟ୍ରିକାଲ୍ସ କିଣନ୍ତୁ। ଅସଲି ବ୍ରାଣ୍ଡ, ସୁରକ୍ଷିତ ପେମେଣ୍ଟ ଓ ଦ୍ରୁତ ଡେଲିଭରୀ।",
+    "feedError": "ଉତ୍ପାଦ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ",
+    "forYou": "ଆପଣଙ୍କ ପାଇଁ ଉତ୍ପାଦ",
+    "topSelling": "ସର୍ବାଧିକ ବିକ୍ରି ହେଉଥିବା ଉତ୍ପାଦ",
+    "recentlyViewed": "ସମ୍ପ୍ରତି ଦେଖାଯାଇଥିବା",
+    "recentlyViewedSubtitle": "ଯେଉଁଠାରେ ଛାଡ଼ିଥିଲେ ସେଠାରୁ ଆରମ୍ଭ କରନ୍ତୁ",
+    "ctaTitle": "କିଛି ବଡ଼ ତିଆରି କରୁଛନ୍ତି କି?",
+    "ctaText": "{{count}} ବର୍ଗରେ ସମ୍ପୂର୍ଣ୍ଣ କାଟାଲଗ ଦେଖନ୍ତୁ — ଟ୍ରେଡ୍ ମୂଲ୍ୟ, ଅସଲି ବ୍ରାଣ୍ଡ ଓ ସାଇଟକୁ ଡେଲିଭରୀ।",
+    "ctaTextAll": "ସମ୍ପୂର୍ଣ୍ଣ କାଟାଲଗ ଦେଖନ୍ତୁ — ଟ୍ରେଡ୍ ମୂଲ୍ୟ, ଅସଲି ବ୍ରାଣ୍ଡ ଓ ସାଇଟକୁ ଡେଲିଭରୀ।",
+    "ctaButton": "ସମସ୍ତ ଉତ୍ପାଦ ଦେଖନ୍ତୁ",
+    "sections": {
+      "for_you": {
+        "title": "ଆପଣଙ୍କ ପାଇଁ ଉତ୍ପାଦ",
+        "subtitle": "ଆପଣଙ୍କ ପସନ୍ଦ ଅନୁଯାୟୀ ବଛା"
+      },
+      "top_selling": {
+        "title": "ସର୍ବାଧିକ ବିକ୍ରି ହେଉଥିବା ଉତ୍ପାଦ",
+        "subtitle": "ସମସ୍ତେ ଯାହା କିଣୁଛନ୍ତି"
+      },
+      "new_arrivals": {
+        "title": "ନୂଆ ଉତ୍ପାଦ",
+        "subtitle": "ଦୋକାନରେ ନୂଆ"
+      },
+      "best_deals": {
+        "title": "ସର୍ବୋତ୍ତମ ଡିଲ୍",
+        "subtitle": "ଏବେ ସବୁଠାରୁ ବଡ଼ ଛାଡ଼"
+      },
+      "top_rated": {
+        "title": "ସର୍ବାଧିକ ରେଟେଡ୍",
+        "subtitle": "ଆମ ଗ୍ରାହକଙ୍କ ପସନ୍ଦ"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}” ପାଇଁ ଫଳାଫଳ",
+    "seoDescription": "{{heading}} ଦେଖନ୍ତୁ — ଅସଲି ବ୍ରାଣ୍ଡ, ପ୍ରତିଯୋଗିତାମୂଳକ ମୂଲ୍ୟ ଓ ଦ୍ରୁତ ଡେଲିଭରୀ।",
+    "loading": "ଉତ୍ପାଦ ଲୋଡ୍ ହେଉଛି…",
+    "found_one": "{{count}} ଉତ୍ପାଦ ମିଳିଲା",
+    "found_other": "{{count}} ଉତ୍ପାଦ ମିଳିଲା",
+    "sortBy": "ସଜାନ୍ତୁ",
+    "sortAria": "ଉତ୍ପାଦ ସଜାନ୍ତୁ",
+    "emptyTitle": "ଏହି ଫିଲ୍ଟର ସହ କୌଣସି ଉତ୍ପାଦ ମେଳ ଖାଉନାହିଁ",
+    "emptyMessage": "ଆପଣଙ୍କ ମୂଲ୍ୟ ସୀମା ବଢ଼ାନ୍ତୁ କିମ୍ବା ଏକ ଫିଲ୍ଟର ହଟାନ୍ତୁ।"
+  },
+  "sort": {
+    "newest": "ନୂଆ ପ୍ରଥମେ",
+    "popular": "ଲୋକପ୍ରିୟତା",
+    "price_asc": "ମୂଲ୍ୟ: କମରୁ ଅଧିକ",
+    "price_desc": "ମୂଲ୍ୟ: ଅଧିକରୁ କମ",
+    "discount": "ଛାଡ଼",
+    "rating": "ଗ୍ରାହକ ରେଟିଂ",
+    "name_asc": "ନାମ: ଅ ରୁ କ୍ଷ"
+  },
+  "filters": {
+    "title": "ଫିଲ୍ଟର",
+    "aria": "ଉତ୍ପାଦ ଫିଲ୍ଟର",
+    "close": "ଫିଲ୍ଟର ବନ୍ଦ କରନ୍ତୁ",
+    "reset": "ଫିଲ୍ଟର ରିସେଟ୍ କରନ୍ତୁ",
+    "resetAll": "ସବୁ ରିସେଟ୍ କରନ୍ତୁ",
+    "removeFilter": "{{name}} ଫିଲ୍ଟର ହଟାନ୍ତୁ",
+    "showCount_one": "{{count}} ଉତ୍ପାଦ ଦେଖାନ୍ତୁ",
+    "showCount_other": "{{count}} ଉତ୍ପାଦ ଦେଖାନ୍ତୁ",
+    "category": "ବର୍ଗ",
+    "subCategory": "ଉପ-ବର୍ଗ",
+    "price": "ମୂଲ୍ୟ",
+    "minPrice": "ସର୍ବନିମ୍ନ ମୂଲ୍ୟ",
+    "maxPrice": "ସର୍ବାଧିକ ମୂଲ୍ୟ",
+    "applyPrice": "ମୂଲ୍ୟ ପ୍ରୟୋଗ କରନ୍ତୁ",
+    "catalogueRange": "କାଟାଲଗ ପରିସର: {{min}} – {{max}}",
+    "brand": "ବ୍ରାଣ୍ଡ",
+    "discount": "ଛାଡ଼",
+    "discountAndAbove": "{{value}}% ଓ ଅଧିକ",
+    "customerRating": "ଗ୍ରାହକ ରେଟିଂ",
+    "andUp": "ଓ ଉପରେ",
+    "availabilityTitle": "ଉପଲବ୍ଧତା",
+    "availability": {
+      "in_stock": "କେବଳ ଷ୍ଟକରେ ଥିବା",
+      "out_of_stock": "ଷ୍ଟକରେ ନାହିଁ"
+    },
+    "chipMinPrice": "{{value}} ଠାରୁ",
+    "chipMaxPrice": "{{value}} ପର୍ଯ୍ୟନ୍ତ",
+    "chipDiscount": "{{value}}% କିମ୍ବା ଅଧିକ ଛାଡ଼",
+    "chipRating": "{{value}} ତାରା ଓ ଉପରେ"
+  },
+  "grid": {
+    "emptyTitle": "କୌଣସି ଉତ୍ପାଦ ମିଳିଲା ନାହିଁ",
+    "emptyMessage": "ଆପଣଙ୍କ ଫିଲ୍ଟର ବଦଳାନ୍ତୁ କିମ୍ବା ଅନ୍ୟ କିଛି ଖୋଜନ୍ତୁ।"
+  },
+  "details": {
+    "notFoundTitle": "ଉତ୍ପାଦ ମିଳିଲା ନାହିଁ",
+    "notFoundMessage": "ଏହି ଉତ୍ପାଦ ହଟାଯାଇଥାଇପାରେ କିମ୍ବା ଆଉ ଉପଲବ୍ଧ ନାହିଁ।",
+    "loadErrorTitle": "ଏହି ଉତ୍ପାଦ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ",
+    "browseAll": "ସମସ୍ତ ଉତ୍ପାଦ ଦେଖନ୍ତୁ",
+    "share": "ଏହି ଉତ୍ପାଦ ସେୟାର କରନ୍ତୁ",
+    "linkCopied": "ଲିଙ୍କ କ୍ଲିପବୋର୍ଡକୁ କପି ହେଲା",
+    "ratingsCount_one": "{{count}} ରେଟିଂ",
+    "ratingsCount_other": "{{count}} ରେଟିଂ",
+    "noRatings": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ରେଟିଂ ନାହିଁ",
+    "youSave": "ଆପଣ {{amount}} ସଞ୍ଚୟ କରୁଛନ୍ତି",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "ଏକ ବିକଳ୍ପ ବାଛନ୍ତୁ",
+    "unitsAvailable_one": "{{count}} ୟୁନିଟ ଉପଲବ୍ଧ",
+    "unitsAvailable_other": "{{count}} ୟୁନିଟ ଉପଲବ୍ଧ",
+    "showingVariant": "<1>{{label}}</1> ଦେଖାଯାଉଛି",
+    "keySpecs": "ମୁଖ୍ୟ ବିଶେଷତା",
+    "specWeight": "ଓଜନ",
+    "specDimensions": "ମାପ",
+    "inStockUnits_one": "ଷ୍ଟକରେ ଅଛି ({{count}} ୟୁନିଟ)",
+    "inStockUnits_other": "ଷ୍ଟକରେ ଅଛି ({{count}} ୟୁନିଟ)",
+    "relatedTitle": "ସମ୍ପର୍କିତ ଉତ୍ପାଦ",
+    "relatedSubtitle": "ଗ୍ରାହକମାନେ ଏଗୁଡ଼ିକୁ ମଧ୍ୟ ବିଚାର କରିଥିଲେ",
+    "delivery": {
+      "freeTitle": "ମାଗଣା ଡେଲିଭରୀ",
+      "freeText": "ଏହି ଜିନିଷ ମାଗଣାରେ ପଠାଯାଏ",
+      "paidTitle": "ଡେଲିଭରୀ ଶୁଳ୍କ ପ୍ରଯୁଜ୍ୟ",
+      "paidText": "₹{{amount}} ଉପରେ ମାଗଣା",
+      "returnsTitle": "7 ଦିନରେ ଫେରସ୍ତ",
+      "returnsText": "ଝଞ୍ଜଟମୁକ୍ତ ବଦଳ",
+      "paymentTitle": "ସୁରକ୍ଷିତ ପେମେଣ୍ଟ",
+      "paymentText": "Razorpay ଦ୍ୱାରା ସୁରକ୍ଷିତ",
+      "weightTitle": "ଶିପିଂ ଓଜନ",
+      "genuineTitle": "ଅସଲି ଉତ୍ପାଦ",
+      "genuineText": "ସିଧାସଳଖ ବ୍ରାଣ୍ଡରୁ ସଂଗୃହୀତ"
+    },
+    "rows": {
+      "brand": "ବ୍ରାଣ୍ଡ",
+      "category": "ବର୍ଗ",
+      "subCategory": "ଉପ-ବର୍ଗ",
+      "sku": "SKU",
+      "availability": "ଉପଲବ୍ଧତା",
+      "tags": "ଟ୍ୟାଗ"
+    }
+  },
+  "tabs": {
+    "description": "ବର୍ଣ୍ଣନା",
+    "details": "ଉତ୍ପାଦ ବିବରଣୀ",
+    "features": "ବିଶେଷତା",
+    "featuresWithCount": "ବିଶେଷତା ({{count}})",
+    "reviews": "ସମୀକ୍ଷା",
+    "reviewsWithCount": "ସମୀକ୍ଷା ({{count}})",
+    "faqs": "ସାଧାରଣ ପ୍ରଶ୍ନ",
+    "faqsWithCount": "ସାଧାରଣ ପ୍ରଶ୍ନ ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "ବାଛନ୍ତୁ",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "ଅନୁପଲବ୍ଧ",
+    "stateOutOfStock": "ଷ୍ଟକରେ ନାହିଁ",
+    "reasonCombination": "ଏହି ସଂଯୋଜନରେ ଉପଲବ୍ଧ ନାହିଁ"
+  },
+  "gallery": {
+    "viewImage": "ଛବି {{index}} ଦେଖନ୍ତୁ",
+    "image": "ଛବି {{index}}",
+    "hoverToZoom": "ଜୁମ୍ କରିବାକୁ ହୋଭର କରନ୍ତୁ",
+    "previousImage": "ପୂର୍ବ ଛବି",
+    "nextImage": "ପରବର୍ତ୍ତୀ ଛବି",
+    "enlarged": "ବଡ଼ ଉତ୍ପାଦ ଛବି"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} ରେଟିଂ",
+    "ratingsCount_other": "{{formatted}} ରେଟିଂ",
+    "writeTitle": "ସମୀକ୍ଷା ଲେଖନ୍ତୁ",
+    "yourRating": "ଆପଣଙ୍କ ରେଟିଂ",
+    "starCount_one": "{{count}} ତାରା",
+    "starCount_other": "{{count}} ତାରା",
+    "titleLabel": "ଶୀର୍ଷକ",
+    "titlePlaceholder": "ଆପଣଙ୍କ ଅଭିଜ୍ଞତା ସଂକ୍ଷେପରେ କୁହନ୍ତୁ",
+    "commentLabel": "ଆପଣଙ୍କ ସମୀକ୍ଷା",
+    "commentPlaceholder": "ଆପଣଙ୍କୁ କଣ ଭଲ ବା ଖରାପ ଲାଗିଲା? ଏହି ଉତ୍ପାଦ କିପରି ବ୍ୟବହାର କଲେ?",
+    "optional": "(ବୈକଳ୍ପିକ)",
+    "submit": "ସମୀକ୍ଷା ଦାଖଲ କରନ୍ତୁ",
+    "submitFailed": "ଆପଣଙ୍କ ସମୀକ୍ଷା ଦାଖଲ ହୋଇପାରିଲା ନାହିଁ",
+    "pickRating": "ଦୟାକରି ଏକ ତାରା ରେଟିଂ ବାଛନ୍ତୁ",
+    "thanks": "ଆପଣଙ୍କ ସମୀକ୍ଷା ପାଇଁ ଧନ୍ୟବାଦ!",
+    "loginToReview": "ସମୀକ୍ଷା ଲେଖିବା ପାଇଁ ଦୟାକରି ଲଗ୍ ଇନ୍ କରନ୍ତୁ",
+    "sortAria": "ସମୀକ୍ଷା ସଜାନ୍ତୁ",
+    "filterAria": "ରେଟିଂ ଅନୁସାରେ ଫିଲ୍ଟର କରନ୍ତୁ",
+    "allRatings": "ସମସ୍ତ ରେଟିଂ",
+    "anonymous": "ଅଜ୍ଞାତ",
+    "verified": "ଯାଞ୍ଚିତ କ୍ରୟ",
+    "emptyTitle": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ସମୀକ୍ଷା ନାହିଁ",
+    "emptyMessage": "ଏହି ଉତ୍ପାଦ ବିଷୟରେ ଆପଣଙ୍କ ଅଭିଜ୍ଞତା ବାଣ୍ଟିବାରେ ପ୍ରଥମ ହୁଅନ୍ତୁ।",
+    "sort": {
+      "newest": "ସର୍ବାଧିକ ସାମ୍ପ୍ରତିକ",
+      "helpful": "ସର୍ବାଧିକ ସହାୟକ",
+      "highest": "ସର୍ବାଧିକ ରେଟେଡ୍",
+      "lowest": "ସର୍ବନିମ୍ନ ରେଟେଡ୍"
+    }
+  },
+  "specs": {
+    "emptyTitle": "କୌଣସି ବିଶେଷତା ତାଲିକାଭୁକ୍ତ ନାହିଁ",
+    "emptyMessage": "ଏହି ଉତ୍ପାଦର ବିସ୍ତୃତ ବିଶେଷତା ଏପର୍ଯ୍ୟନ୍ତ ଯୋଡ଼ାଯାଇନାହିଁ।"
+  },
+  "faq": {
+    "emptyTitle": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ପ୍ରଶ୍ନ ନାହିଁ",
+    "emptyMessage": "ଏହି ଉତ୍ପାଦ ବିଷୟରେ ପ୍ରଶ୍ନ ଅଛି କି? ଆମର ସହାୟତା ଦଳକୁ ଯୋଗାଯୋଗ କରନ୍ତୁ, ଆମେ ସାହାଯ୍ୟ କରିବୁ।"
+  }
+}

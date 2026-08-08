@@ -1,0 +1,168 @@
+{
+  "cart": {
+    "title": "शॉपिंग कार्ट",
+    "itemCount_one": "{{count}} वस्तू",
+    "itemCount_other": "{{count}} वस्तू",
+    "emptyTitle": "तुमचे कार्ट रिकामे आहे",
+    "emptyMessage": "तुम्ही अजून काहीही जोडलेले दिसत नाही. आमचा कॅटलॉग पहायला सुरुवात करा.",
+    "emptyButSaved": "खाली नंतरसाठी जतन केलेल्या वस्तू आहेत.",
+    "startShopping": "खरेदी सुरू करा",
+    "continueShopping": "खरेदी सुरू ठेवा",
+    "savedForLater": "नंतरसाठी जतन केलेले ({{count}})",
+    "saveForLater": "नंतरसाठी जतन करा",
+    "savedToast": "नंतरसाठी जतन केले",
+    "moveToCart": "कार्टमध्ये हलवा",
+    "movedToCart": "कार्टमध्ये हलवले",
+    "itemRemoved": "वस्तू काढली",
+    "removeTitle": "ही वस्तू काढायची?",
+    "removeMessage": "“{{name}}” तुमच्या कार्टमधून काढली जाईल.",
+    "updateFailed": "तुमचे कार्ट अद्ययावत करता आले नाही",
+    "lineOutOfStock": "स्टॉकमध्ये नाही — चेकआउट सुरू ठेवण्यासाठी हे काढा",
+    "lineExceedsStock_one": "फक्त {{count}} उपलब्ध — चेकआउटला प्रमाण कमी केले जाईल",
+    "lineExceedsStock_other": "फक्त {{count}} उपलब्ध — चेकआउटला प्रमाण कमी केले जाईल",
+    "linePriceChanged": "तुम्ही जोडल्यानंतर किंमत बदलली आहे (आधी {{was}})",
+    "unavailableWarning": "काही वस्तू अनुपलब्ध आहेत किंवा स्टॉकपेक्षा जास्त आहेत. चेकआउटपूर्वी तुमचे कार्ट अद्ययावत करा.",
+    "proceedToCheckout": "चेकआउटला जा",
+    "securePayments": "सुरक्षित पेमेंट"
+  },
+
+  "wishlist": {
+    "title": "माझी इच्छासूची",
+    "emptyTitle": "तुमची इच्छासूची रिकामी आहे",
+    "emptyMessage": "कोणत्याही उत्पादनावरील हृदय चिन्हावर टॅप करून ते इथे जतन करा.",
+    "browse": "उत्पादने पहा"
+  },
+
+  "coupon": {
+    "applyTitle": "कूपन लागू करा",
+    "label": "कूपन कोड",
+    "placeholder": "कूपन कोड टाका",
+    "enterCode": "कूपन कोड टाका",
+    "applied": "कूपन लागू झाले",
+    "applyFailed": "हे कूपन लागू करता आले नाही",
+    "removed": "कूपन काढले",
+    "codeApplied": "{{code}} लागू झाले",
+    "youSaved": "तुम्ही {{amount}} वाचवले",
+    "viewAvailable": "उपलब्ध कूपन पहा ({{count}})",
+    "hideAvailable": "उपलब्ध कूपन लपवा ({{count}})",
+    "minOrder": "किमान ऑर्डर {{amount}}"
+  },
+
+  "summary": {
+    "title": "किंमत तपशील",
+    "subtotal_one": "उप-एकूण ({{count}} वस्तू)",
+    "subtotal_other": "उप-एकूण ({{count}} वस्तू)",
+    "coupon": "कूपन ({{code}})",
+    "delivery": "वितरण शुल्क",
+    "free": "मोफत",
+    "total": "एकूण रक्कम",
+    "savings": "या ऑर्डरवर तुम्ही {{amount}} वाचवता",
+    "freeShippingNudge": "मोफत वितरणासाठी आणखी {{amount}} जोडा"
+  },
+
+  "checkout": {
+    "title": "चेकआउट",
+    "orderTotal": "ऑर्डर एकूण",
+    "emptyCartMessage": "चेकआउट करण्यापूर्वी तुमच्या कार्टमध्ये काहीतरी जोडा.",
+    "selectAddress": "कृपया वितरण पत्ता निवडा",
+    "placeFailed": "तुमची ऑर्डर देता आली नाही",
+    "change": "बदला",
+    "deliverHere": "याच पत्त्यावर वितरित करा",
+    "summaryHeading_one": "ऑर्डर सारांश ({{count}} वस्तू)",
+    "summaryHeading_other": "ऑर्डर सारांश ({{count}} वस्तू)",
+    "qty": "प्रमाण: {{count}}",
+    "continueToPayment": "पेमेंटकडे जा",
+    "processing": "प्रक्रिया सुरू आहे…",
+    "placeOrder": "ऑर्डर द्या",
+    "payAmount": "{{amount}} भरा",
+    "completeSteps": "ऑर्डर देण्यासाठी सर्व टप्पे पूर्ण करा",
+    "encrypted": "तुमची माहिती एन्क्रिप्टेड आणि सुरक्षित आहे",
+    "legal": "ही ऑर्डर देऊन तुम्ही आमच्या <1>सेवा अटी</1> आणि <2>गोपनीयता धोरणाशी</2> सहमत होता.",
+    "steps": {
+      "address": "वितरण पत्ता",
+      "review": "ऑर्डर सारांश",
+      "payment": "पेमेंट"
+    }
+  },
+
+  "address": {
+    "addTitle": "नवीन पत्ता जोडा",
+    "editTitle": "पत्ता संपादित करा",
+    "save": "पत्ता जतन करा",
+    "update": "पत्ता अद्ययावत करा",
+    "added": "पत्ता जोडला",
+    "updated": "पत्ता अद्ययावत झाला",
+    "saveFailed": "हा पत्ता जतन करता आला नाही",
+    "default": "डीफॉल्ट",
+    "makeDefault": "हा माझा डीफॉल्ट वितरण पत्ता करा",
+    "typeLabel": "पत्त्याचा प्रकार",
+    "optional": "(पर्यायी)",
+    "phoneLine": "फोन: {{phone}}",
+    "labels": {
+      "home": "घर",
+      "work": "कार्यालय",
+      "other": "इतर"
+    },
+    "fields": {
+      "fullName": "पूर्ण नाव",
+      "fullNamePlaceholder": "प्राप्तकर्त्याचे नाव",
+      "phone": "मोबाइल क्रमांक",
+      "phonePlaceholder": "10 अंकी क्रमांक",
+      "addressLine1": "पत्ता ओळ 1",
+      "addressLine1Placeholder": "घर / फ्लॅट क्र., इमारत, रस्ता",
+      "addressLine2": "पत्ता ओळ 2",
+      "addressLine2Placeholder": "क्षेत्र, कॉलनी, सेक्टर",
+      "landmark": "खूण",
+      "landmarkPlaceholder": "जवळची खूण",
+      "pincode": "पिनकोड",
+      "pincodePlaceholder": "6 अंकी पिनकोड",
+      "city": "शहर",
+      "cityPlaceholder": "शहर",
+      "state": "राज्य",
+      "statePlaceholder": "राज्य",
+      "alternatePhone": "पर्यायी फोन"
+    },
+    "errors": {
+      "line1": "तुमचा रस्त्याचा पत्ता टाका",
+      "city": "शहर आवश्यक आहे",
+      "state": "राज्य आवश्यक आहे"
+    }
+  },
+
+  "payment": {
+    "methodTitle": "पेमेंट पद्धत",
+    "onlineTitle": "ऑनलाइन पेमेंट (कार्ड / यूपीआय / नेट बँकिंग)",
+    "onlineText": "Razorpay द्वारे सुरक्षित. तुमच्या कार्डचे तपशील आमच्या सर्व्हरपर्यंत कधीही पोहोचत नाहीत.",
+    "onlineUnavailable": "या स्टोअरवर ऑनलाइन पेमेंट अजून कॉन्फिगर केलेले नाही.",
+    "codTitle": "डिलिव्हरीवर रोख",
+    "codText": "तुमची ऑर्डर मिळाल्यावर रोख भरा.",
+    "gatewayLoadFailed": "पेमेंट गेटवे लोड करता आले नाही. तुमचे कनेक्शन तपासा.",
+    "orderDescription": "ऑर्डर {{number}}",
+    "cancelled": "पेमेंट रद्द झाले. तुमची ऑर्डर प्रलंबित म्हणून जतन केली आहे.",
+    "failed": "पेमेंट अयशस्वी झाले. कृपया पुन्हा प्रयत्न करा."
+  },
+
+  "confirm": {
+    "pill": "ऑर्डर",
+    "title": "ऑर्डर निश्चित",
+    "subtitle": "तुमच्या वस्तू पॅक करून आमच्या वितरण भागीदाराकडे सोपवल्या जात आहेत",
+    "status": "तुमची ऑर्डर निश्चित केली जात आहे…"
+  },
+
+  "success": {
+    "seoTitle": "ऑर्डर निश्चित झाली",
+    "notFound": "ऑर्डर सापडली नाही",
+    "title": "ऑर्डर यशस्वीरित्या दिली!",
+    "subtitle": "तुमच्या ऑर्डरबद्दल धन्यवाद. पुष्टीकरण तुमच्या ईमेलवर पाठवले आहे.",
+    "orderNumber": "ऑर्डर क्रमांक",
+    "orderDate": "ऑर्डर तारीख",
+    "totalPaid": "एकूण भरलेले",
+    "paidTitle": "पेमेंट मिळाले",
+    "paidText": "तुमचे पेमेंट यशस्वी झाले आणि तुमची ऑर्डर निश्चित झाली आहे.",
+    "codText": "कृपया वितरणाच्या वेळी {{amount}} तयार ठेवा.",
+    "items": "या ऑर्डरमधील वस्तू",
+    "deliveringTo": "इथे वितरित होत आहे",
+    "trackOrder": "ही ऑर्डर ट्रॅक करा",
+    "downloadInvoice": "इनव्हॉइस डाउनलोड करा"
+  }
+}

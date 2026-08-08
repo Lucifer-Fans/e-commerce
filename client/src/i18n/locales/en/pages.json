@@ -1,0 +1,86 @@
+{
+  "contact": {
+    "seoTitle": "Contact Us",
+    "seoDescription": "Questions about our products or your order? Reach the {{app}} team by phone, email or the contact form.",
+    "heading": "Get in Touch",
+    "intro": "Have a question about our products or your order? We're <1>here</1> to help! <2>Fill out the form below or contact us directly.</2>",
+    "formTitle": "Send us a Message",
+    "detailsTitle": "Contact Details",
+    "officeAddress": "Office Address",
+    "addressSoon": "Address coming soon",
+    "openInMaps": "Open in Maps",
+    "mapTitle": "Office location",
+    "optional": "(optional)",
+    "submit": "Submit Message",
+    "sending": "Sending…",
+    "sendFailed": "Could not send your message. Please try again.",
+    "successMessage": "Your message has been successfully submitted. We will get back to you soon.",
+    "fields": {
+      "name": "Full Name",
+      "namePlaceholder": "Your Name",
+      "email": "Email Address",
+      "emailPlaceholder": "example@gmail.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter 10 digit number",
+      "subject": "Subject",
+      "subjectPlaceholder": "Order Inquiry, Product Info, etc.",
+      "message": "Message",
+      "messagePlaceholder": "How can we help you?"
+    },
+    "errors": {
+      "message": "Tell us a little more about your query"
+    }
+  },
+
+  "careers": {
+    "seoTitle": "Careers",
+    "seoDescription": "Join the {{app}} team — browse our open positions and apply online.",
+    "heading": "Apply For A Position",
+    "optional": "(optional)",
+    "selectPosition": "Select Position",
+    "noOpenings": "No openings right now",
+    "noOpeningsNote": "There are no open positions right now. Please check back soon.",
+    "selectExperience": "Select Experience",
+    "uploadResume": "Upload Resume",
+    "chooseFile": "Choose File",
+    "noFile": "No file chosen",
+    "removeFile": "Remove selected file",
+    "resumeHint": "(PDF, DOC, DOCX - Max 5MB)",
+    "submit": "Submit Application",
+    "submitting": "Submitting…",
+    "uploading": "Uploading {{percent}}%",
+    "submitFailed": "Could not submit your application. Please try again.",
+    "successMessage": "Your application has been successfully submitted. We will get back to you soon.",
+    "whyJoin": "Why Join Us?",
+    "contactHr": "Contact HR",
+    "fields": {
+      "name": "Full Name",
+      "namePlaceholder": "Your Name",
+      "email": "Email Address",
+      "emailPlaceholder": "example@gmail.com",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter 10 digit number",
+      "position": "Position Applying For",
+      "experience": "Experience",
+      "location": "Current Location",
+      "locationPlaceholder": "Your Location",
+      "coverLetter": "Cover Letter / Message",
+      "coverLetterPlaceholder": "Tell us about yourself..."
+    },
+    "perks": {
+      "growthTitle": "Growth Opportunities",
+      "growthText": "We support your professional and personal growth.",
+      "cultureTitle": "Great Work Culture",
+      "cultureText": "A supportive and friendly environment.",
+      "learningTitle": "Learn & Develop",
+      "learningText": "Continuous learning and skill development."
+    },
+    "errors": {
+      "position": "Select the position you are applying for",
+      "experience": "Select your experience level",
+      "resume": "Attach your résumé (PDF, DOC or DOCX)",
+      "resumeType": "Only PDF, DOC and DOCX files are accepted",
+      "resumeSize": "Your résumé must be smaller than 5MB"
+    }
+  }
+}

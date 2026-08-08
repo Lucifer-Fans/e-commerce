@@ -1,0 +1,399 @@
+/**
+ * Order-confirm animation — plays inside the checkout content area (in place of the
+ * address/summary/payment columns) between "Place Order" and the success page.
+ * Styled with the store's own tokens so it reads as the next checkout step, not a takeover.
+ * The whole timeline is CSS keyframes; OrderConfirmAnimation.jsx only owns the clock.
+ */
+
+.oc-panel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  min-height: 460px;
+  padding: 40px 20px;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0; /* ink-200 */
+  background: #fff;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.06),
+    0 1px 2px rgba(15, 23, 42, 0.04);
+  animation: oc-fade 0.3s ease-out both;
+}
+
+.oc-panel.is-leaving {
+  animation: oc-fade 0.4s ease-in reverse both;
+}
+
+/* Soft brand wash so the panel doesn't read as a blank card. */
+.oc-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 85%, rgba(37, 99, 235, 0.08), transparent 55%),
+    radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.1), transparent 55%);
+}
+
+.oc-scene {
+  position: relative;
+  z-index: 2;
+  width: min(560px, 100%);
+  text-align: center;
+}
+
+/* ---------- decorative flourishes ---------- */
+
+.oc-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.oc-squiggle {
+  position: absolute;
+  fill: none;
+  stroke: #bfdbfe; /* brand-200 */
+  stroke-width: 2;
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  opacity: 0;
+  animation: oc-draw 2.4s ease-out 0.15s forwards;
+}
+
+.oc-squiggle--tl {
+  top: 6%;
+  left: -3%;
+  width: 260px;
+}
+.oc-squiggle--br {
+  right: -3%;
+  bottom: 6%;
+  width: 240px;
+  stroke: #fde68a; /* amber-200 */
+  animation-delay: 0.4s;
+}
+
+.oc-wifi {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  width: 44px;
+  fill: none;
+  stroke: #cbd5e1; /* ink-300 */
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.oc-wifi > * {
+  opacity: 0.3;
+  animation: oc-wifi-pulse 1.8s ease-in-out infinite;
+}
+.oc-wifi > *:nth-child(2) {
+  animation-delay: 0.22s;
+}
+.oc-wifi > *:nth-child(3) {
+  animation-delay: 0.44s;
+}
+
+.oc-cloud {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  width: 78px;
+  fill: none;
+  stroke: #e2e8f0; /* ink-200 */
+  stroke-width: 3;
+  animation: oc-float 4s ease-in-out infinite alternate;
+}
+
+/* ---------- headline block ---------- */
+
+.oc-pill {
+  display: inline-block;
+  border-radius: 999px;
+  background: #fef3c7; /* amber-100 */
+  padding: 5px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #b45309; /* amber-700 */
+  animation: oc-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+.oc-title {
+  margin-top: 12px;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0f172a; /* ink-900 */
+  animation: oc-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+.oc-subtitle {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #64748b; /* ink-500 */
+  animation: oc-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+}
+
+/* ---------- stage: parcel → arrow → truck ---------- */
+
+.oc-stage {
+  /* Horizontal gap between the pad's centre and the truck's cargo box. */
+  --oc-travel: calc(min(500px, 80vw) - 150px);
+  position: relative;
+  margin: 26px auto 0;
+  display: flex;
+  height: 170px;
+  width: min(500px, 80vw);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.oc-pad {
+  display: grid;
+  height: 116px;
+  width: 116px;
+  place-items: center;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc; /* ink-50 */
+  animation: oc-pad-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+}
+
+.oc-parcel {
+  width: 66px;
+  filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.12));
+  animation:
+    oc-parcel-idle 0.9s ease-in-out 0.95s 1,
+    oc-parcel-fly 1.15s cubic-bezier(0.5, -0.2, 0.4, 1) 1.85s forwards;
+}
+
+/* The dashed arc the parcel rides along. */
+.oc-arrow {
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  width: 150px;
+  translate: -50% 0;
+  fill: none;
+  stroke: #f59e0b; /* accent */
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: oc-draw 0.7s ease-out 1.2s forwards;
+}
+
+/* The head is short, so it needs its own dash length to land with the curve. */
+.oc-arrow-head {
+  stroke-dasharray: 46;
+  stroke-dashoffset: 46;
+  animation: oc-draw 0.25s ease-out 1.7s forwards;
+}
+
+.oc-truck {
+  position: relative;
+  width: 140px;
+  animation:
+    oc-truck-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both,
+    oc-truck-load 0.35s ease-out 2.9s,
+    oc-truck-off 0.9s cubic-bezier(0.6, 0, 0.85, 0.2) 3.3s forwards;
+}
+
+.oc-wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: oc-spin 0.7s linear 3.3s infinite;
+}
+
+/* ---------- closing state ---------- */
+
+.oc-check {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  animation: oc-check-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3.75s forwards;
+}
+.oc-check span {
+  display: grid;
+  height: 72px;
+  width: 72px;
+  place-items: center;
+  border-radius: 999px;
+  background: #16a34a; /* success */
+  color: #fff;
+  box-shadow: 0 0 0 10px rgba(22, 163, 74, 0.15);
+}
+
+.oc-status {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.oc-track {
+  margin: 12px auto 0;
+  height: 4px;
+  width: 200px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+.oc-track i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2563eb, #16a34a);
+  transform-origin: left;
+  animation: oc-progress 4.2s linear forwards;
+}
+
+/* ---------- keyframes ---------- */
+
+@keyframes oc-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes oc-draw {
+  to {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes oc-wifi-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes oc-float {
+  to {
+    transform: translateY(-10px);
+  }
+}
+@keyframes oc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes oc-pad-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7) rotate(-8deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+@keyframes oc-parcel-idle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  35% {
+    transform: translateY(-9px) rotate(-5deg);
+  }
+  70% {
+    transform: translateY(0) rotate(3deg);
+  }
+}
+/* Arcs up and to the right, landing inside the truck's cargo box. */
+@keyframes oc-parcel-fly {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0);
+  }
+  45% {
+    transform: translate(calc(var(--oc-travel) * 0.45), -92px) scale(0.78) rotate(180deg);
+  }
+  85% {
+    transform: translate(calc(var(--oc-travel) * 0.94), -16px) scale(0.5) rotate(340deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--oc-travel), 2px) scale(0.42) rotate(360deg);
+    opacity: 0;
+  }
+}
+@keyframes oc-truck-in {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes oc-truck-load {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(7px);
+  }
+}
+@keyframes oc-truck-off {
+  0% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-16px);
+  }
+  100% {
+    /* Far enough to clear the panel on any breakpoint. */
+    transform: translateX(120vw);
+  }
+}
+@keyframes oc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes oc-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes oc-check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Shoppers who asked for calm interfaces get the endpoint, not the ride. */
+@media (prefers-reduced-motion: reduce) {
+  .oc-panel *,
+  .oc-panel::before {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "दर्जेदार बांधकाम साहित्य, हार्डवेअर आणि अवजारे",
+    "seoDescription": "प्रीमियम प्लायवूड, लॅमिनेट, हार्डवेअर, पेंट, पॉवर टूल्स आणि इलेक्ट्रिकल्स खरेदी करा. अस्सल ब्रँड, सुरक्षित पेमेंट आणि जलद वितरण.",
+    "feedError": "उत्पादने लोड करता आली नाहीत",
+    "forYou": "तुमच्यासाठी उत्पादने",
+    "topSelling": "सर्वाधिक विकली जाणारी उत्पादने",
+    "recentlyViewed": "अलीकडे पाहिलेली",
+    "recentlyViewedSubtitle": "जिथे थांबलात तिथून सुरू करा",
+    "ctaTitle": "काहीतरी मोठं बांधताय?",
+    "ctaText": "{{count}} श्रेणींमधील संपूर्ण कॅटलॉग पहा — व्यापारी दर, अस्सल ब्रँड आणि साइटवर वितरण.",
+    "ctaTextAll": "संपूर्ण कॅटलॉग पहा — व्यापारी दर, अस्सल ब्रँड आणि साइटवर वितरण.",
+    "ctaButton": "सर्व उत्पादने पहा",
+    "sections": {
+      "for_you": {
+        "title": "तुमच्यासाठी उत्पादने",
+        "subtitle": "तुमच्या आवडीनुसार निवडलेली"
+      },
+      "top_selling": {
+        "title": "सर्वाधिक विकली जाणारी उत्पादने",
+        "subtitle": "जे सगळे घेत आहेत"
+      },
+      "new_arrivals": {
+        "title": "नवीन उत्पादने",
+        "subtitle": "दुकानात नवीन"
+      },
+      "best_deals": {
+        "title": "सर्वोत्तम डील",
+        "subtitle": "आत्ता सर्वात मोठ्या सवलती"
+      },
+      "top_rated": {
+        "title": "सर्वोच्च रेटेड",
+        "subtitle": "आमच्या ग्राहकांची पसंती"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}” साठी निकाल",
+    "seoDescription": "{{heading}} पहा — अस्सल ब्रँड, स्पर्धात्मक किंमत आणि जलद वितरण.",
+    "loading": "उत्पादने लोड होत आहेत…",
+    "found_one": "{{count}} उत्पादन सापडले",
+    "found_other": "{{count}} उत्पादने सापडली",
+    "sortBy": "क्रमवारी लावा",
+    "sortAria": "उत्पादने क्रमवारी लावा",
+    "emptyTitle": "या फिल्टरशी कोणतेही उत्पादन जुळत नाही",
+    "emptyMessage": "तुमची किंमत मर्यादा वाढवा किंवा एखादा फिल्टर काढून टाका."
+  },
+  "sort": {
+    "newest": "नवीन आधी",
+    "popular": "लोकप्रियता",
+    "price_asc": "किंमत: कमी ते जास्त",
+    "price_desc": "किंमत: जास्त ते कमी",
+    "discount": "सूट",
+    "rating": "ग्राहक रेटिंग",
+    "name_asc": "नाव: अ ते ज्ञ"
+  },
+  "filters": {
+    "title": "फिल्टर",
+    "aria": "उत्पादन फिल्टर",
+    "close": "फिल्टर बंद करा",
+    "reset": "फिल्टर रीसेट करा",
+    "resetAll": "सर्व रीसेट करा",
+    "removeFilter": "{{name}} फिल्टर काढा",
+    "showCount_one": "{{count}} उत्पादन दाखवा",
+    "showCount_other": "{{count}} उत्पादने दाखवा",
+    "category": "श्रेणी",
+    "subCategory": "उप-श्रेणी",
+    "price": "किंमत",
+    "minPrice": "किमान किंमत",
+    "maxPrice": "कमाल किंमत",
+    "applyPrice": "किंमत लागू करा",
+    "catalogueRange": "कॅटलॉग मर्यादा: {{min}} – {{max}}",
+    "brand": "ब्रँड",
+    "discount": "सूट",
+    "discountAndAbove": "{{value}}% आणि अधिक",
+    "customerRating": "ग्राहक रेटिंग",
+    "andUp": "आणि वर",
+    "availabilityTitle": "उपलब्धता",
+    "availability": {
+      "in_stock": "फक्त स्टॉकमध्ये",
+      "out_of_stock": "स्टॉकमध्ये नाही"
+    },
+    "chipMinPrice": "{{value}} पासून",
+    "chipMaxPrice": "{{value}} पर्यंत",
+    "chipDiscount": "{{value}}% किंवा अधिक सूट",
+    "chipRating": "{{value}} तारे आणि वर"
+  },
+  "grid": {
+    "emptyTitle": "कोणतीही उत्पादने सापडली नाहीत",
+    "emptyMessage": "तुमचे फिल्टर बदला किंवा दुसरे काहीतरी शोधा."
+  },
+  "details": {
+    "notFoundTitle": "उत्पादन सापडले नाही",
+    "notFoundMessage": "हे उत्पादन काढून टाकले असावे किंवा आता उपलब्ध नाही.",
+    "loadErrorTitle": "हे उत्पादन लोड करता आले नाही",
+    "browseAll": "सर्व उत्पादने पहा",
+    "share": "हे उत्पादन शेअर करा",
+    "linkCopied": "लिंक क्लिपबोर्डवर कॉपी झाली",
+    "ratingsCount_one": "{{count}} रेटिंग",
+    "ratingsCount_other": "{{count}} रेटिंग",
+    "noRatings": "अजून कोणतेही रेटिंग नाही",
+    "youSave": "तुम्ही {{amount}} वाचवता",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "एक पर्याय निवडा",
+    "unitsAvailable_one": "{{count}} नग उपलब्ध",
+    "unitsAvailable_other": "{{count}} नग उपलब्ध",
+    "showingVariant": "<1>{{label}}</1> दाखवत आहे",
+    "keySpecs": "प्रमुख वैशिष्ट्ये",
+    "specWeight": "वजन",
+    "specDimensions": "परिमाणे",
+    "inStockUnits_one": "स्टॉकमध्ये ({{count}} नग)",
+    "inStockUnits_other": "स्टॉकमध्ये ({{count}} नग)",
+    "relatedTitle": "संबंधित उत्पादने",
+    "relatedSubtitle": "ग्राहकांनी हे देखील पाहिले",
+    "delivery": {
+      "freeTitle": "मोफत वितरण",
+      "freeText": "ही वस्तू मोफत पाठवली जाते",
+      "paidTitle": "वितरण शुल्क लागू",
+      "paidText": "₹{{amount}} वर मोफत",
+      "returnsTitle": "7 दिवसांत परतावा",
+      "returnsText": "त्रासमुक्त बदली",
+      "paymentTitle": "सुरक्षित पेमेंट",
+      "paymentText": "Razorpay द्वारे संरक्षित",
+      "weightTitle": "शिपिंग वजन",
+      "genuineTitle": "अस्सल उत्पादन",
+      "genuineText": "थेट ब्रँडकडून मिळवलेले"
+    },
+    "rows": {
+      "brand": "ब्रँड",
+      "category": "श्रेणी",
+      "subCategory": "उप-श्रेणी",
+      "sku": "SKU",
+      "availability": "उपलब्धता",
+      "tags": "टॅग"
+    }
+  },
+  "tabs": {
+    "description": "वर्णन",
+    "details": "उत्पादन तपशील",
+    "features": "वैशिष्ट्ये",
+    "featuresWithCount": "वैशिष्ट्ये ({{count}})",
+    "reviews": "पुनरावलोकने",
+    "reviewsWithCount": "पुनरावलोकने ({{count}})",
+    "faqs": "वारंवार विचारले जाणारे प्रश्न",
+    "faqsWithCount": "वारंवार विचारले जाणारे प्रश्न ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "निवडा",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "अनुपलब्ध",
+    "stateOutOfStock": "स्टॉकमध्ये नाही",
+    "reasonCombination": "या संयोजनात उपलब्ध नाही"
+  },
+  "gallery": {
+    "viewImage": "प्रतिमा {{index}} पहा",
+    "image": "प्रतिमा {{index}}",
+    "hoverToZoom": "झूम करण्यासाठी होवर करा",
+    "previousImage": "मागील प्रतिमा",
+    "nextImage": "पुढील प्रतिमा",
+    "enlarged": "मोठी उत्पादन प्रतिमा"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} रेटिंग",
+    "ratingsCount_other": "{{formatted}} रेटिंग",
+    "writeTitle": "पुनरावलोकन लिहा",
+    "yourRating": "तुमचे रेटिंग",
+    "starCount_one": "{{count}} तारा",
+    "starCount_other": "{{count}} तारे",
+    "titleLabel": "शीर्षक",
+    "titlePlaceholder": "तुमचा अनुभव थोडक्यात सांगा",
+    "commentLabel": "तुमचे पुनरावलोकन",
+    "commentPlaceholder": "तुम्हाला काय आवडले किंवा नाही आवडले? हे उत्पादन तुम्ही कसे वापरले?",
+    "optional": "(पर्यायी)",
+    "submit": "पुनरावलोकन सादर करा",
+    "submitFailed": "तुमचे पुनरावलोकन सादर करता आले नाही",
+    "pickRating": "कृपया तारा रेटिंग निवडा",
+    "thanks": "तुमच्या पुनरावलोकनाबद्दल धन्यवाद!",
+    "loginToReview": "पुनरावलोकन लिहिण्यासाठी कृपया लॉग इन करा",
+    "sortAria": "पुनरावलोकने क्रमवारी लावा",
+    "filterAria": "रेटिंगनुसार फिल्टर करा",
+    "allRatings": "सर्व रेटिंग",
+    "anonymous": "निनावी",
+    "verified": "सत्यापित खरेदी",
+    "emptyTitle": "अजून कोणतेही पुनरावलोकन नाही",
+    "emptyMessage": "या उत्पादनाबद्दल तुमचा अनुभव सांगणारे पहिले व्हा.",
+    "sort": {
+      "newest": "सर्वात अलीकडील",
+      "helpful": "सर्वात उपयुक्त",
+      "highest": "सर्वाधिक रेटेड",
+      "lowest": "सर्वात कमी रेटेड"
+    }
+  },
+  "specs": {
+    "emptyTitle": "कोणतीही वैशिष्ट्ये सूचीबद्ध नाहीत",
+    "emptyMessage": "या उत्पादनाची सविस्तर वैशिष्ट्ये अजून जोडलेली नाहीत."
+  },
+  "faq": {
+    "emptyTitle": "अजून कोणतेही प्रश्न नाहीत",
+    "emptyMessage": "या उत्पादनाबद्दल प्रश्न आहे? आमच्या सपोर्ट टीमशी संपर्क साधा, आम्ही मदत करू."
+  }
+}

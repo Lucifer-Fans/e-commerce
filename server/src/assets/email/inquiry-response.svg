@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none">
+  <!--
+    The illustration beside the reply itself: a headset with a chat bubble
+    drifting out of it, on a pale green disc — "a person answered this", where
+    the mail's opening artwork says "we got it". Painted back to front, and
+    everything drawn into the one mark, because email cannot reliably overlap
+    two images. Shown at 150.
+  -->
+  <circle cx="150" cy="152" r="138" fill="#dcfce7"/>
+
+  <!-- Headband: the top of a ring, opened just past the horizontal (250 to 110
+       degrees clockwise from twelve) so it meets the ear cups rather than
+       stopping short of them. -->
+  <path d="M59.79 192.83a96 96 0 11180.42 0l-16.91-6.15a78 78 0 10-146.6 0z" fill="#334155"/>
+  <rect x="41" y="152" width="44" height="86" rx="22" fill="#334155"/>
+  <rect x="215" y="152" width="44" height="86" rx="22" fill="#334155"/>
+
+  <!-- Green accents — the same "we are live" green the response card is tinted
+       in. The ear pad goes on the left cup, which the bubble does not cover. -->
+  <circle cx="150" cy="64" r="13" fill="#16a34a"/>
+  <rect x="48" y="164" width="26" height="62" rx="13" fill="#16a34a"/>
+
+  <!-- Chat bubble, tail first so the body covers where the two meet. -->
+  <path d="M158 236l42 4-48 36z" fill="#ffffff"/>
+  <rect x="142" y="186" width="108" height="66" rx="24" fill="#ffffff"/>
+  <circle cx="172" cy="219" r="7.5" fill="#64748b"/>
+  <circle cx="196" cy="219" r="7.5" fill="#64748b"/>
+  <circle cx="220" cy="219" r="7.5" fill="#64748b"/>
+</svg>

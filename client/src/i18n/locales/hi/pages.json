@@ -1,0 +1,86 @@
+{
+  "contact": {
+    "seoTitle": "संपर्क करें",
+    "seoDescription": "हमारे उत्पादों या अपने ऑर्डर के बारे में प्रश्न हैं? {{app}} टीम से फ़ोन, ईमेल या संपर्क फ़ॉर्म के ज़रिए जुड़ें।",
+    "heading": "संपर्क में रहें",
+    "intro": "हमारे उत्पादों या अपने ऑर्डर के बारे में कोई प्रश्न है? हम मदद के लिए <1>यहाँ</1> हैं! <2>नीचे दिया फ़ॉर्म भरें या सीधे हमसे संपर्क करें।</2>",
+    "formTitle": "हमें संदेश भेजें",
+    "detailsTitle": "संपर्क विवरण",
+    "officeAddress": "कार्यालय का पता",
+    "addressSoon": "पता जल्द ही आ रहा है",
+    "openInMaps": "मैप्स में खोलें",
+    "mapTitle": "कार्यालय का स्थान",
+    "optional": "(वैकल्पिक)",
+    "submit": "संदेश भेजें",
+    "sending": "भेजा जा रहा है…",
+    "sendFailed": "आपका संदेश भेजा नहीं जा सका। कृपया दोबारा प्रयास करें।",
+    "successMessage": "आपका संदेश सफलतापूर्वक भेज दिया गया है। हम जल्द ही आपसे संपर्क करेंगे।",
+    "fields": {
+      "name": "पूरा नाम",
+      "namePlaceholder": "आपका नाम",
+      "email": "ईमेल पता",
+      "emailPlaceholder": "example@gmail.com",
+      "phone": "फ़ोन नंबर",
+      "phonePlaceholder": "10 अंकों का नंबर दर्ज करें",
+      "subject": "विषय",
+      "subjectPlaceholder": "ऑर्डर पूछताछ, उत्पाद जानकारी, आदि",
+      "message": "संदेश",
+      "messagePlaceholder": "हम आपकी कैसे मदद कर सकते हैं?"
+    },
+    "errors": {
+      "message": "अपने प्रश्न के बारे में थोड़ा और बताएँ"
+    }
+  },
+
+  "careers": {
+    "seoTitle": "करियर",
+    "seoDescription": "{{app}} टीम से जुड़ें — हमारे खुले पदों को देखें और ऑनलाइन आवेदन करें।",
+    "heading": "किसी पद के लिए आवेदन करें",
+    "optional": "(वैकल्पिक)",
+    "selectPosition": "पद चुनें",
+    "noOpenings": "अभी कोई रिक्ति नहीं",
+    "noOpeningsNote": "अभी कोई पद खुला नहीं है। कृपया जल्द ही दोबारा देखें।",
+    "selectExperience": "अनुभव चुनें",
+    "uploadResume": "रिज़्यूमे अपलोड करें",
+    "chooseFile": "फ़ाइल चुनें",
+    "noFile": "कोई फ़ाइल नहीं चुनी",
+    "removeFile": "चुनी गई फ़ाइल हटाएँ",
+    "resumeHint": "(PDF, DOC, DOCX - अधिकतम 5MB)",
+    "submit": "आवेदन जमा करें",
+    "submitting": "जमा हो रहा है…",
+    "uploading": "अपलोड हो रहा है {{percent}}%",
+    "submitFailed": "आपका आवेदन जमा नहीं हो सका। कृपया दोबारा प्रयास करें।",
+    "successMessage": "आपका आवेदन सफलतापूर्वक जमा हो गया है। हम जल्द ही आपसे संपर्क करेंगे।",
+    "whyJoin": "हमसे क्यों जुड़ें?",
+    "contactHr": "एचआर से संपर्क करें",
+    "fields": {
+      "name": "पूरा नाम",
+      "namePlaceholder": "आपका नाम",
+      "email": "ईमेल पता",
+      "emailPlaceholder": "example@gmail.com",
+      "phone": "फ़ोन नंबर",
+      "phonePlaceholder": "10 अंकों का नंबर दर्ज करें",
+      "position": "किस पद के लिए आवेदन",
+      "experience": "अनुभव",
+      "location": "वर्तमान स्थान",
+      "locationPlaceholder": "आपका स्थान",
+      "coverLetter": "कवर लेटर / संदेश",
+      "coverLetterPlaceholder": "अपने बारे में बताएँ..."
+    },
+    "perks": {
+      "growthTitle": "विकास के अवसर",
+      "growthText": "हम आपके व्यावसायिक और व्यक्तिगत विकास में सहयोग करते हैं।",
+      "cultureTitle": "बेहतरीन कार्य संस्कृति",
+      "cultureText": "एक सहयोगी और मित्रवत वातावरण।",
+      "learningTitle": "सीखें और आगे बढ़ें",
+      "learningText": "निरंतर सीखना और कौशल विकास।"
+    },
+    "errors": {
+      "position": "जिस पद के लिए आवेदन कर रहे हैं वह चुनें",
+      "experience": "अपना अनुभव स्तर चुनें",
+      "resume": "अपना रिज़्यूमे संलग्न करें (PDF, DOC या DOCX)",
+      "resumeType": "केवल PDF, DOC और DOCX फ़ाइलें स्वीकार्य हैं",
+      "resumeSize": "आपका रिज़्यूमे 5MB से छोटा होना चाहिए"
+    }
+  }
+}

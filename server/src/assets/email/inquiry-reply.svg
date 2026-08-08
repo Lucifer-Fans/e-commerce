@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52" fill="none">
+  <!--
+    MUI's `ReplyOutlined` re-cut solid: an arrowhead pointing back at the reader
+    with the tail sweeping away beneath it. The tail is a quarter of a ring
+    rather than a stroked curve so its weight stays even all the way round —
+    4.4px of ring on a 52px cut is the 2/24 the row glyphs are drawn at.
+    Green rather than brand blue: the storefront marks anything resolved in the
+    success ramp, and this glyph heads the answer itself. Shown at 26.
+  -->
+  <path d="M18 22a24 24 0 0124 24h-4.4A19.6 19.6 0 0018 26.4z" fill="#16a34a"/>
+  <path d="M4 22l16-11v22z" fill="#16a34a"/>
+</svg>

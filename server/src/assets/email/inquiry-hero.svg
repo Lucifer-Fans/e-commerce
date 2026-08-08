@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="220" viewBox="0 0 240 220" fill="none">
+  <!-- burst of strokes off the letter's top-right corner, as on the acknowledgement artwork -->
+  <path d="M196 34l14-13M204 56h18M190 20l5-16" stroke="#1d4ed8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M180 12l3-9" stroke="#1d4ed8" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- potted plant tucked against the envelope's left edge -->
+  <path d="M30 166c-14-11-18-30-9-45 15 10 20 30 9 45z" fill="#4ea675"/>
+  <path d="M34 168c0-20 12-34 31-38-3 20-14 33-31 38z" fill="#6cbf8f"/>
+  <path d="M32 168v-34" stroke="#3f8f63" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M14 166h36l-4.5 36a4 4 0 01-4 3.6H22.5a4 4 0 01-4-3.6z" fill="#ffffff" stroke="#dbe4fd" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- envelope back panel -->
+  <rect x="46" y="62" width="164" height="128" rx="10" fill="#c8d8fb"/>
+
+  <!-- letter, lifted clear of the envelope's mouth -->
+  <rect x="72" y="16" width="112" height="122" rx="8" fill="#ffffff" stroke="#dbe4fd" stroke-width="2"/>
+  <!-- confirmation tick -->
+  <circle cx="128" cy="70" r="31" fill="#2563eb"/>
+  <path d="M115 70.5l9.5 9.5 17-18" stroke="#ffffff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- envelope front: V-notched panel folded over the letter -->
+  <path d="M46 70l82 62 82-62v110a10 10 0 01-10 10H56a10 10 0 01-10-10z" fill="#2f6bf0"/>
+  <path d="M46 180a10 10 0 0010 10h144a10 10 0 0010-10l-82-54z" fill="#1e56d6"/>
+
+  <!-- shadow the envelope casts on the panel behind it -->
+  <ellipse cx="128" cy="199" rx="86" ry="7" fill="#c3d4f9"/>
+</svg>

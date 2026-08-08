@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+  <!--
+    Chain link for the "copy and paste this link" box — two interlocking
+    capsules tipped onto the diagonal every link glyph is drawn on. Laid out
+    horizontally and rotated, the way the raster cut builds it, since that
+    rasteriser's rounded rect is axis-aligned. Shown at 18 on the pale disc
+    beside the URL.
+  -->
+  <g transform="rotate(-45 22 22)" fill="#2563eb" fill-rule="evenodd">
+    <path d="M11 15h8a7 7 0 010 14h-8a7 7 0 010-14zm0 4.2a2.8 2.8 0 000 5.6h8a2.8 2.8 0 000-5.6z"/>
+    <path d="M25 15h8a7 7 0 010 14h-8a7 7 0 010-14zm0 4.2a2.8 2.8 0 000 5.6h8a2.8 2.8 0 000-5.6z"/>
+  </g>
+</svg>

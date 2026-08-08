@@ -1,0 +1,168 @@
+{
+  "cart": {
+    "title": "ਸ਼ਾਪਿੰਗ ਕਾਰਟ",
+    "itemCount_one": "{{count}} ਵਸਤੂ",
+    "itemCount_other": "{{count}} ਵਸਤੂਆਂ",
+    "emptyTitle": "ਤੁਹਾਡਾ ਕਾਰਟ ਖਾਲੀ ਹੈ",
+    "emptyMessage": "ਲੱਗਦਾ ਹੈ ਤੁਸੀਂ ਹਾਲੇ ਕੁਝ ਨਹੀਂ ਜੋੜਿਆ। ਸਾਡਾ ਕੈਟਾਲਾਗ ਵੇਖਣਾ ਸ਼ੁਰੂ ਕਰੋ।",
+    "emptyButSaved": "ਹੇਠਾਂ ਬਾਅਦ ਲਈ ਸੰਭਾਲੀਆਂ ਵਸਤੂਆਂ ਹਨ।",
+    "startShopping": "ਖਰੀਦਦਾਰੀ ਸ਼ੁਰੂ ਕਰੋ",
+    "continueShopping": "ਖਰੀਦਦਾਰੀ ਜਾਰੀ ਰੱਖੋ",
+    "savedForLater": "ਬਾਅਦ ਲਈ ਸੰਭਾਲੇ ({{count}})",
+    "saveForLater": "ਬਾਅਦ ਲਈ ਸੰਭਾਲੋ",
+    "savedToast": "ਬਾਅਦ ਲਈ ਸੰਭਾਲਿਆ",
+    "moveToCart": "ਕਾਰਟ ਵਿੱਚ ਲੈ ਜਾਓ",
+    "movedToCart": "ਕਾਰਟ ਵਿੱਚ ਲੈ ਗਏ",
+    "itemRemoved": "ਵਸਤੂ ਹਟਾਈ",
+    "removeTitle": "ਇਹ ਵਸਤੂ ਹਟਾਉਣੀ ਹੈ?",
+    "removeMessage": "“{{name}}” ਤੁਹਾਡੇ ਕਾਰਟ ਵਿੱਚੋਂ ਹਟਾ ਦਿੱਤੀ ਜਾਵੇਗੀ।",
+    "updateFailed": "ਤੁਹਾਡਾ ਕਾਰਟ ਅੱਪਡੇਟ ਨਹੀਂ ਹੋ ਸਕਿਆ",
+    "lineOutOfStock": "ਸਟਾਕ ਵਿੱਚ ਨਹੀਂ — ਚੈੱਕਆਊਟ ਜਾਰੀ ਰੱਖਣ ਲਈ ਇਸਨੂੰ ਹਟਾਓ",
+    "lineExceedsStock_one": "ਸਿਰਫ਼ {{count}} ਉਪਲਬਧ — ਚੈੱਕਆਊਟ 'ਤੇ ਮਾਤਰਾ ਘਟਾਈ ਜਾਵੇਗੀ",
+    "lineExceedsStock_other": "ਸਿਰਫ਼ {{count}} ਉਪਲਬਧ — ਚੈੱਕਆਊਟ 'ਤੇ ਮਾਤਰਾ ਘਟਾਈ ਜਾਵੇਗੀ",
+    "linePriceChanged": "ਤੁਹਾਡੇ ਜੋੜਨ ਤੋਂ ਬਾਅਦ ਕੀਮਤ ਬਦਲ ਗਈ ਹੈ (ਪਹਿਲਾਂ {{was}})",
+    "unavailableWarning": "ਕੁਝ ਵਸਤੂਆਂ ਅਣਉਪਲਬਧ ਹਨ ਜਾਂ ਸਟਾਕ ਤੋਂ ਵੱਧ ਹਨ। ਚੈੱਕਆਊਟ ਤੋਂ ਪਹਿਲਾਂ ਆਪਣਾ ਕਾਰਟ ਅੱਪਡੇਟ ਕਰੋ।",
+    "proceedToCheckout": "ਚੈੱਕਆਊਟ 'ਤੇ ਜਾਓ",
+    "securePayments": "ਸੁਰੱਖਿਅਤ ਭੁਗਤਾਨ"
+  },
+
+  "wishlist": {
+    "title": "ਮੇਰੀ ਵਿਸ਼ਲਿਸਟ",
+    "emptyTitle": "ਤੁਹਾਡੀ ਵਿਸ਼ਲਿਸਟ ਖਾਲੀ ਹੈ",
+    "emptyMessage": "ਕਿਸੇ ਵੀ ਉਤਪਾਦ 'ਤੇ ਦਿਲ ਦੇ ਨਿਸ਼ਾਨ ਨੂੰ ਦਬਾ ਕੇ ਇਸਨੂੰ ਇੱਥੇ ਸੰਭਾਲੋ।",
+    "browse": "ਉਤਪਾਦ ਵੇਖੋ"
+  },
+
+  "coupon": {
+    "applyTitle": "ਕੂਪਨ ਲਾਗੂ ਕਰੋ",
+    "label": "ਕੂਪਨ ਕੋਡ",
+    "placeholder": "ਕੂਪਨ ਕੋਡ ਦਰਜ ਕਰੋ",
+    "enterCode": "ਕੂਪਨ ਕੋਡ ਦਰਜ ਕਰੋ",
+    "applied": "ਕੂਪਨ ਲਾਗੂ ਹੋ ਗਿਆ",
+    "applyFailed": "ਇਹ ਕੂਪਨ ਲਾਗੂ ਨਹੀਂ ਹੋ ਸਕਿਆ",
+    "removed": "ਕੂਪਨ ਹਟਾਇਆ",
+    "codeApplied": "{{code}} ਲਾਗੂ ਹੋਇਆ",
+    "youSaved": "ਤੁਸੀਂ {{amount}} ਬਚਾਏ",
+    "viewAvailable": "ਉਪਲਬਧ ਕੂਪਨ ਵੇਖੋ ({{count}})",
+    "hideAvailable": "ਉਪਲਬਧ ਕੂਪਨ ਲੁਕਾਓ ({{count}})",
+    "minOrder": "ਘੱਟੋ-ਘੱਟ ਆਰਡਰ {{amount}}"
+  },
+
+  "summary": {
+    "title": "ਕੀਮਤ ਵੇਰਵੇ",
+    "subtotal_one": "ਉਪ-ਜੋੜ ({{count}} ਵਸਤੂ)",
+    "subtotal_other": "ਉਪ-ਜੋੜ ({{count}} ਵਸਤੂਆਂ)",
+    "coupon": "ਕੂਪਨ ({{code}})",
+    "delivery": "ਡਿਲੀਵਰੀ ਖਰਚ",
+    "free": "ਮੁਫ਼ਤ",
+    "total": "ਕੁੱਲ ਰਕਮ",
+    "savings": "ਇਸ ਆਰਡਰ 'ਤੇ ਤੁਸੀਂ {{amount}} ਬਚਾਉਂਦੇ ਹੋ",
+    "freeShippingNudge": "ਮੁਫ਼ਤ ਡਿਲੀਵਰੀ ਲਈ {{amount}} ਹੋਰ ਜੋੜੋ"
+  },
+
+  "checkout": {
+    "title": "ਚੈੱਕਆਊਟ",
+    "orderTotal": "ਆਰਡਰ ਕੁੱਲ",
+    "emptyCartMessage": "ਚੈੱਕਆਊਟ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਆਪਣੇ ਕਾਰਟ ਵਿੱਚ ਕੁਝ ਜੋੜੋ।",
+    "selectAddress": "ਕਿਰਪਾ ਕਰਕੇ ਡਿਲੀਵਰੀ ਪਤਾ ਚੁਣੋ",
+    "placeFailed": "ਤੁਹਾਡਾ ਆਰਡਰ ਨਹੀਂ ਦਿੱਤਾ ਜਾ ਸਕਿਆ",
+    "change": "ਬਦਲੋ",
+    "deliverHere": "ਇਸੇ ਪਤੇ 'ਤੇ ਡਿਲੀਵਰ ਕਰੋ",
+    "summaryHeading_one": "ਆਰਡਰ ਸਾਰ ({{count}} ਵਸਤੂ)",
+    "summaryHeading_other": "ਆਰਡਰ ਸਾਰ ({{count}} ਵਸਤੂਆਂ)",
+    "qty": "ਮਾਤਰਾ: {{count}}",
+    "continueToPayment": "ਭੁਗਤਾਨ 'ਤੇ ਜਾਓ",
+    "processing": "ਪ੍ਰਕਿਰਿਆ ਜਾਰੀ ਹੈ…",
+    "placeOrder": "ਆਰਡਰ ਦਿਓ",
+    "payAmount": "{{amount}} ਦਾ ਭੁਗਤਾਨ ਕਰੋ",
+    "completeSteps": "ਆਰਡਰ ਦੇਣ ਲਈ ਸਾਰੇ ਪੜਾਅ ਪੂਰੇ ਕਰੋ",
+    "encrypted": "ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਐਨਕ੍ਰਿਪਟਿਡ ਅਤੇ ਸੁਰੱਖਿਅਤ ਹੈ",
+    "legal": "ਇਹ ਆਰਡਰ ਦੇ ਕੇ ਤੁਸੀਂ ਸਾਡੀਆਂ <1>ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ</1> ਅਤੇ <2>ਪਰਦੇਦਾਰੀ ਨੀਤੀ</2> ਨਾਲ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ।",
+    "steps": {
+      "address": "ਡਿਲੀਵਰੀ ਪਤਾ",
+      "review": "ਆਰਡਰ ਸਾਰ",
+      "payment": "ਭੁਗਤਾਨ"
+    }
+  },
+
+  "address": {
+    "addTitle": "ਨਵਾਂ ਪਤਾ ਜੋੜੋ",
+    "editTitle": "ਪਤਾ ਸੋਧੋ",
+    "save": "ਪਤਾ ਸੰਭਾਲੋ",
+    "update": "ਪਤਾ ਅੱਪਡੇਟ ਕਰੋ",
+    "added": "ਪਤਾ ਜੋੜਿਆ",
+    "updated": "ਪਤਾ ਅੱਪਡੇਟ ਹੋਇਆ",
+    "saveFailed": "ਇਹ ਪਤਾ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ",
+    "default": "ਡਿਫੌਲਟ",
+    "makeDefault": "ਇਸਨੂੰ ਮੇਰਾ ਡਿਫੌਲਟ ਡਿਲੀਵਰੀ ਪਤਾ ਬਣਾਓ",
+    "typeLabel": "ਪਤੇ ਦੀ ਕਿਸਮ",
+    "optional": "(ਵਿਕਲਪਿਕ)",
+    "phoneLine": "ਫ਼ੋਨ: {{phone}}",
+    "labels": {
+      "home": "ਘਰ",
+      "work": "ਦਫ਼ਤਰ",
+      "other": "ਹੋਰ"
+    },
+    "fields": {
+      "fullName": "ਪੂਰਾ ਨਾਮ",
+      "fullNamePlaceholder": "ਪ੍ਰਾਪਤਕਰਤਾ ਦਾ ਨਾਮ",
+      "phone": "ਮੋਬਾਈਲ ਨੰਬਰ",
+      "phonePlaceholder": "10 ਅੰਕਾਂ ਦਾ ਨੰਬਰ",
+      "addressLine1": "ਪਤਾ ਲਾਈਨ 1",
+      "addressLine1Placeholder": "ਘਰ / ਫਲੈਟ ਨੰ., ਇਮਾਰਤ, ਗਲੀ",
+      "addressLine2": "ਪਤਾ ਲਾਈਨ 2",
+      "addressLine2Placeholder": "ਖੇਤਰ, ਕਾਲੋਨੀ, ਸੈਕਟਰ",
+      "landmark": "ਲੈਂਡਮਾਰਕ",
+      "landmarkPlaceholder": "ਨੇੜਲਾ ਲੈਂਡਮਾਰਕ",
+      "pincode": "ਪਿੰਨਕੋਡ",
+      "pincodePlaceholder": "6 ਅੰਕਾਂ ਦਾ ਪਿੰਨਕੋਡ",
+      "city": "ਸ਼ਹਿਰ",
+      "cityPlaceholder": "ਸ਼ਹਿਰ",
+      "state": "ਰਾਜ",
+      "statePlaceholder": "ਰਾਜ",
+      "alternatePhone": "ਬਦਲਵਾਂ ਫ਼ੋਨ"
+    },
+    "errors": {
+      "line1": "ਆਪਣਾ ਗਲੀ ਦਾ ਪਤਾ ਦਰਜ ਕਰੋ",
+      "city": "ਸ਼ਹਿਰ ਲੋੜੀਂਦਾ ਹੈ",
+      "state": "ਰਾਜ ਲੋੜੀਂਦਾ ਹੈ"
+    }
+  },
+
+  "payment": {
+    "methodTitle": "ਭੁਗਤਾਨ ਦਾ ਤਰੀਕਾ",
+    "onlineTitle": "ਆਨਲਾਈਨ ਭੁਗਤਾਨ (ਕਾਰਡ / ਯੂਪੀਆਈ / ਨੈੱਟ ਬੈਂਕਿੰਗ)",
+    "onlineText": "Razorpay ਵੱਲੋਂ ਸੁਰੱਖਿਅਤ। ਤੁਹਾਡੇ ਕਾਰਡ ਦੇ ਵੇਰਵੇ ਕਦੇ ਵੀ ਸਾਡੇ ਸਰਵਰ ਤੱਕ ਨਹੀਂ ਪਹੁੰਚਦੇ।",
+    "onlineUnavailable": "ਇਸ ਸਟੋਰ 'ਤੇ ਆਨਲਾਈਨ ਭੁਗਤਾਨ ਹਾਲੇ ਸੈੱਟ ਨਹੀਂ ਕੀਤਾ ਗਿਆ।",
+    "codTitle": "ਡਿਲੀਵਰੀ 'ਤੇ ਨਕਦ",
+    "codText": "ਤੁਹਾਡਾ ਆਰਡਰ ਮਿਲਣ 'ਤੇ ਨਕਦ ਭੁਗਤਾਨ ਕਰੋ।",
+    "gatewayLoadFailed": "ਭੁਗਤਾਨ ਗੇਟਵੇ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕਿਆ। ਆਪਣਾ ਕਨੈਕਸ਼ਨ ਜਾਂਚੋ।",
+    "orderDescription": "ਆਰਡਰ {{number}}",
+    "cancelled": "ਭੁਗਤਾਨ ਰੱਦ ਹੋਇਆ। ਤੁਹਾਡਾ ਆਰਡਰ ਬਕਾਇਆ ਵਜੋਂ ਸੰਭਾਲਿਆ ਗਿਆ ਹੈ।",
+    "failed": "ਭੁਗਤਾਨ ਅਸਫਲ ਰਿਹਾ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
+  },
+
+  "confirm": {
+    "pill": "ਆਰਡਰ",
+    "title": "ਆਰਡਰ ਪੁਸ਼ਟੀ",
+    "subtitle": "ਤੁਹਾਡੀਆਂ ਵਸਤੂਆਂ ਪੈਕ ਕਰਕੇ ਸਾਡੇ ਡਿਲੀਵਰੀ ਸਾਥੀ ਨੂੰ ਸੌਂਪੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ",
+    "status": "ਤੁਹਾਡਾ ਆਰਡਰ ਪੁਸ਼ਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ…"
+  },
+
+  "success": {
+    "seoTitle": "ਆਰਡਰ ਪੁਸ਼ਟ ਹੋਇਆ",
+    "notFound": "ਆਰਡਰ ਨਹੀਂ ਮਿਲਿਆ",
+    "title": "ਆਰਡਰ ਸਫਲਤਾਪੂਰਵਕ ਦਿੱਤਾ ਗਿਆ!",
+    "subtitle": "ਤੁਹਾਡੇ ਆਰਡਰ ਲਈ ਧੰਨਵਾਦ। ਪੁਸ਼ਟੀ ਤੁਹਾਡੇ ਈਮੇਲ 'ਤੇ ਭੇਜ ਦਿੱਤੀ ਗਈ ਹੈ।",
+    "orderNumber": "ਆਰਡਰ ਨੰਬਰ",
+    "orderDate": "ਆਰਡਰ ਦੀ ਮਿਤੀ",
+    "totalPaid": "ਕੁੱਲ ਭੁਗਤਾਨ",
+    "paidTitle": "ਭੁਗਤਾਨ ਮਿਲਿਆ",
+    "paidText": "ਤੁਹਾਡਾ ਭੁਗਤਾਨ ਸਫਲ ਰਿਹਾ ਅਤੇ ਤੁਹਾਡਾ ਆਰਡਰ ਪੁਸ਼ਟ ਹੋ ਗਿਆ ਹੈ।",
+    "codText": "ਕਿਰਪਾ ਕਰਕੇ ਡਿਲੀਵਰੀ ਸਮੇਂ {{amount}} ਤਿਆਰ ਰੱਖੋ।",
+    "items": "ਇਸ ਆਰਡਰ ਦੀਆਂ ਵਸਤੂਆਂ",
+    "deliveringTo": "ਇੱਥੇ ਡਿਲੀਵਰ ਹੋ ਰਿਹਾ ਹੈ",
+    "trackOrder": "ਇਹ ਆਰਡਰ ਟ੍ਰੈਕ ਕਰੋ",
+    "downloadInvoice": "ਇਨਵੌਇਸ ਡਾਊਨਲੋਡ ਕਰੋ"
+  }
+}

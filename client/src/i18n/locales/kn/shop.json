@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "ಗುಣಮಟ್ಟದ ಕಟ್ಟಡ ಸಾಮಗ್ರಿ, ಹಾರ್ಡ್‌ವೇರ್ ಮತ್ತು ಉಪಕರಣಗಳು",
+    "seoDescription": "ಪ್ರೀಮಿಯಂ ಪ್ಲೈವುಡ್, ಲ್ಯಾಮಿನೇಟ್, ಹಾರ್ಡ್‌ವೇರ್, ಪೇಂಟ್, ಪವರ್ ಟೂಲ್ಸ್ ಮತ್ತು ಎಲೆಕ್ಟ್ರಿಕಲ್ಸ್ ಖರೀದಿಸಿ. ಅಸಲಿ ಬ್ರಾಂಡ್‌ಗಳು, ಸುರಕ್ಷಿತ ಪಾವತಿ ಮತ್ತು ವೇಗದ ವಿತರಣೆ.",
+    "feedError": "ಉತ್ಪನ್ನಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+    "forYou": "ನಿಮಗಾಗಿ ಉತ್ಪನ್ನಗಳು",
+    "topSelling": "ಅತಿ ಹೆಚ್ಚು ಮಾರಾಟವಾಗುವ ಉತ್ಪನ್ನಗಳು",
+    "recentlyViewed": "ಇತ್ತೀಚೆಗೆ ನೋಡಿದವು",
+    "recentlyViewedSubtitle": "ಬಿಟ್ಟ ಸ್ಥಳದಿಂದ ಮುಂದುವರಿಸಿ",
+    "ctaTitle": "ದೊಡ್ಡದೇನಾದರೂ ಕಟ್ಟುತ್ತಿದ್ದೀರಾ?",
+    "ctaText": "{{count}} ವರ್ಗಗಳಲ್ಲಿ ಸಂಪೂರ್ಣ ಕ್ಯಾಟಲಾಗ್ ನೋಡಿ — ವ್ಯಾಪಾರ ಬೆಲೆ, ಅಸಲಿ ಬ್ರಾಂಡ್‌ಗಳು ಮತ್ತು ಸೈಟ್‌ಗೇ ವಿತರಣೆ.",
+    "ctaTextAll": "ಸಂಪೂರ್ಣ ಕ್ಯಾಟಲಾಗ್ ನೋಡಿ — ವ್ಯಾಪಾರ ಬೆಲೆ, ಅಸಲಿ ಬ್ರಾಂಡ್‌ಗಳು ಮತ್ತು ಸೈಟ್‌ಗೇ ವಿತರಣೆ.",
+    "ctaButton": "ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳನ್ನು ನೋಡಿ",
+    "sections": {
+      "for_you": {
+        "title": "ನಿಮಗಾಗಿ ಉತ್ಪನ್ನಗಳು",
+        "subtitle": "ನಿಮ್ಮ ಅಭಿರುಚಿಗೆ ತಕ್ಕಂತೆ ಆಯ್ಕೆ ಮಾಡಿದವು"
+      },
+      "top_selling": {
+        "title": "ಅತಿ ಹೆಚ್ಚು ಮಾರಾಟವಾಗುವ ಉತ್ಪನ್ನಗಳು",
+        "subtitle": "ಎಲ್ಲರೂ ಖರೀದಿಸುತ್ತಿರುವುದು"
+      },
+      "new_arrivals": {
+        "title": "ಹೊಸ ಆಗಮನಗಳು",
+        "subtitle": "ಅಂಗಡಿಯಲ್ಲಿ ಹೊಸದು"
+      },
+      "best_deals": {
+        "title": "ಅತ್ಯುತ್ತಮ ಡೀಲ್‌ಗಳು",
+        "subtitle": "ಈಗ ಅತಿ ದೊಡ್ಡ ರಿಯಾಯಿತಿಗಳು"
+      },
+      "top_rated": {
+        "title": "ಅತಿ ಹೆಚ್ಚು ರೇಟೆಡ್",
+        "subtitle": "ನಮ್ಮ ಗ್ರಾಹಕರ ನೆಚ್ಚಿನವು"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}” ಗಾಗಿ ಫಲಿತಾಂಶಗಳು",
+    "seoDescription": "{{heading}} ನೋಡಿ — ಅಸಲಿ ಬ್ರಾಂಡ್‌ಗಳು, ಸ್ಪರ್ಧಾತ್ಮಕ ಬೆಲೆ ಮತ್ತು ವೇಗದ ವಿತರಣೆ.",
+    "loading": "ಉತ್ಪನ್ನಗಳು ಲೋಡ್ ಆಗುತ್ತಿವೆ…",
+    "found_one": "{{count}} ಉತ್ಪನ್ನ ಸಿಕ್ಕಿದೆ",
+    "found_other": "{{count}} ಉತ್ಪನ್ನಗಳು ಸಿಕ್ಕಿವೆ",
+    "sortBy": "ವಿಂಗಡಿಸಿ",
+    "sortAria": "ಉತ್ಪನ್ನಗಳನ್ನು ವಿಂಗಡಿಸಿ",
+    "emptyTitle": "ಈ ಫಿಲ್ಟರ್‌ಗಳಿಗೆ ಯಾವುದೇ ಉತ್ಪನ್ನ ಹೊಂದಿಕೆಯಾಗುತ್ತಿಲ್ಲ",
+    "emptyMessage": "ನಿಮ್ಮ ಬೆಲೆ ವ್ಯಾಪ್ತಿಯನ್ನು ವಿಸ್ತರಿಸಿ ಅಥವಾ ಒಂದು ಫಿಲ್ಟರ್ ತೆಗೆದುಹಾಕಿ."
+  },
+  "sort": {
+    "newest": "ಹೊಸದು ಮೊದಲು",
+    "popular": "ಜನಪ್ರಿಯತೆ",
+    "price_asc": "ಬೆಲೆ: ಕಡಿಮೆಯಿಂದ ಹೆಚ್ಚು",
+    "price_desc": "ಬೆಲೆ: ಹೆಚ್ಚಿನಿಂದ ಕಡಿಮೆ",
+    "discount": "ರಿಯಾಯಿತಿ",
+    "rating": "ಗ್ರಾಹಕ ರೇಟಿಂಗ್",
+    "name_asc": "ಹೆಸರು: ಅ ಇಂದ ಳ"
+  },
+  "filters": {
+    "title": "ಫಿಲ್ಟರ್‌ಗಳು",
+    "aria": "ಉತ್ಪನ್ನ ಫಿಲ್ಟರ್‌ಗಳು",
+    "close": "ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಮುಚ್ಚಿ",
+    "reset": "ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಮರುಹೊಂದಿಸಿ",
+    "resetAll": "ಎಲ್ಲವನ್ನೂ ಮರುಹೊಂದಿಸಿ",
+    "removeFilter": "{{name}} ಫಿಲ್ಟರ್ ತೆಗೆದುಹಾಕಿ",
+    "showCount_one": "{{count}} ಉತ್ಪನ್ನ ತೋರಿಸಿ",
+    "showCount_other": "{{count}} ಉತ್ಪನ್ನಗಳನ್ನು ತೋರಿಸಿ",
+    "category": "ವರ್ಗ",
+    "subCategory": "ಉಪ-ವರ್ಗ",
+    "price": "ಬೆಲೆ",
+    "minPrice": "ಕನಿಷ್ಠ ಬೆಲೆ",
+    "maxPrice": "ಗರಿಷ್ಠ ಬೆಲೆ",
+    "applyPrice": "ಬೆಲೆ ಅನ್ವಯಿಸಿ",
+    "catalogueRange": "ಕ್ಯಾಟಲಾಗ್ ವ್ಯಾಪ್ತಿ: {{min}} – {{max}}",
+    "brand": "ಬ್ರಾಂಡ್",
+    "discount": "ರಿಯಾಯಿತಿ",
+    "discountAndAbove": "{{value}}% ಮತ್ತು ಅದಕ್ಕಿಂತ ಹೆಚ್ಚು",
+    "customerRating": "ಗ್ರಾಹಕ ರೇಟಿಂಗ್",
+    "andUp": "ಮತ್ತು ಮೇಲೆ",
+    "availabilityTitle": "ಲಭ್ಯತೆ",
+    "availability": {
+      "in_stock": "ಸ್ಟಾಕ್‌ನಲ್ಲಿರುವವು ಮಾತ್ರ",
+      "out_of_stock": "ಸ್ಟಾಕ್‌ನಲ್ಲಿ ಇಲ್ಲ"
+    },
+    "chipMinPrice": "{{value}} ಇಂದ",
+    "chipMaxPrice": "{{value}} ವರೆಗೆ",
+    "chipDiscount": "{{value}}% ಅಥವಾ ಹೆಚ್ಚು ರಿಯಾಯಿತಿ",
+    "chipRating": "{{value}} ನಕ್ಷತ್ರ ಮತ್ತು ಮೇಲೆ"
+  },
+  "grid": {
+    "emptyTitle": "ಯಾವುದೇ ಉತ್ಪನ್ನಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
+    "emptyMessage": "ನಿಮ್ಮ ಫಿಲ್ಟರ್‌ಗಳನ್ನು ಬದಲಾಯಿಸಿ ಅಥವಾ ಬೇರೆ ಏನಾದರೂ ಹುಡುಕಿ."
+  },
+  "details": {
+    "notFoundTitle": "ಉತ್ಪನ್ನ ಕಂಡುಬಂದಿಲ್ಲ",
+    "notFoundMessage": "ಈ ಉತ್ಪನ್ನವನ್ನು ತೆಗೆದುಹಾಕಿರಬಹುದು ಅಥವಾ ಇನ್ನು ಲಭ್ಯವಿಲ್ಲ.",
+    "loadErrorTitle": "ಈ ಉತ್ಪನ್ನವನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+    "browseAll": "ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳನ್ನು ನೋಡಿ",
+    "share": "ಈ ಉತ್ಪನ್ನವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ",
+    "linkCopied": "ಲಿಂಕ್ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ನಕಲಿಸಲಾಗಿದೆ",
+    "ratingsCount_one": "{{count}} ರೇಟಿಂಗ್",
+    "ratingsCount_other": "{{count}} ರೇಟಿಂಗ್‌ಗಳು",
+    "noRatings": "ಇನ್ನೂ ರೇಟಿಂಗ್‌ಗಳಿಲ್ಲ",
+    "youSave": "ನೀವು {{amount}} ಉಳಿಸುತ್ತೀರಿ",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ",
+    "unitsAvailable_one": "{{count}} ಘಟಕ ಲಭ್ಯವಿದೆ",
+    "unitsAvailable_other": "{{count}} ಘಟಕಗಳು ಲಭ್ಯವಿವೆ",
+    "showingVariant": "<1>{{label}}</1> ತೋರಿಸಲಾಗುತ್ತಿದೆ",
+    "keySpecs": "ಪ್ರಮುಖ ವಿಶೇಷಣಗಳು",
+    "specWeight": "ತೂಕ",
+    "specDimensions": "ಆಯಾಮಗಳು",
+    "inStockUnits_one": "ಸ್ಟಾಕ್‌ನಲ್ಲಿದೆ ({{count}} ಘಟಕ)",
+    "inStockUnits_other": "ಸ್ಟಾಕ್‌ನಲ್ಲಿದೆ ({{count}} ಘಟಕಗಳು)",
+    "relatedTitle": "ಸಂಬಂಧಿತ ಉತ್ಪನ್ನಗಳು",
+    "relatedSubtitle": "ಗ್ರಾಹಕರು ಇವುಗಳನ್ನೂ ಪರಿಗಣಿಸಿದ್ದಾರೆ",
+    "delivery": {
+      "freeTitle": "ಉಚಿತ ವಿತರಣೆ",
+      "freeText": "ಈ ವಸ್ತು ಉಚಿತವಾಗಿ ರವಾನೆಯಾಗುತ್ತದೆ",
+      "paidTitle": "ವಿತರಣಾ ಶುಲ್ಕ ಅನ್ವಯಿಸುತ್ತದೆ",
+      "paidText": "₹{{amount}} ಮೇಲೆ ಉಚಿತ",
+      "returnsTitle": "7 ದಿನಗಳ ಹಿಂತಿರುಗಿಸುವಿಕೆ",
+      "returnsText": "ತೊಂದರೆ ರಹಿತ ಬದಲಾವಣೆ",
+      "paymentTitle": "ಸುರಕ್ಷಿತ ಪಾವತಿ",
+      "paymentText": "Razorpay ಮೂಲಕ ಸಂರಕ್ಷಿತ",
+      "weightTitle": "ಸಾಗಣೆ ತೂಕ",
+      "genuineTitle": "ಅಸಲಿ ಉತ್ಪನ್ನ",
+      "genuineText": "ನೇರವಾಗಿ ಬ್ರಾಂಡ್‌ಗಳಿಂದ"
+    },
+    "rows": {
+      "brand": "ಬ್ರಾಂಡ್",
+      "category": "ವರ್ಗ",
+      "subCategory": "ಉಪ-ವರ್ಗ",
+      "sku": "SKU",
+      "availability": "ಲಭ್ಯತೆ",
+      "tags": "ಟ್ಯಾಗ್‌ಗಳು"
+    }
+  },
+  "tabs": {
+    "description": "ವಿವರಣೆ",
+    "details": "ಉತ್ಪನ್ನ ವಿವರಗಳು",
+    "features": "ವೈಶಿಷ್ಟ್ಯಗಳು",
+    "featuresWithCount": "ವೈಶಿಷ್ಟ್ಯಗಳು ({{count}})",
+    "reviews": "ವಿಮರ್ಶೆಗಳು",
+    "reviewsWithCount": "ವಿಮರ್ಶೆಗಳು ({{count}})",
+    "faqs": "ಪದೇ ಪದೇ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು",
+    "faqsWithCount": "ಪದೇ ಪದೇ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "ಆರಿಸಿ",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "ಲಭ್ಯವಿಲ್ಲ",
+    "stateOutOfStock": "ಸ್ಟಾಕ್‌ನಲ್ಲಿ ಇಲ್ಲ",
+    "reasonCombination": "ಈ ಸಂಯೋಜನೆಯಲ್ಲಿ ಲಭ್ಯವಿಲ್ಲ"
+  },
+  "gallery": {
+    "viewImage": "ಚಿತ್ರ {{index}} ನೋಡಿ",
+    "image": "ಚಿತ್ರ {{index}}",
+    "hoverToZoom": "ಜೂಮ್ ಮಾಡಲು ಹೋವರ್ ಮಾಡಿ",
+    "previousImage": "ಹಿಂದಿನ ಚಿತ್ರ",
+    "nextImage": "ಮುಂದಿನ ಚಿತ್ರ",
+    "enlarged": "ದೊಡ್ಡದಾದ ಉತ್ಪನ್ನ ಚಿತ್ರ"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} ರೇಟಿಂಗ್",
+    "ratingsCount_other": "{{formatted}} ರೇಟಿಂಗ್‌ಗಳು",
+    "writeTitle": "ವಿಮರ್ಶೆ ಬರೆಯಿರಿ",
+    "yourRating": "ನಿಮ್ಮ ರೇಟಿಂಗ್",
+    "starCount_one": "{{count}} ನಕ್ಷತ್ರ",
+    "starCount_other": "{{count}} ನಕ್ಷತ್ರಗಳು",
+    "titleLabel": "ಶೀರ್ಷಿಕೆ",
+    "titlePlaceholder": "ನಿಮ್ಮ ಅನುಭವವನ್ನು ಸಂಕ್ಷಿಪ್ತವಾಗಿ ಹೇಳಿ",
+    "commentLabel": "ನಿಮ್ಮ ವಿಮರ್ಶೆ",
+    "commentPlaceholder": "ನಿಮಗೆ ಏನು ಇಷ್ಟವಾಯಿತು ಅಥವಾ ಇಷ್ಟವಾಗಲಿಲ್ಲ? ಈ ಉತ್ಪನ್ನವನ್ನು ಹೇಗೆ ಬಳಸಿದಿರಿ?",
+    "optional": "(ಐಚ್ಛಿಕ)",
+    "submit": "ವಿಮರ್ಶೆ ಸಲ್ಲಿಸಿ",
+    "submitFailed": "ನಿಮ್ಮ ವಿಮರ್ಶೆಯನ್ನು ಸಲ್ಲಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+    "pickRating": "ದಯವಿಟ್ಟು ನಕ್ಷತ್ರ ರೇಟಿಂಗ್ ಆರಿಸಿ",
+    "thanks": "ನಿಮ್ಮ ವಿಮರ್ಶೆಗೆ ಧನ್ಯವಾದಗಳು!",
+    "loginToReview": "ವಿಮರ್ಶೆ ಬರೆಯಲು ದಯವಿಟ್ಟು ಲಾಗಿನ್ ಮಾಡಿ",
+    "sortAria": "ವಿಮರ್ಶೆಗಳನ್ನು ವಿಂಗಡಿಸಿ",
+    "filterAria": "ರೇಟಿಂಗ್ ಪ್ರಕಾರ ಫಿಲ್ಟರ್ ಮಾಡಿ",
+    "allRatings": "ಎಲ್ಲಾ ರೇಟಿಂಗ್‌ಗಳು",
+    "anonymous": "ಅನಾಮಧೇಯ",
+    "verified": "ಪರಿಶೀಲಿಸಿದ ಖರೀದಿ",
+    "emptyTitle": "ಇನ್ನೂ ವಿಮರ್ಶೆಗಳಿಲ್ಲ",
+    "emptyMessage": "ಈ ಉತ್ಪನ್ನದ ಬಗ್ಗೆ ನಿಮ್ಮ ಅನುಭವವನ್ನು ಹಂಚಿಕೊಳ್ಳುವ ಮೊದಲ ವ್ಯಕ್ತಿಯಾಗಿ.",
+    "sort": {
+      "newest": "ಅತಿ ಇತ್ತೀಚಿನವು",
+      "helpful": "ಅತ್ಯಂತ ಸಹಾಯಕ",
+      "highest": "ಅತಿ ಹೆಚ್ಚು ರೇಟಿಂಗ್",
+      "lowest": "ಅತಿ ಕಡಿಮೆ ರೇಟಿಂಗ್"
+    }
+  },
+  "specs": {
+    "emptyTitle": "ಯಾವುದೇ ವಿಶೇಷಣಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡಿಲ್ಲ",
+    "emptyMessage": "ಈ ಉತ್ಪನ್ನಕ್ಕೆ ವಿವರವಾದ ವಿಶೇಷಣಗಳನ್ನು ಇನ್ನೂ ಸೇರಿಸಿಲ್ಲ."
+  },
+  "faq": {
+    "emptyTitle": "ಇನ್ನೂ ಪ್ರಶ್ನೆಗಳಿಲ್ಲ",
+    "emptyMessage": "ಈ ಉತ್ಪನ್ನದ ಬಗ್ಗೆ ಪ್ರಶ್ನೆ ಇದೆಯೇ? ನಮ್ಮ ಬೆಂಬಲ ತಂಡವನ್ನು ಸಂಪರ್ಕಿಸಿ, ನಾವು ಸಹಾಯ ಮಾಡುತ್ತೇವೆ."
+  }
+}

@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "মানসম্পন্ন নির্মাণ সামগ্রী, হার্ডওয়্যার ও সরঞ্জাম",
+    "seoDescription": "প্রিমিয়াম প্লাইউড, ল্যামিনেট, হার্ডওয়্যার, রং, পাওয়ার টুল ও ইলেকট্রিক্যাল কিনুন। আসল ব্র্যান্ড, নিরাপদ পেমেন্ট ও দ্রুত ডেলিভারি।",
+    "feedError": "পণ্য লোড করা যায়নি",
+    "forYou": "আপনার জন্য পণ্য",
+    "topSelling": "সর্বাধিক বিক্রিত পণ্য",
+    "recentlyViewed": "সম্প্রতি দেখা",
+    "recentlyViewedSubtitle": "যেখানে ছেড়েছিলেন সেখান থেকে শুরু করুন",
+    "ctaTitle": "বড় কিছু বানাচ্ছেন?",
+    "ctaText": "{{count}} বিভাগ জুড়ে সম্পূর্ণ ক্যাটালগ দেখুন — ট্রেড মূল্য, আসল ব্র্যান্ড এবং সাইটে ডেলিভারি।",
+    "ctaTextAll": "সম্পূর্ণ ক্যাটালগ দেখুন — ট্রেড মূল্য, আসল ব্র্যান্ড এবং সাইটে ডেলিভারি।",
+    "ctaButton": "সব পণ্য দেখুন",
+    "sections": {
+      "for_you": {
+        "title": "আপনার জন্য পণ্য",
+        "subtitle": "আপনার পছন্দ অনুযায়ী বাছাই করা"
+      },
+      "top_selling": {
+        "title": "সর্বাধিক বিক্রিত পণ্য",
+        "subtitle": "সবাই যা কিনছে"
+      },
+      "new_arrivals": {
+        "title": "নতুন পণ্য",
+        "subtitle": "দোকানে নতুন"
+      },
+      "best_deals": {
+        "title": "সেরা ডিল",
+        "subtitle": "এখন সবচেয়ে বড় ছাড়"
+      },
+      "top_rated": {
+        "title": "সর্বোচ্চ রেটেড",
+        "subtitle": "আমাদের গ্রাহকদের প্রিয়"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}” এর ফলাফল",
+    "seoDescription": "{{heading}} দেখুন — আসল ব্র্যান্ড, প্রতিযোগিতামূলক মূল্য ও দ্রুত ডেলিভারি।",
+    "loading": "পণ্য লোড হচ্ছে…",
+    "found_one": "{{count}} পণ্য পাওয়া গেছে",
+    "found_other": "{{count}} পণ্য পাওয়া গেছে",
+    "sortBy": "সাজান",
+    "sortAria": "পণ্য সাজান",
+    "emptyTitle": "এই ফিল্টারের সঙ্গে কোনো পণ্য মেলেনি",
+    "emptyMessage": "আপনার মূল্যসীমা বাড়ান বা একটি ফিল্টার সরিয়ে দেখুন।"
+  },
+  "sort": {
+    "newest": "নতুন আগে",
+    "popular": "জনপ্রিয়তা",
+    "price_asc": "মূল্য: কম থেকে বেশি",
+    "price_desc": "মূল্য: বেশি থেকে কম",
+    "discount": "ছাড়",
+    "rating": "গ্রাহক রেটিং",
+    "name_asc": "নাম: অ থেকে হ"
+  },
+  "filters": {
+    "title": "ফিল্টার",
+    "aria": "পণ্য ফিল্টার",
+    "close": "ফিল্টার বন্ধ করুন",
+    "reset": "ফিল্টার রিসেট করুন",
+    "resetAll": "সব রিসেট করুন",
+    "removeFilter": "{{name}} ফিল্টার সরান",
+    "showCount_one": "{{count}} পণ্য দেখান",
+    "showCount_other": "{{count}} পণ্য দেখান",
+    "category": "বিভাগ",
+    "subCategory": "উপ-বিভাগ",
+    "price": "মূল্য",
+    "minPrice": "সর্বনিম্ন মূল্য",
+    "maxPrice": "সর্বোচ্চ মূল্য",
+    "applyPrice": "মূল্য প্রয়োগ করুন",
+    "catalogueRange": "ক্যাটালগ পরিসর: {{min}} – {{max}}",
+    "brand": "ব্র্যান্ড",
+    "discount": "ছাড়",
+    "discountAndAbove": "{{value}}% ও তার বেশি",
+    "customerRating": "গ্রাহক রেটিং",
+    "andUp": "ও তার উপরে",
+    "availabilityTitle": "প্রাপ্যতা",
+    "availability": {
+      "in_stock": "শুধু স্টকে আছে",
+      "out_of_stock": "স্টকে নেই"
+    },
+    "chipMinPrice": "{{value}} থেকে",
+    "chipMaxPrice": "{{value}} পর্যন্ত",
+    "chipDiscount": "{{value}}% বা তার বেশি ছাড়",
+    "chipRating": "{{value}} তারা ও তার উপরে"
+  },
+  "grid": {
+    "emptyTitle": "কোনো পণ্য পাওয়া যায়নি",
+    "emptyMessage": "আপনার ফিল্টার পরিবর্তন করুন বা অন্য কিছু খুঁজুন।"
+  },
+  "details": {
+    "notFoundTitle": "পণ্য পাওয়া যায়নি",
+    "notFoundMessage": "এই পণ্যটি সরিয়ে ফেলা হয়ে থাকতে পারে বা আর উপলব্ধ নেই।",
+    "loadErrorTitle": "এই পণ্যটি লোড করা যায়নি",
+    "browseAll": "সব পণ্য দেখুন",
+    "share": "এই পণ্যটি শেয়ার করুন",
+    "linkCopied": "লিঙ্ক ক্লিপবোর্ডে কপি হয়েছে",
+    "ratingsCount_one": "{{count}} রেটিং",
+    "ratingsCount_other": "{{count}} রেটিং",
+    "noRatings": "এখনও কোনো রেটিং নেই",
+    "youSave": "আপনি {{amount}} সাশ্রয় করছেন",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "একটি বিকল্প নির্বাচন করুন",
+    "unitsAvailable_one": "{{count}} একক উপলব্ধ",
+    "unitsAvailable_other": "{{count}} একক উপলব্ধ",
+    "showingVariant": "<1>{{label}}</1> দেখানো হচ্ছে",
+    "keySpecs": "প্রধান বৈশিষ্ট্য",
+    "specWeight": "ওজন",
+    "specDimensions": "মাপ",
+    "inStockUnits_one": "স্টকে আছে ({{count}} একক)",
+    "inStockUnits_other": "স্টকে আছে ({{count}} একক)",
+    "relatedTitle": "সম্পর্কিত পণ্য",
+    "relatedSubtitle": "গ্রাহকরা এগুলিও বিবেচনা করেছেন",
+    "delivery": {
+      "freeTitle": "বিনামূল্যে ডেলিভারি",
+      "freeText": "এই পণ্যটি বিনামূল্যে পাঠানো হয়",
+      "paidTitle": "ডেলিভারি চার্জ প্রযোজ্য",
+      "paidText": "₹{{amount}} এর উপরে বিনামূল্যে",
+      "returnsTitle": "৭ দিনে ফেরত",
+      "returnsText": "ঝামেলাহীন প্রতিস্থাপন",
+      "paymentTitle": "নিরাপদ পেমেন্ট",
+      "paymentText": "Razorpay দ্বারা সুরক্ষিত",
+      "weightTitle": "শিপিং ওজন",
+      "genuineTitle": "আসল পণ্য",
+      "genuineText": "সরাসরি ব্র্যান্ড থেকে সংগৃহীত"
+    },
+    "rows": {
+      "brand": "ব্র্যান্ড",
+      "category": "বিভাগ",
+      "subCategory": "উপ-বিভাগ",
+      "sku": "SKU",
+      "availability": "প্রাপ্যতা",
+      "tags": "ট্যাগ"
+    }
+  },
+  "tabs": {
+    "description": "বিবরণ",
+    "details": "পণ্যের বিবরণ",
+    "features": "বৈশিষ্ট্য",
+    "featuresWithCount": "বৈশিষ্ট্য ({{count}})",
+    "reviews": "পর্যালোচনা",
+    "reviewsWithCount": "পর্যালোচনা ({{count}})",
+    "faqs": "সাধারণ প্রশ্ন",
+    "faqsWithCount": "সাধারণ প্রশ্ন ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "নির্বাচন করুন",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "অনুপলব্ধ",
+    "stateOutOfStock": "স্টকে নেই",
+    "reasonCombination": "এই সমন্বয়ে উপলব্ধ নয়"
+  },
+  "gallery": {
+    "viewImage": "ছবি {{index}} দেখুন",
+    "image": "ছবি {{index}}",
+    "hoverToZoom": "জুম করতে হোভার করুন",
+    "previousImage": "আগের ছবি",
+    "nextImage": "পরের ছবি",
+    "enlarged": "বড় করা পণ্যের ছবি"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} রেটিং",
+    "ratingsCount_other": "{{formatted}} রেটিং",
+    "writeTitle": "পর্যালোচনা লিখুন",
+    "yourRating": "আপনার রেটিং",
+    "starCount_one": "{{count}} তারা",
+    "starCount_other": "{{count}} তারা",
+    "titleLabel": "শিরোনাম",
+    "titlePlaceholder": "আপনার অভিজ্ঞতা সংক্ষেপে বলুন",
+    "commentLabel": "আপনার পর্যালোচনা",
+    "commentPlaceholder": "আপনার কী ভালো বা খারাপ লেগেছে? এই পণ্যটি কীভাবে ব্যবহার করেছেন?",
+    "optional": "(ঐচ্ছিক)",
+    "submit": "পর্যালোচনা জমা দিন",
+    "submitFailed": "আপনার পর্যালোচনা জমা দেওয়া যায়নি",
+    "pickRating": "অনুগ্রহ করে একটি তারা রেটিং নির্বাচন করুন",
+    "thanks": "আপনার পর্যালোচনার জন্য ধন্যবাদ!",
+    "loginToReview": "পর্যালোচনা লিখতে অনুগ্রহ করে লগ ইন করুন",
+    "sortAria": "পর্যালোচনা সাজান",
+    "filterAria": "রেটিং অনুযায়ী ফিল্টার করুন",
+    "allRatings": "সব রেটিং",
+    "anonymous": "নামহীন",
+    "verified": "যাচাইকৃত ক্রয়",
+    "emptyTitle": "এখনও কোনো পর্যালোচনা নেই",
+    "emptyMessage": "এই পণ্য সম্পর্কে আপনার অভিজ্ঞতা ভাগ করে নেওয়া প্রথম ব্যক্তি হোন।",
+    "sort": {
+      "newest": "সাম্প্রতিকতম",
+      "helpful": "সবচেয়ে সহায়ক",
+      "highest": "সর্বোচ্চ রেটেড",
+      "lowest": "সর্বনিম্ন রেটেড"
+    }
+  },
+  "specs": {
+    "emptyTitle": "কোনো বৈশিষ্ট্য তালিকাভুক্ত নেই",
+    "emptyMessage": "এই পণ্যের বিস্তারিত বৈশিষ্ট্য এখনও যোগ করা হয়নি।"
+  },
+  "faq": {
+    "emptyTitle": "এখনও কোনো প্রশ্ন নেই",
+    "emptyMessage": "এই পণ্য সম্পর্কে প্রশ্ন আছে? আমাদের সহায়তা দলের সঙ্গে যোগাযোগ করুন, আমরা সাহায্য করব।"
+  }
+}

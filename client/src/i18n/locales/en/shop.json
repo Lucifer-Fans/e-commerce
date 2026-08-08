@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "Quality Building Materials, Hardware & Tools",
+    "seoDescription": "Shop premium plywood, laminates, hardware, paints, power tools and electricals. Genuine brands, secure payments and fast delivery.",
+    "feedError": "Could not load products",
+    "forYou": "Products For You",
+    "topSelling": "Top Selling Products",
+    "recentlyViewed": "Recently Viewed",
+    "recentlyViewedSubtitle": "Pick up where you left off",
+    "ctaTitle": "Building something big?",
+    "ctaText": "Browse the full catalogue across {{count}} categories — trade pricing, genuine brands and delivery to site.",
+    "ctaTextAll": "Browse the full catalogue — trade pricing, genuine brands and delivery to site.",
+    "ctaButton": "Explore all products",
+    "sections": {
+      "for_you": {
+        "title": "Products For You",
+        "subtitle": "Handpicked for your taste"
+      },
+      "top_selling": {
+        "title": "Top Selling Products",
+        "subtitle": "What everyone is buying"
+      },
+      "new_arrivals": {
+        "title": "New Arrivals",
+        "subtitle": "Fresh in store"
+      },
+      "best_deals": {
+        "title": "Best Deals",
+        "subtitle": "Biggest discounts right now"
+      },
+      "top_rated": {
+        "title": "Top Rated",
+        "subtitle": "Loved by our customers"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "Results for “{{term}}”",
+    "seoDescription": "Browse {{heading}} — genuine brands, competitive pricing and fast delivery.",
+    "loading": "Loading products…",
+    "found_one": "{{count}} product found",
+    "found_other": "{{count}} products found",
+    "sortBy": "Sort by",
+    "sortAria": "Sort products",
+    "emptyTitle": "No products match these filters",
+    "emptyMessage": "Try widening your price range or clearing a filter."
+  },
+  "sort": {
+    "newest": "Newest First",
+    "popular": "Popularity",
+    "price_asc": "Price: Low to High",
+    "price_desc": "Price: High to Low",
+    "discount": "Discount",
+    "rating": "Customer Rating",
+    "name_asc": "Name: A to Z"
+  },
+  "filters": {
+    "title": "Filters",
+    "aria": "Product filters",
+    "close": "Close filters",
+    "reset": "Reset filters",
+    "resetAll": "Reset all",
+    "removeFilter": "Remove filter {{name}}",
+    "showCount_one": "Show {{count}} product",
+    "showCount_other": "Show {{count}} products",
+    "category": "Category",
+    "subCategory": "Sub-category",
+    "price": "Price",
+    "minPrice": "Minimum price",
+    "maxPrice": "Maximum price",
+    "applyPrice": "Apply price",
+    "catalogueRange": "Catalogue range: {{min}} – {{max}}",
+    "brand": "Brand",
+    "discount": "Discount",
+    "discountAndAbove": "{{value}}% and above",
+    "customerRating": "Customer rating",
+    "andUp": "& up",
+    "availabilityTitle": "Availability",
+    "availability": {
+      "in_stock": "In stock only",
+      "out_of_stock": "Out of stock"
+    },
+    "chipMinPrice": "From {{value}}",
+    "chipMaxPrice": "Up to {{value}}",
+    "chipDiscount": "{{value}}% off or more",
+    "chipRating": "{{value}} stars & up"
+  },
+  "grid": {
+    "emptyTitle": "No products found",
+    "emptyMessage": "Try adjusting your filters or search for something else."
+  },
+  "details": {
+    "notFoundTitle": "Product not found",
+    "notFoundMessage": "This product may have been removed or is no longer available.",
+    "loadErrorTitle": "Could not load this product",
+    "browseAll": "Browse all products",
+    "share": "Share this product",
+    "linkCopied": "Link copied to clipboard",
+    "ratingsCount_one": "{{count}} rating",
+    "ratingsCount_other": "{{count}} ratings",
+    "noRatings": "No ratings yet",
+    "youSave": "You save {{amount}}",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "Select an option",
+    "unitsAvailable_one": "{{count}} unit available",
+    "unitsAvailable_other": "{{count}} units available",
+    "showingVariant": "Showing <1>{{label}}</1>",
+    "keySpecs": "Key specifications",
+    "specWeight": "Weight",
+    "specDimensions": "Dimensions",
+    "inStockUnits_one": "In stock ({{count}} unit)",
+    "inStockUnits_other": "In stock ({{count}} units)",
+    "relatedTitle": "Related Products",
+    "relatedSubtitle": "Customers also considered these",
+    "delivery": {
+      "freeTitle": "Free delivery",
+      "freeText": "This item ships free",
+      "paidTitle": "Delivery charges apply",
+      "paidText": "Free above ₹{{amount}}",
+      "returnsTitle": "7 day returns",
+      "returnsText": "Hassle-free replacement",
+      "paymentTitle": "Secure payment",
+      "paymentText": "Protected by Razorpay",
+      "weightTitle": "Shipping weight",
+      "genuineTitle": "Genuine product",
+      "genuineText": "Sourced direct from brands"
+    },
+    "rows": {
+      "brand": "Brand",
+      "category": "Category",
+      "subCategory": "Sub-category",
+      "sku": "SKU",
+      "availability": "Availability",
+      "tags": "Tags"
+    }
+  },
+  "tabs": {
+    "description": "Description",
+    "details": "Product Details",
+    "features": "Features",
+    "featuresWithCount": "Features ({{count}})",
+    "reviews": "Reviews",
+    "reviewsWithCount": "Reviews ({{count}})",
+    "faqs": "FAQs",
+    "faqsWithCount": "FAQs ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "Select",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "unavailable",
+    "stateOutOfStock": "out of stock",
+    "reasonCombination": "not available in this combination"
+  },
+  "gallery": {
+    "viewImage": "View image {{index}}",
+    "image": "Image {{index}}",
+    "hoverToZoom": "Hover to zoom",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "enlarged": "Enlarged product image"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} rating",
+    "ratingsCount_other": "{{formatted}} ratings",
+    "writeTitle": "Write a review",
+    "yourRating": "Your rating",
+    "starCount_one": "{{count}} star",
+    "starCount_other": "{{count}} stars",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Sum up your experience",
+    "commentLabel": "Your review",
+    "commentPlaceholder": "What did you like or dislike? How did you use this product?",
+    "optional": "(optional)",
+    "submit": "Submit review",
+    "submitFailed": "Could not submit your review",
+    "pickRating": "Please select a star rating",
+    "thanks": "Thanks for your review!",
+    "loginToReview": "Please log in to write a review",
+    "sortAria": "Sort reviews",
+    "filterAria": "Filter by rating",
+    "allRatings": "All ratings",
+    "anonymous": "Anonymous",
+    "verified": "Verified purchase",
+    "emptyTitle": "No reviews yet",
+    "emptyMessage": "Be the first to share your experience with this product.",
+    "sort": {
+      "newest": "Most recent",
+      "helpful": "Most helpful",
+      "highest": "Highest rated",
+      "lowest": "Lowest rated"
+    }
+  },
+  "specs": {
+    "emptyTitle": "No specifications listed",
+    "emptyMessage": "Detailed specifications for this product have not been added yet."
+  },
+  "faq": {
+    "emptyTitle": "No questions yet",
+    "emptyMessage": "Have a question about this product? Contact our support team and we'll help."
+  }
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="220" viewBox="0 0 240 220" fill="none">
+  <!-- decorative marks scattered around the envelope, as on the careers artwork -->
+  <circle cx="150" cy="24" r="3.5" stroke="#93b4fb" stroke-width="2"/>
+  <circle cx="216" cy="86" r="3" stroke="#93b4fb" stroke-width="2"/>
+  <circle cx="34" cy="88" r="3" stroke="#93b4fb" stroke-width="2"/>
+  <circle cx="60" cy="40" r="2.5" fill="#93b4fb"/>
+  <path d="M196 20l7-7M206 34h6" stroke="#7ea6fa" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M28 46h8M24 118l6-4" stroke="#7ea6fa" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M46 26l6 5-6 5" stroke="#7ea6fa" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M198 60l5 5" stroke="#7ea6fa" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M36 26c2.6 0 4.6 2 4.6 4.6H36z" fill="#34b98a"/>
+  <path d="M212 44h7v6h-7z" fill="#cddcfd"/>
+
+  <!-- leaf sprig tucked behind the envelope's right edge -->
+  <path d="M206 194c-3-23 5-40 24-49 4 23-6 41-24 49z" fill="#93cbaa"/>
+  <path d="M206 194c-15-10-20-26-16-41 14 10 19 26 16 41z" fill="#7fc39c"/>
+
+  <!-- envelope back -->
+  <rect x="34" y="72" width="172" height="118" rx="9" fill="#c8d6fb"/>
+
+  <!-- letter, lifting well clear of the envelope's mouth -->
+  <rect x="60" y="20" width="120" height="126" rx="7" fill="#ffffff" stroke="#dbe4fd" stroke-width="2"/>
+  <!-- confirmation tick -->
+  <circle cx="120" cy="82" r="34" fill="#2f6df6"/>
+  <path d="M106 82.5l10.5 10.5 19-20" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- envelope front: V-notched panel folded over the letter -->
+  <path d="M34 80l86 66 86-66v101a9 9 0 01-9 9H43a9 9 0 01-9-9z" fill="#adc3f8"/>
+  <path d="M34 181a9 9 0 009 9h154a9 9 0 009-9l-86-56z" fill="#9db7f6"/>
+</svg>

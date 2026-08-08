@@ -1,0 +1,202 @@
+﻿{
+  "home": {
+    "seoTitle": "মানসম্পন্ন নিৰ্মাণ সামগ্ৰী, হাৰ্ডৱেৰ আৰু সঁজুলি",
+    "seoDescription": "প্ৰিমিয়াম প্লাইউড, লেমিনেট, হাৰ্ডৱেৰ, ৰং, পাৱাৰ টুল আৰু ইলেকট্ৰিকেল কিনক। আচল ব্ৰেণ্ড, সুৰক্ষিত পেমেণ্ট আৰু দ্ৰুত ডেলিভাৰী।",
+    "feedError": "সামগ্ৰী ল'ড কৰিব পৰা নগ'ল",
+    "forYou": "আপোনাৰ বাবে সামগ্ৰী",
+    "topSelling": "সৰ্বাধিক বিক্ৰী হোৱা সামগ্ৰী",
+    "recentlyViewed": "শেহতীয়াকৈ চোৱা",
+    "recentlyViewedSubtitle": "য'ত এৰিছিল তাৰ পৰা আৰম্ভ কৰক",
+    "ctaTitle": "ডাঙৰ কিবা সাজি আছে নেকি?",
+    "ctaText": "{{count}} টা শ্ৰেণীত সম্পূৰ্ণ কেটেলগ চাওক — ট্ৰেড মূল্য, আচল ব্ৰেণ্ড আৰু ছাইটলৈকে ডেলিভাৰী।",
+    "ctaTextAll": "সম্পূৰ্ণ কেটেলগ চাওক — ট্ৰেড মূল্য, আচল ব্ৰেণ্ড আৰু ছাইটলৈকে ডেলিভাৰী।",
+    "ctaButton": "সকলো সামগ্ৰী চাওক",
+    "sections": {
+      "for_you": {
+        "title": "আপোনাৰ বাবে সামগ্ৰী",
+        "subtitle": "আপোনাৰ পছন্দ অনুসৰি বাছনি কৰা"
+      },
+      "top_selling": {
+        "title": "সৰ্বাধিক বিক্ৰী হোৱা সামগ্ৰী",
+        "subtitle": "সকলোৱে যি কিনিছে"
+      },
+      "new_arrivals": {
+        "title": "নতুন সামগ্ৰী",
+        "subtitle": "দোকানত নতুন"
+      },
+      "best_deals": {
+        "title": "শ্ৰেষ্ঠ ডীল",
+        "subtitle": "এতিয়া সৰ্বাধিক ৰেহাই"
+      },
+      "top_rated": {
+        "title": "সৰ্বোচ্চ ৰেটেড",
+        "subtitle": "আমাৰ গ্ৰাহকৰ প্ৰিয়"
+      }
+    }
+  },
+  "list": {
+    "resultsFor": "“{{term}}”ৰ ফলাফল",
+    "seoDescription": "{{heading}} চাওক — আচল ব্ৰেণ্ড, প্ৰতিযোগিতামূলক মূল্য আৰু দ্ৰুত ডেলিভাৰী।",
+    "loading": "সামগ্ৰী ল'ড হৈ আছে…",
+    "found_one": "{{count}} টা সামগ্ৰী পোৱা গ'ল",
+    "found_other": "{{count}} টা সামগ্ৰী পোৱা গ'ল",
+    "sortBy": "সজাওক",
+    "sortAria": "সামগ্ৰী সজাওক",
+    "emptyTitle": "এই ফিল্টাৰৰ সৈতে কোনো সামগ্ৰী মিলা নাই",
+    "emptyMessage": "আপোনাৰ মূল্য সীমা বঢ়াওক বা এটা ফিল্টাৰ আঁতৰাওক।"
+  },
+  "sort": {
+    "newest": "নতুন আগতে",
+    "popular": "জনপ্ৰিয়তা",
+    "price_asc": "মূল্য: কমৰ পৰা বেছি",
+    "price_desc": "মূল্য: বেছিৰ পৰা কম",
+    "discount": "ৰেহাই",
+    "rating": "গ্ৰাহক ৰেটিং",
+    "name_asc": "নাম: অ ৰ পৰা হ"
+  },
+  "filters": {
+    "title": "ফিল্টাৰ",
+    "aria": "সামগ্ৰী ফিল্টাৰ",
+    "close": "ফিল্টাৰ বন্ধ কৰক",
+    "reset": "ফিল্টাৰ ৰিছেট কৰক",
+    "resetAll": "সকলো ৰিছেট কৰক",
+    "removeFilter": "{{name}} ফিল্টাৰ আঁতৰাওক",
+    "showCount_one": "{{count}} টা সামগ্ৰী দেখুৱাওক",
+    "showCount_other": "{{count}} টা সামগ্ৰী দেখুৱাওক",
+    "category": "শ্ৰেণী",
+    "subCategory": "উপ-শ্ৰেণী",
+    "price": "মূল্য",
+    "minPrice": "নূন্যতম মূল্য",
+    "maxPrice": "সৰ্বোচ্চ মূল্য",
+    "applyPrice": "মূল্য প্ৰয়োগ কৰক",
+    "catalogueRange": "কেটেলগ পৰিসৰ: {{min}} – {{max}}",
+    "brand": "ব্ৰেণ্ড",
+    "discount": "ৰেহাই",
+    "discountAndAbove": "{{value}}% আৰু তাৰ ওপৰত",
+    "customerRating": "গ্ৰাহক ৰেটিং",
+    "andUp": "আৰু ওপৰত",
+    "availabilityTitle": "উপলব্ধতা",
+    "availability": {
+      "in_stock": "কেৱল ষ্টকত থকা",
+      "out_of_stock": "ষ্টকত নাই"
+    },
+    "chipMinPrice": "{{value}} ৰ পৰা",
+    "chipMaxPrice": "{{value}} লৈকে",
+    "chipDiscount": "{{value}}% বা তাতোধিক ৰেহাই",
+    "chipRating": "{{value}} তৰা আৰু ওপৰত"
+  },
+  "grid": {
+    "emptyTitle": "কোনো সামগ্ৰী পোৱা নগ'ল",
+    "emptyMessage": "আপোনাৰ ফিল্টাৰ সলনি কৰক বা আন কিবা বিচাৰক।"
+  },
+  "details": {
+    "notFoundTitle": "সামগ্ৰী পোৱা নগ'ল",
+    "notFoundMessage": "এই সামগ্ৰীটো আঁতৰোৱা হৈ থাকিব পাৰে বা আৰু উপলব্ধ নহয়।",
+    "loadErrorTitle": "এই সামগ্ৰীটো ল'ড কৰিব পৰা নগ'ল",
+    "browseAll": "সকলো সামগ্ৰী চাওক",
+    "share": "এই সামগ্ৰী শ্বেয়াৰ কৰক",
+    "linkCopied": "লিংক ক্লিপব'ৰ্ডলৈ কপি হ'ল",
+    "ratingsCount_one": "{{count}} ৰেটিং",
+    "ratingsCount_other": "{{count}} ৰেটিং",
+    "noRatings": "এতিয়ালৈকে কোনো ৰেটিং নাই",
+    "youSave": "আপুনি {{amount}} সাঁচি আছে",
+    "sku": "SKU: {{sku}}",
+    "selectAnOption": "এটা বিকল্প বাছনি কৰক",
+    "unitsAvailable_one": "{{count}} একক উপলব্ধ",
+    "unitsAvailable_other": "{{count}} একক উপলব্ধ",
+    "showingVariant": "<1>{{label}}</1> দেখুওৱা হৈছে",
+    "keySpecs": "মুখ্য বৈশিষ্ট্য",
+    "specWeight": "ওজন",
+    "specDimensions": "জোখ",
+    "inStockUnits_one": "ষ্টকত আছে ({{count}} একক)",
+    "inStockUnits_other": "ষ্টকত আছে ({{count}} একক)",
+    "relatedTitle": "সম্পৰ্কিত সামগ্ৰী",
+    "relatedSubtitle": "গ্ৰাহকসকলে এইবোৰো বিবেচনা কৰিছিল",
+    "delivery": {
+      "freeTitle": "বিনামূলীয়া ডেলিভাৰী",
+      "freeText": "এই সামগ্ৰী বিনামূলীয়াকৈ পঠোৱা হয়",
+      "paidTitle": "ডেলিভাৰী মাচুল প্ৰযোজ্য",
+      "paidText": "₹{{amount}} ৰ ওপৰত বিনামূলীয়া",
+      "returnsTitle": "৭ দিনত ঘূৰাই দিয়া",
+      "returnsText": "ঝামেলাবিহীন সলনি",
+      "paymentTitle": "সুৰক্ষিত পেমেণ্ট",
+      "paymentText": "Razorpay ৰ দ্বাৰা সুৰক্ষিত",
+      "weightTitle": "শ্বিপিং ওজন",
+      "genuineTitle": "আচল সামগ্ৰী",
+      "genuineText": "পোনপটীয়াকৈ ব্ৰেণ্ডৰ পৰা সংগৃহীত"
+    },
+    "rows": {
+      "brand": "ব্ৰেণ্ড",
+      "category": "শ্ৰেণী",
+      "subCategory": "উপ-শ্ৰেণী",
+      "sku": "SKU",
+      "availability": "উপলব্ধতা",
+      "tags": "টেগ"
+    }
+  },
+  "tabs": {
+    "description": "বিৱৰণ",
+    "details": "সামগ্ৰীৰ বিৱৰণ",
+    "features": "বৈশিষ্ট্য",
+    "featuresWithCount": "বৈশিষ্ট্য ({{count}})",
+    "reviews": "পৰ্যালোচনা",
+    "reviewsWithCount": "পৰ্যালোচনা ({{count}})",
+    "faqs": "সাধাৰণ প্ৰশ্ন",
+    "faqsWithCount": "সাধাৰণ প্ৰশ্ন ({{count}})"
+  },
+  "variants": {
+    "selectPrompt": "বাছনি কৰক",
+    "optionAria": "{{attribute}} {{value}}{{status}}",
+    "optionTitle": "{{value}} — {{reason}}",
+    "stateUnavailable": "অনুপলব্ধ",
+    "stateOutOfStock": "ষ্টকত নাই",
+    "reasonCombination": "এই সংমিশ্ৰণত উপলব্ধ নহয়"
+  },
+  "gallery": {
+    "viewImage": "ছবি {{index}} চাওক",
+    "image": "ছবি {{index}}",
+    "hoverToZoom": "জুম কৰিবলৈ হোভাৰ কৰক",
+    "previousImage": "আগৰ ছবি",
+    "nextImage": "পিছৰ ছবি",
+    "enlarged": "ডাঙৰ কৰা সামগ্ৰীৰ ছবি"
+  },
+  "reviews": {
+    "ratingsCount_one": "{{formatted}} ৰেটিং",
+    "ratingsCount_other": "{{formatted}} ৰেটিং",
+    "writeTitle": "পৰ্যালোচনা লিখক",
+    "yourRating": "আপোনাৰ ৰেটিং",
+    "starCount_one": "{{count}} তৰা",
+    "starCount_other": "{{count}} তৰা",
+    "titleLabel": "শিৰোনাম",
+    "titlePlaceholder": "আপোনাৰ অভিজ্ঞতা চমুকৈ কওক",
+    "commentLabel": "আপোনাৰ পৰ্যালোচনা",
+    "commentPlaceholder": "আপোনাৰ কি ভাল বা বেয়া লাগিল? এই সামগ্ৰী কেনেকৈ ব্যৱহাৰ কৰিলে?",
+    "optional": "(ঐচ্ছিক)",
+    "submit": "পৰ্যালোচনা দাখিল কৰক",
+    "submitFailed": "আপোনাৰ পৰ্যালোচনা দাখিল কৰিব পৰা নগ'ল",
+    "pickRating": "অনুগ্ৰহ কৰি এটা তৰা ৰেটিং বাছনি কৰক",
+    "thanks": "আপোনাৰ পৰ্যালোচনাৰ বাবে ধন্যবাদ!",
+    "loginToReview": "পৰ্যালোচনা লিখিবলৈ অনুগ্ৰহ কৰি লগ ইন কৰক",
+    "sortAria": "পৰ্যালোচনা সজাওক",
+    "filterAria": "ৰেটিং অনুসৰি ফিল্টাৰ কৰক",
+    "allRatings": "সকলো ৰেটিং",
+    "anonymous": "নামবিহীন",
+    "verified": "সত্যাপিত ক্ৰয়",
+    "emptyTitle": "এতিয়ালৈকে কোনো পৰ্যালোচনা নাই",
+    "emptyMessage": "এই সামগ্ৰীৰ বিষয়ে আপোনাৰ অভিজ্ঞতা ভাগ কৰা প্ৰথম ব্যক্তি হওক।",
+    "sort": {
+      "newest": "শেহতীয়া",
+      "helpful": "সৰ্বাধিক সহায়ক",
+      "highest": "সৰ্বোচ্চ ৰেটেড",
+      "lowest": "সৰ্বনিম্ন ৰেটেড"
+    }
+  },
+  "specs": {
+    "emptyTitle": "কোনো বৈশিষ্ট্য তালিকাভুক্ত হোৱা নাই",
+    "emptyMessage": "এই সামগ্ৰীৰ বিশদ বৈশিষ্ট্য এতিয়ালৈকে যোগ কৰা হোৱা নাই।"
+  },
+  "faq": {
+    "emptyTitle": "এতিয়ালৈকে কোনো প্ৰশ্ন নাই",
+    "emptyMessage": "এই সামগ্ৰীৰ বিষয়ে প্ৰশ্ন আছে নেকি? আমাৰ সহায় দলৰ লগত যোগাযোগ কৰক, আমি সহায় কৰিম।"
+  }
+}

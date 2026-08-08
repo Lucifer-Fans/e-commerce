@@ -1,0 +1,169 @@
+name: 🚀 CD
+
+on:
+  push:
+    branches: [ main ]
+  # Re-deploy without needing an empty commit.
+  workflow_dispatch:
+    inputs:
+      skip-checks:
+        description: 'Deploy without re-running checks (emergency use only)'
+        type: boolean
+        default: false
+
+# Deploys of main must never overlap. Queue rather than cancel: a triggered
+# Render deploy is already in flight and abandoning the job would not stop it.
+concurrency:
+  group: cd-main
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  # The exact same gate a pull request has to pass. Reused, not re-described,
+  # so production and PR standards cannot drift apart.
+  checks:
+    name: 🔎 Checks
+    if: ${{ !inputs.skip-checks }}
+    uses: ./.github/workflows/checks.yml
+
+  deploy:
+    name: 🚀 Deploy ${{ matrix.service }}
+    needs: checks
+    # `always()` lets an emergency skip-checks dispatch through, while still
+    # blocking whenever checks actually ran and failed.
+    if: ${{ always() && (inputs.skip-checks || needs.checks.result == 'success') }}
+    runs-on: ubuntu-latest
+
+    # Configure required reviewers / wait timers on this environment in repo
+    # settings to gate production behind a human approval.
+    environment:
+      name: production
+
+    strategy:
+      # Deploy everything that can deploy; don't strand the stack half-updated
+      # because one service failed.
+      fail-fast: false
+      # Render builds each service independently, but rolling them out one at a
+      # time keeps the failure blast radius to a single service.
+      max-parallel: 1
+      matrix:
+        # These map to secrets RENDER_SERVICE_ID_<NAME>. FRONTEND is the storefront
+        # (the ./client directory) — the name is kept to match the existing secret.
+        # API first: the static sites are useless if the backend is broken.
+        service: [ SERVER, FRONTEND, ADMIN ]
+
+    steps:
+      - name: 🔔 Trigger Render deploy, wait for it, then verify it serves
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          SERVICE_ID: ${{ secrets[format('RENDER_SERVICE_ID_{0}', matrix.service)] }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${RENDER_API_KEY:-}" ]; then
+            echo "❌ Secret RENDER_API_KEY is not set"; exit 1
+          fi
+          if [ -z "${SERVICE_ID:-}" ]; then
+            echo "❌ Secret RENDER_SERVICE_ID_${{ matrix.service }} is not set"; exit 1
+          fi
+
+          api() {
+            curl -sS --fail-with-body --retry 3 --retry-delay 5 --retry-connrefused \
+              -H "Accept: application/json" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $RENDER_API_KEY" "$@"
+          }
+
+          echo "::group::Trigger deploy"
+          echo "Service ${{ matrix.service }} ($SERVICE_ID) @ ${GITHUB_SHA:0:7}"
+          DEPLOY_ID=$(api -X POST "https://api.render.com/v1/services/$SERVICE_ID/deploys" -d '{}' | jq -er '.id')
+          echo "Deploy $DEPLOY_ID created"
+          echo "::endgroup::"
+
+          echo "::group::Wait for deploy to reach a terminal state"
+          # Render's own build+release can legitimately take several minutes.
+          DEADLINE=$(( SECONDS + 20 * 60 ))
+          STATUS=""
+          while [ "$SECONDS" -lt "$DEADLINE" ]; do
+            sleep 15
+            STATUS=$(api "https://api.render.com/v1/services/$SERVICE_ID/deploys/$DEPLOY_ID" | jq -er '.status')
+            echo "  status: $STATUS"
+            case "$STATUS" in
+              live) break ;;
+              build_failed|update_failed|pre_deploy_failed|canceled|deactivated)
+                echo "❌ Deploy ended as '$STATUS'"
+                echo "   https://dashboard.render.com/web/$SERVICE_ID/deploys/$DEPLOY_ID"
+                exit 1
+                ;;
+            esac
+          done
+
+          if [ "$STATUS" != "live" ]; then
+            echo "❌ Deploy did not reach 'live' within 20 minutes (last status: ${STATUS:-unknown})"
+            echo "   https://dashboard.render.com/web/$SERVICE_ID/deploys/$DEPLOY_ID"
+            exit 1
+          fi
+          echo "✅ Render reports ${{ matrix.service }} live"
+          echo "::endgroup::"
+
+          echo "::group::Verify the deployed service actually serves traffic"
+          # 'live' means Render finished releasing, not that the app answers.
+          # The public URL comes from the API, so no extra secret is needed.
+          URL=$(api "https://api.render.com/v1/services/$SERVICE_ID" | jq -er '.serviceDetails.url // empty')
+          if [ -z "$URL" ]; then
+            echo "⚠️  No public URL for this service (private service?) — skipping HTTP verification"
+            exit 0
+          fi
+
+          # The API exposes a real health report; the static sites just need to serve.
+          if [ "${{ matrix.service }}" = "SERVER" ]; then
+            TARGET="$URL/api/v1/health"
+          else
+            TARGET="$URL/"
+          fi
+          echo "Probing $TARGET"
+
+          # A just-released instance can need a moment to accept connections.
+          for attempt in $(seq 1 10); do
+            CODE=$(curl -sS -o /tmp/body -w '%{http_code}' --max-time 30 "$TARGET" || echo 000)
+            if [ "$CODE" = "200" ]; then
+              if [ "${{ matrix.service }}" = "SERVER" ] && ! jq -e '.success == true' /tmp/body > /dev/null 2>&1; then
+                echo "  attempt $attempt: 200 but health payload not successful"
+              else
+                echo "✅ ${{ matrix.service }} verified serving at $TARGET"
+                exit 0
+              fi
+            else
+              echo "  attempt $attempt: HTTP $CODE"
+            fi
+            sleep 10
+          done
+
+          echo "❌ ${{ matrix.service }} is 'live' but did not serve a healthy response at $TARGET"
+          head -c 500 /tmp/body || true
+          exit 1
+
+  summary:
+    name: 📋 Deployment summary
+    if: always()
+    needs: [ checks, deploy ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write summary
+        run: |
+          {
+            echo "### Deployment of \`${GITHUB_SHA:0:7}\`"
+            echo ""
+            echo "| Stage | Result |"
+            echo "| --- | --- |"
+            echo "| Checks | ${{ needs.checks.result }} |"
+            echo "| Deploy | ${{ needs.deploy.result }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "${{ needs.deploy.result }}" != "success" ]; then
+            echo "❌ Deployment did not fully succeed"
+            exit 1
+          fi
+          echo "✅ Deployment succeeded"
