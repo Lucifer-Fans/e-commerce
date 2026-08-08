@@ -1,0 +1,75 @@
+name: 🚀 CD
+
+on:
+  workflow_run:
+    workflows: [ "🧪 CI" ]
+    types: [ completed ]
+    branches: [ main ]
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: 🧱 Build Admin & Client
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install admin dependencies
+        working-directory: ./admin
+        run: npm install
+
+      - name: 🏗️ Build admin
+        working-directory: ./admin
+        run: npm run build
+
+      - name: 📦 Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: 🏗️ Build client
+        working-directory: ./client
+        run: npm run build
+
+  deploy-to-render:
+    name: 🚀 Trigger Render Deploys
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔔 Trigger deploys for Render services
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID_ADMIN: ${{ secrets.RENDER_SERVICE_ID_ADMIN }}
+          RENDER_SERVICE_ID_CLIENT: ${{ secrets.RENDER_SERVICE_ID_CLIENT }}
+          RENDER_SERVICE_ID_SERVER: ${{ secrets.RENDER_SERVICE_ID_SERVER }}
+        run: |
+          set -e
+
+          echo "Triggering deploy for Admin service"
+          curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID_ADMIN/deploys" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -d '{}' \
+            | jq -r '.id // "no-deploy-id"' || true
+
+          echo "Triggering deploy for Client service"
+          curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID_CLIENT/deploys" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -d '{}' \
+            | jq -r '.id // "no-deploy-id"' || true
+
+          echo "Triggering deploy for Server service"
+          curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID_SERVER/deploys" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -d '{}' \
+            | jq -r '.id // "no-deploy-id"' || true
