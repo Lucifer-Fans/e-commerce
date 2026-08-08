@@ -92,3 +92,6 @@ scratch_*
 
 # Misc
 .eslintcache
+
+# Docs
+docs/

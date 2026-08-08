@@ -2,11 +2,38 @@ name: 🧪 CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, main ]
   pull_request:
     branches: [ main, develop ]
 
 jobs:
+  validate:
+    name: 🧪 Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install admin dependencies
+        working-directory: ./admin
+        run: npm install
+
+      - name: 📦 Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: 📦 Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      - name: 🧪 Run onsite grace tests
+        run: npm run test:onsite-grace
+
   admin:
     name: 🛠️ Admin Build
     runs-on: ubuntu-latest
