@@ -1,20 +1,68 @@
 name: 🧪 CI
 
 on:
-  pull_request:
-    branches: [ main, develop ]
   push:
     branches: [ develop ]
-
-# A newer push to the same ref makes the in-flight run obsolete.
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
+  pull_request:
+    branches: [ main, develop ]
 
 jobs:
-  checks:
-    name: 🔎 Checks
-    uses: ./.github/workflows/checks.yml
+  admin:
+    name: 🛠️ Admin Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install admin dependencies
+        working-directory: ./admin
+        run: npm install
+
+      - name: 🏗️ Build admin
+        working-directory: ./admin
+        run: npm run build
+
+  client:
+    name: 🎨 Client Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install client dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: 🏗️ Build client
+        working-directory: ./client
+        run: npm run build
+
+  server:
+    name: 🧩 Server Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+      - name: ✅ Syntax check server entry
+        working-directory: ./server
+        run: node --check src/server.js
