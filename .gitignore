@@ -95,3 +95,5 @@ scratch_*
 
 # Docs
 docs/
+
+*.zip
