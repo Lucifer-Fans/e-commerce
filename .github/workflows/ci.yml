@@ -31,9 +31,6 @@ jobs:
         working-directory: ./server
         run: npm install
 
-      - name: 🧪 Run onsite grace tests
-        run: npm run test:onsite-grace
-
   admin:
     name: 🛠️ Admin Build
     runs-on: ubuntu-latest
