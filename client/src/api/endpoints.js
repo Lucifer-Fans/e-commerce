@@ -114,7 +114,13 @@ export const orderApi = {
   create: (payload) => api.post('/orders', payload),
   list: (params) => api.get('/orders', { params }),
   detail: (id) => api.get(`/orders/${id}`),
-  cancel: (id, reason) => api.patch(`/orders/${id}/cancel`, { reason }),
+  /**
+   * `payload` is either `{ reasonId }` for one of the store's published reasons
+   * or `{ reason }` for the sentence typed under "Other". The server resolves the
+   * id to its label, so nothing the dialog displays is trusted as the record.
+   */
+  cancel: (id, payload) => api.patch(`/orders/${id}/cancel`, payload),
+  cancellationReasons: () => api.get('/cancellation-reasons'),
   invoiceUrl: (id) => `${import.meta.env.VITE_API_URL}/orders/${id}/invoice`,
 };
 

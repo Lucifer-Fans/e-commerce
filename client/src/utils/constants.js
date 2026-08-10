@@ -30,6 +30,17 @@ export const ORDER_STATUS_STEPS = [
   'delivered',
 ];
 
+/**
+ * How far a shopper may cancel on their own — mirrors CUSTOMER_CANCELLABLE in
+ * server/src/models/Order.js. Once the parcel is with a courier the button stays
+ * on screen but explains itself instead of cancelling; the endpoint enforces the
+ * same window, so this list only decides what the page says.
+ */
+export const CUSTOMER_CANCELLABLE_STATUSES = ['pending', 'confirmed', 'packed'];
+
+/** Statuses that end an order — nothing follows them on the timeline. */
+export const ORDER_CLOSED_STATUSES = ['cancelled', 'returned'];
+
 export const ORDER_STATUS_STYLES = {
   pending: 'bg-amber-50 text-amber-700 ring-amber-200',
   confirmed: 'bg-blue-50 text-blue-700 ring-blue-200',
@@ -45,6 +56,9 @@ export const PAYMENT_STATUS_STYLES = {
   pending: 'bg-amber-50 text-amber-700 ring-amber-200',
   paid: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
   failed: 'bg-rose-50 text-rose-700 ring-rose-200',
+  // Money owed back reads as outstanding, the same as money still owed; only a
+  // completed refund goes quiet.
+  refund_pending: 'bg-amber-50 text-amber-700 ring-amber-200',
   refunded: 'bg-slate-100 text-slate-700 ring-slate-200',
 };
 

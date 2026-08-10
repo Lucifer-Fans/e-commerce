@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { productApi } from '../api/endpoints';
 import useFetch from '../hooks/useFetch';
+import useScrollLock from '../hooks/useScrollLock';
 import { useLiveRefetch } from '../realtime/useRealtime';
 import { CATALOG_EVENTS } from '../realtime/events';
 import { SORT_OPTIONS } from '../utils/constants';
@@ -29,6 +30,8 @@ export default function ProductList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categories = useSelector((s) => s.catalog.categories);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  // The filter sheet scrolls on its own; the results grid behind it stays still.
+  const filterSheetRef = useScrollLock(mobileFiltersOpen);
 
   const filters = useMemo(() => {
     const result = {};
@@ -227,7 +230,7 @@ export default function ProductList() {
       </div>
 
       {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-[95] lg:hidden">
+        <div ref={filterSheetRef} className="fixed inset-0 z-[95] lg:hidden">
           <div
             className="absolute inset-0 bg-ink-900/50"
             onClick={() => setMobileFiltersOpen(false)}

@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} রেটিং",
     "ratingsCount_other": "{{count}} রেটিং",
     "noRatings": "এখনও কোনো রেটিং নেই",
+    "hurryLeft_one": "তাড়াতাড়ি করুন! মাত্র {{count}}টি বাকি আছে",
+
+    "hurryLeft_other": "তাড়াতাড়ি করুন! মাত্র {{count}}টি বাকি আছে",
+
     "youSave": "আপনি {{amount}} সাশ্রয় করছেন",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "একটি বিকল্প নির্বাচন করুন",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "নির্বাচন করুন",
+    "selectedAttribute": "নির্বাচিত {{attribute}}",
+
+    "selectAttribute": "{{attribute}} নির্বাচন করুন",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "অনুপলব্ধ",

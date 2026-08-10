@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} ৰেটিং",
     "ratingsCount_other": "{{count}} ৰেটিং",
     "noRatings": "এতিয়ালৈকে কোনো ৰেটিং নাই",
+    "hurryLeft_one": "সোনকালে কৰক! মাত্ৰ {{count}} বাকী আছে",
+
+    "hurryLeft_other": "সোনকালে কৰক! মাত্ৰ {{count}} বাকী আছে",
+
     "youSave": "আপুনি {{amount}} সাঁচি আছে",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "এটা বিকল্প বাছনি কৰক",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "বাছনি কৰক",
+    "selectedAttribute": "নিৰ্বাচিত {{attribute}}",
+
+    "selectAttribute": "{{attribute}} বাছনি কৰক",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "অনুপলব্ধ",

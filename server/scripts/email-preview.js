@@ -248,10 +248,18 @@ const CASES = [
       mail.sendOrderStatusEmail({
         ...CUSTOMER,
         order: orderAt('cancelled', {
-          statusHistory: [...historyUpTo('packed'), { status: 'cancelled', changedAt: ago(1) }],
-          paymentStatus: 'refunded',
+          statusHistory: [
+            ...historyUpTo('packed'),
+            { status: 'cancelled', changedAt: ago(1), actor: 'customer' },
+          ],
+          // The state an order is actually in the moment it is cancelled — the
+          // refund is queued for staff to raise, not already sent.
+          paymentStatus: 'refund_pending',
           cancelledAt: ago(1),
-          cancellationReason: 'Cancelled at your request — the item was no longer needed.',
+          // The reason is stored bare; who cancelled is a separate field, and the
+          // mail composes the two into "Cancelled at your request — …".
+          cancelledBy: 'customer',
+          cancellationReason: 'the item was no longer needed.',
         }),
       }),
   },
@@ -268,7 +276,8 @@ const CASES = [
           paymentStatus: 'refunded',
           deliveredAt: ago(3),
           cancelledAt: ago(0),
-          cancellationReason: 'Return completed — the headphones arrived with a damaged ear cup.',
+          cancelledBy: 'admin',
+          cancellationReason: 'the headphones arrived with a damaged ear cup.',
         }),
       }),
   },

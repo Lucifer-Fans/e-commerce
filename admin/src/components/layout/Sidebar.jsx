@@ -14,6 +14,7 @@ import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import CategoryIcon from '@mui/icons-material/AccountTreeOutlined';
 import BrandIcon from '@mui/icons-material/SellOutlined';
 import OrdersIcon from '@mui/icons-material/ReceiptLongOutlined';
+import CancelIcon from '@mui/icons-material/CancelPresentationOutlined';
 import PeopleIcon from '@mui/icons-material/PeopleAltOutlined';
 import InquiryIcon from '@mui/icons-material/ForumOutlined';
 import BannerIcon from '@mui/icons-material/SlideshowOutlined';
@@ -44,6 +45,7 @@ const NAV_GROUPS = [
     heading: 'Commerce',
     items: [
       { to: '/orders', label: 'Orders', icon: <OrdersIcon /> },
+      { to: '/cancellation-reasons', label: 'Cancel Reasons', icon: <CancelIcon /> },
       { to: '/users', label: 'Users', icon: <PeopleIcon /> },
       { to: '/inquiries', label: 'Inquiries', icon: <InquiryIcon /> },
     ],

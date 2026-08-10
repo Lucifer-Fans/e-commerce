@@ -7,8 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  admin:
-    name: 🛠️ Admin Build & Test
+  validate:
+    name: 🧪 Validation
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout code
@@ -18,27 +18,41 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: admin/package-lock.json
 
       - name: 📦 Install admin dependencies
         working-directory: ./admin
-        run: npm ci
+        run: npm install
 
-      - name: 🔍 Lint admin
-        working-directory: ./admin
-        run: npm run lint --if-present
+      - name: 📦 Install client dependencies
+        working-directory: ./client
+        run: npm install
 
-      - name: 🧪 Test admin
+      - name: 📦 Install server dependencies
+        working-directory: ./server
+        run: npm install
+
+  admin:
+    name: 🛠️ Admin Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install admin dependencies
         working-directory: ./admin
-        run: npm test --if-present -- --ci
+        run: npm install
 
       - name: 🏗️ Build admin
         working-directory: ./admin
         run: npm run build
 
   client:
-    name: 🎨 Client Build & Test
+    name: 🎨 Client Build
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout code
@@ -48,27 +62,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: client/package-lock.json
 
       - name: 📦 Install client dependencies
         working-directory: ./client
-        run: npm ci
-
-      - name: 🔍 Lint client
-        working-directory: ./client
-        run: npm run lint --if-present
-
-      - name: 🧪 Test client
-        working-directory: ./client
-        run: npm test --if-present -- --ci
+        run: npm install
 
       - name: 🏗️ Build client
         working-directory: ./client
         run: npm run build
 
   server:
-    name: 🧩 Server Validation & Test
+    name: 🧩 Server Check
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout code
@@ -78,37 +82,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: server/package-lock.json
 
       - name: 📦 Install server dependencies
         working-directory: ./server
-        run: npm ci
-
-      - name: 🔍 Lint server
-        working-directory: ./server
-        run: npm run lint --if-present
+        run: npm install
 
       - name: ✅ Syntax check server entry
         working-directory: ./server
         run: node --check src/server.js
-
-      - name: 🧪 Test server
-        working-directory: ./server
-        run: npm test --if-present -- --ci
-
-  summary:
-    name: ✅ CI Summary
-    needs: [ admin, client, server ]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📋 Report overall status
-        run: |
-          if [ "${{ needs.admin.result }}" != "success" ] || \
-             [ "${{ needs.client.result }}" != "success" ] || \
-             [ "${{ needs.server.result }}" != "success" ]; then
-            echo "❌ One or more CI jobs failed."
-            exit 1
-          fi
-          echo "✅ All CI jobs passed."

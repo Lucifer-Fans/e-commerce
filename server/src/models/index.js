@@ -13,6 +13,7 @@ module.exports = {
   Review: require('./Review'),
   Banner: require('./Banner'),
   Order: require('./Order'),
+  CancellationReason: require('./CancellationReason'),
   Payment: require('./Payment'),
   Setting: require('./Setting'),
   Inquiry: require('./Inquiry'),

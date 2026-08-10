@@ -8,6 +8,8 @@ import { useLiveRefetch } from '../realtime/useRealtime';
 import { CATALOG_EVENTS, EVENTS } from '../realtime/events';
 import { getRecentlyViewed } from '../utils/recentlyViewed';
 import useSettings from '../settings/useSettings';
+import useLanguage from '../i18n/useLanguage';
+import { consumeWelcomePending } from '../i18n/welcomePrompt';
 import Seo from '../components/common/Seo';
 import Icon from '../components/common/Icon';
 import HeroSlider from '../components/home/HeroSlider';
@@ -20,6 +22,14 @@ export default function Home() {
   const { t } = useTranslation(['shop', 'common']);
   const { categories, loading: categoriesLoading } = useSelector((s) => s.catalog);
   const { siteName } = useSettings();
+  const { openWelcome } = useLanguage();
+
+  // The far end of the sign-up: a shopper who has just created and verified an
+  // account is asked which language they want. An ordinary visit — first or
+  // hundredth — leaves the flag unset and this does nothing.
+  useEffect(() => {
+    if (consumeWelcomePending()) openWelcome();
+  }, [openWelcome]);
 
   const banners = useFetch(useCallback(() => catalogApi.banners('hero'), []), []);
   const feed = useFetch(useCallback(() => productApi.homeFeed(), []), []);

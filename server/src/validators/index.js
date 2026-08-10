@@ -103,6 +103,36 @@ module.exports = {
       .withMessage('Invalid order status'),
     body('note').optional().trim().isLength({ max: 300 }),
     body('trackingNumber').optional().trim().isLength({ max: 60 }),
+    // Staff may quote the same admin-managed picklist the storefront offers.
+    body('reasonId').optional({ values: 'falsy' }).isMongoId().withMessage('Select a valid reason'),
+  ],
+
+  /**
+   * Cancelling from the storefront. Exactly one of the two arrives: the id of a
+   * reason the admin published, or the sentence typed under "Other". Which one is
+   * required is settled in the controller — it is the only place that knows
+   * whether the id resolves to a reason that is still active.
+   */
+  cancelOrderRules: [
+    body('reasonId').optional({ values: 'falsy' }).isMongoId().withMessage('Select a valid reason'),
+    body('reason')
+      .optional({ values: 'falsy' })
+      .trim()
+      .isLength({ min: 5, max: 300 })
+      .withMessage('Tell us a little more — between 5 and 300 characters'),
+  ],
+
+  /**
+   * Marking a refund sent. There is no status to pass — the endpoint does one
+   * thing — so the only field is the reference staff can quote back later.
+   */
+  refundRules: [body('refundReference').optional({ values: 'falsy' }).trim().isLength({ max: 80 })],
+
+  cancellationReasonRules: [
+    body('label').trim().isLength({ min: 3, max: 120 }).withMessage('Reason must be 3-120 characters'),
+    body('description').optional({ values: 'falsy' }).trim().isLength({ max: 200 }),
+    body('displayOrder').optional().isInt({ min: 0 }).toInt(),
+    body('isActive').optional().isBoolean().toBoolean(),
   ],
 
   verifyPaymentRules: [

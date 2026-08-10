@@ -88,6 +88,9 @@ export default function SearchBar({ className = '', autoFocus = false, onNavigat
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="flex items-center overflow-hidden rounded-lg bg-white ring-1 ring-ink-200 focus-within:ring-2 focus-within:ring-brand-500">
         <Icon name="search" size={18} className="ml-3 shrink-0 text-ink-400" />
+        {/* The wrapper above renders the focus ring via focus-within. The global
+            :focus-visible ring is switched off on the input, since overflow-hidden
+            clips it into two stray vertical bars at the input's edges. */}
         <input
           ref={inputRef}
           type="search"
@@ -97,7 +100,7 @@ export default function SearchBar({ className = '', autoFocus = false, onNavigat
           onFocus={() => term.trim().length >= 2 && setOpen(true)}
           onKeyDown={onKeyDown}
           placeholder={t('nav.searchPlaceholder')}
-          className="w-full bg-transparent px-3 py-2.5 text-sm text-ink-800 placeholder:text-ink-400 focus:outline-none"
+          className="w-full bg-transparent px-3 py-2.5 text-sm text-ink-800 placeholder:text-ink-400 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           aria-label={t('a11y.searchProducts')}
           aria-expanded={open}
           aria-autocomplete="list"

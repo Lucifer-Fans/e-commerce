@@ -11,6 +11,7 @@ import LanguageContext from './LanguageContext';
  *   changeLanguage: (code: string) => Promise<string>,
  *   switching: boolean,
  *   welcomeOpen: boolean,
+ *   openWelcome: () => void,
  *   dismissWelcome: () => void,
  *   suggested: string | null,
  * }}

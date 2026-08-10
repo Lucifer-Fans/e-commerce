@@ -121,7 +121,11 @@ exports.listUsers = asyncHandler(async (req, res) => {
   const page = Math.max(1, Number(req.query.page) || 1);
   const limit = Math.min(100, Number(req.query.limit) || 15);
 
-  const filter = {};
+  // Sign-ups that never answered their code are not accounts yet — nobody has proven
+  // they own the address, and the row exists only because the code has to be stored
+  // somewhere. `$ne: true` rather than `false`: every account made before OTP sign-up
+  // existed, and every one made through Google, has no such field at all.
+  const filter = { emailVerificationPending: { $ne: true } };
   if (req.query.role && req.query.role !== 'all') filter.role = req.query.role;
   if (req.query.status && req.query.status !== 'all') filter.status = req.query.status;
   if (req.query.search) {
@@ -162,7 +166,12 @@ exports.listUsers = asyncHandler(async (req, res) => {
 
 /** GET /users/:id (admin) */
 exports.getUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).lean();
+  // Same rule as the list it is opened from: an id that only exists because a
+  // sign-up is half-finished must not resolve to a profile page.
+  const user = await User.findOne({
+    _id: req.params.id,
+    emailVerificationPending: { $ne: true },
+  }).lean();
   if (!user) throw ApiError.notFound('User not found');
 
   const orders = await Order.find({ user: user._id })

@@ -7,6 +7,7 @@ import { verifyEmail, clearAuthError } from '../../store/authSlice';
 import { fetchCart } from '../../store/cartSlice';
 import { fetchWishlistIds } from '../../store/wishlistSlice';
 import { authApi } from '../../api/endpoints';
+import { markWelcomePending } from '../../i18n/welcomePrompt';
 import Seo from '../../components/common/Seo';
 import Icon from '../../components/common/Icon';
 import Spinner from '../../components/common/Spinner';
@@ -86,6 +87,10 @@ export default function VerifyEmail() {
 
       try {
         await dispatch(verifyEmail({ email, otp: value })).unwrap();
+        // The sign-up is complete only here — this is the one moment that earns
+        // the welcome language prompt. The home page picks the flag up after the
+        // redirect below; landing anywhere else simply defers it.
+        markWelcomePending();
         // Personalised data is only meaningful once a session exists.
         dispatch(fetchCart());
         dispatch(fetchWishlistIds());
@@ -132,9 +137,13 @@ export default function VerifyEmail() {
         footer={
           <>
             {t('auth.wrongEmail')}{' '}
+            {/* Lands on the form they already filled in rather than a blank one —
+                "start over" here means correcting the address, not retyping the
+                lot. The address still travels in state for the one case with no
+                draft behind it: a login refused because it was never verified. */}
             <Link
               to="/register"
-              state={{ email }}
+              state={{ email, from: location.state?.from }}
               className="font-semibold text-brand-600 hover:underline"
             >
               {t('auth.startOver')}

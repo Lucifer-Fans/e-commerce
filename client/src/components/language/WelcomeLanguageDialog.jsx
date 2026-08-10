@@ -3,11 +3,12 @@ import LanguageDialog from './LanguageDialog';
 import useLanguage from '../../i18n/useLanguage';
 
 /**
- * Shown once, to a visitor whose language we had to guess. Choosing a language or
- * closing the dialog both count as answering it, so it never appears again.
+ * Shown once, to a shopper who has just created an account, verified it and been
+ * returned to the home page — never on an ordinary visit or page load. Choosing a
+ * language or closing the dialog both count as answering it.
  *
  * It is deliberately not a blocker: the site behind it is already rendered in the
- * detected language, so dismissing costs the visitor nothing.
+ * detected language, so dismissing costs nothing.
  */
 export default function WelcomeLanguageDialog() {
   const { t } = useTranslation();

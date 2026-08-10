@@ -12,7 +12,7 @@ import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { orderApi } from '../../api/endpoints';
+import { orderApi, cancellationReasonApi } from '../../api/endpoints';
 import { STATUS_FLOW } from '../../utils/constants';
 import { titleCase } from '../../utils/format';
 import StatusChip from '../common/StatusChip';
@@ -26,6 +26,8 @@ export default function UpdateStatusDialog({ order, onClose, onUpdated }) {
 
   const [status, setStatus] = useState('');
   const [note, setNote] = useState('');
+  const [reasonId, setReasonId] = useState('');
+  const [reasons, setReasons] = useState([]);
   const [trackingNumber, setTrackingNumber] = useState('');
   const [courierPartner, setCourierPartner] = useState('');
   const [expectedDeliveryDate, setExpectedDeliveryDate] = useState('');
@@ -36,12 +38,29 @@ export default function UpdateStatusDialog({ order, onClose, onUpdated }) {
     const allowed = STATUS_FLOW[order.orderStatus] || [];
     setStatus(allowed[0] || '');
     setNote('');
+    setReasonId('');
     setTrackingNumber(order.trackingNumber || '');
     setCourierPartner(order.courierPartner || '');
     setExpectedDeliveryDate(
       order.expectedDeliveryDate ? new Date(order.expectedDeliveryDate).toISOString().slice(0, 10) : ''
     );
   }, [order]);
+
+  // The same picklist the storefront offers, so a staff cancellation and a
+  // shopper's own read identically on the order and in the email.
+  useEffect(() => {
+    let cancelled = false;
+    cancellationReasonApi
+      .list()
+      .then((res) => {
+        if (!cancelled) setReasons((res?.data?.reasons || []).filter((row) => row.isActive));
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   if (!order) return null;
 
@@ -55,6 +74,9 @@ export default function UpdateStatusDialog({ order, onClose, onUpdated }) {
       await orderApi.updateStatus(order._id, {
         status,
         note: note.trim() || undefined,
+        // Only meaningful on the two moves that close an order; the server reads
+        // it as the reason and ignores it otherwise.
+        reasonId: isDestructive ? reasonId || undefined : undefined,
         trackingNumber: trackingNumber.trim() || undefined,
         courierPartner: courierPartner.trim() || undefined,
         expectedDeliveryDate: expectedDeliveryDate || undefined,
@@ -108,10 +130,32 @@ export default function UpdateStatusDialog({ order, onClose, onUpdated }) {
               </TextField>
 
               {isDestructive && (
-                <Alert severity="warning">
-                  Marking this order {titleCase(status).toLowerCase()} returns its items to stock
-                  {order.paymentStatus === 'paid' && ' and flags the payment as refunded'}.
-                </Alert>
+                <>
+                  <Alert severity="warning">
+                    Marking this order {titleCase(status).toLowerCase()} returns its items to stock
+                    {order.paymentStatus === 'paid' &&
+                      ' and queues a refund — raise it through the gateway, then mark it refunded from the payment summary'}
+                    .
+                  </Alert>
+
+                  <TextField
+                    select
+                    fullWidth
+                    label="Reason"
+                    value={reasonId}
+                    onChange={(e) => setReasonId(e.target.value)}
+                    helperText="Shown to the customer on their order page and in the email. Leave blank to use the note below."
+                  >
+                    <MenuItem value="">
+                      <em>Write my own below</em>
+                    </MenuItem>
+                    {reasons.map((reason) => (
+                      <MenuItem key={reason._id} value={reason._id}>
+                        {reason.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </>
               )}
 
               {needsTracking && (
@@ -144,10 +188,14 @@ export default function UpdateStatusDialog({ order, onClose, onUpdated }) {
                 fullWidth
                 multiline
                 minRows={2}
-                label="Internal note"
+                label={isDestructive ? 'Note' : 'Internal note'}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                helperText="Optional — stored in the order's status history"
+                helperText={
+                  isDestructive
+                    ? 'Used as the reason when none is picked above — the customer sees it'
+                    : "Optional — stored in the order's status history"
+                }
                 inputProps={{ maxLength: 300 }}
               />
             </>

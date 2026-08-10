@@ -8,6 +8,13 @@ const daysAgo = (n) => startOfDay(Date.now() - n * 86400000);
 
 const REVENUE_MATCH = { paymentStatus: 'paid', orderStatus: { $ne: 'cancelled' } };
 
+/**
+ * Customers, counted the same way the users list shows them: a sign-up still owing
+ * its verification code is not a customer, so it must not swell the headline number
+ * either — otherwise the KPI and the list it links to disagree.
+ */
+const CUSTOMER_MATCH = { role: 'user', emailVerificationPending: { $ne: true } };
+
 /** GET /dashboard/stats (admin) — headline KPI cards. */
 exports.getStats = asyncHandler(async (_req, res) => {
   const today = startOfDay(Date.now());
@@ -35,8 +42,8 @@ exports.getStats = asyncHandler(async (_req, res) => {
     Product.countDocuments({ status: 'published' }),
     Product.countDocuments({ stock: { $lte: 0 } }),
     Product.countDocuments({ $expr: { $and: [{ $gt: ['$stock', 0] }, { $lte: ['$stock', '$lowStockThreshold'] }] } }),
-    User.countDocuments({ role: 'user' }),
-    User.countDocuments({ role: 'user', createdAt: { $gte: last30 } }),
+    User.countDocuments(CUSTOMER_MATCH),
+    User.countDocuments({ ...CUSTOMER_MATCH, createdAt: { $gte: last30 } }),
     Order.countDocuments(),
     Order.countDocuments({ orderStatus: { $in: ['pending', 'confirmed', 'packed'] } }),
     Order.aggregate([{ $match: REVENUE_MATCH }, { $group: { _id: null, total: { $sum: '$pricing.total' }, count: { $sum: 1 } } }]),

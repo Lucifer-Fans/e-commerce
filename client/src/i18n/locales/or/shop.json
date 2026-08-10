@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} ରେଟିଂ",
     "ratingsCount_other": "{{count}} ରେଟିଂ",
     "noRatings": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ରେଟିଂ ନାହିଁ",
+    "hurryLeft_one": "ଶୀଘ୍ର! କେବଳ {{count}} ବାକି ଅଛି",
+
+    "hurryLeft_other": "ଶୀଘ୍ର! କେବଳ {{count}} ବାକି ଅଛି",
+
     "youSave": "ଆପଣ {{amount}} ସଞ୍ଚୟ କରୁଛନ୍ତି",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ଏକ ବିକଳ୍ପ ବାଛନ୍ତୁ",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "ବାଛନ୍ତୁ",
+    "selectedAttribute": "ମନୋନୀତ {{attribute}}",
+
+    "selectAttribute": "{{attribute}} ବାଛନ୍ତୁ",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "ଅନୁପଲବ୍ଧ",

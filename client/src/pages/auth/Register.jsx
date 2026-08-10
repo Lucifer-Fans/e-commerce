@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
-import { register, clearAuthError } from '../../store/authSlice';
+import { register, clearAuthError, setRegistrationDraft } from '../../store/authSlice';
 import Seo from '../../components/common/Seo';
 import Spinner from '../../components/common/Spinner';
 import AuthShell from '../../components/auth/AuthShell';
@@ -16,16 +16,28 @@ export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { loading, error, isAuthenticated } = useSelector((s) => s.auth);
+  const { loading, error, isAuthenticated, registrationDraft } = useSelector((s) => s.auth);
 
-  // Arriving from a login that found no such account: the address is already
-  // typed and known-unregistered, so carry it over rather than ask for it twice.
+  /**
+   * Two ways of arriving with something already known:
+   *
+   * - "Start over" from the code screen, which is a sign-up in progress coming back
+   *   to change one detail. Everything they typed is still in the store, so the form
+   *   is handed back whole and they edit the one field that was wrong.
+   * - A login that found no such account, which carries only the address it was
+   *   refused for — already typed and known-unregistered, so not asked for twice.
+   */
   const [values, setValues] = useState(() => ({
     ...EMPTY,
-    email: location.state?.email || '',
+    ...registrationDraft?.values,
+    // An address handed over in router state is the more recent statement of intent
+    // — it was typed after the draft was saved — so it wins where both exist.
+    ...(location.state?.email ? { email: location.state.email } : {}),
   }));
   const [errors, setErrors] = useState({});
-  const [agreed, setAgreed] = useState(false);
+  // Consent already given on the way to the code screen stands; coming back to fix
+  // a typo in the phone number is not a reason to ask for it again.
+  const [agreed, setAgreed] = useState(Boolean(registrationDraft?.agreed));
 
   useEffect(() => {
     if (isAuthenticated) navigate('/', { replace: true });
@@ -74,6 +86,10 @@ export default function Register() {
       // verify screen needs comes back in that response, so it is handed straight
       // over in the router state rather than re-derived there.
       const pending = await dispatch(register(payload)).unwrap();
+      // Kept for "Start over": the code screen sends people back here, and back
+      // here should mean the form they just filled in, not a blank one. Dropped
+      // by the slice as soon as the code is accepted.
+      dispatch(setRegistrationDraft({ values, agreed }));
       toast.success(t('auth.codeSent'));
       navigate('/verify-email', {
         state: { ...pending, from: location.state?.from },

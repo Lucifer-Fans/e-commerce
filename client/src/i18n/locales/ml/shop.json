@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} റേറ്റിംഗ്",
     "ratingsCount_other": "{{count}} റേറ്റിംഗുകൾ",
     "noRatings": "ഇതുവരെ റേറ്റിംഗുകളില്ല",
+    "hurryLeft_one": "വേഗം! {{count}} എണ്ണം മാത്രം ബാക്കി",
+
+    "hurryLeft_other": "വേഗം! {{count}} എണ്ണം മാത്രം ബാക്കി",
+
     "youSave": "നിങ്ങൾ {{amount}} ലാഭിക്കുന്നു",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ഒരു ഓപ്ഷൻ തിരഞ്ഞെടുക്കുക",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "തിരഞ്ഞെടുക്കുക",
+    "selectedAttribute": "തിരഞ്ഞെടുത്ത {{attribute}}",
+
+    "selectAttribute": "{{attribute}} തിരഞ്ഞെടുക്കുക",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "ലഭ്യമല്ല",

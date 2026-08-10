@@ -54,6 +54,15 @@ export function ProductDetailSkeleton() {
   );
 }
 
+export function ProductGridPageSkeleton({ count = 10 }) {
+  return (
+    <div className="container-page py-5">
+      <Skeleton className="mb-5 h-7 w-48" />
+      <ProductGridSkeleton count={count} />
+    </div>
+  );
+}
+
 export function ListRowSkeleton({ rows = 4 }) {
   return (
     <div className="space-y-3">

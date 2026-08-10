@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} ਰੇਟਿੰਗ",
     "ratingsCount_other": "{{count}} ਰੇਟਿੰਗਾਂ",
     "noRatings": "ਹਾਲੇ ਕੋਈ ਰੇਟਿੰਗ ਨਹੀਂ",
+    "hurryLeft_one": "ਜਲਦੀ ਕਰੋ! ਸਿਰਫ਼ {{count}} ਬਾਕੀ ਹਨ",
+
+    "hurryLeft_other": "ਜਲਦੀ ਕਰੋ! ਸਿਰਫ਼ {{count}} ਬਾਕੀ ਹਨ",
+
     "youSave": "ਤੁਸੀਂ {{amount}} ਬਚਾਉਂਦੇ ਹੋ",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ਇੱਕ ਵਿਕਲਪ ਚੁਣੋ",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "ਚੁਣੋ",
+    "selectedAttribute": "ਚੁਣਿਆ {{attribute}}",
+
+    "selectAttribute": "{{attribute}} ਚੁਣੋ",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "ਅਣਉਪਲਬਧ",

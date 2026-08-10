@@ -95,23 +95,6 @@ export default function OrderConfirmAnimation({ onDone }) {
               <circle cx="150" cy="96" r="6" fill="#cbd5e1" />
             </g>
           </svg>
-
-          <div className="oc-check">
-            <span>
-              <svg
-                width="36"
-                height="36"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M20 6L9 17l-5-5" />
-              </svg>
-            </span>
-          </div>
         </div>
 
         <p className="oc-status">{t('confirm.status')}</p>

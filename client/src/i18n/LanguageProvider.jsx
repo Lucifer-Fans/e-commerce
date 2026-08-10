@@ -28,7 +28,8 @@ const remember = (code) => {
  *   • a change made while signed in is pushed to the account;
  *   • a change made signed-out is remembered locally and adopted on next login
  *     if the account has no preference of its own;
- *   • a first-time visitor gets their browser language, English if unmatched.
+ *   • a first-time visitor gets their browser language, English if unmatched,
+ *     silently — they are only *asked* once their sign-up completes.
  */
 export default function LanguageProvider({ children }) {
   const { i18n } = useTranslation();
@@ -38,8 +39,9 @@ export default function LanguageProvider({ children }) {
   const [language, setLanguage] = useState(() => resolveLanguage(i18n.language) || FALLBACK_LANGUAGE);
   const [switching, setSwitching] = useState(false);
 
-  // The welcome prompt is a one-time affordance for genuinely new visitors — never
-  // for someone who already made a choice, and never twice.
+  // The welcome prompt belongs to the end of the sign-up, not to the start of a
+  // visit: it is opened by `openWelcome` when a freshly verified account lands on
+  // the home page. Nothing here opens it on page load.
   const [welcomeOpen, setWelcomeOpen] = useState(false);
 
   // Guards the login sync so it runs once per session rather than on every
@@ -134,26 +136,28 @@ export default function LanguageProvider({ children }) {
     }
   }, [i18n.language, isAuthenticated, dispatch]);
 
-  // --- One-time welcome prompt -------------------------------------------
-  useEffect(() => {
-    if (initialising || isAuthenticated) return;
-    // Only when we had to guess. A stored choice — or an explicit ?lang= — means
-    // the visitor has already decided, so asking again would be noise.
-    if (initialDetection === 'stored' || initialDetection === 'query') return;
-    try {
-      if (localStorage.getItem(`${STORAGE_KEY}.prompted`)) return;
-    } catch {
-      return; // no storage means we cannot honour "one-time"; better to stay quiet
-    }
+  // --- Post-sign-up welcome prompt ---------------------------------------
+  /**
+   * Opens the welcome dialog. Called only by the home page, and only for someone
+   * who has just finished creating and verifying an account — browsing the site,
+   * reloading it or opening it for the first time never reaches this.
+   *
+   * An explicit ?lang= is still respected: arriving on a language is a choice
+   * already made, and re-asking would undo it.
+   */
+  const openWelcome = useCallback(() => {
+    if (initialDetection === 'query') return;
     setWelcomeOpen(true);
-  }, [initialising, isAuthenticated]);
+  }, []);
 
   const dismissWelcome = useCallback(() => {
     setWelcomeOpen(false);
     try {
+      // Kept as the record that this account was asked, so a later visit that
+      // somehow re-runs the sign-up hand-off cannot ask a second time.
       localStorage.setItem(`${STORAGE_KEY}.prompted`, '1');
     } catch {
-      /* nothing to do — the prompt simply may reappear */
+      /* nothing to do — the preference is session-only this time */
     }
   }, []);
 
@@ -165,11 +169,12 @@ export default function LanguageProvider({ children }) {
       changeLanguage,
       switching,
       welcomeOpen,
+      openWelcome,
       dismissWelcome,
       // What the browser suggested, so the welcome dialog can highlight it.
       suggested: initialDetection === 'browser' ? language : null,
     }),
-    [language, changeLanguage, switching, welcomeOpen, dismissWelcome]
+    [language, changeLanguage, switching, welcomeOpen, openWelcome, dismissWelcome]
   );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

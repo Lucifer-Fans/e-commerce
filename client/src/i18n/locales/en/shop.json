@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} rating",
     "ratingsCount_other": "{{count}} ratings",
     "noRatings": "No ratings yet",
+    "hurryLeft_one": "Hurry! Only {{count}} left in stock",
+
+    "hurryLeft_other": "Hurry! Only {{count}} left in stock",
+
     "youSave": "You save {{amount}}",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "Select an option",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "Select",
+    "selectedAttribute": "Selected {{attribute}}",
+
+    "selectAttribute": "Select {{attribute}}",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "unavailable",

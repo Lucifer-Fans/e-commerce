@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} रेटिंग",
     "ratingsCount_other": "{{count}} रेटिंग",
     "noRatings": "अभी कोई रेटिंग नहीं",
+    "hurryLeft_one": "जल्दी करें! केवल {{count}} बचे हैं",
+
+    "hurryLeft_other": "जल्दी करें! केवल {{count}} बचे हैं",
+
     "youSave": "आप {{amount}} बचाते हैं",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "एक विकल्प चुनें",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "चुनें",
+    "selectedAttribute": "चयनित {{attribute}}",
+
+    "selectAttribute": "{{attribute}} चुनें",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "अनुपलब्ध",

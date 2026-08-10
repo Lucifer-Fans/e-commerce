@@ -8,70 +8,157 @@ import useFetch from '../../hooks/useFetch';
 import { useLiveRefetch, useRealtimeRoom } from '../../realtime/useRealtime';
 import { ORDER_EVENTS, rooms } from '../../realtime/events';
 import { formatDate, formatDateTime, formatPrice, optimisedImage } from '../../utils/format';
-import { ORDER_STATUS_STEPS } from '../../utils/constants';
+import {
+  CUSTOMER_CANCELLABLE_STATUSES,
+  ORDER_CLOSED_STATUSES,
+  ORDER_STATUS_STEPS,
+} from '../../utils/constants';
 import { orderTotals } from '../../utils/pricing';
 import PriceSummary from '../../components/cart/PriceSummary';
 import Icon from '../../components/common/Icon';
 import StatusBadge from '../../components/common/StatusBadge';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import Modal from '../../components/common/Modal';
+import CancelReasonDialog from '../../components/orders/CancelReasonDialog';
 import ErrorState from '../../components/common/ErrorState';
 import { ListRowSkeleton } from '../../components/common/Skeleton';
 
-function StatusTimeline({ order, t }) {
-  if (order.orderStatus === 'cancelled') {
-    return (
-      <div className="flex items-start gap-3 rounded-lg bg-red-50 p-4">
-        <Icon name="close" size={18} className="mt-0.5 shrink-0 text-danger" />
-        <div className="text-sm">
-          <p className="font-semibold text-red-800">{t('detail.cancelledTitle')}</p>
-          <p className="text-red-700">
-            {/* An admin-authored reason is shown as written; only our own default
-                sentence is translated. */}
-            {order.cancellationReason || t('detail.cancelledDefault')}
-            {order.cancelledAt && ` · ${formatDate(order.cancelledAt)}`}
-          </p>
-        </div>
-      </div>
-    );
-  }
+/**
+ * The rows the timeline draws for one order.
+ *
+ * A closed order is read from its own history rather than from where `cancelled`
+ * sits in the ladder: it stopped somewhere along the path, and the question is
+ * what actually happened, not how the terminal status sorts. So the steps it
+ * really reached stay, complete and green, and the closing status is appended as
+ * the last row — the steps it never got to are simply not drawn, because a grey
+ * "Delivered" under a cancelled order invites exactly the question it can't
+ * answer.
+ *
+ * A live order keeps the full ladder ahead of it, greyed, so a shopper can see
+ * what is still to come.
+ */
+function timelineRows(order) {
+  const history = order.statusHistory || [];
+  const rankOf = (status) => ORDER_STATUS_STEPS.indexOf(status);
+  const entryFor = (status) => history.find((row) => row.status === status);
 
-  const currentIndex = ORDER_STATUS_STEPS.indexOf(order.orderStatus);
-  // A history entry gives us the real timestamp for each completed stage.
-  const historyFor = (key) => order.statusHistory?.find((h) => h.status === key);
+  const closed = ORDER_CLOSED_STATUSES.includes(order.orderStatus);
+  const reachedFromHistory = history.reduce((max, row) => Math.max(max, rankOf(row.status)), -1);
+  // "Order Placed" is true of every order, whether or not a `pending` row was
+  // ever written — a COD order is confirmed the moment it is created.
+  const reached = closed
+    ? Math.max(reachedFromHistory, 0)
+    : Math.max(reachedFromHistory, rankOf(order.orderStatus), 0);
+
+  const steps = ORDER_STATUS_STEPS.slice(0, closed ? reached + 1 : undefined).map((key, index) => {
+    const entry = entryFor(key);
+
+    return {
+      key,
+      label: `detail.steps.${key}`,
+      done: index <= reached,
+      // Nothing is still in progress once an order has stopped.
+      active: !closed && index === reached,
+      at: entry?.changedAt || (index === 0 ? order.createdAt : null),
+      note: entry?.note,
+    };
+  });
+
+  if (!closed) return steps;
+
+  return [
+    ...steps,
+    {
+      key: order.orderStatus,
+      // The terminal statuses are already named in the shared status vocabulary;
+      // `detail.steps` only covers the fulfilment path.
+      label: `common:orderStatus.${order.orderStatus}`,
+      done: true,
+      closing: true,
+      at: order.cancelledAt || entryFor(order.orderStatus)?.changedAt,
+      reason: order.cancellationReason,
+      by: order.cancelledBy,
+    },
+  ];
+}
+
+function StatusTimeline({ order, t }) {
+  const rows = timelineRows(order);
 
   return (
     <ol className="relative">
-      {ORDER_STATUS_STEPS.map((stepKey, index) => {
-        const done = index <= currentIndex;
-        const active = index === currentIndex;
-        const entry = historyFor(stepKey);
+      {rows.map((row, index) => {
+        const last = index === rows.length - 1;
+        const closing = Boolean(row.closing);
 
         return (
-          <li key={stepKey} className="relative flex gap-4 pb-6 last:pb-0">
-            {index < ORDER_STATUS_STEPS.length - 1 && (
+          <li key={row.key} className="relative flex gap-4 pb-6 last:pb-0">
+            {!last && (
               <span
                 className={`absolute left-[13px] top-7 h-full w-0.5 ${
-                  index < currentIndex ? 'bg-success' : 'bg-ink-200'
+                  // The segment takes the colour of the step it runs *into*, so the
+                  // line arriving at a cancellation is red.
+                  rows[index + 1].closing
+                    ? 'bg-danger'
+                    : rows[index + 1].done
+                    ? 'bg-success'
+                    : 'bg-ink-200'
                 }`}
               />
             )}
 
             <span
               className={`relative z-10 grid h-7 w-7 shrink-0 place-items-center rounded-full ring-4 ring-white ${
-                done ? 'bg-success text-white' : 'bg-ink-200 text-ink-400'
-              } ${active ? 'animate-pulse' : ''}`}
+                closing
+                  ? 'bg-danger text-white'
+                  : row.done
+                  ? 'bg-success text-white'
+                  : 'bg-ink-200 text-ink-400'
+              } ${row.active ? 'animate-pulse' : ''}`}
             >
-              {done ? <Icon name="check" size={13} /> : <span className="h-2 w-2 rounded-full bg-current" />}
+              {closing ? (
+                <Icon name="close" size={13} />
+              ) : row.done ? (
+                <Icon name="check" size={13} />
+              ) : (
+                <span className="h-2 w-2 rounded-full bg-current" />
+              )}
             </span>
 
-            <div className="pt-0.5">
-              <p className={`text-sm font-semibold ${done ? 'text-ink-900' : 'text-ink-400'}`}>
-                {t(`detail.steps.${stepKey}`)}
+            <div className="min-w-0 pt-0.5">
+              <p
+                className={`text-sm font-semibold ${
+                  closing ? 'text-red-800' : row.done ? 'text-ink-900' : 'text-ink-400'
+                }`}
+              >
+                {t(row.label)}
               </p>
-              {entry && (
-                <p className="text-xs text-ink-500">{formatDateTime(entry.changedAt)}</p>
+              {row.at && (
+                <p className={`text-xs ${closing ? 'text-red-700' : 'text-ink-500'}`}>
+                  {formatDateTime(row.at)}
+                </p>
               )}
-              {entry?.note && <p className="mt-0.5 text-xs text-ink-500">{entry.note}</p>}
+
+              {closing ? (
+                <div className="mt-2 rounded-lg bg-red-50 p-3 text-xs">
+                  <p className="font-semibold text-red-800">
+                    {row.by === 'customer'
+                      ? t('detail.cancelledByYou')
+                      : row.by === 'admin'
+                      ? t('detail.cancelledByStore')
+                      : t('detail.cancelledTitle')}
+                  </p>
+                  {/* An admin-authored reason, or the shopper's own words, shown as
+                      written; only our fallback sentence is translated. */}
+                  <p className="mt-0.5 text-red-700">
+                    {t('detail.cancelledReason', {
+                      reason: row.reason || t('detail.cancelledDefault'),
+                    })}
+                  </p>
+                </div>
+              ) : (
+                row.note && <p className="mt-0.5 text-xs text-ink-500">{row.note}</p>
+              )}
             </div>
           </li>
         );
@@ -83,7 +170,13 @@ function StatusTimeline({ order, t }) {
 export default function OrderDetail() {
   const { t } = useTranslation(['account', 'common']);
   const { id } = useParams();
-  const [cancelOpen, setCancelOpen] = useState(false);
+  /**
+   * The cancel journey is three dialogs deep, and only one is ever open:
+   * `confirm` (are you sure) → `reason` (why), or `blocked` for an order that has
+   * already shipped — the button stays on the page in that case and explains
+   * itself rather than disappearing, which reads as the feature being broken.
+   */
+  const [dialog, setDialog] = useState(null);
 
   const { data, loading, error, refetch } = useFetch(
     useCallback(() => orderApi.detail(id), [id]),
@@ -99,14 +192,19 @@ export default function OrderDetail() {
 
   const order = data?.data?.order;
 
-  const cancel = async () => {
+  /**
+   * Runs once a reason has been chosen — the confirmation dialog on its own no
+   * longer cancels anything. The error is rethrown so the reason dialog can show
+   * it inline and stay open on the choice the shopper already made.
+   */
+  const cancel = async (payload) => {
     try {
-      // Stored on the order and read by staff, so it stays in the store's language.
-      await orderApi.cancel(id, 'Cancelled by customer');
+      await orderApi.cancel(id, payload);
       toast.success(t('detail.cancelled'));
       refetch();
     } catch (err) {
       toast.error(err.message || t('detail.cancelFailed'));
+      throw err;
     }
   };
 
@@ -135,7 +233,10 @@ export default function OrderDetail() {
     return <ErrorState title={t('detail.notFound')} message={error?.message} onRetry={refetch} />;
   }
 
-  const canCancel = ['pending', 'confirmed', 'packed', 'shipped'].includes(order.orderStatus);
+  const canCancel = CUSTOMER_CANCELLABLE_STATUSES.includes(order.orderStatus);
+  // Offered right up to delivery; past `packed` it explains why it can't be used.
+  // An order that has already closed has nothing left to cancel.
+  const showCancel = !ORDER_CLOSED_STATUSES.includes(order.orderStatus);
   const invoiceAvailable = order.paymentStatus === 'paid' || order.paymentMethod === 'cod';
 
   return (
@@ -169,8 +270,12 @@ export default function OrderDetail() {
               {t('detail.downloadInvoice')}
             </button>
           )}
-          {canCancel && (
-            <button type="button" onClick={() => setCancelOpen(true)} className="btn-outline !text-danger">
+          {showCancel && (
+            <button
+              type="button"
+              onClick={() => setDialog(canCancel ? 'confirm' : 'blocked')}
+              className="btn-outline !text-danger"
+            >
               {t('detail.cancelOrder')}
             </button>
           )}
@@ -300,15 +405,49 @@ export default function OrderDetail() {
         </div>
       </div>
 
+      {/* Step one: are you sure. Confirming only opens the reason dialog — the
+          order is not touched until a reason has been given. */}
       <ConfirmDialog
-        open={cancelOpen}
-        onClose={() => setCancelOpen(false)}
-        onConfirm={cancel}
+        open={dialog === 'confirm'}
+        // ConfirmDialog closes itself after `onConfirm` resolves, which would undo
+        // the step it just opened — so dismissing only applies while this dialog
+        // is still the one on screen.
+        onClose={() => setDialog((open) => (open === 'confirm' ? null : open))}
+        onConfirm={() => setDialog('reason')}
         title={t('detail.cancelTitle')}
         message={t('detail.cancelMessage')}
         confirmLabel={t('detail.cancelConfirm')}
         cancelLabel={t('detail.cancelDismiss')}
       />
+
+      <CancelReasonDialog
+        open={dialog === 'reason'}
+        onClose={() => setDialog(null)}
+        onConfirm={cancel}
+      />
+
+      {/* Past the cut-off the same button opens this instead — it says what
+          happened and where to go, rather than failing silently. */}
+      <Modal
+        open={dialog === 'blocked'}
+        onClose={() => setDialog(null)}
+        title={t('detail.cancelBlockedTitle')}
+        size="sm"
+        footer={
+          <button type="button" onClick={() => setDialog(null)} className="btn-primary">
+            {t('common:actions.close')}
+          </button>
+        }
+      >
+        <div className="flex items-start gap-3">
+          <Icon name="info" size={18} className="mt-0.5 shrink-0 text-danger" />
+          <p className="text-sm text-ink-600">
+            {t('detail.cancelBlockedMessage', {
+              status: t(`common:orderStatus.${order.orderStatus}`),
+            })}
+          </p>
+        </div>
+      </Modal>
     </div>
   );
 }

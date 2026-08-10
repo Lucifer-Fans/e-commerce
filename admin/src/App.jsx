@@ -11,9 +11,13 @@ import theme from './theme';
 import { router } from './routes';
 import { loadSession, sessionExpired } from './store/authSlice';
 import RealtimeProvider from './realtime/RealtimeProvider';
+import useOverlayScrollGuard from './hooks/useOverlayScrollGuard';
 
 export default function App() {
   const dispatch = useDispatch();
+
+  // Keeps the page still behind any open dialog, drawer or menu, touch included.
+  useOverlayScrollGuard();
 
   useEffect(() => {
     dispatch(loadSession());

@@ -157,7 +157,11 @@ exports.register = asyncHandler(async (req, res) => {
     Wishlist.updateOne({ user: user._id }, { $setOnInsert: { user: user._id } }, { upsert: true }),
   ]);
 
-  if (!existing) broadcast.userChanged('created', user);
+  // Deliberately no `userChanged` broadcast here. A pending sign-up is not yet an
+  // account anybody can see: it is invisible to the admin users list (which filters
+  // pending rows out) and to the dashboard counts, so announcing it would only make
+  // an open Users screen refetch a list that cannot have changed. The 'created'
+  // event is fired by verify-email instead, at the moment the row becomes real.
 
   const issued = await issueEmailOtp(user);
 
@@ -228,7 +232,10 @@ exports.verifyEmail = asyncHandler(async (req, res) => {
 
   const { accessToken, sessionId } = await startSession(req, res, user);
 
-  broadcast.userChanged('updated', user);
+  // 'created', not 'updated': as far as every admin-facing view is concerned this
+  // account comes into existence here, because that is the first moment it passes
+  // the verified filter those views query behind.
+  broadcast.userChanged('created', user);
 
   return sendSuccess(res, {
     message: 'Email verified — welcome aboard!',

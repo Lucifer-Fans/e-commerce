@@ -127,6 +127,17 @@ const authSlice = createSlice({
      * fills it in the same way on its way there.
      */
     pendingVerification: null,
+    /**
+     * What was typed into the sign-up form, kept so "Start over" on the code screen
+     * returns to a filled form rather than an empty one — the shopper's way back is
+     * to correct one field, usually the address, not to type all five again.
+     *
+     * Held here rather than in router state precisely because it contains the
+     * password: the store lives in memory and dies with the tab, while router state
+     * is `history.state`, which browsers serialise to disk for session restore.
+     * Cleared the moment the sign-up completes.
+     */
+    registrationDraft: null,
     // `initialising` gates the router until we know whether a session exists,
     // so protected routes don't flash the login page on refresh.
     initialising: true,
@@ -152,6 +163,13 @@ const authSlice = createSlice({
     setPendingVerification: (state, action) => {
       state.pendingVerification = { email: action.payload };
     },
+    /** Remembers the sign-up form so the code screen can hand it back intact. */
+    setRegistrationDraft: (state, action) => {
+      state.registrationDraft = action.payload;
+    },
+    clearRegistrationDraft: (state) => {
+      state.registrationDraft = null;
+    },
     sessionExpired: (state) => {
       state.user = null;
       state.sessionId = null;
@@ -170,8 +188,10 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.sessionId = action.payload.sessionId || null;
       state.isAuthenticated = true;
-      // Whatever was waiting on a code has just been answered, one way or another.
+      // Whatever was waiting on a code has just been answered, one way or another —
+      // and the half-filled form that produced it has nothing left to go back to.
       state.pendingVerification = null;
+      state.registrationDraft = null;
     };
     const rejected = (state, action) => {
       state.loading = false;
@@ -229,6 +249,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser, clearAuthError, setPendingVerification, sessionExpired } =
-  authSlice.actions;
+export const {
+  setUser,
+  clearAuthError,
+  setPendingVerification,
+  setRegistrationDraft,
+  clearRegistrationDraft,
+  sessionExpired,
+} = authSlice.actions;
 export default authSlice.reducer;

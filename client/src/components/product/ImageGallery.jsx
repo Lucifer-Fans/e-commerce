@@ -1,20 +1,26 @@
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { optimisedImage } from '../../utils/format';
+import useMediaQuery from '../../hooks/useMediaQuery';
 import Icon from '../common/Icon';
+import ImageViewer from '../common/ImageViewer';
+
+/** Below this width a tap opens the popup; above it the hover magnifier is enough. */
+const DESKTOP = '(min-width: 1024px)';
 
 /**
- * Product gallery: thumbnail rail, hover magnifier on desktop, tap-to-zoom
- * lightbox on touch. The magnifier moves a scaled background rather than a second
- * <img>, so there is no extra network request.
+ * Product gallery: thumbnail rail plus a hover magnifier on desktop, and on
+ * handheld widths a tap that opens the shared image popup. The magnifier moves a
+ * scaled background rather than a second <img>, so there is no extra request.
  */
 export default function ImageGallery({ images = [], alt = '' }) {
   const { t } = useTranslation(['shop', 'common']);
   const [active, setActive] = useState(0);
   const [zooming, setZooming] = useState(false);
   const [origin, setOrigin] = useState({ x: 50, y: 50 });
-  const [lightbox, setLightbox] = useState(false);
+  const [viewer, setViewer] = useState(false);
   const frameRef = useRef(null);
+  const isDesktop = useMediaQuery(DESKTOP);
 
   if (!images.length) {
     return (
@@ -33,8 +39,6 @@ export default function ImageGallery({ images = [], alt = '' }) {
       y: ((e.clientY - rect.top) / rect.height) * 100,
     });
   };
-
-  const step = (delta) => setActive((i) => (i + delta + images.length) % images.length);
 
   return (
     <>
@@ -68,10 +72,11 @@ export default function ImageGallery({ images = [], alt = '' }) {
           <div
             ref={frameRef}
             className="relative aspect-square w-full cursor-zoom-in overflow-hidden rounded-xl border border-ink-200 bg-white"
-            onMouseEnter={() => setZooming(true)}
-            onMouseLeave={() => setZooming(false)}
-            onMouseMove={onMouseMove}
-            onClick={() => setLightbox(true)}
+            onMouseEnter={isDesktop ? () => setZooming(true) : undefined}
+            onMouseLeave={isDesktop ? () => setZooming(false) : undefined}
+            onMouseMove={isDesktop ? onMouseMove : undefined}
+            // Desktop keeps the in-place magnifier; only handheld widths pop out.
+            onClick={isDesktop ? undefined : () => setViewer(true)}
           >
             <img
               src={optimisedImage(current.url, { width: 900 })}
@@ -91,74 +96,17 @@ export default function ImageGallery({ images = [], alt = '' }) {
               {t('gallery.hoverToZoom')}
             </span>
           </div>
-
-          {images.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={() => step(-1)}
-                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/95 p-2 text-ink-700 shadow-md hover:bg-white sm:hidden"
-                aria-label={t('gallery.previousImage')}
-              >
-                <Icon name="chevronLeft" size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={() => step(1)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/95 p-2 text-ink-700 shadow-md hover:bg-white sm:hidden"
-                aria-label={t('gallery.nextImage')}
-              >
-                <Icon name="chevronRight" size={18} />
-              </button>
-            </>
-          )}
         </div>
       </div>
 
-      {lightbox && (
-        <div
-          className="fixed inset-0 z-[110] flex items-center justify-center bg-ink-900/95 p-4"
-          onClick={() => setLightbox(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={t('gallery.enlarged')}
-        >
-          <button
-            type="button"
-            onClick={() => setLightbox(false)}
-            className="absolute right-5 top-5 rounded-full bg-white/10 p-2.5 text-white hover:bg-white/20"
-            aria-label={t('common:actions.close')}
-          >
-            <Icon name="close" size={22} />
-          </button>
-
-          <img
-            src={optimisedImage(current.url, { width: 1400, crop: 'limit' })}
-            alt={current.alt || alt}
-            className="max-h-full max-w-full object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-
-          {images.length > 1 && (
-            <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
-              {images.map((image, i) => (
-                <button
-                  key={image.publicId || i}
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActive(i);
-                  }}
-                  aria-label={t('gallery.image', { index: i + 1 })}
-                  className={`h-2 rounded-full transition-all ${
-                    i === active ? 'w-7 bg-white' : 'w-2 bg-white/40'
-                  }`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      <ImageViewer
+        open={viewer && !isDesktop}
+        images={images}
+        index={active}
+        onIndexChange={setActive}
+        onClose={() => setViewer(false)}
+        alt={alt}
+      />
     </>
   );
 }

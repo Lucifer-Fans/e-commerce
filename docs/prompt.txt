@@ -1,0 +1,147 @@
+Design and develop a complete scalable, secure, and maintainable end-to-end E-Commerce Platform using the following technology stack and project requirements.
+
+========================================
+TECH STACK & PROJECT REQUIREMENTS
+========================================
+
+Frontend
+- React.js
+- Tailwind CSS
+- Material UI
+- React Router
+- Redux Toolkit + RTK Query
+- React Hook Form
+- Zod Validation
+- Axios
+- Framer Motion
+- Swiper
+- Lucide React
+
+Backend
+- Node.js
+- Express.js
+
+Database
+- MongoDB
+- Mongoose ODM
+
+Authentication
+- JWT Access Token
+- Refresh Token
+- Google OAuth Login
+- Mobile OTP Authentication
+- Email Authentication
+
+Storage
+- Cloudinary
+
+Payment
+- Razorpay
+
+Email
+- Nodemailer
+
+Security
+- Helmet
+- CORS
+- Express Rate Limit
+- Compression
+- bcrypt
+- Environment Variables
+- Input Validation
+- XSS Protection
+- NoSQL Injection Protection
+- Password Hashing 
+- File Validation 
+- Secure Cookies
+
+The application must include:
+* Clean Code &  Architecture
+* Modular Folder Structure
+* Reusable Components
+* Responsive Design
+* Mobile First UI
+* Enterprise Coding Standards
+* Proper Error Handling
+* Logging
+* Validation
+* Optimized Performance
+* Security Best Practices
+* SEO Friendly
+* Future Scalability
+
+Implement complete authentication system that support
+* Email Registration
+* Email Verification
+* Email Login
+* Google Sign In
+* Mobile Number Login using OTP
+* Forgot Password
+* Reset Password
+* Change Password
+* JWT Authentication
+* Refresh Tokens
+* Secure HTTP Only Cookies
+* Multiple Device Login
+* Session Management
+* Logout From Current Device
+* Logout From All Devices
+
+PERFORMANCE
+* Lazy Loading
+* React loading skeleton
+* Image Optimization
+* Code Splitting
+* Pagination
+* Caching
+* Compression
+* Database Indexing
+* Efficient Queries
+* Socket IO in entire project
+
+DATABASE DESIGN
+Design a scalable MongoDB schema with proper Mongoose models, relationships, indexes, validation, timestamps, middleware and optimized queries.
+
+API DESIGN
+Develop clean REST APIs following industry best practices with versioning, validation, standardized success/error responses, authentication middleware, authorization middleware, pagination, filtering, searching, and sorting.
+
+========================================
+FRONTEND PANEL
+========================================
+
+
+
+========================================
+ADMIN PANEL
+========================================
+
+Create a modern Admin Panel. Support multiple admin accounts.
+
+Create complete CRUD modules for
+* Dashboard
+* Category & Sub Category Management
+* Brand Management
+* Product Management
+* Orders with complete order details page including payments & order tracking
+* User Management
+* Inquiries Management 
+* Banner Management
+* Coupon Management
+* Analytics & Reports
+* Settings with SEO Management
+
+Design and develop a complete dynamic, E-Commerce Admin Panel using modern UI/UX and scalable architecture. The overall design, layout, spacing, navigation, cards, tables, forms, modals, and user experience should closely match the attached PDF reference while making every module fully dynamic with database-driven data and APIs. The admin panel should include modules for Dashboard, Categories, Brands, Products, Orders, Users, Inquiries, Analytics, Banner Management, Coupon Management, and Settings. The Dashboard should display dynamic KPI cards for Total Revenue, Total Orders, Total Customers, Pending Orders, and Average Order Value, along with interactive revenue graphs, category sales, inventory overview, recent activity, and quick actions. Categories and Brands should support hierarchical management with statistics cards, advanced filtering, search, sorting, status management, expandable subcategories, CRUD operations, bulk actions, image uploads, and product counts. Products should contain separate Product List and Add Product sections with dynamic filters, searchable tables, SKU management, stock management, pricing, discounts, multiple categories and brands, dynamic FAQs, inventory, sizes, color picker, product features, multiple image and video uploads, shipping information, draft and publish options, and automatic final price calculation. Orders should include order statistics, searchable order tables, detailed order pages with customer information, order items, pricing breakdown, shipping address, logistics and shipment tracking, payment details, internal notes, and complete order management with status updates. Users should provide customer statistics, search and filters, profile cards, block/delete functionality, and detailed user profile popups displaying customer information and complete order history. Inquiries should manage Contact Messages, Newsletter Subscribers, Career Applications, and Partner Applications with separate tabs, filters, downloadable attachments, detailed application modals, status management, and export functionality. Analytics should replicate the reference design with business intelligence dashboards, revenue insights, sales performance, category revenue, acquisition trends, conversion funnel, customer analytics, payment distribution, order status charts, top-performing products, downloadable reports, and interactive charts. Banner Management should exactly follow the reference PDF, supporting homepage banners, promotional banners, category banners, mobile and desktop banners, scheduling, priority, preview, activation, and full CRUD functionality. Coupon Management should support Percentage Discounts, Flat Discounts, Free Shipping, First Order Coupons, Category Coupons, Product Coupons, Expiry Dates, Minimum Purchase, Maximum Discount, Usage Limits, Per User Limits, Active/Inactive status, and complete coupon lifecycle management. Settings should include Site Configuration, SEO Settings, Branding, Social Media Links, Personal Profile, Password Management, Manage Administrators, and Announcement Bar. Site Configuration should manage Site Name, Email, Contact Number, Company Address, Logo, Favicon, Meta Title, Meta Description, Meta Keywords, and social media URLs with last updated timestamps. Personal Profile should allow administrators to update profile details and change passwords securely. Manage Administrators should support multiple admin accounts with role-based permissions, status management, activation/deactivation, deletion, and provisioning of new administrators. Announcement Bar should allow administrators to create, edit, update, and publish announcements or news across the website. Every page should support responsive design, pagination, advanced search, sorting, filtering, bulk actions, validation, confirmation dialogs, loading states, empty states, error handling, success notifications, audit logs, role-based access control, optimized API integration, reusable components, scalable architecture, and enterprise-level security. The final implementation must be fully dynamic, maintainable, responsive, secure and visually consistent with the attached PDF reference while following modern UI/UX best practices.
+
+========================================
+EXPECTED OUTPUT
+========================================
+
+Before writing any code:
+
+1. Analyze the complete requirements.
+2. Design the overall system architecture.
+3. Design the MongoDB database schema.
+4. Design the folder structure.
+5. Design the API architecture.
+6. Design the UI/UX flow.
+7. Explain every major design decision.

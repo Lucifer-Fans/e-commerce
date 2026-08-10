@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} రేటింగ్",
     "ratingsCount_other": "{{count}} రేటింగ్‌లు",
     "noRatings": "ఇంకా రేటింగ్‌లు లేవు",
+    "hurryLeft_one": "త్వరపడండి! కేవలం {{count}} మాత్రమే మిగిలి ఉన్నాయి",
+
+    "hurryLeft_other": "త్వరపడండి! కేవలం {{count}} మాత్రమే మిగిలి ఉన్నాయి",
+
     "youSave": "మీరు {{amount}} ఆదా చేస్తారు",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ఒక ఎంపికను ఎంచుకోండి",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "ఎంచుకోండి",
+    "selectedAttribute": "ఎంచుకున్న {{attribute}}",
+
+    "selectAttribute": "{{attribute}} ఎంచుకోండి",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "అందుబాటులో లేదు",

@@ -1645,6 +1645,11 @@ const orderTextSummary = (order, lead) =>
     `Order: ${order.orderNumber}`,
     `Placed: ${dateTime(order.createdAt)}`,
     `Status: ${titleCase(order.orderStatus)}`,
+    // The plain-text part is what a screen reader and a stripped-down client get,
+    // so the one fact that explains a closed order travels with it.
+    order.cancellationReason
+      ? `Reason: ${CANCELLED_BY_LEAD[order.cancelledBy] || 'Cancelled'} — ${order.cancellationReason}`
+      : null,
     `Payment: ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online (Razorpay)'} (${order.paymentStatus})`,
     '',
     ...order.items.map(
@@ -1655,7 +1660,10 @@ const orderTextSummary = (order, lead) =>
     `Total: ${moneyText(order.pricing.total)}`,
     '',
     `Track your order: ${orderUrl(order)}`,
-  ].join('\n');
+    // Blank strings are deliberate spacing; only the rows that did not apply drop.
+  ]
+    .filter((line) => line !== null)
+    .join('\n');
 
 /* ------------------------------------------------------------------ *
  * Templates
@@ -1896,20 +1904,42 @@ const STATUS_COPY = {
 };
 
 /**
- * The status card's line for an order that has stopped: the admin's own reason
- * where there is one, and the refund note where the money has already been sent
- * back. Nothing is promised that the payment record does not already show.
+ * The status card's line for an order that has stopped: who ended it, the reason
+ * they gave, and the refund note where the money has already been sent back.
+ *
+ * Naming the side that cancelled is the difference between a receipt and a
+ * shock — "cancelled at your request" answers the question a red email opens
+ * with. Nothing is promised that the payment record does not already show.
  */
-const closedStatusLine = (order) =>
-  [
-    escapeHtml(
-      order.cancellationReason || `Order ${order.orderNumber} was ${statusLabel(order.orderStatus)}.`
-    ),
-    order.paymentStatus === 'refunded' &&
-      'Any amount paid is being refunded to the original payment method.',
+const CANCELLED_BY_LEAD = {
+  customer: 'Cancelled at your request',
+  admin: 'Cancelled by our team',
+};
+
+/**
+ * The refund sentence, keyed off the payment record rather than off the
+ * cancellation — a refund is raised by hand through the gateway, and this mail
+ * must not claim it has happened while the order is still queued for it. An
+ * unpaid COD order gets no line at all: there is nothing to send back.
+ */
+const REFUND_LINE = {
+  refund_pending: 'Your refund has been initiated and will reach your original payment method shortly.',
+  refunded: 'Any amount paid has been refunded to the original payment method.',
+};
+
+const closedStatusLine = (order) => {
+  const reason = order.cancellationReason;
+  const lead = CANCELLED_BY_LEAD[order.cancelledBy];
+
+  return [
+    reason
+      ? escapeHtml(lead ? `${lead} — ${reason}` : reason)
+      : escapeHtml(`Order ${order.orderNumber} was ${statusLabel(order.orderStatus)}.`),
+    REFUND_LINE[order.paymentStatus],
   ]
     .filter(Boolean)
     .join('<br>');
+};
 
 /** `async` for the reason spelled out on sendOrderConfirmationEmail above. */
 const sendOrderStatusEmail = async ({ to, name, order }) => {

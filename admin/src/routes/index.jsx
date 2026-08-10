@@ -12,6 +12,7 @@ const Categories = lazy(() => import('../pages/Categories'));
 const Brands = lazy(() => import('../pages/Brands'));
 const Orders = lazy(() => import('../pages/Orders'));
 const OrderDetail = lazy(() => import('../pages/OrderDetail'));
+const CancellationReasons = lazy(() => import('../pages/CancellationReasons'));
 const Users = lazy(() => import('../pages/Users'));
 const Banners = lazy(() => import('../pages/Banners'));
 const Coupons = lazy(() => import('../pages/Coupons'));
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
       { path: 'brands', element: <Brands /> },
       { path: 'orders', element: <Orders /> },
       { path: 'orders/:id', element: <OrderDetail /> },
+      { path: 'cancellation-reasons', element: <CancellationReasons /> },
       { path: 'users', element: <Users /> },
       { path: 'banners', element: <Banners /> },
       { path: 'coupons', element: <Coupons /> },

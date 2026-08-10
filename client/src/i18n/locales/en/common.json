@@ -248,6 +248,7 @@
     "pending": "Payment pending",
     "paid": "Paid",
     "failed": "Payment failed",
+    "refund_pending": "Refund pending",
     "refunded": "Refunded"
   }
 }

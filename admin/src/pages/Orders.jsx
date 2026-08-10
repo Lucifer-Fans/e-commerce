@@ -281,7 +281,9 @@ export default function Orders() {
               sx={{ minWidth: 140 }}
             >
               <MenuItem value="all">All payments</MenuItem>
-              {['pending', 'paid', 'failed', 'refunded'].map((value) => (
+              {/* "Refund pending" is the queue staff work through after a
+                  cancellation, so it has to be filterable. */}
+              {['pending', 'paid', 'failed', 'refund_pending', 'refunded'].map((value) => (
                 <MenuItem key={value} value={value}>
                   {titleCase(value)}
                 </MenuItem>

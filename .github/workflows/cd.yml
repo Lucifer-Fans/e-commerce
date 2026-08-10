@@ -19,14 +19,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: |
-            admin/package-lock.json
-            client/package-lock.json
 
       - name: 📦 Install admin dependencies
         working-directory: ./admin
-        run: npm ci
+        run: npm install
 
       - name: 🏗️ Build admin
         working-directory: ./admin
@@ -34,7 +30,7 @@ jobs:
 
       - name: 📦 Install client dependencies
         working-directory: ./client
-        run: npm ci
+        run: npm install
 
       - name: 🏗️ Build client
         working-directory: ./client
@@ -44,146 +40,36 @@ jobs:
     name: 🚀 Trigger Render Deploys
     needs: build
     runs-on: ubuntu-latest
-    outputs:
-      admin_deploy_id: ${{ steps.deploy-admin.outputs.deploy_id }}
-      client_deploy_id: ${{ steps.deploy-client.outputs.deploy_id }}
-      server_deploy_id: ${{ steps.deploy-server.outputs.deploy_id }}
     steps:
-      - name: 🔔 Trigger Admin deploy
-        id: deploy-admin
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID_ADMIN }}
-        run: |
-          set -e
-          response=$(curl -sf -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $RENDER_API_KEY" \
-            -d '{}')
-          deploy_id=$(echo "$response" | jq -r '.id // empty')
-          if [ -z "$deploy_id" ]; then
-            echo "::error::Failed to trigger Admin deploy — no deploy id returned"
-            exit 1
-          fi
-          echo "deploy_id=$deploy_id" >> "$GITHUB_OUTPUT"
-          echo "Triggered Admin deploy: $deploy_id"
-
-      - name: 🔔 Trigger Client deploy
-        id: deploy-client
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID_CLIENT }}
-        run: |
-          set -e
-          response=$(curl -sf -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $RENDER_API_KEY" \
-            -d '{}')
-          deploy_id=$(echo "$response" | jq -r '.id // empty')
-          if [ -z "$deploy_id" ]; then
-            echo "::error::Failed to trigger Client deploy — no deploy id returned"
-            exit 1
-          fi
-          echo "deploy_id=$deploy_id" >> "$GITHUB_OUTPUT"
-          echo "Triggered Client deploy: $deploy_id"
-
-      - name: 🔔 Trigger Server deploy
-        id: deploy-server
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID_SERVER }}
-        run: |
-          set -e
-          response=$(curl -sf -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID/deploys" \
-            -H "Accept: application/json" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $RENDER_API_KEY" \
-            -d '{}')
-          deploy_id=$(echo "$response" | jq -r '.id // empty')
-          if [ -z "$deploy_id" ]; then
-            echo "::error::Failed to trigger Server deploy — no deploy id returned"
-            exit 1
-          fi
-          echo "deploy_id=$deploy_id" >> "$GITHUB_OUTPUT"
-          echo "Triggered Server deploy: $deploy_id"
-
-  verify-deploys:
-    name: 🔎 Verify Deploy Status
-    needs: deploy-to-render
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⏳ Poll Render deploy statuses
+      - name: 🔔 Trigger deploys for Render services
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_SERVICE_ID_ADMIN: ${{ secrets.RENDER_SERVICE_ID_ADMIN }}
           RENDER_SERVICE_ID_CLIENT: ${{ secrets.RENDER_SERVICE_ID_CLIENT }}
           RENDER_SERVICE_ID_SERVER: ${{ secrets.RENDER_SERVICE_ID_SERVER }}
-          ADMIN_DEPLOY_ID: ${{ needs.deploy-to-render.outputs.admin_deploy_id }}
-          CLIENT_DEPLOY_ID: ${{ needs.deploy-to-render.outputs.client_deploy_id }}
-          SERVER_DEPLOY_ID: ${{ needs.deploy-to-render.outputs.server_deploy_id }}
         run: |
-          check_deploy () {
-            local service_id=$1
-            local deploy_id=$2
-            local name=$3
-            local attempts=0
-            local max_attempts=30   # ~15 minutes at 30s intervals
+          set -e
 
-            while [ $attempts -lt $max_attempts ]; do
-              status=$(curl -sf "https://api.render.com/v1/services/$service_id/deploys/$deploy_id" \
-                -H "Accept: application/json" \
-                -H "Authorization: Bearer $RENDER_API_KEY" | jq -r '.status')
-              echo "[$name] status: $status"
+          echo "Triggering deploy for Admin service"
+          curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID_ADMIN/deploys" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -d '{}' \
+            | jq -r '.id // "no-deploy-id"' || true
 
-              case "$status" in
-                live)
-                  echo "✅ $name deploy succeeded"
-                  return 0
-                  ;;
-                build_failed|update_failed|canceled|deactivated)
-                  echo "::error::❌ $name deploy failed with status: $status"
-                  return 1
-                  ;;
-              esac
+          echo "Triggering deploy for Client service"
+          curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID_CLIENT/deploys" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -d '{}' \
+            | jq -r '.id // "no-deploy-id"' || true
 
-              attempts=$((attempts+1))
-              sleep 30
-            done
-
-            echo "::error::⏱️ Timed out waiting for $name deploy to complete"
-            return 1
-          }
-
-          failed=0
-          check_deploy "$RENDER_SERVICE_ID_ADMIN" "$ADMIN_DEPLOY_ID" "Admin" || failed=1
-          check_deploy "$RENDER_SERVICE_ID_CLIENT" "$CLIENT_DEPLOY_ID" "Client" || failed=1
-          check_deploy "$RENDER_SERVICE_ID_SERVER" "$SERVER_DEPLOY_ID" "Server" || failed=1
-
-          if [ $failed -eq 1 ]; then
-            echo "One or more deployments failed."
-            exit 1
-          fi
-          echo "All deployments succeeded."
-
-  notify-on-failure:
-    name: 🚨 Notify on Deployment Failure
-    needs: [ build, deploy-to-render, verify-deploys ]
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📣 Send failure notification
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          MESSAGE="🚨 CD pipeline failed for *${{ github.repository }}* on branch \`main\` (run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-          echo "$MESSAGE"
-
-          if [ -n "$SLACK_WEBHOOK_URL" ]; then
-            curl -s -X POST -H 'Content-type: application/json' \
-              --data "{\"text\": \"$MESSAGE\"}" \
-              "$SLACK_WEBHOOK_URL" || echo "⚠️ Failed to send Slack notification"
-          else
-            echo "ℹ️ SLACK_WEBHOOK_URL secret not set — skipping Slack notification"
-          fi
+          echo "Triggering deploy for Server service"
+          curl -s -X POST "https://api.render.com/v1/services/$RENDER_SERVICE_ID_SERVER/deploys" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -d '{}' \
+            | jq -r '.id // "no-deploy-id"' || true

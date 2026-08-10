@@ -408,6 +408,9 @@ const PAYMENT_TINTS = {
   paid: { bg: P.green50, fg: P.green700 },
   pending: { bg: P.accent50, fg: P.accentDark },
   failed: { bg: P.red50, fg: P.red700 },
+  // Money still owed back wears the same amber as money still owed — both are
+  // outstanding; only a completed refund goes quiet.
+  refund_pending: { bg: P.accent50, fg: P.accentDark },
   refunded: { bg: P.ink100, fg: P.ink600 },
 };
 

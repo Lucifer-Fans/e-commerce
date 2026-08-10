@@ -9,6 +9,7 @@ const hpp = require('hpp');
 
 const env = require('./config/env');
 const routes = require('./routes');
+const healthRoutes = require('./routes/health.routes');
 const sanitizeRequest = require('./middleware/sanitize');
 const resolveLanguage = require('./middleware/language');
 const { apiLimiter } = require('./middleware/rateLimiter');
@@ -89,6 +90,13 @@ app.use(
 app.get('/', (req, res) => {
   res.send('Server is Working');
 });
+
+/**
+ * Mounted ahead of the API rate limiter: an uptime monitor polling every few
+ * seconds shares an IP bucket with real traffic, and a probe that 429s reads as
+ * an outage.
+ */
+app.use(`${env.apiPrefix}/health`, healthRoutes);
 
 app.use(env.apiPrefix, apiLimiter, routes);
 

@@ -74,7 +74,20 @@ export const orderApi = {
   list: (params) => api.get('/orders/admin/all', { params }),
   detail: (id) => api.get(`/orders/${id}`),
   updateStatus: (id, payload) => api.patch(`/orders/${id}/status`, payload),
+  // The one payment decision staff make: the refund has actually been sent.
+  markRefunded: (id, payload) => api.patch(`/orders/${id}/mark-refunded`, payload),
   statuses: () => api.get('/orders/admin/statuses'),
+};
+
+/**
+ * The picklist the storefront's cancel dialog offers. "Other" is not a row here —
+ * it is the free-text escape hatch the dialog always shows underneath.
+ */
+export const cancellationReasonApi = {
+  list: () => api.get('/cancellation-reasons', { params: { adminView: true } }),
+  create: (payload) => api.post('/cancellation-reasons', payload),
+  update: (id, payload) => api.patch(`/cancellation-reasons/${id}`, payload),
+  remove: (id) => api.delete(`/cancellation-reasons/${id}`),
 };
 
 export const userApi = {

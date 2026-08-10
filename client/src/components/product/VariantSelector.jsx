@@ -74,9 +74,14 @@ function AttributeBlock({ attribute, variants, selection, onSelect, showPriceHin
 
   return (
     <div>
+      {/* The label states what the shopper has done — "Selected Color: Black" — and asks
+          for it plainly while the attribute is still open. Attribute names come from the
+          admin, so both readings are interpolated rather than hard-coded per attribute. */}
       <div className="mb-2 flex flex-wrap items-baseline gap-x-2">
         <span className="text-sm font-medium text-ink-700" id={`variant-${attribute.slug}-label`}>
-          {attribute.name}:
+          {`${t(selectedValue ? 'variants.selectedAttribute' : 'variants.selectAttribute', {
+            attribute: attribute.name,
+          })}:`}
         </span>
         <span className="text-sm font-bold text-ink-900">
           {selectedValue?.label || t('variants.selectPrompt')}

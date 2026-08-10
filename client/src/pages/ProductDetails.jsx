@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { productApi } from '../api/endpoints';
 import useFetch from '../hooks/useFetch';
@@ -375,46 +375,31 @@ export default function ProductDetails() {
                   {t('details.youSave', { amount: formatPrice(savings, { precise: true }) })}
                 </p>
               )}
-              {sku && (
-                <p className="mt-1 text-xs text-ink-400">{t('details.sku', { sku })}</p>
+              {/* Scarcity sits with the price, where the decision is being made — and only
+                  once the SKU's own stock has fallen to the admin's threshold. */}
+              {lowStock && (
+                <p className="mt-1.5 text-sm font-bold text-accent-dark">
+                  {t('details.hurryLeft', { count: stock })}
+                </p>
               )}
             </div>
 
-            <div className="mb-5 flex flex-wrap items-center gap-2">
-              <span
-                className={`badge ${
-                  incomplete
-                    ? 'bg-ink-100 text-ink-600 ring-ink-200'
-                    : outOfStock
-                      ? 'bg-red-50 text-danger ring-red-200'
-                      : lowStock
-                        ? 'bg-amber-50 text-amber-700 ring-amber-200'
-                        : 'bg-emerald-50 text-success ring-emerald-200'
-                }`}
-              >
-                {incomplete
-                  ? t('details.selectAnOption')
-                  : outOfStock
-                    ? t('common:product.outOfStock')
-                    : lowStock
-                      ? t('common:product.onlyLeft', { count: stock })
-                      : t('common:product.inStock')}
-              </span>
-              {!outOfStock && !incomplete && (
-                <span className="text-xs text-ink-500">
-                  {t('details.unitsAvailable', { count: stock })}
+            {/* Only states the shopper has to act on are called out — a plain "In stock"
+                repeats what the enabled buy buttons already say, and low stock now speaks
+                for itself in the price box above. */}
+            {(incomplete || outOfStock) && (
+              <div className="mb-5 flex flex-wrap items-center gap-2">
+                <span
+                  className={`badge ${
+                    incomplete
+                      ? 'bg-ink-100 text-ink-600 ring-ink-200'
+                      : 'bg-red-50 text-danger ring-red-200'
+                  }`}
+                >
+                  {incomplete ? t('details.selectAnOption') : t('common:product.outOfStock')}
                 </span>
-              )}
-              {selectedLabel && (
-                <span className="text-xs text-ink-500">
-                  <Trans
-                    i18nKey="shop:details.showingVariant"
-                    values={{ label: selectedLabel }}
-                    components={[<span key="0" />, <span key="1" className="font-semibold text-ink-700" />]}
-                  />
-                </span>
-              )}
-            </div>
+              </div>
+            )}
 
             {product.shortDescription && (
               <p className="mb-5 text-sm leading-relaxed text-ink-600">{product.shortDescription}</p>
@@ -441,7 +426,9 @@ export default function ProductDetails() {
               </div>
             )}
 
-            <div className="mb-6 flex flex-col gap-3 sm:flex-row">
+            {/* Below `lg` the same two actions live in the bar pinned to the bottom of
+                the viewport, so they stay in reach however far the shopper has scrolled. */}
+            <div className="mb-6 hidden gap-3 sm:flex-row lg:flex">
               <button
                 type="button"
                 onClick={() => handleAddToCart(product, quantity, variant)}
@@ -503,6 +490,46 @@ export default function ProductDetails() {
       {recent.length > 0 && (
         <ProductCarousel title={t('home.recentlyViewed')} products={recent} />
       )}
+
+      {/* Room for the fixed bar below, so the last carousel never ends underneath it.
+          This route drops the four-tab nav (see mobileNavScope), so nothing stacks. */}
+      <div aria-hidden="true" className="h-[calc(4.5rem+env(safe-area-inset-bottom))] lg:hidden" />
+
+      <div
+        className="fixed inset-x-0 bottom-0 z-[70] border-t border-ink-200 bg-white
+                   shadow-[0_-2px_12px_rgba(15,23,42,.1)] lg:hidden"
+      >
+        {/* Padding rather than margin, so the white ground reaches past the home indicator. */}
+        <div className="flex items-stretch gap-3 px-3 pb-[calc(0.625rem+env(safe-area-inset-bottom))] pt-2.5">
+          <button
+            type="button"
+            onClick={() => handleAddToCart(product, quantity, variant)}
+            disabled={cantBuy}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-brand-600 bg-white
+                       py-3 text-sm font-bold text-brand-600 transition active:scale-[.98]
+                       disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <Icon name="cart" size={20} />
+            {t('common:product.addToCart')}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleBuyNow(product, quantity, variant)}
+            disabled={cantBuy}
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent py-3 text-sm
+                       font-bold text-white shadow-sm transition hover:bg-accent-dark active:scale-[.98]
+                       disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {/* Two chevrons nested into a ▶▶ mark, from the same single-path icon set. */}
+            <span aria-hidden="true" className="flex items-center -space-x-2">
+              <Icon name="chevronRight" size={18} />
+              <Icon name="chevronRight" size={18} />
+            </span>
+            {t('common:product.buyNow')}
+          </button>
+        </div>
+      </div>
     </>
   );
 }

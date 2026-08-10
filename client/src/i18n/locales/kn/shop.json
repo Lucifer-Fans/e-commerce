@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} ರೇಟಿಂಗ್",
     "ratingsCount_other": "{{count}} ರೇಟಿಂಗ್‌ಗಳು",
     "noRatings": "ಇನ್ನೂ ರೇಟಿಂಗ್‌ಗಳಿಲ್ಲ",
+    "hurryLeft_one": "ಬೇಗ ಮಾಡಿ! ಕೇವಲ {{count}} ಉಳಿದಿವೆ",
+
+    "hurryLeft_other": "ಬೇಗ ಮಾಡಿ! ಕೇವಲ {{count}} ಉಳಿದಿವೆ",
+
     "youSave": "ನೀವು {{amount}} ಉಳಿಸುತ್ತೀರಿ",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "ಆರಿಸಿ",
+    "selectedAttribute": "ಆಯ್ಕೆಮಾಡಿದ {{attribute}}",
+
+    "selectAttribute": "{{attribute}} ಆರಿಸಿ",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "ಲಭ್ಯವಿಲ್ಲ",

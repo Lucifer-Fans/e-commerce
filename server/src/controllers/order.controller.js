@@ -2,13 +2,34 @@ const mongoose = require('mongoose');
 const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
 const { sendSuccess, paginationMeta } = require('../utils/apiResponse');
-const { Order, Cart, Address, Coupon } = require('../models');
+const { Order, Cart, Address, Coupon, CancellationReason } = require('../models');
 const { calculateTotals, eligibleSubtotal, lineTotal } = require('../services/pricing.service');
 const { reserveStock, releaseStock } = require('../services/inventory.service');
 const { streamInvoice } = require('../services/invoice.service');
 const mailService = require('../services/mail.service');
 const broadcast = require('../realtime/broadcast');
-const { STATUS_FLOW } = require('../models/Order');
+const { STATUS_FLOW, CUSTOMER_CANCELLABLE, canMarkRefunded } = require('../models/Order');
+
+/**
+ * Turns what the cancel dialog submitted into the one sentence stored on the
+ * order: the label of a published reason, or the shopper's own words.
+ *
+ * The id is resolved server-side rather than trusting the label that came with
+ * it, so a closed order can only ever quote a reason the store actually offers —
+ * and a reason that has since been deactivated cannot be picked out of a stale
+ * dialog left open in a tab.
+ */
+async function resolveCancellationReason({ reasonId, reason } = {}) {
+  if (reasonId) {
+    const picked = await CancellationReason.findOne({ _id: reasonId, isActive: true });
+    if (!picked) throw ApiError.badRequest('That cancellation reason is no longer available');
+    return picked.label;
+  }
+
+  const custom = (reason || '').trim();
+  if (!custom) throw ApiError.badRequest('Please tell us why you are cancelling this order');
+  return custom;
+}
 
 /**
  * Rebuilds the order from server-side truth: live product prices, live stock,
@@ -188,6 +209,7 @@ exports.createOrder = asyncHandler(async (req, res) => {
               status: paymentMethod === 'cod' ? 'confirmed' : 'pending',
               note: paymentMethod === 'cod' ? 'Order placed (cash on delivery)' : 'Awaiting payment',
               changedBy: userId,
+              actor: 'customer',
             },
           ],
           notes,
@@ -282,6 +304,12 @@ exports.getOrder = asyncHandler(async (req, res) => {
     throw ApiError.forbidden('You cannot view this order');
   }
 
+  // Only the panel names the person behind each move; a shopper's own order page
+  // has no business learning which member of staff touched it.
+  if (req.user.role === 'admin') {
+    await order.populate({ path: 'statusHistory.changedBy', select: 'name role' });
+  }
+
   return sendSuccess(res, { message: 'Order fetched', data: { order } });
 });
 
@@ -301,31 +329,60 @@ exports.downloadInvoice = asyncHandler(async (req, res) => {
   await streamInvoice(order, res);
 });
 
-/** PATCH /orders/:id/cancel — shopper-initiated. */
+/**
+ * PATCH /orders/:id/cancel — shopper-initiated.
+ *
+ * The storefront hides the action once an order has shipped, but the window is
+ * enforced here: this is the only check a direct API call cannot walk around.
+ * Staff keep the wider STATUS_FLOW window and go through /status instead.
+ */
 exports.cancelOrder = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id).populate('user', 'name email');
   if (!order) throw ApiError.notFound('Order not found');
-  if (String(order.user) !== String(req.user._id)) throw ApiError.forbidden('You cannot cancel this order');
-  if (!STATUS_FLOW[order.orderStatus]?.includes('cancelled')) {
-    throw ApiError.badRequest(`An order that is ${order.orderStatus.replace(/_/g, ' ')} cannot be cancelled`);
+  if (String(order.user?._id || order.user) !== String(req.user._id)) {
+    throw ApiError.forbidden('You cannot cancel this order');
   }
+  if (!CUSTOMER_CANCELLABLE.includes(order.orderStatus)) {
+    throw ApiError.badRequest(
+      order.orderStatus === 'cancelled'
+        ? 'This order has already been cancelled'
+        : `This order is already ${order.orderStatus.replace(/_/g, ' ')} and can no longer be cancelled online. Please contact support for help.`
+    );
+  }
+
+  // A reason is part of the contract, not a nicety: it is what the confirmation
+  // email quotes back and what staff read on the order.
+  const reason = await resolveCancellationReason(req.body);
 
   // Cancelling returns the reserved units to the exact SKU they were taken from.
   await Promise.all(order.items.map((item) => releaseStock(item)));
 
   order.orderStatus = 'cancelled';
   order.cancelledAt = new Date();
-  order.cancellationReason = req.body.reason || 'Cancelled by customer';
+  order.cancellationReason = reason;
+  order.cancelledBy = 'customer';
+  order.cancelledByUser = req.user._id;
   order.statusHistory.push({
     status: 'cancelled',
-    note: order.cancellationReason,
+    note: reason,
     changedBy: req.user._id,
+    actor: 'customer',
   });
-  if (order.paymentStatus === 'paid') order.paymentStatus = 'refunded';
+  // Cancelling does not move money — it only puts the order in the queue for a
+  // refund an admin actually raises through the gateway.
+  if (order.paymentStatus === 'paid') order.paymentStatus = 'refund_pending';
   await order.save();
 
-  broadcast.orderStatusChanged(order, order.cancellationReason);
+  broadcast.orderStatusChanged(order, reason);
   broadcast.stockChanged(order.items, { reason: 'order_cancelled' });
+
+  // The same status mail an admin cancellation sends. A shopper who cancels from
+  // one device still wants the record in their inbox.
+  if (order.user?.email) {
+    mailService
+      .sendOrderStatusEmail({ to: order.user.email, name: order.user.name, order })
+      .catch(() => {});
+  }
 
   return sendSuccess(res, { message: 'Order cancelled', data: { order } });
 });
@@ -379,7 +436,7 @@ exports.listAllOrders = asyncHandler(async (req, res) => {
 
 /** PATCH /orders/:id/status (admin) */
 exports.updateOrderStatus = asyncHandler(async (req, res) => {
-  const { status, note, trackingNumber, courierPartner, expectedDeliveryDate } = req.body;
+  const { status, note, reasonId, trackingNumber, courierPartner, expectedDeliveryDate } = req.body;
 
   const order = await Order.findById(req.params.id).populate('user', 'name email');
   if (!order) throw ApiError.notFound('Order not found');
@@ -392,13 +449,22 @@ exports.updateOrderStatus = asyncHandler(async (req, res) => {
     );
   }
 
+  // A staff cancellation quotes the same picklist the storefront offers when the
+  // admin picked from it, and falls back to whatever they typed in the note.
+  let historyNote = note;
   if (status === 'cancelled' || status === 'returned') {
     // A return restocks the SKU that came back, not the product in general — a returned
     // Black/M must never make Blue/L look available.
     await Promise.all(order.items.map((item) => releaseStock(item)));
-    if (order.paymentStatus === 'paid') order.paymentStatus = 'refunded';
+    // Queued for a refund, not refunded — see cancelOrder above.
+    if (order.paymentStatus === 'paid') order.paymentStatus = 'refund_pending';
     order.cancelledAt = new Date();
-    order.cancellationReason = note || `Marked ${status} by admin`;
+    order.cancellationReason = reasonId
+      ? await resolveCancellationReason({ reasonId })
+      : note || `Marked ${status} by admin`;
+    order.cancelledBy = 'admin';
+    order.cancelledByUser = req.user._id;
+    historyNote = order.cancellationReason;
   }
 
   order.orderStatus = status;
@@ -411,10 +477,10 @@ exports.updateOrderStatus = asyncHandler(async (req, res) => {
     if (order.paymentMethod === 'cod') order.paymentStatus = 'paid';
   }
 
-  order.statusHistory.push({ status, note, changedBy: req.user._id });
+  order.statusHistory.push({ status, note: historyNote, changedBy: req.user._id, actor: 'admin' });
   await order.save();
 
-  broadcast.orderStatusChanged(order, note);
+  broadcast.orderStatusChanged(order, historyNote);
   if (status === 'cancelled' || status === 'returned') {
     broadcast.stockChanged(order.items, { reason: `order_${status}` });
   }
@@ -426,6 +492,46 @@ exports.updateOrderStatus = asyncHandler(async (req, res) => {
   }
 
   return sendSuccess(res, { message: `Order marked as ${status.replace(/_/g, ' ')}`, data: { order } });
+});
+
+/**
+ * PATCH /orders/:id/mark-refunded (admin)
+ *
+ * The one payment decision a human makes. Cancelling a prepaid order parks it at
+ * `refund_pending`; this is where staff confirm the money has actually left the
+ * account, which nothing but the person who raised the refund can know.
+ *
+ * Everything else the payment status does — a verified payment, a failed
+ * attempt, cash collected on delivery — the system does for itself.
+ */
+exports.markRefunded = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate('user', 'name email');
+  if (!order) throw ApiError.notFound('Order not found');
+
+  if (order.paymentStatus === 'refunded') {
+    throw ApiError.badRequest('This refund has already been marked as sent');
+  }
+  if (!canMarkRefunded(order)) {
+    // Everything that is not awaiting a refund is the system's business, not an
+    // admin's: an unpaid COD order collected nothing, and a live order's payment
+    // moves on its own when it is verified or handed over.
+    throw ApiError.badRequest(
+      order.paymentMethod === 'cod' && order.paymentStatus === 'pending'
+        ? 'Nothing was collected on this cash-on-delivery order, so there is nothing to refund'
+        : 'This order is not awaiting a refund'
+    );
+  }
+
+  order.paymentStatus = 'refunded';
+  order.refundedAt = new Date();
+  if (req.body.refundReference !== undefined) {
+    order.refundReference = req.body.refundReference || undefined;
+  }
+  await order.save();
+
+  broadcast.orderChanged(order, { note: 'Refund sent' });
+
+  return sendSuccess(res, { message: 'Refund marked as sent', data: { order } });
 });
 
 /** GET /orders/admin/statuses — drives the admin status dropdown. */

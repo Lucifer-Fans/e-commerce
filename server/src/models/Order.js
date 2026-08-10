@@ -12,8 +12,11 @@ const ORDER_STATUSES = [
 ];
 
 /**
- * Legal forward transitions. Orders may be cancelled up to (and including) "shipped";
- * after delivery only a return is possible.
+ * Legal forward transitions. Orders may be cancelled up to (and including)
+ * "out_for_delivery"; after delivery only a return is possible.
+ *
+ * This is the *staff* ladder. A shopper cancelling from the storefront is held to
+ * the narrower window below — see CUSTOMER_CANCELLABLE.
  */
 const STATUS_FLOW = {
   pending: ['confirmed', 'cancelled'],
@@ -25,6 +28,43 @@ const STATUS_FLOW = {
   cancelled: [],
   returned: [],
 };
+
+/**
+ * How far a shopper may cancel on their own: up to, but not including, the moment
+ * the parcel leaves the warehouse. Once it is with a courier the money and the
+ * goods are both in motion, and stopping that is a support decision — staff keep
+ * the wider window STATUS_FLOW allows, because they can actually recall a parcel.
+ *
+ * Both front-ends mirror this list; the cancel endpoint is what enforces it.
+ */
+const CUSTOMER_CANCELLABLE = ['pending', 'confirmed', 'packed'];
+
+/** Who ended an order. Recorded on the order and on the history entry alike. */
+const CANCELLED_BY = ['customer', 'admin'];
+
+const PAYMENT_STATUSES = ['pending', 'paid', 'failed', 'refund_pending', 'refunded'];
+
+/**
+ * The payment status is maintained by the system, not by hand.
+ *
+ *   pending → paid            a verified Razorpay payment, or a COD order
+ *                             reaching `delivered` — cash is collected on
+ *                             handover, so delivery *is* the payment
+ *   pending → failed          an abandoned or rejected gateway attempt
+ *   paid → refund_pending     the order was cancelled or returned after payment
+ *
+ * Every one of those happens on its own, in the controller that owns the event.
+ * That leaves exactly one thing a human has to decide: whether the refund has
+ * actually left the account. Money moves through the gateway, not through a
+ * status field, so nothing can know that but the person who raised it.
+ *
+ * Hence a single manual move, and no map: `refund_pending → refunded`.
+ *
+ * A cash-on-delivery order never reaches it. Cancelled before handover it
+ * collected nothing and owes nothing back, so it simply stays `pending`;
+ * delivered, it is marked paid without anyone touching it.
+ */
+const canMarkRefunded = (order) => order.paymentStatus === 'refund_pending';
 
 /**
  * Order items are denormalised snapshots. A product being renamed, repriced or deleted
@@ -121,10 +161,14 @@ const orderSchema = new mongoose.Schema(
     paymentMethod: { type: String, enum: ['razorpay', 'cod'], default: 'razorpay' },
     paymentStatus: {
       type: String,
-      enum: ['pending', 'paid', 'failed', 'refunded'],
+      enum: PAYMENT_STATUSES,
       default: 'pending',
       index: true,
     },
+    /** When staff confirmed the refund had actually been raised. */
+    refundedAt: Date,
+    /** The gateway/bank reference staff can quote to a shopper chasing it. */
+    refundReference: String,
     payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },
 
     orderStatus: { type: String, enum: ORDER_STATUSES, default: 'pending', index: true },
@@ -133,6 +177,12 @@ const orderSchema = new mongoose.Schema(
         status: { type: String, enum: ORDER_STATUSES },
         note: String,
         changedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        /**
+         * Which side made the move. `changedBy` names the account, but an admin
+         * panel reading back a closed order needs to say "cancelled by customer"
+         * without first resolving a user id against the staff list.
+         */
+        actor: { type: String, enum: ['customer', 'admin', 'system'], default: 'admin' },
         changedAt: { type: Date, default: Date.now },
       },
     ],
@@ -142,7 +192,14 @@ const orderSchema = new mongoose.Schema(
     expectedDeliveryDate: Date,
     deliveredAt: Date,
     cancelledAt: Date,
+    /**
+     * The reason as it will be read back — the label of the predefined reason the
+     * shopper picked, or the sentence they typed under "Other". Stored as text so
+     * a later edit to the admin's reason list cannot rewrite a closed order.
+     */
     cancellationReason: String,
+    cancelledBy: { type: String, enum: CANCELLED_BY },
+    cancelledByUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
     invoiceNumber: String,
     notes: String,
@@ -158,8 +215,12 @@ orderSchema.virtual('itemCount').get(function itemCount() {
   return this.items.reduce((sum, item) => sum + item.quantity, 0);
 });
 
+/**
+ * Whether the *shopper* may still cancel this themselves. The storefront reads
+ * this to decide what its Cancel button does; staff go by STATUS_FLOW instead.
+ */
 orderSchema.virtual('isCancellable').get(function isCancellable() {
-  return STATUS_FLOW[this.orderStatus]?.includes('cancelled') ?? false;
+  return CUSTOMER_CANCELLABLE.includes(this.orderStatus);
 });
 
 orderSchema.pre('validate', async function assignNumbers(next) {
@@ -175,8 +236,15 @@ orderSchema.pre('validate', async function assignNumbers(next) {
 
 orderSchema.statics.ORDER_STATUSES = ORDER_STATUSES;
 orderSchema.statics.STATUS_FLOW = STATUS_FLOW;
+orderSchema.statics.CUSTOMER_CANCELLABLE = CUSTOMER_CANCELLABLE;
+orderSchema.statics.PAYMENT_STATUSES = PAYMENT_STATUSES;
+orderSchema.statics.canMarkRefunded = canMarkRefunded;
 orderSchema.statics.canTransition = (from, to) => Boolean(STATUS_FLOW[from]?.includes(to));
 
 module.exports = mongoose.model('Order', orderSchema);
 module.exports.ORDER_STATUSES = ORDER_STATUSES;
 module.exports.STATUS_FLOW = STATUS_FLOW;
+module.exports.CUSTOMER_CANCELLABLE = CUSTOMER_CANCELLABLE;
+module.exports.CANCELLED_BY = CANCELLED_BY;
+module.exports.PAYMENT_STATUSES = PAYMENT_STATUSES;
+module.exports.canMarkRefunded = canMarkRefunded;

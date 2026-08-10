@@ -75,6 +75,15 @@ const settingSchema = new mongoose.Schema(
       metaDescription: { type: String, trim: true, maxlength: 200 },
     }),
 
+    /**
+     * One-time bookkeeping the panel never shows. A default list is planted on
+     * first use; the flag is what stops it growing back after an admin has
+     * deliberately emptied it.
+     */
+    seeded: {
+      cancellationReasons: { type: Boolean, default: false },
+    },
+
     fieldHistory: { type: Map, of: Date, default: () => ({}) },
     updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },

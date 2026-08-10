@@ -108,7 +108,12 @@ exports.verifyPayment = asyncHandler(async (req, res) => {
   order.paymentStatus = 'paid';
   if (order.orderStatus === 'pending') {
     order.orderStatus = 'confirmed';
-    order.statusHistory.push({ status: 'confirmed', note: 'Payment received', changedBy: req.user._id });
+    order.statusHistory.push({
+      status: 'confirmed',
+      note: 'Payment received',
+      changedBy: req.user._id,
+      actor: 'customer',
+    });
   }
   await order.save();
 

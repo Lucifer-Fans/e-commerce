@@ -99,6 +99,10 @@
     "ratingsCount_one": "{{count}} மதிப்பீடு",
     "ratingsCount_other": "{{count}} மதிப்பீடுகள்",
     "noRatings": "இன்னும் மதிப்பீடுகள் இல்லை",
+    "hurryLeft_one": "விரைந்திடுங்கள்! {{count}} மட்டுமே மீதம்",
+
+    "hurryLeft_other": "விரைந்திடுங்கள்! {{count}} மட்டுமே மீதம்",
+
     "youSave": "நீங்கள் {{amount}} சேமிக்கிறீர்கள்",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ஒரு விருப்பத்தைத் தேர்ந்தெடுக்கவும்",
@@ -146,6 +150,10 @@
   },
   "variants": {
     "selectPrompt": "தேர்ந்தெடு",
+    "selectedAttribute": "தேர்ந்தெடுத்த {{attribute}}",
+
+    "selectAttribute": "{{attribute}} தேர்ந்தெடு",
+
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "கிடைக்கவில்லை",
