@@ -72,21 +72,26 @@ export default function MobileBottomNav() {
       active ? 'text-brand-600' : 'text-ink-500'
     }`;
 
+  // The sheet covers the page it was opened from, so while it is up the category
+  // tab is the only one highlighted — the route underneath is no longer what the
+  // shopper is looking at.
+  const onRoute = (test) => !categoryOpen && test;
+
   const links = [
-    { to: '/', icon: 'home', label: t('nav.home'), active: pathname === '/' },
+    { to: '/', icon: 'home', label: t('nav.home'), active: onRoute(pathname === '/') },
     {
       to: '/wishlist',
       icon: 'heart',
       label: t('nav.wishlist'),
       count: wishlistCount,
-      active: pathname.startsWith('/wishlist'),
+      active: onRoute(pathname.startsWith('/wishlist')),
     },
     {
       to: '/cart',
       icon: 'cart',
       label: t('nav.cart'),
       count: cartCount,
-      active: pathname.startsWith('/cart'),
+      active: onRoute(pathname.startsWith('/cart')),
     },
   ];
 

@@ -82,7 +82,8 @@ export default function HeroSlider({ slides = [], loading = false }) {
                   alt={slide.title}
                   // The first slide is the LCP element — it must not be lazy.
                   loading={i === 0 ? 'eager' : 'lazy'}
-                  fetchPriority={i === 0 ? 'high' : undefined}
+                  // React 18 does not map camelCase `fetchPriority` to the DOM attribute.
+                  fetchpriority={i === 0 ? 'high' : undefined}
                   className="h-full w-full object-cover"
                 />
               </picture>

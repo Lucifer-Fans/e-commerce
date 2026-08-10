@@ -1,8 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import '../../styles/order-confirm.css';
 
 const TOTAL_MS = 5000;
+/** The checkout column unmounts as we mount, so the page keeps shrinking for a few frames. */
+const ALIGN_FRAMES = 5;
+/** Breathing room between the sticky header and the panel when the panel is too tall to centre. */
+const GAP = 12;
+
+/** Height of the sticky header, which covers the top of the viewport. */
+function headerOffset() {
+  const header = document.querySelector('header');
+  return header ? header.getBoundingClientRect().height : 0;
+}
+
+/** Height of the fixed mobile bottom bar, which covers the foot of the viewport (0 on desktop). */
+function bottomBarOffset() {
+  const bar = document.querySelector('nav.fixed.bottom-0');
+  if (!bar) return 0;
+  const rect = bar.getBoundingClientRect();
+  // `lg:hidden` leaves the node in the DOM on desktop, so trust the measured box.
+  return rect.height && rect.top < window.innerHeight ? rect.height : 0;
+}
 
 /**
  * Confirmation cinematic shown inside the checkout content area: the parcel leaps off
@@ -13,6 +32,40 @@ const TOTAL_MS = 5000;
 export default function OrderConfirmAnimation({ onDone }) {
   const { t } = useTranslation('checkout');
   const [leaving, setLeaving] = useState(false);
+  const panelRef = useRef(null);
+
+  // Checkout can be far taller than the viewport with a big cart, and swapping the
+  // columns out for this panel leaves the shopper parked wherever they were scrolled —
+  // often below the whole animation. Pull the viewport onto the panel before the first
+  // paint, and keep re-aligning while the page settles into its new (much shorter) height.
+  useLayoutEffect(() => {
+    let frame = 0;
+    let attempts = 0;
+
+    const align = () => {
+      frame = 0;
+      const panel = panelRef.current;
+      if (!panel) return;
+
+      const header = headerOffset();
+      const rect = panel.getBoundingClientRect();
+      const top = rect.top + window.scrollY - header;
+      // What the shopper can actually see: viewport minus the two fixed chrome bars.
+      const free = window.innerHeight - header - bottomBarOffset();
+      // Centre it in that band; if it's taller than the band, centring would push its
+      // head off-screen, so sit its top just under the header instead.
+      const target = rect.height < free ? top - (free - rect.height) / 2 : top - GAP;
+
+      window.scrollTo(0, Math.max(0, target));
+
+      if (++attempts < ALIGN_FRAMES) frame = requestAnimationFrame(align);
+    };
+
+    align();
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -31,6 +84,7 @@ export default function OrderConfirmAnimation({ onDone }) {
 
   return (
     <div
+      ref={panelRef}
       className={`oc-panel ${leaving ? 'is-leaving' : ''}`}
       role="status"
       aria-live="polite"
