@@ -13,14 +13,6 @@ if (env.mailEnabled) {
     port: env.mail.port,
     secure: env.mail.secure,
     auth: { user: env.mail.user, pass: env.mail.pass },
-    // See config/env.js: the pool is what stops every message paying for a fresh
-    // TLS handshake, and the timeouts are what stop a stalled provider holding a
-    // socket — and the request behind it — open indefinitely.
-    pool: env.mail.pool,
-    maxConnections: env.mail.maxConnections,
-    connectionTimeout: env.mail.connectionTimeoutMs,
-    greetingTimeout: env.mail.greetingTimeoutMs,
-    socketTimeout: env.mail.socketTimeoutMs,
   });
 }
 
@@ -40,48 +32,20 @@ const cidFor = (file) => `${file.replace(/[^a-z0-9]+/gi, '-')}@springwala.mail`;
  * The artwork a composed message actually refers to. Only what the HTML uses is
  * attached, so a password-reset email does not carry the order tracker's glyphs.
  */
-/**
- * The artwork folder, indexed by content id and read exactly once.
- *
- * It used to be scanned per message, which put a synchronous directory read —
- * the one flavour of I/O that stops the event loop dead rather than yielding —
- * on the path of every mail, and so on the path of every request that sends
- * one. The files ship with the deploy and cannot change under a running
- * process, so there is nothing to re-read for.
- */
-let assetIndex = null;
-function assetsByCid() {
-  if (assetIndex) return assetIndex;
-
-  assetIndex = new Map();
-  try {
-    for (const file of fs.readdirSync(ASSET_DIR)) {
-      if (file.endsWith('.png')) assetIndex.set(cidFor(file), file);
-    }
-  } catch (err) {
-    logger.warn(`Could not read email asset folder: ${err.message}`);
-  }
-  return assetIndex;
-}
-
 function inlineAttachments(html = '') {
   const wanted = new Set();
   for (const match of html.matchAll(/src="cid:([^"]+)"/g)) wanted.add(match[1]);
   if (!wanted.size) return [];
 
-  const assets = assetsByCid();
-  const attachments = [];
-  for (const cid of wanted) {
-    const file = assets.get(cid);
-    if (!file) continue;
-    attachments.push({
+  return fs
+    .readdirSync(ASSET_DIR)
+    .filter((file) => file.endsWith('.png') && wanted.has(cidFor(file)))
+    .map((file) => ({
       filename: file,
       path: path.join(ASSET_DIR, file),
-      cid,
+      cid: cidFor(file),
       contentDisposition: 'inline',
-    });
-  }
-  return attachments;
+    }));
 }
 
 /**
@@ -3404,47 +3368,8 @@ const sendApplicationStatusEmail = async ({
   });
 };
 
-/**
- * Waits for a send, but only for as long as a person is willing to sit in front
- * of a spinner for it.
- *
- * Composing and delivering a message costs a TLS handshake, an AUTH exchange and
- * a few hundred KB of artwork — a second or two on a real machine, and rather
- * more on a throttled one, all of it spent while the request that triggered it
- * is still open. Past the deadline the caller is handed `null` and answers the
- * browser; the send itself is untouched and carries on to completion in the
- * background, so the mail still arrives. The rejection is swallowed here because
- * every caller's `.catch()` has already stopped listening by then.
- *
- * The three-way answer is the point. `false` means the provider actually refused
- * the message and nothing is coming, which is worth telling the user about;
- * `null` means only that it is taking a while, which is not — a caller that
- * treated the two alike would fail a registration whose code is seconds behind it.
- *
- * @param {Promise<boolean>} sending  A send in flight — call the sender first.
- * @param {number} [ms]  How long to wait. Defaults to the configured deadline.
- * @returns {Promise<boolean|null>} true sent, false refused, null still going.
- */
-function within(sending, ms = env.mail.requestDeadlineMs) {
-  const settled = Promise.resolve(sending).catch((err) => {
-    logger.error(`Background mail send failed: ${err.message}`);
-    return false;
-  });
-
-  return new Promise((resolve) => {
-    const timer = setTimeout(() => resolve(null), ms);
-    // `unref` so a pending deadline cannot hold the process open during shutdown.
-    timer.unref?.();
-    settled.then((sent) => {
-      clearTimeout(timer);
-      resolve(sent);
-    });
-  });
-}
-
 module.exports = {
   sendMail,
-  within,
   // The invoice PDF is branded from the same Organization settings and the same
   // cache, so a rebrand lands on the mail and the invoice in the same instant.
   getBranding,

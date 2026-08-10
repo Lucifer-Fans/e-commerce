@@ -119,30 +119,10 @@ function init(httpServer) {
     pingInterval: 25000,
     pingTimeout: 20000,
     connectionStateRecovery: {
-      /**
-       * A brief network blip replays what was missed instead of dropping updates.
-       *
-       * The replay buffer is held in this process's memory, per disconnected
-       * session, so the window is also a memory budget: two minutes of every
-       * dropped connection's missed packets is a real figure on a 512MB
-       * instance where phones are backgrounding tabs all day. Thirty seconds
-       * still covers what this is for — a tunnel, a lift, a wifi handover —
-       * and anything longer was going to be a refetch on reconnect anyway.
-       */
-      maxDisconnectionDuration: 30 * 1000,
+      // A brief network blip replays what was missed instead of dropping updates.
+      maxDisconnectionDuration: 2 * 60 * 1000,
       skipMiddlewares: false,
     },
-    /**
-     * Per-message deflate is off by default in Socket.IO for good reason and is
-     * named here only so nobody switches it on: it allocates a zlib context per
-     * connection — hundreds of KB apiece, and they are slow to be reclaimed —
-     * to compress payloads that are already small JSON. Both resources it
-     * spends are the two this instance has least of.
-     */
-    perMessageDeflate: false,
-    // A realtime payload here is a few KB of JSON at most. The 1MB default is
-    // simply a larger buffer than anything legitimate needs.
-    maxHttpBufferSize: 1e5,
   });
 
   io.use(async (socket, next) => {

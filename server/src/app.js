@@ -60,19 +60,7 @@ app.post(
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use(cookieParser());
-/**
- * Compression, tuned for a container with a tenth of a core rather than for the
- * smallest possible payload.
- *
- * gzip is pure CPU on the same single thread every request is queued behind, and
- * the default level 6 costs roughly three times what level 1 does to save
- * another ten-odd percent of a catalogue response. On this instance the seconds
- * matter and the kilobytes do not. The threshold keeps the small stuff — an auth
- * reply, an error, an ack — out of the compressor altogether: below about a
- * packet's worth there is nothing to win, and the header alone can make the
- * response bigger.
- */
-app.use(compression({ level: 1, threshold: 1024 }));
+app.use(compression());
 app.use(hpp({ whitelist: ['tags', 'brand', 'category', 'subCategory'] }));
 app.use(sanitizeRequest);
 // Decides which language the catalogue is served in; every controller reads

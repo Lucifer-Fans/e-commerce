@@ -182,25 +182,11 @@ userSchema.methods.comparePassword = function comparePassword(candidate) {
  * a hit pays for bcrypt, and that difference alone tells an attacker which
  * addresses are registered — the thing every message in the login path is
  * carefully worded to avoid revealing.
- *
- * Built on first use rather than at import, and asynchronously.
- * `bcrypt.hashSync` at module scope is a full work factor's worth of arithmetic
- * with nothing else able to run — it lands during boot, before the process is
- * even listening, which on a fraction of a core is time added to a cold start
- * that the first request is already waiting through. The async form yields
- * between rounds, and by deferring it the cost falls on the first sign-in
- * against an unknown address instead of on every deploy. Cached from then on:
- * the point is a comparison that costs what a real one costs, not a fresh hash.
- *
- * The promise is what is cached, not the hash: two sign-ins arriving together
- * before it exists then share the one computation rather than each paying for
- * their own — which on this budget is the whole saving, twice over.
  */
-let dummyHash = null;
+const DUMMY_HASH = bcrypt.hashSync('login-timing-equaliser', env.bcryptRounds);
 
 userSchema.statics.burnPasswordCompare = function burnPasswordCompare(candidate) {
-  dummyHash ||= bcrypt.hash('login-timing-equaliser', env.bcryptRounds);
-  return dummyHash.then((hash) => bcrypt.compare(String(candidate ?? ''), hash));
+  return bcrypt.compare(String(candidate ?? ''), DUMMY_HASH);
 };
 
 /** Whether the account is currently closed to password sign-in. */

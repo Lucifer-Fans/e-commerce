@@ -35,31 +35,7 @@ const env = {
     accessExpires: process.env.JWT_ACCESS_EXPIRES || '15m',
     refreshExpires: process.env.JWT_REFRESH_EXPIRES || '30d',
   },
-  /**
-   * Work factor for password hashing.
-   *
-   * Ten rather than twelve, because this runs on bcryptjs — a pure-JS
-   * implementation roughly six times slower than the native binding — on a
-   * fraction of a shared core. Each round doubles the work, so 12 costs four
-   * times what 10 does: on a 0.1-CPU container that is the difference between a
-   * sign-up that answers and one the browser times out on, and the cost is paid
-   * twice more on every login (the compare, and the dummy compare that hides
-   * whether an address exists).
-   *
-   * Nothing needs re-hashing: the cost is stored inside each hash, so accounts
-   * created at 12 keep verifying at 12 and only new passwords use this value.
-   * Raise it with BCRYPT_ROUNDS the moment this runs anywhere with a real core.
-   */
-  bcryptRounds: num(process.env.BCRYPT_ROUNDS, 10),
-
-  /**
-   * Connection pool, sized for the container this runs in rather than for what
-   * the database would allow. See config/db.js for why each value is what it is.
-   */
-  mongo: {
-    maxPoolSize: num(process.env.MONGO_MAX_POOL_SIZE, 8),
-    minPoolSize: num(process.env.MONGO_MIN_POOL_SIZE, 2),
-  },
+  bcryptRounds: num(process.env.BCRYPT_ROUNDS, 12),
 
   /**
    * Per-account lockout, the companion to the per-IP login limiter: the limiter
@@ -151,33 +127,6 @@ const env = {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
     from: process.env.MAIL_FROM || 'Premium Store <no-reply@premiumstore.com>',
-
-    /**
-     * One connection, held open and reused. Every message otherwise pays for a
-     * fresh TCP connect, a TLS handshake and an AUTH exchange before a byte of
-     * the mail moves — seconds of it on a throttled container, since the
-     * handshake is CPU work on the same core the request is waiting on.
-     */
-    pool: bool(process.env.SMTP_POOL, true),
-    maxConnections: num(process.env.SMTP_MAX_CONNECTIONS, 2),
-
-    /**
-     * Ceilings on each stage of a send. Without them a provider that accepts the
-     * connection and then stops talking holds the socket — and, where a request
-     * is waiting on the send, the request — until the client gives up.
-     */
-    connectionTimeoutMs: num(process.env.SMTP_CONNECTION_TIMEOUT_MS, 10000),
-    greetingTimeoutMs: num(process.env.SMTP_GREETING_TIMEOUT_MS, 10000),
-    socketTimeoutMs: num(process.env.SMTP_SOCKET_TIMEOUT_MS, 20000),
-
-    /**
-     * How long a request that triggered a mail will wait for it before answering
-     * anyway. The send is not cancelled — it carries on in the background and
-     * the message still arrives — this only decides when the *shopper* stops
-     * waiting. Well under the client's own 30s timeout, so a slow SMTP provider
-     * costs a few seconds rather than the whole request.
-     */
-    requestDeadlineMs: num(process.env.MAIL_REQUEST_DEADLINE_MS, 4000),
   },
 
   commerce: {

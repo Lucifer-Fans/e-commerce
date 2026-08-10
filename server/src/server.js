@@ -24,13 +24,7 @@ function startSessionSweeper() {
       .then((count) => count && logger.info(`Expired ${count} inactive session(s)`))
       .catch((err) => logger.warn(`Session sweep failed: ${err.message}`));
 
-  /**
-   * The first sweep waits a minute rather than running at boot. It enforces a
-   * policy measured in days, so nothing about it is urgent — and a collection
-   * scan competing with the first requests after a cold start is the one moment
-   * its cost is actually felt.
-   */
-  setTimeout(run, 60 * 1000).unref();
+  run();
   // Hourly is far finer than the multi-day policy it enforces, and `unref` keeps the
   // timer from holding the process open during shutdown.
   sessionSweeper = setInterval(run, 60 * 60 * 1000).unref();
@@ -42,26 +36,6 @@ async function start() {
 
   // Socket.IO needs the raw HTTP server, so express no longer creates it itself.
   server = http.createServer(app);
-
-  /**
-   * Connection reuse, across a proxy that outlives ours.
-   *
-   * Node closes an idle keep-alive connection after 5s. Render's load balancer
-   * holds its side open longer than that, so it will happily send a request down
-   * a socket we have just decided to close — which surfaces to the browser as a
-   * 502 or a hung request rather than as anything in the logs. Keeping ours open
-   * the longer of the two settles it, and every reused connection is a TCP and
-   * TLS handshake this instance does not have to spend a core it barely has on.
-   *
-   * `headersTimeout` must stay above `keepAliveTimeout`, or the header clock can
-   * expire on a connection that was legitimately idle between requests.
-   */
-  server.keepAliveTimeout = 120000;
-  server.headersTimeout = 125000;
-  // Requests are answered or abandoned long before this; it exists so a stalled
-  // client cannot pin a connection, and a slow upload is not counted against it.
-  server.requestTimeout = 60000;
-
   realtime.init(server);
   startSessionSweeper();
 
