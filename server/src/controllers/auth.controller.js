@@ -67,7 +67,10 @@ async function startSession(req, res, user, { signInMethod = 'password' } = {}) 
  * caller decides what that means, since a dev box with no SMTP wants the code
  * back on the response while production wants an error.
  *
- * @returns {Promise<{code: string, sent: boolean}>}
+ * `sent` is three-way — see mailService.within. Only an outright `false` means
+ * no code is coming; `null` is a send still in flight, which needs no telling.
+ *
+ * @returns {Promise<{code: string, sent: boolean|null}>}
  */
 async function issueEmailOtp(user, { resend = false } = {}) {
   const code = user.createEmailOtp({ resend });
@@ -75,14 +78,24 @@ async function issueEmailOtp(user, { resend = false } = {}) {
   // the whole thing (and its validators) along for a field the user never touched.
   await User.updateOne({ _id: user._id }, { $set: { otp: user.otp } });
 
-  const sent = await mailService
-    .sendEmailVerificationEmail({
-      to: user.email,
-      name: user.name,
-      code,
-      minutes: env.otp.expiryMinutes,
-    })
-    .catch(() => false);
+  /**
+   * The shopper is held only until the deadline, not until the provider is done.
+   * Registration used to wait out the whole SMTP exchange — a connect, a TLS
+   * handshake, an AUTH round trip and a few hundred KB of inline artwork, none
+   * of it quick on a throttled container — with the form spinning throughout. It
+   * is `sent === false` past the deadline, which reads as "not confirmed" rather
+   * than "failed": the send goes on in the background and the mail still lands.
+   */
+  const sent = await mailService.within(
+    mailService
+      .sendEmailVerificationEmail({
+        to: user.email,
+        name: user.name,
+        code,
+        minutes: env.otp.expiryMinutes,
+      })
+      .catch(() => false)
+  );
 
   return { code, sent };
 }
@@ -94,8 +107,11 @@ const otpPayload = (user, { code, sent }) => ({
   expiresInMinutes: env.otp.expiryMinutes,
   resendAvailableInSeconds: env.otp.resendCooldownSeconds,
   // Dev convenience, exactly as forgot-password surfaces its link: without SMTP
-  // wired up there is otherwise no way to get past this screen locally.
-  ...(!sent && !env.isProd ? { devOtp: code } : {}),
+  // wired up there is otherwise no way to get past this screen locally. A send
+  // that merely has not finished yet (`null`) counts as unconfirmed here — the
+  // code is as useful to a local developer waiting on a slow relay as to one
+  // with no relay at all, and production never reaches this branch either way.
+  ...(sent !== true && !env.isProd ? { devOtp: code } : {}),
 });
 
 /**
@@ -168,7 +184,9 @@ exports.register = asyncHandler(async (req, res) => {
   // In production a code that never left the building leaves the shopper staring
   // at a screen asking for something they will never receive; say so instead. The
   // account stays pending, so trying again picks up exactly where this left off.
-  if (!issued.sent && env.isProd) {
+  // Strictly `false` — a send still in flight is not a failure, and refusing the
+  // registration over one would throw away an account whose code is about to land.
+  if (issued.sent === false && env.isProd) {
     throw ApiError.serviceUnavailable(
       'We could not send your verification code right now. Please try again in a few minutes.'
     );
@@ -281,7 +299,7 @@ exports.resendEmailOtp = asyncHandler(async (req, res) => {
 
   const issued = await issueEmailOtp(user, { resend: true });
 
-  if (!issued.sent && env.isProd) {
+  if (issued.sent === false && env.isProd) {
     throw ApiError.serviceUnavailable(
       'We could not send your verification code right now. Please try again in a few minutes.'
     );
@@ -569,13 +587,14 @@ exports.forgotPassword = asyncHandler(async (req, res) => {
   await user.save({ validateBeforeSave: false });
 
   const resetUrl = `${env.corsOrigins[0] || 'http://localhost:5173'}/reset-password/${rawToken}`;
-  const sent = await mailService.sendPasswordResetEmail({
-    to: user.email,
-    name: user.name,
-    resetUrl,
-  });
+  // Answered on the same deadline as the verification code, and for the same
+  // reason: the reply is a fixed generic line either way, so there is nothing
+  // here worth making someone wait out an SMTP handshake for.
+  const sent = await mailService.within(
+    mailService.sendPasswordResetEmail({ to: user.email, name: user.name, resetUrl })
+  );
 
-  if (!sent && !env.isProd) {
+  if (sent !== true && !env.isProd) {
     // Dev convenience: surface the link when SMTP isn't wired up yet.
     return sendSuccess(res, { message: genericMessage, data: { devResetUrl: resetUrl } });
   }

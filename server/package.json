@@ -5,8 +5,9 @@
   "main": "src/server.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node --max-old-space-size=384 src/server.js",
     "dev": "nodemon src/server.js",
+    "db:indexes": "node scripts/sync-indexes.js",
     "seed": "node src/seed/seed.js",
     "seed:destroy": "node src/seed/seed.js --destroy",
     "email:preview": "node scripts/email-preview.js --open",
