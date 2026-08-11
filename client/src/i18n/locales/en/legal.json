@@ -1,0 +1,1890 @@
+{
+  "ui": {
+    "onThisPage": "On this page",
+    "lastUpdated": "Last updated {{date}}",
+    "readingNote": "Please read this page together with our other store policies.",
+    "backToTop": "Back to top",
+    "helpTitle": "Still have a question?",
+    "helpText": "Our support team answers order, delivery and refund questions every working day. Send us the details and we will get back to you.",
+    "contactSupport": "Contact support",
+    "trackOrder": "Track my order",
+    "callUs": "Call us",
+    "emailUs": "Email us",
+    "relatedTitle": "Related pages",
+    "related": {
+      "about": "About Us",
+      "shipping": "Shipping Policy",
+      "returns": "Returns & Refunds",
+      "faq": "FAQs",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy",
+      "refund": "Refund Policy",
+      "contact": "Contact Us"
+    }
+  },
+
+  "about": {
+    "seoTitle": "About Us",
+    "seoDescription": "{{app}} is an Indian online store for building materials, hardware and tools — genuine brands, transparent pricing, secure payments and delivery across India.",
+    "breadcrumb": "About Us",
+    "heading": "Building supplies, bought the easy way",
+    "intro": "{{app}} is an online store for building materials, hardware and tools. We put the counter, the catalogue and the delivery van in one place, so a contractor on site, a shop owner restocking, or a homeowner finishing one room can order what they need without spending the day travelling between suppliers.",
+    "heroPoints": [
+      "Genuine, brand-sourced products",
+      "Clear pricing with no surprises at checkout",
+      "Delivered across India"
+    ],
+
+    "storyTitle": "Who we are",
+    "story": [
+      "Buying hardware has always meant knowing a person: which shop stocks the right grade, who quotes honestly, who will answer the phone when a delivery is late. That works — until you need forty items from six suppliers before Friday.",
+      "{{app}} was built to keep the parts of that which are worth keeping and drop the parts that are not. Every product on the site carries the same information you would ask for across a counter — brand, specification, size, weight, what is actually in stock — and the price you see on the product page is the price the order is billed at. Nothing is added on the last screen.",
+      "We are a small team of buyers, warehouse staff and support people. The catalogue is curated rather than endless: we would rather list one grade of a fastener we can vouch for and keep it in stock than list nine we cannot."
+    ],
+
+    "missionTitle": "What we are trying to do",
+    "mission": "Make professional-grade building materials, hardware and tools available to every buyer in India at a fair, visible price — with the ordering, tracking and after-sales support that large buyers have always had and small ones rarely do.",
+
+    "pillarsTitle": "How we work",
+    "pillars": [
+      {
+        "icon": "users",
+        "title": "Customer first",
+        "text": "You can reach a person. Contact us with an order number and you get a real answer about that order — not a script. Cancellations, returns and refunds are handled by the same team, so nobody is passed around."
+      },
+      {
+        "icon": "package",
+        "title": "Genuine products",
+        "text": "We buy from brands and authorised distributors. Specifications, grades and pack sizes on a product page come from the manufacturer's own data, and every listing shows the brand it belongs to."
+      },
+      {
+        "icon": "shield",
+        "title": "Secure shopping",
+        "text": "Card, UPI and net banking payments run through Razorpay. Your card details go to the gateway, never to our servers. Accounts are protected by email verification, and you can see and sign out every device on your account."
+      },
+      {
+        "icon": "tag",
+        "title": "Honest pricing",
+        "text": "The discounted price on the product page is the price your order is billed at. Coupons and delivery charges are shown as separate lines before you pay, and the same figures are printed on your invoice."
+      },
+      {
+        "icon": "truck",
+        "title": "Delivery you can follow",
+        "text": "Once an order is dispatched, the courier name, tracking number and expected delivery date appear on the order itself. Every status change is emailed to you and updates live on the site."
+      },
+      {
+        "icon": "refresh",
+        "title": "Support after the sale",
+        "text": "Damaged, wrong or defective items are our problem, not yours. Tell us within the return window and we arrange the pickup, the replacement or the refund."
+      }
+    ],
+
+    "qualityTitle": "Product quality",
+    "quality": [
+      "Every product is listed with the brand, category, specification table and — where the product comes in more than one option — the exact variant you are buying, down to its own SKU, price and stock count. What you add to the cart is the unit that leaves our warehouse.",
+      "Stock counts on the site are live. If a variant runs out while you are checking out, the order is stopped rather than accepted and quietly short-shipped.",
+      "Ratings and written reviews come from buyers, and reviews left by a verified purchase are marked as such, so you can weigh them accordingly."
+    ],
+
+    "serviceTitle": "Our service commitment",
+    "service": [
+      "Orders placed on a working day are picked and packed the same or the next working day.",
+      "You can cancel an order yourself, from your account, at any point before it is handed to the courier.",
+      "Damaged, wrong or defective deliveries are reported within 7 days of delivery and resolved by replacement or refund.",
+      "Approved refunds are raised through the original payment method, with a reference you can quote to your bank.",
+      "Every order carries a downloadable GST invoice."
+    ],
+
+    "languagesTitle": "Shop in your language",
+    "languagesText": "The whole storefront — product pages, checkout, your orders and these policies — is available in 13 Indian languages. Pick yours from the header, and the choice is saved to your account and follows you to every device.",
+
+    "ctaTitle": "Ready to order?",
+    "ctaText": "Browse the catalogue, or talk to us first if you are not sure which grade or size you need.",
+    "ctaBrowse": "Browse products",
+    "ctaContact": "Talk to us"
+  },
+
+  "shipping": {
+    "seoTitle": "Shipping Policy",
+    "seoDescription": "How {{app}} processes, charges for, ships and tracks your order — delivery timelines, delivery areas across India, delays, address problems, failed deliveries and damaged parcels.",
+    "breadcrumb": "Shipping Policy",
+    "heading": "Shipping Policy",
+    "intro": "This policy explains what happens to your order between the moment you place it and the moment it reaches your door — what we charge, how long it takes, and what to do when something goes wrong on the way.",
+    "sections": [
+      {
+        "id": "processing",
+        "title": "Order processing",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "An order moves through a fixed set of stages, and you can see the current one on the order page in your account at any time."
+          },
+          {
+            "type": "ol",
+            "items": [
+              "Pending — the order exists but payment has not been confirmed yet. Prepaid orders sit here for the few seconds it takes the gateway to verify the payment.",
+              "Confirmed — payment is verified, or the order was placed as cash on delivery. Cash-on-delivery orders are confirmed the moment they are placed.",
+              "Packed — the items have been picked from the warehouse and packed.",
+              "Shipped — the parcel has been handed to our courier partner and a tracking number is on your order.",
+              "Out for delivery — the parcel is with the delivery agent for your area.",
+              "Delivered — the parcel has been handed over."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Orders are picked and packed on working days (Monday to Saturday, excluding public holidays). An order confirmed before 2:00 PM on a working day is normally packed the same day; anything later moves to the next working day."
+          },
+          {
+            "type": "note",
+            "text": "Stock is reserved for your order the moment it is placed, so the items cannot be sold to someone else while your payment is being confirmed."
+          }
+        ]
+      },
+      {
+        "id": "charges",
+        "title": "Shipping charges",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Delivery is charged as a single flat rate per order, regardless of how many items are in it, and it is free above a threshold."
+          },
+          {
+            "type": "table",
+            "head": ["Order value (after discounts and coupon)", "Delivery charge"],
+            "rows": [
+              ["{{freeShipping}} and above", "Free"],
+              ["Below {{freeShipping}}", "{{shippingFee}}"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "The threshold is measured against what you actually pay for the goods — that is, the discounted item total after any coupon has been applied. Your cart shows how much more you need to add to qualify for free delivery, and the delivery charge appears as its own line in the price summary before you pay."
+          },
+          {
+            "type": "p",
+            "text": "There are no separate handling, packaging or fuel charges, and no charge is added after checkout. The total shown on the payment screen is the total you are billed."
+          }
+        ]
+      },
+      {
+        "id": "delivery-time",
+        "title": "Estimated delivery time",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Delivery time is counted in working days from the day the order is confirmed, and depends on where it is going."
+          },
+          {
+            "type": "table",
+            "head": ["Destination", "Typical delivery time"],
+            "rows": [
+              ["Metro cities", "2–4 working days"],
+              ["Other cities and large towns", "3–6 working days"],
+              ["Smaller towns and rural pincodes", "5–8 working days"],
+              ["Remote, hill and island pincodes", "7–12 working days"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "These are estimates based on how our courier partners normally perform on those routes — they are not a guaranteed date. Heavy or oversized items, which are common in building materials, may take longer because they travel by surface freight rather than by air."
+          },
+          {
+            "type": "p",
+            "text": "Once your parcel is dispatched, the expected delivery date for that specific order is shown on the order page. That date is the one to go by; it is set from the courier's own commitment for your route."
+          }
+        ]
+      },
+      {
+        "id": "locations",
+        "title": "Where we deliver",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We deliver across India. Delivery addresses must be within India and must carry a valid 6-digit pincode; the address form will not accept anything else. We do not ship internationally at present."
+          },
+          {
+            "type": "p",
+            "text": "A small number of pincodes are not served by our courier partners at all, or are not served for heavy freight. If your address turns out to be one of them after you have ordered, we will contact you — you can give us an alternative address, or we will cancel the order and refund it in full."
+          },
+          {
+            "type": "p",
+            "text": "We deliver to residential addresses, business addresses and construction sites. For a site delivery, please add a landmark and a phone number that will be answered, because sites are frequently unmarked."
+          },
+          {
+            "type": "note",
+            "text": "Delivery is to the entrance of the address. Our courier partners do not carry material up stairs, into a building, or to a floor above the ground floor."
+          }
+        ]
+      },
+      {
+        "id": "tracking",
+        "title": "Tracking your order",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Every order can be followed from Account → My Orders. Open an order and you will see:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "the full status timeline, with the date and time of each stage;",
+              "the courier partner's name and the tracking number, once the parcel has been handed over;",
+              "the expected delivery date for that order;",
+              "the delivery address the parcel is going to, and the items in it."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "The order page updates on its own as the status changes — you do not need to refresh it. We also email you at each stage, at the address on your account, so the record is in your inbox as well."
+          },
+          {
+            "type": "p",
+            "text": "The tracking number can be used on the courier partner's own website for the parcel's location between our warehouse and your address."
+          }
+        ]
+      },
+      {
+        "id": "delays",
+        "title": "Delays",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Most delays come from something outside the warehouse. The common causes are:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "weather, floods or road closures on the route;",
+              "regional strikes, bandhs, curfews or law-and-order restrictions;",
+              "public holidays and festival-season courier backlogs;",
+              "courier network congestion at a transit hub;",
+              "an address the delivery agent could not find, or a phone that went unanswered."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "If your order passes its expected delivery date, contact us with the order number. We will chase it with the courier and come back to you. If the parcel cannot be located, we treat it as lost in transit and give you the choice between a replacement and a full refund, including the delivery charge."
+          },
+          {
+            "type": "p",
+            "text": "We do our best to keep to the estimates above, but we cannot accept liability for a delay caused by an event outside our reasonable control."
+          }
+        ]
+      },
+      {
+        "id": "address",
+        "title": "Incorrect or incomplete addresses",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The parcel goes to the address saved on the order. Please check it — particularly the pincode, the flat or house number, the landmark and the phone number — before you place the order."
+          },
+          {
+            "type": "p",
+            "text": "The delivery address on an order cannot be edited after the order is placed, because the order carries a snapshot of the address as it was at the time. If you notice a mistake:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Before the order ships — cancel it yourself from My Orders, correct the address in Account → Addresses, and place the order again.",
+              "After the order has shipped — contact us immediately. We will ask the courier to redirect it, but a redirection is at the courier's discretion and cannot be guaranteed."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "If a parcel is returned to us because the address was wrong or incomplete, we refund the order minus the delivery charge actually incurred. If you would rather have it sent again to a corrected address, the delivery charge for the second attempt applies."
+          }
+        ]
+      },
+      {
+        "id": "failed-delivery",
+        "title": "Failed delivery attempts",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Our courier partners make up to three delivery attempts, normally on consecutive working days. The delivery agent will call the phone number on the order before each attempt."
+          },
+          {
+            "type": "p",
+            "text": "Please make sure someone can receive the parcel at that address. For heavy or bulky building material, please also make sure there is somewhere to put it down — an agent cannot wait while space is cleared."
+          },
+          {
+            "type": "p",
+            "text": "After three failed attempts the parcel is returned to our warehouse. What happens next depends on how the order was paid:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Prepaid orders — cancelled and refunded, less the delivery charge incurred on the failed attempts.",
+              "Cash-on-delivery orders — cancelled. Nothing was collected, so there is nothing to refund."
+            ]
+          },
+          {
+            "type": "note",
+            "text": "Repeatedly refusing cash-on-delivery parcels may lead to cash on delivery being disabled for your account. Online payment stays available."
+          }
+        ]
+      },
+      {
+        "id": "damaged",
+        "title": "Damaged or tampered packages",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Please look at the outer packaging before you accept the parcel."
+          },
+          {
+            "type": "ul",
+            "items": [
+              "If the box is crushed, wet, open or the tape has been cut and resealed, refuse the delivery. Tell the agent it is being refused as damaged, and contact us the same day.",
+              "If the damage only becomes visible after you open the parcel, keep the packaging, the packing material and the item exactly as they are, and report it within 48 hours of delivery."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "In both cases, send us photographs of the outer packaging, the shipping label and the damaged item. That is what lets us file the claim with the courier without asking you to prove anything further."
+          },
+          {
+            "type": "p",
+            "text": "A damaged delivery is resolved at no cost to you — a replacement, or a full refund including the delivery charge, whichever you prefer. See our Returns & Refunds policy for how the pickup and inspection work."
+          },
+          {
+            "type": "note",
+            "text": "Reporting damage after 48 hours makes a courier claim very difficult, because the courier's own window will have closed. Please tell us as soon as you see it."
+          }
+        ]
+      }
+    ]
+  },
+
+  "returns": {
+    "seoTitle": "Returns & Refunds",
+    "seoDescription": "Return eligibility, the 7-day return window, product condition, non-returnable items, damaged or wrong deliveries, pickup, inspection, replacement and refund approval at {{app}}.",
+    "breadcrumb": "Returns & Refunds",
+    "heading": "Returns & Refunds",
+    "intro": "If something arrives damaged, wrong or defective, we will put it right. This page explains exactly what can be returned, how long you have, and what happens between your request and your money.",
+    "highlights": [
+      { "icon": "clock", "title": "7-day window", "text": "Report an issue within 7 days of delivery." },
+      { "icon": "truck", "title": "Free pickup", "text": "We arrange the courier — no charge for a valid return." },
+      { "icon": "refresh", "title": "Replace or refund", "text": "Your choice, once the return passes inspection." }
+    ],
+    "sections": [
+      {
+        "id": "eligibility",
+        "title": "What can be returned",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "A return can be raised on a delivered order for any of these reasons:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "the item arrived damaged or broken;",
+              "the wrong item, wrong variant, wrong size or wrong quantity was delivered;",
+              "the item is defective or does not work as it is supposed to;",
+              "the item is materially different from its description or specification on the product page;",
+              "part of the order is missing from the parcel."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Because we sell building materials, hardware and tools, we do not offer change-of-mind returns. Cut, mixed, measured and site-consumable goods cannot be resold once they have left the warehouse, and pricing them for free returns would mean pricing them higher for everyone. If you are unsure which grade, size or finish you need, contact us before you order — we will help you choose."
+          },
+          {
+            "type": "note",
+            "text": "If you have simply changed your mind, cancel the order before it ships. You can do that yourself, free, from My Orders — see our Refund Policy for how the money comes back."
+          }
+        ]
+      },
+      {
+        "id": "window",
+        "title": "Return window",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You have 7 days from the date of delivery to raise a return. The delivery date is the one recorded on your order."
+          },
+          {
+            "type": "table",
+            "head": ["Issue", "Report within"],
+            "rows": [
+              ["Parcel damaged in transit", "48 hours of delivery"],
+              ["Wrong, missing or short-delivered item", "48 hours of delivery"],
+              ["Damaged or broken item inside the parcel", "48 hours of delivery"],
+              ["Defective item, or not as described", "7 days of delivery"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "The shorter window for transit damage exists because our claim against the courier has to be filed quickly. The longer window covers faults that only show up when the item is actually used."
+          },
+          {
+            "type": "p",
+            "text": "A request made after these windows cannot normally be accepted. Where the product carries a manufacturer's warranty, we will still help you raise a claim with the brand — send us the order number and we will point you to the right service channel."
+          }
+        ]
+      },
+      {
+        "id": "condition",
+        "title": "Condition of the returned product",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "For a return to be accepted, the item must come back:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "unused and uninstalled, except to the extent needed to discover the fault;",
+              "in its original packaging, with the brand box, seals, labels and barcodes intact;",
+              "with everything that came with it — manuals, warranty cards, accessories, fittings, free items and any promotional add-ons;",
+              "with the invoice or the order number quoted."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Please keep the outer shipping carton until the return is finished. It is what the courier collects the item in, and it is part of the evidence for a transit-damage claim."
+          },
+          {
+            "type": "note",
+            "text": "An item that has been installed, cut, drilled, mixed, painted, used on site or altered in any way cannot be returned — with the single exception of a genuine manufacturing defect that could not have been seen before use."
+          }
+        ]
+      },
+      {
+        "id": "non-returnable",
+        "title": "Non-returnable items",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The following cannot be returned unless they arrive damaged, wrong or defective:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Cement, adhesives, sealants, paints, primers, chemicals and any other product with a shelf life or a mixed state.",
+              "Products cut, mixed, blended or made to your measurement or specification.",
+              "Products sold by length, weight or volume where the quantity has been cut or decanted for your order.",
+              "Consumables that have been opened or partly used — blades, abrasives, fasteners, tapes, filters, cartridges.",
+              "Items marked \"non-returnable\" or \"final sale\" on the product page.",
+              "Items returned without their original packaging, seals, labels or accessories.",
+              "Items damaged by misuse, incorrect installation, unsuitable storage, overloading or normal wear.",
+              "Free gifts and promotional items, which must be returned along with the product they came with."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Where a product page marks an item as non-returnable, that marking is part of the product's terms and takes precedence over the general rule on this page."
+          }
+        ]
+      },
+      {
+        "id": "damaged-wrong",
+        "title": "Damaged, wrong or defective products",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "These are handled as a priority and cost you nothing. Please send us, within the window above:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "your order number;",
+              "photographs of the outer packaging and the shipping label;",
+              "photographs or a short video of the item showing the damage, the defect or the wrong product;",
+              "for a short delivery, a photograph of everything that was inside the parcel."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "The photographs matter: they are what let us approve the return and file the courier or brand claim ourselves, instead of asking you to wait while responsibility is decided."
+          },
+          {
+            "type": "p",
+            "text": "Once approved, you choose a replacement or a refund. Either way there is no pickup charge, and the original delivery charge is refunded too — you should not be out of pocket for our mistake or the courier's."
+          }
+        ]
+      },
+      {
+        "id": "how-to-request",
+        "title": "How to raise a return request",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Returns are handled by our support team, so that a person looks at the photographs and the order before anything is collected. There is no self-service return button."
+          },
+          {
+            "type": "ol",
+            "items": [
+              "Open Account → My Orders and note the order number of the delivered order.",
+              "Go to Contact Us — or reply to the delivery confirmation email — and tell us the order number, which item is affected, and what is wrong with it.",
+              "Attach the photographs described above.",
+              "We reply with a decision. If the return is approved, we tell you the pickup arrangement in the same reply."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "We aim to respond to every return request within 1 working day, and always within 2."
+          },
+          {
+            "type": "note",
+            "text": "Please do not send anything back on your own. A parcel returned without an approved request cannot be traced to your order, and we cannot refund it."
+          }
+        ]
+      },
+      {
+        "id": "pickup",
+        "title": "Pickup",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Once a return is approved we arrange a reverse pickup from the delivery address, normally within 2–4 working days. Our courier partner will call before arriving."
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Have the item packed in its original packaging, inside the outer shipping carton.",
+              "Include all accessories, manuals, warranty cards and free items.",
+              "Write the order number on the outside of the carton.",
+              "Keep a photograph of the packed parcel and the pickup receipt the agent gives you."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Where reverse pickup is not available at your pincode, or the item is too heavy for a reverse pickup, we will ask you to courier it to our warehouse instead and reimburse the actual courier charge against the receipt."
+          },
+          {
+            "type": "p",
+            "text": "Pickup is free for every approved return. You are never asked to pay a return shipping fee for a damaged, wrong or defective item."
+          }
+        ]
+      },
+      {
+        "id": "inspection",
+        "title": "Inspection",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "When the item reaches our warehouse it is checked against the return request — the right product, the stated fault, the condition and the completeness described above. Inspection normally takes 2–3 working days from the day it arrives."
+          },
+          {
+            "type": "p",
+            "text": "For a claimed manufacturing defect that is not visible on inspection, the item may be sent to the brand's service centre for a technical opinion. That can add 5–7 working days, and we will tell you if it happens rather than leaving you waiting."
+          },
+          {
+            "type": "p",
+            "text": "We email you the outcome as soon as it is decided, and the order's status is updated to Returned at the same time."
+          }
+        ]
+      },
+      {
+        "id": "replacement",
+        "title": "Replacement",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "If you asked for a replacement and the return passes inspection, we dispatch the same item — same variant, same specification — at no charge. Replacements ship within 2 working days of the inspection passing and are delivered on the normal timelines in our Shipping Policy."
+          },
+          {
+            "type": "p",
+            "text": "The replacement is sent as a fresh order, so it gets its own order number, its own tracking and its own status emails."
+          },
+          {
+            "type": "p",
+            "text": "If the item is out of stock, or the variant has been discontinued, we will tell you and offer you the choice of waiting for it, taking a different variant with the price difference settled either way, or a full refund."
+          }
+        ]
+      },
+      {
+        "id": "refund",
+        "title": "Refund after an approved return",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "If you asked for a refund, it is approved as soon as the return passes inspection. The order's payment then shows as Refund pending on your order page while our team raises the money, and as Refunded once it has actually left our account."
+          },
+          {
+            "type": "p",
+            "text": "Refunds go back to the method you paid with, and the delivery charge is included whenever the return was our fault or the courier's. Full timelines, methods and the cash-on-delivery case are set out in the Refund Policy."
+          },
+          {
+            "type": "p",
+            "text": "You are not asked to trust the status alone: we record a reference number against the refund, which you can quote to your bank if it has not appeared."
+          }
+        ]
+      },
+      {
+        "id": "rejected",
+        "title": "When a return is rejected",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "A return can be rejected if, on inspection:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "the item is not the one that was sold on that order;",
+              "the item has been used, installed, cut, mixed or altered, and the fault claimed is not a manufacturing defect;",
+              "the original packaging, seals, labels, accessories, manuals or free items are missing;",
+              "the damage is consistent with misuse, incorrect installation, unsuitable storage or normal wear rather than a fault;",
+              "the item falls under Non-returnable items above and arrived in good condition;",
+              "the request was raised after the applicable window."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "If a return is rejected we tell you why, with the inspection photographs, and send the item back to your delivery address at no charge. No refund is issued in that case."
+          },
+          {
+            "type": "p",
+            "text": "If you disagree with a rejection, reply to that email. A second person reviews it, and we will look at any further evidence you have."
+          }
+        ]
+      }
+    ]
+  },
+
+  "faq": {
+    "seoTitle": "FAQs",
+    "seoDescription": "Answers to common questions about ordering, payment, delivery, cancellation, returns, refunds and your account at {{app}}.",
+    "breadcrumb": "FAQs",
+    "heading": "Frequently asked questions",
+    "intro": "Search below, or pick a topic. If your question is not here, our support team will answer it.",
+    "searchPlaceholder": "Search questions — delivery, refund, COD…",
+    "searchLabel": "Search frequently asked questions",
+    "allTopics": "All topics",
+    "resultCount_one": "{{count}} question",
+    "resultCount_other": "{{count}} questions",
+    "noResultsTitle": "No question matches “{{query}}”",
+    "noResultsText": "Try a different word, or ask us directly — we answer every message.",
+    "clearSearch": "Clear search",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "categories": [
+      {
+        "id": "orders",
+        "title": "Orders",
+        "icon": "package",
+        "items": [
+          {
+            "q": "Do I need an account to place an order?",
+            "a": "Yes. You can browse the whole catalogue as a guest, but the cart, checkout and order history need an account. It takes a minute: register with your email, enter the 6-digit code we send you, and you are in. You can also sign in with Google."
+          },
+          {
+            "q": "How do I place an order?",
+            "a": "Add items to your cart, open the cart and apply a coupon if you have one, then go to checkout. Choose or add a delivery address, review the order summary, pick a payment method and confirm. You will see a confirmation screen with your order number and get an email straight after."
+          },
+          {
+            "q": "How do I know my order went through?",
+            "a": "Three ways: the confirmation screen shows your order number, a confirmation email arrives at the address on your account, and the order appears under Account → My Orders. If you do not see it in My Orders, the order was not placed and you have not been charged."
+          },
+          {
+            "q": "Can I change the items or the address after ordering?",
+            "a": "No. An order captures the items, prices and address as they were when it was placed, and none of them can be edited afterwards. If something is wrong, cancel the order from My Orders while it is still cancellable, and place it again."
+          },
+          {
+            "q": "Where do I find my invoice?",
+            "a": "Open the order under Account → My Orders and use Download invoice. It is available once payment is complete, and immediately for cash-on-delivery orders."
+          },
+          {
+            "q": "An item went out of stock while I was checking out. What happens?",
+            "a": "The order is stopped and you are told which item ran out, before any payment is taken. Nothing is ever short-shipped quietly. Update your cart and try again."
+          }
+        ]
+      },
+      {
+        "id": "payments",
+        "title": "Payments",
+        "icon": "creditCard",
+        "items": [
+          {
+            "q": "What payment methods can I use?",
+            "a": "Credit and debit cards, UPI and net banking, all through Razorpay — and cash on delivery. Card, UPI and net banking payments are handled entirely on the gateway's side."
+          },
+          {
+            "q": "Is it safe to pay on this site?",
+            "a": "Yes. Online payments run through Razorpay, a PCI-DSS compliant payment gateway. Your card number, CVV and UPI PIN are entered on the gateway, never on our servers, and we never see or store them. Every payment is verified with a cryptographic signature before an order is confirmed."
+          },
+          {
+            "q": "Money left my account but the order shows as pending. What now?",
+            "a": "That means the gateway took the payment but the confirmation did not reach us. Do not pay again. Failed or unverified payments are reversed automatically by the gateway, normally within 5–7 working days. Contact us with the order number and we will check it against the gateway's record."
+          },
+          {
+            "q": "My payment failed. Was I charged?",
+            "a": "No. A failed payment is recorded against the order and the order is left unpaid. If your bank shows a debit, it is a temporary hold that the bank releases on its own — usually within 5–7 working days."
+          },
+          {
+            "q": "How do I pay for an order whose payment failed?",
+            "a": "Place the order again from your cart, then cancel the unpaid one from My Orders so the stock goes back. There is no way to retry payment on an existing order."
+          },
+          {
+            "q": "Is cash on delivery available everywhere?",
+            "a": "Cash on delivery is offered on most orders and pincodes. If it is unavailable for your order, the option is not shown at checkout."
+          },
+          {
+            "q": "When is a cash-on-delivery order treated as paid?",
+            "a": "At handover. Cash is collected by the delivery agent, so the order becomes Paid the moment it is marked Delivered. Until then it shows as Payment pending, which is normal and is not a problem with your order."
+          },
+          {
+            "q": "Can I use more than one coupon on an order?",
+            "a": "No — one coupon per order. The discount is applied to the item total and shown as its own line before you pay."
+          }
+        ]
+      },
+      {
+        "id": "shipping",
+        "title": "Shipping & delivery",
+        "icon": "truck",
+        "items": [
+          {
+            "q": "What does delivery cost?",
+            "a": "Delivery is free on orders of {{freeShipping}} and above, after discounts and any coupon. Below that it is a flat {{shippingFee}} per order, however many items it contains. Your cart tells you how much more you need for free delivery."
+          },
+          {
+            "q": "How long will my order take?",
+            "a": "Typically 2–4 working days to metro cities, 3–6 to other cities, 5–8 to smaller towns and 7–12 to remote pincodes. Heavy or oversized items travel by surface freight and take longer. Once dispatched, your order shows the expected delivery date for that specific parcel."
+          },
+          {
+            "q": "Where do you deliver?",
+            "a": "Anywhere in India with a valid 6-digit pincode. We do not ship internationally. A few pincodes are not served by our courier partners for heavy freight — if yours is one, we contact you and either use an alternative address or refund the order in full."
+          },
+          {
+            "q": "How do I track my order?",
+            "a": "Open the order under Account → My Orders. It shows the live status timeline, and — once the parcel is with the courier — the courier's name, the tracking number and the expected delivery date. The page updates itself, and we email you at every stage."
+          },
+          {
+            "q": "My order is past its expected delivery date.",
+            "a": "Contact us with the order number. We chase it with the courier and come back to you. If the parcel cannot be traced, you choose between a replacement and a full refund including the delivery charge."
+          },
+          {
+            "q": "What if nobody is at home when the courier arrives?",
+            "a": "The courier makes up to three attempts on consecutive working days and calls the number on the order first. After three failed attempts the parcel returns to us: a prepaid order is refunded less the delivery charge incurred, and a cash-on-delivery order is simply cancelled."
+          },
+          {
+            "q": "Will the delivery agent carry the material inside?",
+            "a": "No. Delivery is to the entrance of the address. Our courier partners do not carry material up stairs or into a building, so please arrange help for heavy items."
+          },
+          {
+            "q": "The box looks damaged. Should I accept it?",
+            "a": "If the outer packaging is crushed, wet, open or resealed, refuse the delivery and contact us the same day. If you only see the damage after opening, keep everything as it is, photograph it and tell us within 48 hours."
+          }
+        ]
+      },
+      {
+        "id": "cancellations",
+        "title": "Cancellations",
+        "icon": "close",
+        "items": [
+          {
+            "q": "Can I cancel my order?",
+            "a": "Yes, yourself, at any time before the parcel is handed to the courier — that is, while the order is Pending, Confirmed or Packed. Open it under Account → My Orders and use Cancel order. Cancellation is free."
+          },
+          {
+            "q": "Why has the cancel button stopped working?",
+            "a": "Because the order has already shipped. Once the parcel is with a courier, both the goods and the money are in motion and stopping that is a support decision. Contact us — we can sometimes recall a parcel that has just left."
+          },
+          {
+            "q": "Why do you ask for a cancellation reason?",
+            "a": "It is recorded on the order and quoted back in your cancellation email, so there is a clear record of what happened. It also tells us what to fix. You can pick from the list or type your own."
+          },
+          {
+            "q": "Can I cancel just one item from an order?",
+            "a": "Not from the site — cancelling applies to the whole order. If you only want to drop one item, cancel the order and place it again without that item, or contact us before it ships and we will do it for you."
+          },
+          {
+            "q": "What happens to my money when I cancel?",
+            "a": "A prepaid order moves to Refund pending immediately and is refunded to the original payment method. A cash-on-delivery order collected nothing, so there is nothing to refund and the order simply closes."
+          },
+          {
+            "q": "Can you cancel my order?",
+            "a": "Occasionally we have to — a stock or quality problem found during packing, an address our couriers cannot serve, or a pricing error. We always tell you why, and a prepaid order is refunded in full including the delivery charge."
+          }
+        ]
+      },
+      {
+        "id": "returns",
+        "title": "Returns",
+        "icon": "refresh",
+        "items": [
+          {
+            "q": "What can I return?",
+            "a": "Anything that arrives damaged, wrong, defective, short-delivered or materially different from its description. We do not accept change-of-mind returns on building materials, hardware and tools — cancel before dispatch instead."
+          },
+          {
+            "q": "How long do I have?",
+            "a": "7 days from delivery for a defect or an item not as described; 48 hours for transit damage, a wrong item or a short delivery, because the courier claim has to be filed quickly."
+          },
+          {
+            "q": "How do I raise a return?",
+            "a": "Contact us with the order number, which item is affected, what is wrong, and photographs of the packaging, the label and the item. A person reviews it and replies — normally within one working day — with the decision and the pickup arrangement. There is no self-service return button, by design."
+          },
+          {
+            "q": "Do I pay for the return pickup?",
+            "a": "No. Pickup is free on every approved return. Where reverse pickup is not available at your pincode, we ask you to courier it and reimburse the actual charge against the receipt."
+          },
+          {
+            "q": "What cannot be returned?",
+            "a": "Cement, adhesives, sealants, paints and chemicals; anything cut, mixed or made to your measurement; opened consumables; items missing their original packaging or accessories; items damaged by misuse or incorrect installation; and anything marked non-returnable on its product page — unless it arrived damaged, wrong or defective."
+          },
+          {
+            "q": "Replacement or refund — can I choose?",
+            "a": "Yes, once the return passes inspection. A replacement ships within 2 working days as a new order with its own tracking. A refund goes back to your original payment method."
+          },
+          {
+            "q": "How long does inspection take?",
+            "a": "2–3 working days from when the item reaches our warehouse. If the item has to go to the brand's service centre for a technical opinion, it can take 5–7 working days longer, and we tell you rather than leaving you waiting."
+          },
+          {
+            "q": "What if my return is rejected?",
+            "a": "We tell you why, with the inspection photographs, and send the item back to you at no charge. If you disagree, reply to that email — a second person reviews it."
+          }
+        ]
+      },
+      {
+        "id": "refunds",
+        "title": "Refunds",
+        "icon": "tag",
+        "items": [
+          {
+            "q": "How long does a refund take?",
+            "a": "We raise it within 2 working days of approval. After that it is your bank's clock: 5–7 working days for cards and net banking, 1–3 for UPI, and 3–5 for a bank transfer on a cash-on-delivery refund."
+          },
+          {
+            "q": "Where does the refund go?",
+            "a": "Back to the method you paid with — the same card, UPI ID or bank account. We cannot send it somewhere else. For a cash-on-delivery order we ask you for bank details, because there is no online payment to reverse."
+          },
+          {
+            "q": "What do “Refund pending” and “Refunded” mean on my order?",
+            "a": "Refund pending means the refund is approved and queued. Refunded means the money has actually left our account and is with your bank. We record a reference number you can quote to your bank."
+          },
+          {
+            "q": "Is my delivery charge refunded?",
+            "a": "Yes when the fault is ours or the courier's — a cancelled order, a damaged, wrong or defective item. It is not refunded when a parcel comes back because the address was wrong or nobody accepted it."
+          },
+          {
+            "q": "I cancelled a cash-on-delivery order. Where is my refund?",
+            "a": "There isn't one, because nothing was collected. Cash on delivery is paid at handover, so an order cancelled before delivery owes nothing in either direction."
+          },
+          {
+            "q": "My refund is marked Refunded but has not reached me.",
+            "a": "Ask your bank, quoting the reference number on the order — banks occasionally hold a credit for a couple of days after the gateway has released it. If it is still missing after 7 working days, contact us and we will chase the gateway."
+          },
+          {
+            "q": "Is my coupon returned when an order is refunded?",
+            "a": "A refunded order refunds what you actually paid, which is the amount after the coupon. Single-use coupons are consumed by the order and are not reissued automatically — contact us and we will look at it case by case."
+          }
+        ]
+      },
+      {
+        "id": "account",
+        "title": "Account & privacy",
+        "icon": "user",
+        "items": [
+          {
+            "q": "I did not get my verification code.",
+            "a": "Check your spam folder first. The code is valid for 10 minutes; if it has expired, request a new one from the same screen — a new code cancels the old one. There is a short cooldown between requests."
+          },
+          {
+            "q": "I forgot my password.",
+            "a": "Use Forgot password on the login screen. We email you a reset link. If you created the account with Google, there is no password — just use Sign in with Google."
+          },
+          {
+            "q": "Why is my account locked?",
+            "a": "Too many failed password attempts in a row lock an account for 15 minutes to protect it. The lock lifts on its own; waiting it out works. Resetting your password also clears it."
+          },
+          {
+            "q": "Can I see where I am logged in?",
+            "a": "Yes. Account → Devices lists every signed-in device with its browser, operating system, approximate location and last activity, and lets you sign any of them out immediately."
+          },
+          {
+            "q": "How do I change the language?",
+            "a": "Use the language selector in the header. The whole storefront — products, checkout, your orders and these policies — is available in 13 Indian languages, and your choice is saved to your account so it follows you across devices."
+          },
+          {
+            "q": "What data do you keep about me?",
+            "a": "Your name, email, phone, saved addresses, order and payment history, reviews, wishlist and cart, and technical details of each signed-in session. We do not run advertising or tracking cookies. The Privacy Policy explains all of it, and what you can ask us to delete."
+          },
+          {
+            "q": "Can I delete my account?",
+            "a": "Yes — contact us and we will close it. Orders and invoices are kept for the period tax and accounting law requires, but your account is deactivated and your marketing preferences are cleared immediately."
+          }
+        ]
+      },
+      {
+        "id": "products",
+        "title": "Products & pricing",
+        "icon": "info",
+        "items": [
+          {
+            "q": "Are your products genuine?",
+            "a": "Yes. We buy from brands and authorised distributors, and every listing names its brand. Specifications and grades come from the manufacturer's own data."
+          },
+          {
+            "q": "The price changed since I added the item to my cart.",
+            "a": "Prices are live and can change. Your cart flags any item whose price has moved since you added it, and the price charged is always the one shown at checkout — never a higher one applied afterwards."
+          },
+          {
+            "q": "The product comes in several options. What am I actually buying?",
+            "a": "The exact option you select. Each variant has its own price, stock count and SKU, and that SKU is what is picked, packed and printed on your invoice."
+          },
+          {
+            "q": "Something is out of stock. Will it come back?",
+            "a": "Usually. Add it to your wishlist and check back, or contact us with the product name and we will tell you when it is expected."
+          },
+          {
+            "q": "Can I get a bulk or site quote?",
+            "a": "Yes. Contact us with the items, quantities and delivery pincode and we will come back with a quote."
+          },
+          {
+            "q": "Can I leave a review?",
+            "a": "Yes, one per product. Reviews written by someone who bought that product are marked as a verified purchase, so other buyers can weigh them accordingly."
+          },
+          {
+            "q": "Do your prices include GST?",
+            "a": "Yes. Displayed prices are inclusive of applicable taxes, and the tax breakdown is printed on the invoice you can download from your order."
+          }
+        ]
+      }
+    ]
+  },
+
+  "terms": {
+    "seoTitle": "Terms & Conditions",
+    "seoDescription": "The terms governing your use of {{app}} — accounts, orders, pricing, payments, cancellation, shipping, returns, refunds, coupons, intellectual property, prohibited conduct and liability.",
+    "breadcrumb": "Terms & Conditions",
+    "heading": "Terms & Conditions",
+    "intro": "These terms govern your use of this website and every order placed through it. By browsing the site, creating an account or placing an order, you accept them. Please read them together with our Privacy Policy, Shipping Policy, Returns & Refunds policy and Refund Policy, each of which forms part of these terms.",
+    "sections": [
+      {
+        "id": "acceptance",
+        "title": "1. Acceptance of these terms",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This website is operated by {{app}} (\"we\", \"us\", \"our\"). \"You\" means anyone who visits the site, registers an account or places an order."
+          },
+          {
+            "type": "p",
+            "text": "By using the site you confirm that you are at least 18 years old and legally able to enter into a contract, or that you are using it under the supervision of a parent or guardian who accepts these terms on your behalf. Orders may only be placed for delivery within India."
+          },
+          {
+            "type": "p",
+            "text": "If you do not accept these terms, please do not use the site."
+          }
+        ]
+      },
+      {
+        "id": "account",
+        "title": "2. Your account",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "An account is required to use the cart, checkout and order history. You may create one with an email address and password, or by signing in with Google."
+          },
+          {
+            "type": "ul",
+            "items": [
+              "A new email account must be verified with the one-time code we send before it can be used.",
+              "The information you give us — name, email, phone and delivery addresses — must be accurate and kept up to date.",
+              "You are responsible for keeping your password confidential and for everything done through your account.",
+              "Repeated failed sign-in attempts temporarily lock an account. This protects you, and the lock lifts on its own.",
+              "You can see every signed-in device under Account → Devices and sign any of them out. Please do so if you no longer recognise one.",
+              "One person may hold one account. Accounts may not be sold, shared or transferred."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "We may suspend or close an account that breaches these terms, that is used for fraudulent or abusive activity, or that repeatedly refuses cash-on-delivery orders. Where we do so, any pending order is cancelled and any money you have actually paid is refunded."
+          }
+        ]
+      },
+      {
+        "id": "responsibilities",
+        "title": "3. Your responsibilities",
+        "blocks": [
+          {
+            "type": "ul",
+            "items": [
+              "Use the site lawfully and only to browse and buy for genuine purposes.",
+              "Give a complete and correct delivery address, with a working phone number that will be answered.",
+              "Make sure the delivery address can receive the goods — heavy building material needs somewhere to be put down.",
+              "Check the parcel before accepting it, and report damage within the windows in our Returns & Refunds policy.",
+              "Keep the products, packaging and documentation intact while a return is being decided.",
+              "Do not use the site to place speculative, fraudulent or automated orders."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "products",
+        "title": "4. Products, descriptions and images",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We describe every product as accurately as we can, using the brand's own specifications. Product names, technical data, grades, dimensions and weights are reproduced from the manufacturer and may be updated by them without notice."
+          },
+          {
+            "type": "p",
+            "text": "Photographs are illustrative. Colour reproduction varies between screens, and building materials such as tiles, stone, timber and cement products vary naturally from batch to batch. A variation of that kind is not a defect."
+          },
+          {
+            "type": "p",
+            "text": "Where a product comes in several options, each option is a distinct item with its own price, stock and SKU, and it is that exact option we supply."
+          },
+          {
+            "type": "p",
+            "text": "Nothing on the site is professional advice. You are responsible for satisfying yourself that a product is suitable for your application, and for its correct installation and use."
+          }
+        ]
+      },
+      {
+        "id": "pricing",
+        "title": "5. Pricing",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "All prices are in Indian Rupees (₹) and include applicable taxes. Where a product shows a struck-through price, that is the maximum retail price and the price beside it is what you pay."
+          },
+          {
+            "type": "p",
+            "text": "Your order total is calculated as: the discounted price of each item, multiplied by its quantity, added together; less any coupon discount; plus the delivery charge. Nothing else is added, and no charge appears after the payment screen."
+          },
+          {
+            "type": "p",
+            "text": "Prices may change at any time. The price that applies to your order is the one shown at checkout when you place it; a later change does not affect an order already placed. Your cart tells you if an item's price has moved since you added it."
+          },
+          {
+            "type": "p",
+            "text": "If a product is listed at an obviously incorrect price because of a technical or human error, we may cancel the order rather than supply at that price. We will tell you and refund you in full, including the delivery charge."
+          }
+        ]
+      },
+      {
+        "id": "availability",
+        "title": "6. Availability",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Stock counts shown on the site are live and are reserved for your order the moment it is placed. If an item sells out while you are checking out, the order is refused and you are told which item ran out — before any payment is taken."
+          },
+          {
+            "type": "p",
+            "text": "Very occasionally a shortage is only found when an order is picked. In that case we contact you and offer a replacement variant, a partial supply, or cancellation with a full refund. We do not short-ship an order without telling you."
+          },
+          {
+            "type": "p",
+            "text": "Listing a product on the site is not a guarantee that it will remain available or continue to be sold."
+          }
+        ]
+      },
+      {
+        "id": "orders",
+        "title": "7. Orders and the contract",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Your order is an offer to buy. The contract is formed when we accept it — which is when the order reaches Confirmed status, that is, when your online payment is verified, or immediately for a cash-on-delivery order."
+          },
+          {
+            "type": "p",
+            "text": "Each order is given an order number and an invoice number, and records the items, prices, delivery address and payment method as they were at the time. That snapshot is fixed: items, quantities, address and payment method cannot be changed after the order is placed."
+          },
+          {
+            "type": "p",
+            "text": "We may decline or cancel an order — before or after confirmation — where there is a stock, pricing, quality, address serviceability or suspected-fraud problem. If we do, we tell you why and refund anything you have paid in full."
+          }
+        ]
+      },
+      {
+        "id": "payments",
+        "title": "8. Payments",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We accept credit and debit cards, UPI and net banking through Razorpay, our payment gateway, and cash on delivery."
+          },
+          {
+            "type": "ul",
+            "items": [
+              "Card, UPI and net banking details are entered on the gateway. We do not see, receive or store them at any point.",
+              "Every online payment is verified against the gateway's cryptographic signature and against the amount of the order before the order is confirmed.",
+              "Cash-on-delivery orders are paid in cash to the delivery agent at handover, and are treated as paid at that moment.",
+              "You must pay the exact order total on a cash-on-delivery order. Agents may not be able to give change for large notes."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Razorpay's own terms apply to the payment itself, in addition to these terms."
+          }
+        ]
+      },
+      {
+        "id": "failed-payments",
+        "title": "9. Failed and incomplete payments",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "If an online payment fails, is abandoned, or cannot be verified, the payment is recorded as failed and the order is left unpaid and unconfirmed. No contract is formed and nothing is dispatched."
+          },
+          {
+            "type": "p",
+            "text": "There is no retry on an existing order. To buy the items, place the order again, and cancel the unpaid one from My Orders so its reserved stock is released."
+          },
+          {
+            "type": "p",
+            "text": "If money left your account on a payment we could not verify, it is reversed by the gateway or your bank without any action from us, normally within 5–7 working days. Please do not pay twice; contact us with the order number and we will check it against the gateway's record."
+          },
+          {
+            "type": "p",
+            "text": "We may cancel orders that remain unpaid, so that reserved stock is returned to sale."
+          }
+        ]
+      },
+      {
+        "id": "cancellation",
+        "title": "10. Cancellation",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You may cancel an order yourself, free of charge, at any time before it is handed to the courier — that is, while it is Pending, Confirmed or Packed. Use Cancel order under Account → My Orders. A reason is required and is recorded on the order."
+          },
+          {
+            "type": "p",
+            "text": "Once an order has shipped it can no longer be cancelled online. Contact us: we can sometimes recall a parcel, but this is not guaranteed and is at the courier's discretion."
+          },
+          {
+            "type": "p",
+            "text": "Cancelling returns the reserved stock to sale. A prepaid order is placed in the refund queue immediately; a cash-on-delivery order collected nothing and simply closes. See the Refund Policy for what follows."
+          },
+          {
+            "type": "p",
+            "text": "We may cancel an order for the reasons set out in clause 7. Where we cancel, you are refunded in full including the delivery charge."
+          }
+        ]
+      },
+      {
+        "id": "shipping",
+        "title": "11. Shipping and delivery",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Delivery is free on orders of {{freeShipping}} and above after discounts and coupons, and {{shippingFee}} per order below that. We deliver anywhere in India with a valid 6-digit pincode, and do not ship internationally."
+          },
+          {
+            "type": "p",
+            "text": "Delivery times shown on the site are estimates, not guarantees. Risk in the goods passes to you on delivery. Delivery is to the entrance of the address; our courier partners do not carry material inside or upstairs."
+          },
+          {
+            "type": "p",
+            "text": "We are not liable for delays caused by events outside our reasonable control, including weather, strikes, civil disruption, courier network failure or restrictions imposed by authority."
+          },
+          {
+            "type": "p",
+            "text": "The full terms, including failed delivery attempts and incorrect addresses, are in our Shipping Policy."
+          }
+        ]
+      },
+      {
+        "id": "returns-refunds",
+        "title": "12. Returns and refunds",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Returns are accepted for items that arrive damaged, wrong, defective, short-delivered or materially different from their description, reported within the windows in our Returns & Refunds policy. We do not accept change-of-mind returns."
+          },
+          {
+            "type": "p",
+            "text": "Returns are raised through our support team and are subject to inspection at our warehouse. Certain goods — including cement, adhesives, paints, chemicals, cut-to-order items and opened consumables — cannot be returned unless they arrive damaged, wrong or defective."
+          },
+          {
+            "type": "p",
+            "text": "Refunds are issued to the original payment method after approval. The Returns & Refunds policy and the Refund Policy set out eligibility, timelines and exceptions in full, and form part of these terms."
+          }
+        ]
+      },
+      {
+        "id": "coupons",
+        "title": "13. Coupons and promotions",
+        "blocks": [
+          {
+            "type": "ul",
+            "items": [
+              "One coupon may be used per order. Coupons cannot be combined with each other.",
+              "A coupon applies only to the item total, and is applied before the delivery charge is calculated — so using one can affect whether an order qualifies for free delivery.",
+              "Coupons have a validity period, may carry a minimum order value, a maximum discount cap, an overall usage limit and a per-customer limit, and may be restricted to particular products or categories. The conditions are shown when you apply the code.",
+              "Coupons have no cash value, cannot be exchanged for cash and cannot be transferred or resold.",
+              "A coupon is consumed by the order it is applied to. If that order is later cancelled or refunded, a single-use coupon is not automatically reissued — contact us and we will consider it case by case.",
+              "We may withdraw, change or cancel any coupon or promotion at any time, and may void a discount obtained by misuse, bulk code generation or any breach of these terms."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "reviews",
+        "title": "14. Reviews and content you submit",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You may leave one review per product, and may attach photographs. Reviews written by an account that bought the product are marked as a verified purchase."
+          },
+          {
+            "type": "p",
+            "text": "By submitting a review, a photograph, an enquiry or any other content, you confirm it is your own, that it is accurate, and that it infringes nobody's rights — and you grant us a non-exclusive, royalty-free licence to display and reproduce it on the site in connection with that product."
+          },
+          {
+            "type": "p",
+            "text": "We may edit or remove content that is unlawful, abusive, misleading, defamatory, promotional, off-topic or in breach of these terms."
+          }
+        ]
+      },
+      {
+        "id": "ip",
+        "title": "15. Intellectual property",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The site and everything in it — its design, layout, code, text, graphics, logos, icons, photographs, compilations and the selection and arrangement of the catalogue — belongs to us or to our licensors and is protected by Indian and international intellectual property law."
+          },
+          {
+            "type": "p",
+            "text": "Brand names, product names, trademarks and product imagery belong to their respective owners and appear here solely to identify the goods we sell."
+          },
+          {
+            "type": "p",
+            "text": "You may view and print pages for your own, non-commercial use. You may not copy, reproduce, republish, scrape, mine, frame, resell or otherwise exploit any part of the site without our prior written permission."
+          }
+        ]
+      },
+      {
+        "id": "prohibited",
+        "title": "16. Prohibited activities",
+        "blocks": [
+          { "type": "p", "text": "You must not:" },
+          {
+            "type": "ul",
+            "items": [
+              "use another person's account, payment instrument or identity, or provide false information;",
+              "place fraudulent, speculative or automated orders, or abuse cash on delivery;",
+              "use bots, scrapers, crawlers or any automated means to access, copy or monitor the site or its prices;",
+              "attempt to probe, scan, overload or interfere with the site, its infrastructure or its security, or to gain unauthorised access to any account or system;",
+              "reverse engineer, decompile or attempt to derive the source of any part of the site;",
+              "upload anything containing malware, or anything unlawful, obscene, defamatory, threatening or infringing;",
+              "misuse coupons, generate codes in bulk, or exploit a pricing or promotional error;",
+              "resell, redistribute or otherwise commercially exploit content from the site without permission;",
+              "use the site in any way that breaches applicable law or these terms."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "We may suspend or close an account, cancel orders and take legal action where any of this occurs."
+          }
+        ]
+      },
+      {
+        "id": "liability",
+        "title": "17. Limitation of liability",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "The site is provided on an \"as is\" and \"as available\" basis. We do not warrant that it will be uninterrupted, error-free or free of every inaccuracy, and we may change, suspend or withdraw any part of it."
+          },
+          {
+            "type": "p",
+            "text": "To the fullest extent permitted by law, we are not liable for indirect, incidental, special or consequential loss, or for loss of profit, business, contracts, goodwill, data or anticipated savings, arising out of your use of the site or of any product bought through it."
+          },
+          {
+            "type": "p",
+            "text": "In particular, we are not liable for loss arising from incorrect installation, unsuitable application, misuse, overloading, unsuitable storage or failure to follow the manufacturer's instructions."
+          },
+          {
+            "type": "p",
+            "text": "Our total liability in connection with any order is limited to the amount you actually paid for that order. Nothing in these terms excludes or limits liability that cannot lawfully be excluded or limited, including liability for death or personal injury caused by our negligence, or for fraud."
+          }
+        ]
+      },
+      {
+        "id": "force-majeure",
+        "title": "18. Events outside our control",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We are not in breach of these terms, and are not liable for any delay or failure to perform, where it is caused by something outside our reasonable control — including natural disaster, epidemic, fire, flood, strike, civil disorder, war, act of government, failure of a courier or payment network, or interruption of power or telecommunications."
+          }
+        ]
+      },
+      {
+        "id": "changes",
+        "title": "19. Changes to these terms",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We may update these terms from time to time to reflect changes in our services, our operations or the law. The current version is always the one on this page, and the date it last changed is shown at the top."
+          },
+          {
+            "type": "p",
+            "text": "Changes take effect when they are published here. The terms that apply to an order are the ones in force when that order was placed. Continuing to use the site after a change means you accept the updated terms."
+          }
+        ]
+      },
+      {
+        "id": "law",
+        "title": "20. Governing law and disputes",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "These terms, and any dispute arising out of them or out of any order, are governed by the laws of India. Consumer protection rights available to you under the Consumer Protection Act, 2019 and the rules made under it are not affected by anything in these terms."
+          },
+          {
+            "type": "p",
+            "text": "Transactions on this site are also subject to the Information Technology Act, 2000 and the rules made under it, and to the Consumer Protection (E-Commerce) Rules, 2020."
+          },
+          {
+            "type": "p",
+            "text": "Please contact us first — most disputes are settled quickly once we have the order number and the details. If a dispute cannot be settled that way, it is subject to the exclusive jurisdiction of the courts at our registered office."
+          },
+          {
+            "type": "p",
+            "text": "If any provision of these terms is held to be invalid or unenforceable, the rest continues in force."
+          }
+        ]
+      }
+    ]
+  },
+
+  "privacy": {
+    "seoTitle": "Privacy Policy",
+    "seoDescription": "What personal information {{app}} collects, how it is used, the cookies and browser storage we rely on, the payment and service providers involved, how your data is secured and retained, and the rights you have over it.",
+    "breadcrumb": "Privacy Policy",
+    "heading": "Privacy Policy",
+    "intro": "This policy explains what we collect about you, why, who else sees it, and what you can ask us to do with it. It covers this website and the account, ordering and support services provided through it.",
+    "sections": [
+      {
+        "id": "scope",
+        "title": "1. Who we are and what this covers",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "{{app}} operates this website and is the data fiduciary for the personal information described here. This policy applies to visitors, registered account holders and anyone who contacts us through the site."
+          },
+          {
+            "type": "p",
+            "text": "We collect only what we need to run the store: to let you sign in, take an order, deliver it, take payment for it, support you afterwards, and meet our legal obligations. We do not sell your personal information, and we do not share it for anyone else's advertising."
+          }
+        ]
+      },
+      {
+        "id": "information-we-collect",
+        "title": "2. Information we collect",
+        "blocks": [
+          { "type": "p", "text": "Information you give us:" },
+          {
+            "type": "ul",
+            "items": [
+              "Account details — your name, email address, phone number, and your password stored only as a secure one-way hash. If you sign in with Google we receive your name, email address and profile picture from Google instead.",
+              "Delivery addresses — recipient name, phone, alternate phone, address lines, landmark, city, state and 6-digit pincode.",
+              "Order information — the items, options and quantities you buy, the price you paid, your chosen payment method, cancellation reasons you give, and the invoices we issue.",
+              "Content you submit — product reviews, ratings and review photographs, enquiries sent through the contact form, and job applications with the résumé attached.",
+              "Preferences — your chosen interface language, your wishlist, your cart, and whether you subscribed to the newsletter."
+            ]
+          },
+          { "type": "p", "text": "Information collected automatically:" },
+          {
+            "type": "ul",
+            "items": [
+              "Session and device information for each sign-in — device type and name, browser, operating system, IP address and an approximate city derived from it, when the session started and when it was last active. This is what powers the Devices screen, so you can recognise and revoke your own logins.",
+              "Technical logs — the requests your browser makes to us, with timestamps and error details, kept for security and troubleshooting.",
+              "Browsing signals held only in your own browser — recently viewed products, a guest cart, and your scroll position between pages."
+            ]
+          },
+          {
+            "type": "note",
+            "text": "We never receive your card number, CVV, UPI PIN or net banking credentials. Those are entered directly on the payment gateway."
+          }
+        ]
+      },
+      {
+        "id": "how-we-use",
+        "title": "3. How we use your information",
+        "blocks": [
+          {
+            "type": "table",
+            "head": ["Purpose", "What we use"],
+            "rows": [
+              ["Creating and securing your account", "Name, email, phone, password hash, verification codes, sign-in attempts, session and device details"],
+              ["Processing and delivering orders", "Order items, delivery address, phone number, payment status"],
+              ["Taking payment and issuing refunds", "Order total, payment method, gateway payment and refund references"],
+              ["Keeping you informed", "Email address, for order confirmation, status changes, cancellation and refund notices"],
+              ["Customer support", "Order history, enquiries you send, return photographs"],
+              ["Invoicing, tax and accounting", "Order, price and address details, as required by law"],
+              ["Improving the store", "Aggregated order and browsing patterns, product ratings and reviews"],
+              ["Preventing fraud and abuse", "IP address, device and session details, order and payment patterns"],
+              ["Marketing, only if you subscribe", "Email address"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Order-related emails — confirmations, status changes, cancellations and refunds — are part of the service and are sent whether or not you subscribe to the newsletter. Marketing email is sent only if you subscribed, and every one of those carries an unsubscribe link."
+          }
+        ]
+      },
+      {
+        "id": "cookies",
+        "title": "4. Cookies and browser storage",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We use the minimum necessary to keep you signed in and the site working. We do not use advertising cookies, and we do not run third-party analytics or tracking pixels."
+          },
+          {
+            "type": "table",
+            "head": ["What", "Where", "Why", "How long"],
+            "rows": [
+              ["Session cookie", "Secure, HTTP-only cookie", "Keeps you signed in and renews your session. Cannot be read by JavaScript.", "Until you sign out, or the session expires"],
+              ["Access token", "Browser local storage", "Authorises each request while you are signed in", "Until you sign out"],
+              ["Language preference", "Browser local storage", "Remembers the language you chose", "Until you clear it"],
+              ["Cart and recently viewed", "Browser local storage", "Keeps a guest cart and your recently viewed products", "Until you clear it"],
+              ["Scroll positions", "Browser session storage", "Puts you back where you were when you press Back", "Until you close the tab"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "You can clear or block this storage in your browser settings. Doing so will sign you out and reset your language and guest cart, but nothing else is affected."
+          },
+          {
+            "type": "p",
+            "text": "The Contact page embeds a Google Maps frame so you can find our office. Loading that page means Google may set its own cookies; that is governed by Google's privacy policy, not ours."
+          }
+        ]
+      },
+      {
+        "id": "third-parties",
+        "title": "5. Service providers we share data with",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We share personal information only where it is needed to provide the service, and only to the extent needed."
+          },
+          {
+            "type": "table",
+            "head": ["Provider", "What they receive", "Why"],
+            "rows": [
+              ["Razorpay", "Order amount and reference, your name, email and phone; your card, UPI or bank details are given directly to them, not to us", "To take payments and process refunds"],
+              ["Courier partners", "Recipient name, phone number and delivery address", "To deliver your order and handle return pickups"],
+              ["Cloudinary", "Images uploaded with reviews, and our own product imagery", "Image hosting and delivery"],
+              ["Google", "Your Google account details, when you choose Sign in with Google", "Authentication"],
+              ["Email service provider", "Your email address and the content of the message", "To send order, account and support email"],
+              ["IP geolocation service", "The IP address of a sign-in", "To show an approximate city on the Devices screen so you can recognise your own logins"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "We may also disclose information where the law requires it, to a court or public authority, to enforce our terms, or to protect our rights, property or safety and those of our customers."
+          },
+          {
+            "type": "p",
+            "text": "If our business is ever sold or reorganised, personal information may transfer as part of it — under the same protections as this policy, and you would be told."
+          }
+        ]
+      },
+      {
+        "id": "payments",
+        "title": "6. Payment information",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Online payments are handled entirely by Razorpay, a PCI-DSS compliant payment gateway. Your card number, CVV, UPI PIN and net banking credentials are entered on the gateway's own screen. They never reach our servers and we cannot see or store them."
+          },
+          {
+            "type": "p",
+            "text": "What we keep is the record of the transaction: the amount, the method used (card, UPI, net banking), the gateway's payment reference, whether it succeeded, and — where a refund was issued — the refund reference. That is what lets us support you and reconcile our accounts."
+          },
+          {
+            "type": "p",
+            "text": "Cash-on-delivery orders involve no online payment data at all."
+          }
+        ]
+      },
+      {
+        "id": "security",
+        "title": "7. How we protect your information",
+        "blocks": [
+          {
+            "type": "ul",
+            "items": [
+              "All traffic between your browser and our servers is encrypted in transit.",
+              "Passwords are stored only as salted one-way hashes, and are never recoverable — not even by us.",
+              "Your session credential is held in a secure, HTTP-only cookie that scripts on the page cannot read, and is renewed rather than reused.",
+              "Every signed-in device is a separate, revocable session that you can end at any time from Account → Devices.",
+              "New email accounts are verified with a short-lived one-time code, and repeated failed sign-in attempts lock an account temporarily.",
+              "Access to customer data inside our team is limited to the staff who need it to fulfil orders and answer support requests.",
+              "Requests to our API are rate-limited and validated, and uploads are restricted by type and size."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "No system is perfectly secure. Please help by using a strong, unique password, not sharing it, and signing out of devices you no longer use. If you believe your account has been accessed by someone else, change your password, revoke the sessions under Account → Devices, and contact us."
+          }
+        ]
+      },
+      {
+        "id": "retention",
+        "title": "8. How long we keep it",
+        "blocks": [
+          {
+            "type": "table",
+            "head": ["Data", "Kept for"],
+            "rows": [
+              ["Account details", "While your account is open"],
+              ["Orders, invoices and payment records", "As long as tax and accounting law requires, even after an account closes"],
+              ["Delivery addresses", "While your account is open, or until you delete them"],
+              ["Sessions and device records", "Until revoked, or until the session expires — then deleted automatically"],
+              ["One-time verification codes", "Minutes — they expire and are cleared"],
+              ["Reviews and ratings", "While the product is listed, unless you ask us to remove them"],
+              ["Contact enquiries", "Until the query is resolved, and a reasonable period afterwards"],
+              ["Job applications and résumés", "For the duration of the recruitment process and a reasonable period afterwards"],
+              ["Newsletter subscription", "Until you unsubscribe"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "When information is no longer needed for any of these purposes it is deleted or irreversibly anonymised."
+          }
+        ]
+      },
+      {
+        "id": "your-rights",
+        "title": "9. Your rights and choices",
+        "blocks": [
+          { "type": "p", "text": "You can, at any time:" },
+          {
+            "type": "ul",
+            "items": [
+              "See and correct your name, phone, language and profile picture under Account → Profile.",
+              "Add, edit or delete your delivery addresses under Account → Addresses.",
+              "See your full order history and download every invoice under Account → My Orders.",
+              "See every signed-in device and sign any of them out under Account → Devices.",
+              "Unsubscribe from marketing email using the link in any such email.",
+              "Ask us for a copy of the personal information we hold about you.",
+              "Ask us to correct anything that is wrong.",
+              "Ask us to delete your account and the personal information we are not legally required to keep.",
+              "Withdraw a consent you previously gave, without affecting what was done before you withdrew it."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "To exercise the last four, contact us from the email address on your account. We respond within 30 days. We may need to confirm your identity first — that check exists to stop someone else making a request in your name."
+          },
+          {
+            "type": "note",
+            "text": "Closing an account does not erase completed orders and invoices. We are required to keep those for tax and accounting purposes, and they are retained separately from your account."
+          }
+        ]
+      },
+      {
+        "id": "children",
+        "title": "10. Children",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "This store is not intended for children. Accounts may only be created by people aged 18 or over, and we do not knowingly collect personal information from children. If you believe a child has given us information, contact us and we will delete it."
+          }
+        ]
+      },
+      {
+        "id": "updates",
+        "title": "11. Changes to this policy",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We update this policy when our services, our providers or the law change. The current version is always the one on this page, and the date it last changed is shown at the top."
+          },
+          {
+            "type": "p",
+            "text": "For a material change — a new category of data, a new purpose, or a new provider — we will make it prominent, and where the law requires it we will ask for your consent again. Continuing to use the site after an update means you accept the revised policy."
+          }
+        ]
+      }
+    ]
+  },
+
+  "refund": {
+    "seoTitle": "Refund Policy",
+    "seoDescription": "When {{app}} issues a refund, how long it takes, which method it comes back to, how cancelled orders, approved returns, damaged goods, failed payments and cash-on-delivery orders are treated, and the exceptions.",
+    "breadcrumb": "Refund Policy",
+    "heading": "Refund Policy",
+    "intro": "This policy explains exactly when money comes back to you, how much, by what route and how long it takes. It applies alongside our Returns & Refunds policy, which covers what can be returned in the first place.",
+    "highlights": [
+      { "icon": "check", "title": "Raised in 2 days", "text": "Approved refunds are sent to the gateway within 2 working days." },
+      { "icon": "creditCard", "title": "Original method", "text": "Money returns to the card, UPI ID or account you paid from." },
+      { "icon": "file", "title": "With a reference", "text": "Every refund carries a reference you can quote to your bank." }
+    ],
+    "sections": [
+      {
+        "id": "eligibility",
+        "title": "When you are entitled to a refund",
+        "blocks": [
+          { "type": "p", "text": "A refund is due in each of these cases:" },
+          {
+            "type": "ul",
+            "items": [
+              "You cancelled a prepaid order before it shipped.",
+              "We cancelled your prepaid order — for a stock, quality, pricing or serviceability reason.",
+              "A return was approved and passed inspection, and you chose a refund rather than a replacement.",
+              "Your order arrived damaged, wrong, defective or short, and you chose a refund.",
+              "The parcel was lost in transit and you chose a refund rather than a replacement.",
+              "A delivery failed after three attempts and the parcel came back to us.",
+              "You were charged for an online payment that we could not verify."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "A refund is only ever due on money that actually reached us. Cash-on-delivery orders that never reached delivery collected nothing, and so have nothing to refund — see the section below."
+          }
+        ]
+      },
+      {
+        "id": "cancelled-orders",
+        "title": "Cancelled orders",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You can cancel an order yourself, free of charge, while it is Pending, Confirmed or Packed — that is, at any time before the parcel is handed to the courier. Use Cancel order under Account → My Orders."
+          },
+          {
+            "type": "p",
+            "text": "Cancelling does not move the money by itself. It places the order in the refund queue, where its payment shows as Refund pending, and our team then raises the refund through the gateway. That is deliberate: money moves through a bank, not through a status field, and we would rather show you the true state than a green tick that means nothing."
+          },
+          {
+            "type": "p",
+            "text": "A cancelled prepaid order is refunded in full — the goods and the delivery charge. Nothing is deducted for cancelling."
+          },
+          {
+            "type": "p",
+            "text": "Where we cancel your order, the refund is likewise full, including the delivery charge, and we tell you the reason."
+          }
+        ]
+      },
+      {
+        "id": "approved-returns",
+        "title": "Approved returns",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "A refund on a return is approved once the returned item reaches our warehouse and passes inspection — normally 2–3 working days after it arrives. The order then moves to Returned and its payment to Refund pending."
+          },
+          {
+            "type": "p",
+            "text": "You are refunded what you actually paid for the returned goods: the discounted price, after any coupon that was applied to them. The delivery charge is refunded too whenever the return was caused by us or by the courier."
+          },
+          {
+            "type": "p",
+            "text": "If the return is rejected on inspection, no refund is issued; the item is returned to you at no charge, with the reasons and the inspection photographs. See Returns & Refunds for the grounds on which a return can be rejected."
+          }
+        ]
+      },
+      {
+        "id": "damaged-wrong",
+        "title": "Damaged, wrong or defective products",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "When the fault is ours or the courier's, you are put back exactly where you started. That means:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "a full refund of the item, including the delivery charge you paid;",
+              "no pickup or return shipping charge;",
+              "no deduction of any kind."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Report transit damage, a wrong item or a short delivery within 48 hours of delivery, and a defect within 7 days, with photographs. Once approved, you may take a replacement instead of a refund — a replacement ships within 2 working days of the inspection passing."
+          },
+          {
+            "type": "p",
+            "text": "If a parcel is confirmed lost in transit, the same applies: a full refund including delivery, or a replacement, whichever you prefer."
+          }
+        ]
+      },
+      {
+        "id": "failed-payments",
+        "title": "Failed and unverified payments",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "If an online payment fails or cannot be verified, no order is confirmed and nothing is dispatched. In the great majority of cases nothing has actually left your account — what you see is a temporary authorisation hold that your bank releases on its own, normally within 5–7 working days."
+          },
+          {
+            "type": "p",
+            "text": "Where money genuinely was captured on a payment we could not verify, the gateway reverses it automatically. No request from you is needed."
+          },
+          {
+            "type": "p",
+            "text": "Please do not pay again for the same order — that creates a second charge to unwind. Instead, place a fresh order if you still want the items, and cancel the unpaid one from My Orders so its reserved stock is released. If a debit has not reversed after 7 working days, contact us with the order number and the bank reference and we will check it against the gateway's record."
+          }
+        ]
+      },
+      {
+        "id": "cod",
+        "title": "Cash-on-delivery orders",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Cash on delivery is paid at handover, so the money and the goods change hands at the same moment. That makes refunds on these orders simpler than they look:"
+          },
+          {
+            "type": "table",
+            "head": ["Situation", "What happens"],
+            "rows": [
+              ["Cancelled before delivery", "Nothing was collected, so there is nothing to refund. The order simply closes."],
+              ["Delivery failed after three attempts", "Nothing was collected. The order is cancelled and closes."],
+              ["Delivered, then returned and approved", "You paid cash, so the refund is made by bank transfer to an account you give us."],
+              ["Delivered, damaged or wrong, replacement chosen", "No money moves — a replacement is sent free of charge."]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "For a bank transfer refund we will ask you for the account holder's name, account number and IFSC code. Please send these only in reply to our own email about that order — we will never ask for them over a phone call, and we never ask for a card number, a PIN, an OTP or a UPI PIN."
+          },
+          {
+            "type": "note",
+            "text": "A cash-on-delivery order that is still awaiting delivery shows its payment as Payment pending. That is normal and does not mean anything is owed to you."
+          }
+        ]
+      },
+      {
+        "id": "approval",
+        "title": "How a refund is approved",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Every refund passes through two visible states on your order page, and you can watch it move:"
+          },
+          {
+            "type": "ol",
+            "items": [
+              "Refund pending — the refund is approved and queued. This happens automatically the moment a paid order is cancelled or marked as returned.",
+              "Refunded — a member of our team has actually raised the money through the gateway, and it has left our account. A reference number is recorded against the order at the same time."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "The step between the two is done by a person on purpose. Nothing but the person who raised the refund can know that the money really left, and we would rather your order said \"pending\" honestly than \"refunded\" prematurely."
+          },
+          {
+            "type": "p",
+            "text": "We email you when a refund is approved and again when it is sent, so the record is in your inbox as well as on the order."
+          }
+        ]
+      },
+      {
+        "id": "timelines",
+        "title": "How long it takes",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "We raise an approved refund within 2 working days. After that the time is your bank's, and it varies by method."
+          },
+          {
+            "type": "table",
+            "head": ["Paid by", "Refunded to", "Typical time after we raise it"],
+            "rows": [
+              ["Credit or debit card", "The same card", "5–7 working days"],
+              ["UPI", "The same UPI ID", "1–3 working days"],
+              ["Net banking", "The same bank account", "3–5 working days"],
+              ["Cash on delivery", "Bank transfer to the account you give us", "3–5 working days"]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "So a cancelled prepaid order is normally back with you within about a week, and a return-based refund adds the pickup and inspection time — typically 7–10 working days from pickup in total."
+          },
+          {
+            "type": "p",
+            "text": "If your order shows Refunded and the money has not appeared after 7 working days, ask your bank first, quoting the reference on the order — banks sometimes hold a credit for a day or two after the gateway has released it. If it is still missing, contact us and we will chase the gateway on your behalf."
+          }
+        ]
+      },
+      {
+        "id": "method",
+        "title": "Refund method",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Refunds go back the way the money came. A card payment is credited to the same card, a UPI payment to the same UPI ID, a net banking payment to the same account. This is a rule of the payment system, not our choice, and it cannot be redirected to a different card or account."
+          },
+          {
+            "type": "p",
+            "text": "If the card you paid with has since expired or been closed, the refund still goes to the issuing bank, which credits it to the replacement card or to the linked account. Your bank can confirm this against the reference number on your order."
+          },
+          {
+            "type": "p",
+            "text": "We do not issue refunds in cash, and we do not issue store credit or vouchers in place of a refund you are entitled to."
+          }
+        ]
+      },
+      {
+        "id": "partial",
+        "title": "Partial refunds",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "Partial refunds are possible, and are used where only part of an order is affected. The common cases:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "one item in a multi-item order is returned, and the rest is kept;",
+              "an item is short-delivered and you keep what did arrive;",
+              "a parcel is returned undelivered because the address was wrong or nobody accepted it — the goods are refunded but the delivery charge actually incurred is not."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "A partial refund is calculated on the discounted price of the affected items, with any coupon discount apportioned across the order so you are neither over- nor under-refunded."
+          },
+          {
+            "type": "p",
+            "text": "Partial refunds are arranged by our support team rather than from the site, and are raised through the gateway in the same way as a full one. Once raised, your order's payment shows as Refunded — that status does not distinguish a part from a whole, so the confirmation email and the refund reference are what record the exact amount."
+          }
+        ]
+      },
+      {
+        "id": "exceptions",
+        "title": "Exceptions — when no refund is due",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "No refund is issued where:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "the order was cash on delivery and was never delivered — nothing was collected;",
+              "the return was rejected on inspection, on the grounds set out in Returns & Refunds;",
+              "the item falls under our non-returnable list and arrived in good condition — cement, adhesives, paints, chemicals, cut-to-order goods, opened consumables and anything marked non-returnable on its product page;",
+              "the item has been used, installed, cut, mixed or altered, other than for a genuine manufacturing defect;",
+              "the item is returned without its original packaging, seals, accessories, manuals or free gifts;",
+              "the damage was caused by misuse, incorrect installation, unsuitable storage, overloading or normal wear;",
+              "the issue was reported after the applicable 48-hour or 7-day window;",
+              "the delivery was refused or repeatedly not accepted — the delivery charge incurred is not refunded;",
+              "a discount was obtained by misusing a coupon or exploiting a pricing error."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Coupons and promotional discounts are not refunded as cash. If an order paid for with a single-use coupon is cancelled or refunded, the coupon is not automatically reissued — contact us and we will look at it case by case."
+          },
+          {
+            "type": "p",
+            "text": "Nothing in this policy affects your rights under the Consumer Protection Act, 2019."
+          }
+        ]
+      }
+    ]
+  }
+}

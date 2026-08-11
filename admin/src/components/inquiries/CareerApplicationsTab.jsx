@@ -36,6 +36,23 @@ const STATUSES = [
   { value: 'hired', label: 'Hired' },
 ];
 
+const STATUS_LABEL = Object.fromEntries(STATUSES.map((status) => [status.value, status.label]));
+
+/**
+ * Review only moves forward, and `rejected` / `hired` close the record — the same
+ * rule the server enforces on the status route, so the dropdown never offers a
+ * move the save would refuse.
+ */
+const STAGES = ['new', 'shortlisted', 'interviewed'];
+const FINAL_STATUSES = ['rejected', 'hired'];
+
+const canChangeStatus = (from, to) => {
+  if (from === to) return true;
+  if (FINAL_STATUSES.includes(from)) return false;
+  if (FINAL_STATUSES.includes(to)) return true;
+  return STAGES.indexOf(to) > STAGES.indexOf(from);
+};
+
 const STATUS_COLOR = {
   new: 'info',
   shortlisted: 'primary',
@@ -129,7 +146,7 @@ export default function CareerApplicationsTab({ onCountsChanged }) {
   const saveStatus = async (row, payload) => {
     try {
       const res = await careerApi.setApplicationStatus(row._id, payload);
-      const label = STATUSES.find((s) => s.value === payload.status)?.label || payload.status;
+      const label = STATUS_LABEL[payload.status] || payload.status;
       // Every status but "New" emails the applicant, so the toast says so —
       // an admin picking from a dropdown has no other cue that a decision has
       // just left the building.
@@ -278,21 +295,44 @@ export default function CareerApplicationsTab({ onCountsChanged }) {
       key: 'status',
       label: 'Status',
       width: 150,
-      render: (row) => (
-        <Select
-          size="small"
-          value={row.status}
-          onChange={(e) => changeStatus(row, e.target.value)}
-          color={STATUS_COLOR[row.status] || 'primary'}
-          sx={{ minWidth: 130, fontSize: 13 }}
-        >
-          {STATUSES.map((status) => (
-            <MenuItem key={status.value} value={status.value} sx={{ fontSize: 13 }}>
-              {status.label}
-            </MenuItem>
-          ))}
-        </Select>
-      ),
+      render: (row) => {
+        const closed = FINAL_STATUSES.includes(row.status);
+        // Every stage stays listed either way, so the pipeline reads the same on
+        // every row — the ones no longer open are shown greyed rather than gone.
+        const select = (
+          <Select
+            size="small"
+            value={row.status}
+            onChange={(e) => changeStatus(row, e.target.value)}
+            color={STATUS_COLOR[row.status] || 'primary'}
+            disabled={closed}
+            sx={{ minWidth: 130, fontSize: 13 }}
+          >
+            {STATUSES.map((status) => (
+              <MenuItem
+                key={status.value}
+                value={status.value}
+                disabled={!canChangeStatus(row.status, status.value)}
+                sx={{ fontSize: 13 }}
+              >
+                {status.label}
+              </MenuItem>
+            ))}
+          </Select>
+        );
+
+        // A closed record's whole dropdown is disabled, which on its own only says
+        // "not allowed" — the tooltip says why, as the row's other locked controls do.
+        return closed ? (
+          <Tooltip
+            title={`Marked ${STATUS_LABEL[row.status] || row.status} — this decision has been emailed and can no longer be changed`}
+          >
+            <span>{select}</span>
+          </Tooltip>
+        ) : (
+          select
+        );
+      },
     },
     {
       key: 'actions',

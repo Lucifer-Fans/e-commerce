@@ -44,10 +44,11 @@ export default function PasswordInput({
         <button
           type="button"
           onClick={() => setVisible((v) => !v)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-ink-400 hover:text-ink-700"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-400 transition-colors hover:text-ink-700"
           aria-label={t(visible ? 'auth.hidePasswordAria' : 'auth.showPasswordAria')}
+          title={t(visible ? 'auth.hidePasswordAria' : 'auth.showPasswordAria')}
         >
-          {t(visible ? 'auth.hide' : 'auth.show')}
+          <Icon name={visible ? 'eyeOff' : 'eye'} size={18} />
         </button>
       </div>
 

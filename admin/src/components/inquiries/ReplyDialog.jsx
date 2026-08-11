@@ -90,7 +90,14 @@ export default function ReplyDialog({ inquiry, onClose, onSent }) {
           variant="contained"
           onClick={send}
           disabled={sending}
-          startIcon={sending ? <CircularProgress size={15} color="inherit" /> : <SendIcon />}
+          startIcon={
+            sending ? (
+              <CircularProgress size={15} color="inherit" />
+            ) : (
+              // Tilted to match the interview invitation's send, the panel's other one.
+              <SendIcon sx={{ transform: 'rotate(-45deg)' }} />
+            )
+          }
         >
           Send reply
         </Button>

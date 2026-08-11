@@ -57,6 +57,24 @@ export const userApi = {
   removeAvatar: () => api.delete('/users/me/avatar'),
 };
 
+export const uploadApi = {
+  /**
+   * One photo or clip per request, so each tile in the review uploader can show
+   * its own progress and fail on its own without taking the others down.
+   */
+  media: (file, { kind = 'reviews', onProgress } = {}) => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('kind', kind);
+    return api.post('/uploads/media', form, {
+      onUploadProgress: (event) => {
+        if (!onProgress || !event.total) return;
+        onProgress(Math.round((event.loaded * 100) / event.total));
+      },
+    });
+  },
+};
+
 export const catalogApi = {
   categories: () => api.get('/categories'),
   category: (idOrSlug) => api.get(`/categories/${idOrSlug}`),

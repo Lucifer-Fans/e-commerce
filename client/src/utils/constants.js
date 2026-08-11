@@ -62,6 +62,40 @@ export const PAYMENT_STATUS_STYLES = {
   refunded: 'bg-slate-100 text-slate-700 ring-slate-200',
 };
 
+/*
+ * Delivery pricing, mirrored from the server's `commerce` config
+ * (server/src/config/env.js → FREE_SHIPPING_THRESHOLD / SHIPPING_FLAT_RATE).
+ *
+ * Cart and checkout never read these — every total the shopper is charged comes
+ * back priced from the API. They exist for the pages that quote the rule without
+ * a basket in hand: the shipping, refund and FAQ policies. Change them here and
+ * in the server's .env together, or the policy will describe a price the checkout
+ * does not charge.
+ */
+export const FREE_SHIPPING_THRESHOLD = Number(
+  import.meta.env.VITE_FREE_SHIPPING_THRESHOLD || 499
+);
+export const SHIPPING_FLAT_RATE = Number(import.meta.env.VITE_SHIPPING_FLAT_RATE || 49);
+
+/**
+ * When the policy pages were last revised. Bumped by hand whenever the copy in a
+ * `legal` translation bundle changes in a way a shopper would care about — it is
+ * the date printed under every policy heading.
+ */
+export const POLICY_LAST_UPDATED = '2026-08-11';
+
+/*
+ * What a shopper may attach to a review. Mirrored by the API — server/src/
+ * middleware/upload.js holds the same mime lists and size caps, and Review.MAX_MEDIA
+ * the same count — so these only decide what the picker offers and what it rejects
+ * before spending a round trip.
+ */
+export const REVIEW_MEDIA_MAX = 5;
+export const REVIEW_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+export const REVIEW_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime'];
+export const MAX_REVIEW_IMAGE_BYTES = 5 * 1024 * 1024;
+export const MAX_REVIEW_VIDEO_BYTES = 30 * 1024 * 1024;
+
 export const RECENTLY_VIEWED_KEY = 'ps_recently_viewed';
 export const GUEST_CART_KEY = 'ps_guest_cart';
 export const MAX_RECENTLY_VIEWED = 12;

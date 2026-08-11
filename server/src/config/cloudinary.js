@@ -46,6 +46,49 @@ function uploadBuffer(buffer, { folder = env.cloudinary.folder, publicId, tags =
 }
 
 /**
+ * Upload a video (review clips).
+ *
+ * `eager` is deliberately not used: transcoding a phone clip synchronously would
+ * hold the request open for as long as the encode takes. Cloudinary streams the
+ * original and derives everything else on first delivery, so the shopper gets
+ * their upload back immediately and the poster frame below is generated the
+ * first time a thumbnail is actually rendered.
+ */
+function uploadVideoBuffer(buffer, { folder = env.cloudinary.folder, tags = [] } = {}) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder, tags, resource_type: 'video', overwrite: false },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve({
+          url: result.secure_url,
+          publicId: result.public_id,
+          thumbnail: videoPosterUrl(result.public_id),
+          width: result.width,
+          height: result.height,
+          duration: result.duration,
+          format: result.format,
+          bytes: result.bytes,
+        });
+      }
+    );
+    stream.end(buffer);
+  });
+}
+
+/** A still frame from a video, sized for a thumbnail tile. */
+function videoPosterUrl(publicId, { width = 400, height = 400 } = {}) {
+  if (!publicId || !env.cloudinaryEnabled) return null;
+
+  return cloudinary.url(publicId, {
+    resource_type: 'video',
+    format: 'jpg',
+    secure: true,
+    transformation: [{ width, height, crop: 'fill', quality: 'auto' }],
+  });
+}
+
+/**
  * Upload a non-image document (résumés: PDF/DOC/DOCX).
  *
  * `resource_type: 'raw'` keeps the file byte-identical — none of the image
@@ -121,7 +164,9 @@ function transformedUrl(url, { width, height, crop = 'fill' } = {}) {
 module.exports = {
   cloudinary,
   uploadBuffer,
+  uploadVideoBuffer,
   uploadRawBuffer,
+  videoPosterUrl,
   destroyAsset,
   transformedUrl,
   privateDownloadUrl,

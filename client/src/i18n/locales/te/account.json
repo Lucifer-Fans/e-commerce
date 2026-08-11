@@ -263,6 +263,7 @@
     "showPasswordAria": "పాస్‌వర్డ్ చూపు",
     "hidePasswordAria": "పాస్‌వర్డ్ దాచు",
     "or": "లేదా",
+    "continueWithGoogle": "Googleతో కొనసాగించండి",
     "googleUnavailable": "Google సైన్-ఇన్ ప్రస్తుతం అందుబాటులో లేదు. దయచేసి మీ ఇమెయిల్ మరియు పాస్‌వర్డ్‌ను ఉపయోగించండి.",
     "rules": {
       "length": "కనీసం 8 అక్షరాలు",

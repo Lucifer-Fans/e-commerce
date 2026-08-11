@@ -12,6 +12,32 @@ const EXPERIENCE_LEVELS = [
 const APPLICATION_STATUSES = ['new', 'shortlisted', 'interviewed', 'rejected', 'hired'];
 
 /**
+ * Review only ever moves forward. Every step past `new` emails the applicant a
+ * decision, and a decision cannot be unsent — so a shortlisted candidate cannot
+ * go back to unreviewed, and one who has been interviewed cannot go back to
+ * merely shortlisted.
+ */
+const APPLICATION_STAGES = ['new', 'shortlisted', 'interviewed'];
+
+/**
+ * `rejected` and `hired` are the outcomes review arrives *at*, reachable from any
+ * stage. They close the record: the applicant has been told the answer, so there
+ * is no truthful next status — not the other outcome, and not a stage that claims
+ * they are still being considered.
+ */
+const FINAL_APPLICATION_STATUSES = ['rejected', 'hired'];
+
+/** Whether an admin may move an application from `from` to `to`. */
+const canChangeStatus = (from, to) => {
+  // Re-saving the status already held is how a reschedule and a notes edit
+  // arrive, so it is never a move backwards.
+  if (from === to) return true;
+  if (FINAL_APPLICATION_STATUSES.includes(from)) return false;
+  if (FINAL_APPLICATION_STATUSES.includes(to)) return true;
+  return APPLICATION_STAGES.indexOf(to) > APPLICATION_STAGES.indexOf(from);
+};
+
+/**
  * How the interview is held. The mode decides which of the two "where" fields
  * the panel asks for and the mail prints — an address is meaningless for a
  * video call and a joining link is meaningless for one held in the office.
@@ -113,6 +139,8 @@ jobApplicationSchema.index({ createdAt: -1 });
 // the canonical lists straight off the require.
 jobApplicationSchema.statics.EXPERIENCE_LEVELS = EXPERIENCE_LEVELS;
 jobApplicationSchema.statics.APPLICATION_STATUSES = APPLICATION_STATUSES;
+jobApplicationSchema.statics.FINAL_APPLICATION_STATUSES = FINAL_APPLICATION_STATUSES;
+jobApplicationSchema.statics.canChangeStatus = canChangeStatus;
 jobApplicationSchema.statics.INTERVIEW_MODES = INTERVIEW_MODES;
 
 module.exports = mongoose.model('JobApplication', jobApplicationSchema);

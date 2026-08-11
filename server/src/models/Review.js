@@ -1,6 +1,26 @@
 const mongoose = require('mongoose');
 const Product = require('./Product');
 
+/** Mirrored by the storefront uploader and the request validator. */
+const MAX_MEDIA = 5;
+
+/**
+ * A photo or clip a shopper attached to their review. Videos carry a poster frame
+ * so a list of reviews can render thumbnails without loading any video bytes.
+ */
+const mediaSchema = new mongoose.Schema(
+  {
+    type: { type: String, enum: ['image', 'video'], default: 'image' },
+    url: { type: String, required: true },
+    publicId: String,
+    thumbnail: String,
+    width: Number,
+    height: Number,
+    duration: Number,
+  },
+  { _id: false }
+);
+
 const reviewSchema = new mongoose.Schema(
   {
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true, index: true },
@@ -15,6 +35,14 @@ const reviewSchema = new mongoose.Schema(
     title: { type: String, trim: true, maxlength: 120 },
     comment: { type: String, trim: true, maxlength: 2000 },
     images: [{ url: String, publicId: String }],
+    media: {
+      type: [mediaSchema],
+      default: [],
+      validate: {
+        validator: (items) => items.length <= MAX_MEDIA,
+        message: `A review can carry at most ${MAX_MEDIA} photos or videos`,
+      },
+    },
     isVerifiedPurchase: { type: Boolean, default: false },
     helpfulCount: { type: Number, default: 0 },
     /**
@@ -44,4 +72,7 @@ reviewSchema.post('findOneAndUpdate', resync);
 reviewSchema.post('findOneAndDelete', resync);
 reviewSchema.post('deleteOne', { document: true, query: false }, resync);
 
-module.exports = mongoose.model('Review', reviewSchema);
+const Review = mongoose.model('Review', reviewSchema);
+Review.MAX_MEDIA = MAX_MEDIA;
+
+module.exports = Review;

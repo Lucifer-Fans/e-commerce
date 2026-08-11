@@ -15,6 +15,8 @@ import Spinner from '../common/Spinner';
 import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import { ListRowSkeleton } from '../common/Skeleton';
+import ReviewMediaUploader from './ReviewMediaUploader';
+import ReviewMediaGallery from './ReviewMediaGallery';
 
 function RatingSummary({ summary }) {
   const { t } = useTranslation('shop');
@@ -62,19 +64,25 @@ function WriteReviewModal({ open, onClose, productId, onSubmitted }) {
   const [rating, setRating] = useState(0);
   const [title, setTitle] = useState('');
   const [comment, setComment] = useState('');
+  const [media, setMedia] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const submit = async (e) => {
     e.preventDefault();
     if (!rating) return toast.error(t('reviews.pickRating'));
+    // Attachments finish uploading before the review is posted — it carries their
+    // URLs, so submitting mid-upload would drop whatever had not landed yet.
+    if (uploading) return toast.error(t('reviews.mediaWait'));
 
     setSubmitting(true);
     try {
-      await productApi.createReview(productId, { rating, title, comment });
+      await productApi.createReview(productId, { rating, title, comment, media });
       toast.success(t('reviews.thanks'));
       setRating(0);
       setTitle('');
       setComment('');
+      setMedia([]);
       onSubmitted();
       onClose();
     } catch (err) {
@@ -138,11 +146,18 @@ function WriteReviewModal({ open, onClose, productId, onSubmitted }) {
           <p className="mt-1 text-right text-xs text-ink-400">{comment.length}/2000</p>
         </div>
 
+        <ReviewMediaUploader
+          value={media}
+          onChange={setMedia}
+          onBusyChange={setUploading}
+          disabled={submitting}
+        />
+
         <div className="flex justify-end gap-3 pt-1">
           <button type="button" onClick={onClose} className="btn-outline">
             {t('common:actions.cancel')}
           </button>
-          <button type="submit" disabled={submitting} className="btn-primary">
+          <button type="submit" disabled={submitting || uploading} className="btn-primary">
             {submitting && <Spinner size={14} />}
             {t('reviews.submit')}
           </button>
@@ -269,6 +284,8 @@ export default function ProductReviews({ product }) {
                 {review.comment && (
                   <p className="text-sm leading-relaxed text-ink-600">{review.comment}</p>
                 )}
+
+                <ReviewMediaGallery media={review.media || []} authorName={review.user?.name} />
               </article>
             ))}
           </div>

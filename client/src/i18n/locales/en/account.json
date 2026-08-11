@@ -281,6 +281,7 @@
     "showPasswordAria": "Show password",
     "hidePasswordAria": "Hide password",
     "or": "or",
+    "continueWithGoogle": "Continue with Google",
     "googleUnavailable": "Google sign-in is unavailable right now. Please use your email and password.",
     "rules": {
       "length": "At least 8 characters",

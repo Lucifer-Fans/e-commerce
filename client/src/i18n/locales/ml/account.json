@@ -263,6 +263,7 @@
     "showPasswordAria": "പാസ്‌വേഡ് കാണിക്കുക",
     "hidePasswordAria": "പാസ്‌വേഡ് മറയ്ക്കുക",
     "or": "അല്ലെങ്കിൽ",
+    "continueWithGoogle": "Google ഉപയോഗിച്ച് തുടരുക",
     "googleUnavailable": "Google സൈൻ-ഇൻ ഇപ്പോൾ ലഭ്യമല്ല. ദയവായി നിങ്ങളുടെ ഇമെയിലും പാസ്‌വേഡും ഉപയോഗിക്കുക.",
     "rules": {
       "length": "കുറഞ്ഞത് 8 അക്ഷരങ്ങൾ",

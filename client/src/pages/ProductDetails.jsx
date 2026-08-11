@@ -6,6 +6,7 @@ import { productApi } from '../api/endpoints';
 import useFetch from '../hooks/useFetch';
 import useCartActions from '../hooks/useCartActions';
 import useVariantSelection from '../hooks/useVariantSelection';
+import useSettings from '../settings/useSettings';
 import { useLiveRefetch, useRealtimeRoom } from '../realtime/useRealtime';
 import { CATALOG_EVENTS, REVIEW_EVENTS, rooms } from '../realtime/events';
 import { pushRecentlyViewed, getRecentlyViewed } from '../utils/recentlyViewed';
@@ -76,6 +77,7 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { handleAddToCart, handleBuyNow } = useCartActions();
+  const { siteName } = useSettings();
 
   const [quantity, setQuantity] = useState(1);
   const [recent, setRecent] = useState([]);
@@ -150,16 +152,23 @@ export default function ProductDetails() {
     setQuantity((current) => Math.min(Math.max(1, current), Math.max(1, Math.min(pricing.stock, 10))));
   }, [pricing.stock]);
 
+  /**
+   * WhatsApp and friends render `text` and then the link on its own line, so the message
+   * reads "Take a look at this <product> (<the chosen options>) on <store>" above the URL —
+   * the SKU is named in words as well as carried by `?v=`, so the receiver sees the same
+   * combination the sender was looking at.
+   */
   const share = async () => {
-    const shareData = {
-      title: product.name,
-      text: product.shortDescription || product.name,
-      url: window.location.href,
-    };
+    const options =
+      (variant?.attributes || []).map((a) => a.value).join(', ') || variantLabel(variant);
+    const name = options ? `${product.name} (${options})` : product.name;
+    const text = t('details.shareText', { product: name, app: siteName });
+    const url = window.location.href;
+
     try {
-      if (navigator.share) await navigator.share(shareData);
+      if (navigator.share) await navigator.share({ title: name, text, url });
       else {
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(`${text}\n${url}`);
         toast.success(t('details.linkCopied'));
       }
     } catch {

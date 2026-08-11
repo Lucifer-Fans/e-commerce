@@ -11,6 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
+import SendIcon from '@mui/icons-material/SendOutlined';
+import DateTimePickerField from '../common/DateTimePickerField';
 
 /** Mirrors INTERVIEW_MODES on the server's JobApplication model. */
 const MODES = [
@@ -20,6 +22,9 @@ const MODES = [
 ];
 
 const DURATIONS = [15, 30, 45, 60, 90, 120];
+
+/** The same 10 digit number every other phone field on the platform takes. */
+const PHONE_RE = /^[6-9]\d{9}$/;
 
 const EMPTY = {
   scheduledAt: '',
@@ -33,10 +38,10 @@ const EMPTY = {
 };
 
 /**
- * `datetime-local` speaks "YYYY-MM-DDTHH:mm" in the browser's own timezone and
- * has no concept of one, so the value is turned into a real instant here rather
- * than posted as typed — a bare local string would be read as UTC on the server
- * and land the interview hours away from the time HR picked.
+ * The picker speaks "YYYY-MM-DDTHH:mm" in the browser's own timezone and has no
+ * concept of one, so the value is turned into a real instant here rather than
+ * posted as typed — a bare local string would be read as UTC on the server and
+ * land the interview hours away from the time HR picked.
  */
 const toISO = (local) => (local ? new Date(local).toISOString() : '');
 
@@ -88,18 +93,61 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
     setErrors((prev) => (prev[field] ? { ...prev, [field]: '' } : prev));
   };
 
-  /** The same three checks the server enforces, so the round trip is not the first to say no. */
+  /**
+   * The number is kept as the ten bare digits the platform stores everywhere
+   * else, so anything that cannot be part of one never lands in the box —
+   * spacing and a pasted country code are dropped as they arrive rather than
+   * refused on submit.
+   */
+  const setPhone = (e) => {
+    const digits = e.target.value.replace(/\D/g, '');
+    // A pasted "+91 98765 43210" is the number, not a twelve digit one.
+    const local = digits.length > 10 && digits.startsWith('91') ? digits.slice(2) : digits;
+    setForm((f) => ({ ...f, contactPhone: local.slice(0, 10) }));
+    setErrors((prev) => (prev.contactPhone ? { ...prev, contactPhone: '' } : prev));
+  };
+
+  /**
+   * Switching the mode swaps the "where" field out, so its complaint goes with
+   * it — a link error must not sit under a venue box the admin never filled in.
+   */
+  const setMode = (e) => {
+    setForm((f) => ({ ...f, mode: e.target.value }));
+    setErrors(({ location, meetingLink, ...rest }) => rest);
+  };
+
+  /**
+   * The same checks the server enforces, so the round trip is not the first to
+   * say no. Anything optional is only checked once it has been filled in: a
+   * blank contact number is fine, a half-typed one is not.
+   */
   const validate = () => {
     const next = {};
-    if (!form.scheduledAt) next.scheduledAt = 'Pick the interview date and time';
-    else if (new Date(form.scheduledAt).getTime() <= Date.now())
-      next.scheduledAt = 'The interview must be in the future';
+
+    const at = form.scheduledAt ? new Date(form.scheduledAt) : null;
+    if (!at) next.scheduledAt = 'Pick the interview date and time';
+    else if (Number.isNaN(at.getTime())) next.scheduledAt = 'Enter a valid interview date and time';
+    else if (at.getTime() <= Date.now()) next.scheduledAt = 'The interview must be in the future';
+
+    if (!DURATIONS.includes(Number(form.durationMins)))
+      next.durationMins = 'Choose how long the round will run';
 
     if (online) {
-      if (!form.meetingLink.trim()) next.meetingLink = 'Add the meeting link';
-      else if (!/^https?:\/\/\S+$/i.test(form.meetingLink.trim()))
+      const link = form.meetingLink.trim();
+      if (!link) next.meetingLink = 'Add the meeting link';
+      else if (!/^https?:\/\/\S+\.\S+/i.test(link))
         next.meetingLink = 'Enter a full URL, starting with https://';
+    } else if (form.mode === 'in-person' && !form.location.trim()) {
+      // An in-person invitation with no address cannot be acted on, so this one
+      // "where" is the one the mail cannot go out without.
+      next.location = 'Add where the candidate should come';
     }
+
+    const interviewer = form.interviewer.trim();
+    if (interviewer && interviewer.length < 2) next.interviewer = "Enter the interviewer's name";
+
+    if (form.contactPhone && !PHONE_RE.test(form.contactPhone))
+      next.contactPhone = 'Enter a valid 10 digit mobile number';
 
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -157,17 +205,14 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
 
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 7 }}>
-              <TextField
-                fullWidth
+              <DateTimePickerField
                 required
-                type="datetime-local"
                 label="Interview date and time"
                 value={form.scheduledAt}
                 onChange={set('scheduledAt')}
                 error={Boolean(errors.scheduledAt)}
                 helperText={errors.scheduledAt || "Shown at the top of the applicant's invitation"}
-                InputLabelProps={{ shrink: true }}
-                inputProps={{ min: earliest() }}
+                min={earliest()}
               />
             </Grid>
 
@@ -178,6 +223,8 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
                 label="Duration"
                 value={form.durationMins}
                 onChange={set('durationMins')}
+                error={Boolean(errors.durationMins)}
+                helperText={errors.durationMins}
               >
                 {DURATIONS.map((mins) => (
                   <MenuItem key={mins} value={mins}>
@@ -188,7 +235,7 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
             </Grid>
 
             <Grid size={{ xs: 12, sm: 5 }}>
-              <TextField fullWidth select label="Mode" value={form.mode} onChange={set('mode')}>
+              <TextField fullWidth select label="Mode" value={form.mode} onChange={setMode}>
                 {MODES.map((mode) => (
                   <MenuItem key={mode.value} value={mode.value}>
                     {mode.label}
@@ -215,13 +262,22 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
               ) : (
                 <TextField
                   fullWidth
+                  // A room is the one "where" the invitation cannot do without;
+                  // a phone round already has the number it was applied with.
+                  required={form.mode === 'in-person'}
                   label={form.mode === 'phone' ? 'How we will call' : 'Venue'}
                   placeholder={
                     form.mode === 'phone' ? 'On your registered number' : 'Office address or room'
                   }
                   value={form.location}
                   onChange={set('location')}
-                  helperText="Optional — printed in the invitation"
+                  error={Boolean(errors.location)}
+                  helperText={
+                    errors.location ||
+                    (form.mode === 'in-person'
+                      ? 'Printed in the invitation'
+                      : 'Optional — printed in the invitation')
+                  }
                   inputProps={{ maxLength: 200 }}
                 />
               )}
@@ -234,7 +290,8 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
                 placeholder="e.g. Rahul Mehta, Engineering Lead"
                 value={form.interviewer}
                 onChange={set('interviewer')}
-                helperText="Optional — who the candidate will meet"
+                error={Boolean(errors.interviewer)}
+                helperText={errors.interviewer || 'Optional — who the candidate will meet'}
                 inputProps={{ maxLength: 80 }}
               />
             </Grid>
@@ -243,11 +300,14 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
               <TextField
                 fullWidth
                 label="Contact number"
-                placeholder="+91 9876543210"
+                placeholder="9876543210"
                 value={form.contactPhone}
-                onChange={set('contactPhone')}
-                helperText="Optional — someone to reach on the day"
-                inputProps={{ maxLength: 20 }}
+                onChange={setPhone}
+                error={Boolean(errors.contactPhone)}
+                helperText={
+                  errors.contactPhone || 'Optional — a 10 digit number to reach on the day'
+                }
+                inputProps={{ inputMode: 'numeric', maxLength: 10, autoComplete: 'tel' }}
               />
             </Grid>
 
@@ -276,7 +336,16 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
           variant="contained"
           onClick={submit}
           disabled={saving}
-          startIcon={saving ? <CircularProgress size={15} color="inherit" /> : null}
+          // Leading, and tilted up out of the button the way a paper plane is
+          // actually thrown — the flat, straight-right default reads as an arrow.
+          // The spinner takes the same slot untilted, so nothing shifts on save.
+          startIcon={
+            saving ? (
+              <CircularProgress size={15} color="inherit" />
+            ) : (
+              <SendIcon sx={{ transform: 'rotate(-45deg)' }} />
+            )
+          }
         >
           {rescheduling ? 'Resend invitation' : 'Send invitation'}
         </Button>

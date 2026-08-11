@@ -263,6 +263,7 @@
     "showPasswordAria": "પાસવર્ડ બતાવો",
     "hidePasswordAria": "પાસવર્ડ છુપાવો",
     "or": "અથવા",
+    "continueWithGoogle": "Google સાથે ચાલુ રાખો",
     "googleUnavailable": "Google સાઇન-ઇન અત્યારે ઉપલબ્ધ નથી. કૃપા કરીને તમારો ઇમેઇલ અને પાસવર્ડ વાપરો.",
     "rules": {
       "length": "ઓછામાં ઓછા 8 અક્ષરો",

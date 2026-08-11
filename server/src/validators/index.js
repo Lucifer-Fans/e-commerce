@@ -5,6 +5,12 @@ const { SUPPORTED_LANGUAGES } = require('../config/languages');
 const EXPERIENCE_VALUES = EXPERIENCE_LEVELS.map((level) => level.value);
 const INTERVIEW_MODE_VALUES = INTERVIEW_MODES.map((mode) => mode.value);
 
+const MAX_REVIEW_MEDIA = require('../models/Review').MAX_MEDIA;
+
+/** Only URLs Cloudinary handed us back count as an attachment. */
+const isStoreAsset = (value) =>
+  typeof value === 'string' && /^https:\/\/res\.cloudinary\.com\/[\w-]+\//.test(value);
+
 module.exports = {
   ...require('./common.validators'),
   auth: require('./auth.validators'),
@@ -146,6 +152,24 @@ module.exports = {
     body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5').toInt(),
     body('title').optional().trim().isLength({ max: 120 }),
     body('comment').optional().trim().isLength({ max: 2000 }),
+
+    /*
+     * Attachments arrive as URLs the client got back from /uploads/media, never as
+     * files — so the only thing worth checking is that they really are assets this
+     * store uploaded. Anything else would let a review embed a remote URL of the
+     * author's choosing on a product page.
+     */
+    body('media')
+      .optional({ values: 'null' })
+      .isArray({ max: MAX_REVIEW_MEDIA })
+      .withMessage(`You can attach at most ${MAX_REVIEW_MEDIA} photos or videos`),
+    body('media.*.type').isIn(['image', 'video']).withMessage('Attachment type must be image or video'),
+    body('media.*.url').custom(isStoreAsset).withMessage('Attachments must be uploaded through this store'),
+    body('media.*.thumbnail')
+      .optional({ values: 'falsy' })
+      .custom(isStoreAsset)
+      .withMessage('Attachments must be uploaded through this store'),
+    body('media.*.publicId').optional({ values: 'falsy' }).isString().trim(),
   ],
 
   couponRules: [
@@ -283,8 +307,9 @@ module.exports = {
       .if(body('status').equals('interviewed'))
       .isIn(INTERVIEW_MODE_VALUES)
       .withMessage('Select how the interview will be held'),
-    // Required only for the mode that cannot be joined without it. An in-person
-    // round can legitimately say nothing but "our office" in the instructions.
+    // Each mode is asked only for the "where" it cannot be attended without: a
+    // link for a call nobody can join otherwise, an address for a room nobody
+    // can find. A phone round needs neither — the number applied with is on file.
     body('interview.meetingLink')
       .if(body('status').equals('interviewed'))
       .if(body('interview.mode').equals('online'))
@@ -294,11 +319,22 @@ module.exports = {
       .bail()
       .isURL({ require_protocol: true })
       .withMessage('The meeting link must be a full URL, starting with https://'),
+    body('interview.location')
+      .if(body('status').equals('interviewed'))
+      .if(body('interview.mode').equals('in-person'))
+      .trim()
+      .notEmpty()
+      .withMessage('Add where the candidate should come for an in-person interview'),
 
-    body('interview.location').optional({ values: 'falsy' }).trim().isLength({ max: 200 }),
-    body('interview.interviewer').optional({ values: 'falsy' }).trim().isLength({ max: 80 }),
-    body('interview.contactPhone').optional({ values: 'falsy' }).trim().isLength({ min: 6, max: 20 })
-      .withMessage('Enter a valid contact number'),
+    body('interview.location').optional({ values: 'falsy' }).trim().isLength({ max: 200 })
+      .withMessage('The venue cannot be longer than 200 characters'),
+    body('interview.interviewer').optional({ values: 'falsy' }).trim().isLength({ min: 2, max: 80 })
+      .withMessage("Enter the interviewer's name, up to 80 characters"),
+    // The same 10 digit number every other phone field on the platform takes, so
+    // what the invitation prints is a number the applicant can actually dial.
+    body('interview.contactPhone').optional({ values: 'falsy' }).trim()
+      .matches(/^[6-9]\d{9}$/)
+      .withMessage('Enter a valid 10 digit mobile number'),
     body('interview.durationMins').optional({ values: 'falsy' }).isInt({ min: 5, max: 600 }).toInt()
       .withMessage('Duration must be between 5 and 600 minutes'),
     body('interview.instructions').optional({ values: 'falsy' }).trim().isLength({ max: 1000 }),

@@ -285,6 +285,17 @@ exports.updateApplicationStatus = asyncHandler(async (req, res) => {
   const application = await JobApplication.findById(req.params.id);
   if (!application) throw ApiError.notFound('Application not found');
 
+  // Review only moves forward, and `rejected` / `hired` close the record: both
+  // rules live on the model, next to the statuses themselves. The dropdown
+  // disables what it must; this is what holds if the request arrives anyway.
+  if (!JobApplication.canChangeStatus(application.status, req.body.status)) {
+    throw ApiError.badRequest(
+      JobApplication.FINAL_APPLICATION_STATUSES.includes(application.status)
+        ? `This application is already marked ${application.status} and can no longer be changed`
+        : 'An application cannot be moved back to an earlier stage'
+    );
+  }
+
   // A move to `interviewed` always arrives from the scheduling dialog, which
   // cannot be submitted without a slot. Re-sending it on the status the record
   // already holds is therefore a *reschedule*, and the one case where the same

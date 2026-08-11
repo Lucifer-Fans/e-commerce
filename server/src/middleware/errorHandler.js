@@ -6,7 +6,7 @@ const notFound = (req, _res, next) =>
   next(ApiError.notFound(`Route ${req.method} ${req.originalUrl} not found`));
 
 /** Translate driver/library errors into ApiError so clients get consistent shapes. */
-function normalise(err) {
+function normalise(err, req = {}) {
   if (err instanceof ApiError) return err;
 
   if (err.name === 'CastError') {
@@ -49,7 +49,8 @@ function normalise(err) {
   if (err.name === 'TokenExpiredError') return ApiError.unauthorized('Token expired');
   if (err.name === 'MulterError') {
     const map = {
-      LIMIT_FILE_SIZE: 'File is too large (max 5MB)',
+      // Routes that accept more than images set their own ceiling on the request.
+      LIMIT_FILE_SIZE: `File is too large (max ${req.uploadMaxLabel || '5MB'})`,
       LIMIT_FILE_COUNT: 'Too many files (max 5 images)',
       LIMIT_UNEXPECTED_FILE: 'Unexpected file field',
     };
@@ -60,7 +61,7 @@ function normalise(err) {
 }
 
 function errorHandler(err, req, res, next) {
-  const error = normalise(err);
+  const error = normalise(err, req);
   const statusCode = error.statusCode || 500;
   const isOperational = error.isOperational === true;
 

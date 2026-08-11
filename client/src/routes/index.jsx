@@ -19,6 +19,15 @@ const Contact = lazy(() => import('../pages/Contact'));
 const Careers = lazy(() => import('../pages/Careers'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
+/** Informational and policy pages — the set the footer links to. */
+const About = lazy(() => import('../pages/About'));
+const ShippingPolicy = lazy(() => import('../pages/ShippingPolicy'));
+const Returns = lazy(() => import('../pages/Returns'));
+const RefundPolicy = lazy(() => import('../pages/RefundPolicy'));
+const Faq = lazy(() => import('../pages/Faq'));
+const Terms = lazy(() => import('../pages/Terms'));
+const Privacy = lazy(() => import('../pages/Privacy'));
+
 const Login = lazy(() => import('../pages/auth/Login'));
 const Register = lazy(() => import('../pages/auth/Register'));
 const VerifyEmail = lazy(() => import('../pages/auth/VerifyEmail'));
@@ -50,6 +59,14 @@ export const router = createBrowserRouter([
       { path: 'contact', element: <Contact /> },
       { path: 'careers', element: <Careers /> },
 
+      { path: 'about', element: <About /> },
+      { path: 'shipping-policy', element: <ShippingPolicy /> },
+      { path: 'returns', element: <Returns /> },
+      { path: 'refund-policy', element: <RefundPolicy /> },
+      { path: 'faq', element: <Faq /> },
+      { path: 'terms', element: <Terms /> },
+      { path: 'privacy', element: <Privacy /> },
+
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       // Reached from the register form and from a login refused as unverified; it
@@ -79,6 +96,18 @@ export const router = createBrowserRouter([
       // Legacy/alias paths people type by hand.
       { path: 'orders', element: <Navigate to="/account/orders" replace /> },
       { path: 'profile', element: <Navigate to="/account" replace /> },
+      // The policy URLs shoppers guess, and the ones older links and printed
+      // invoices point at. Redirected rather than duplicated so each page keeps
+      // exactly one canonical URL for search engines.
+      { path: 'about-us', element: <Navigate to="/about" replace /> },
+      { path: 'shipping', element: <Navigate to="/shipping-policy" replace /> },
+      { path: 'return-policy', element: <Navigate to="/returns" replace /> },
+      { path: 'returns-policy', element: <Navigate to="/returns" replace /> },
+      { path: 'refunds', element: <Navigate to="/refund-policy" replace /> },
+      { path: 'faqs', element: <Navigate to="/faq" replace /> },
+      { path: 'terms-and-conditions', element: <Navigate to="/terms" replace /> },
+      { path: 'terms-of-service', element: <Navigate to="/terms" replace /> },
+      { path: 'privacy-policy', element: <Navigate to="/privacy" replace /> },
 
       { path: '*', element: <NotFound /> },
     ],

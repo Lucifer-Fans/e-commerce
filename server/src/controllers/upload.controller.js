@@ -2,7 +2,8 @@ const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
 const { sendSuccess } = require('../utils/apiResponse');
 const env = require('../config/env');
-const { uploadBuffer, destroyAsset } = require('../config/cloudinary');
+const { uploadBuffer, uploadVideoBuffer, destroyAsset } = require('../config/cloudinary');
+const { MAX_BYTES, VIDEO_ALLOWED } = require('../middleware/upload');
 
 function assertEnabled() {
   if (!env.cloudinaryEnabled) {
@@ -12,7 +13,16 @@ function assertEnabled() {
   }
 }
 
-const folderFor = (kind) => `${env.cloudinary.folder}/${kind || 'misc'}`;
+/**
+ * `kind` is a client-supplied field, and on the review route that client is any
+ * signed-in shopper — so it is reduced to a plain slug rather than pasted into a
+ * path as sent. Everything still lands under this store's folder, which is what
+ * the delete endpoint scopes itself to.
+ */
+const folderFor = (kind) => {
+  const slug = String(kind || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  return `${env.cloudinary.folder}/${slug || 'misc'}`;
+};
 
 /**
  * POST /uploads/image  (field: image)
@@ -40,6 +50,35 @@ exports.uploadImages = asyncHandler(async (req, res) => {
     statusCode: 201,
     message: `${images.length} image(s) uploaded`,
     data: { images },
+  });
+});
+
+/**
+ * POST /uploads/media  (field: file)
+ *
+ * One photo *or* one short video, for shoppers attaching evidence to a review.
+ * Images ride the same pipeline as everything else; videos keep their original
+ * bytes and get a poster frame derived on delivery.
+ */
+exports.uploadMedia = asyncHandler(async (req, res) => {
+  assertEnabled();
+  if (!req.file) throw ApiError.badRequest('No file received');
+
+  const isVideo = VIDEO_ALLOWED.includes(req.file.mimetype);
+  // multer's cap is the video one; images are held to the tighter limit here.
+  if (!isVideo && req.file.size > MAX_BYTES) {
+    throw ApiError.badRequest('Image is too large (max 5MB)');
+  }
+
+  const folder = folderFor(req.body.kind);
+  const asset = isVideo
+    ? await uploadVideoBuffer(req.file.buffer, { folder })
+    : await uploadBuffer(req.file.buffer, { folder });
+
+  return sendSuccess(res, {
+    statusCode: 201,
+    message: isVideo ? 'Video uploaded' : 'Image uploaded',
+    data: { media: { type: isVideo ? 'video' : 'image', ...asset } },
   });
 });
 

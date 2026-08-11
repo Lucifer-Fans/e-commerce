@@ -170,6 +170,16 @@ function createHtmlMeta(distPath) {
     let status = 200;
     try {
       const meta = await seoService.resolveMeta(req.path, lang);
+
+      // An alias path answers with a real redirect rather than the SPA, so a
+      // crawler follows it to the canonical page instead of recording the alias.
+      // The query string rides along — `?lang=` is how an hreflang alternate picks
+      // its language, and dropping it would land the visitor in English.
+      if (meta.redirectTo) {
+        const query = req.originalUrl.slice(req.path.length);
+        return res.redirect(meta.status || 301, `${meta.redirectTo}${query}`);
+      }
+
       status = meta.status || 200;
       body = html
         .replace(/<html([^>]*)\slang="[^"]*"/i, '<html$1')

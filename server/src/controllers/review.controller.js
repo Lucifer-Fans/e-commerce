@@ -3,6 +3,20 @@ const ApiError = require('../utils/ApiError');
 const { sendSuccess, paginationMeta } = require('../utils/apiResponse');
 const { Review, Product, Order } = require('../models');
 const broadcast = require('../realtime/broadcast');
+const { destroyAsset } = require('../config/cloudinary');
+
+/**
+ * Free the Cloudinary assets a review no longer references. Fire-and-forget: a
+ * failed remote cleanup is logged inside `destroyAsset` and must never turn a
+ * successful delete or edit into an error for the shopper.
+ */
+function releaseMedia(items = []) {
+  items
+    .filter((item) => item?.publicId)
+    .forEach((item) => {
+      destroyAsset(item.publicId, { resourceType: item.type === 'video' ? 'video' : 'image' });
+    });
+}
 
 /**
  * Reads back the product's rating aggregate. The Review model resyncs it in a post
@@ -84,6 +98,7 @@ exports.createReview = asyncHandler(async (req, res) => {
     title: req.body.title,
     comment: req.body.comment,
     images: req.body.images || [],
+    media: req.body.media || [],
   });
 
   await review.populate('user', 'name avatar');
@@ -99,10 +114,20 @@ exports.updateReview = asyncHandler(async (req, res) => {
   if (!review) throw ApiError.notFound('Review not found');
   if (String(review.user) !== String(req.user._id)) throw ApiError.forbidden();
 
-  ['rating', 'title', 'comment', 'images'].forEach((field) => {
+  // Whatever the edit drops is released only once the save has gone through.
+  const droppedMedia =
+    req.body.media === undefined
+      ? []
+      : review.media.filter(
+          (existing) => !req.body.media.some((kept) => kept.publicId === existing.publicId)
+        );
+
+  ['rating', 'title', 'comment', 'images', 'media'].forEach((field) => {
     if (req.body[field] !== undefined) review[field] = req.body[field];
   });
   await review.save();
+
+  releaseMedia(droppedMedia);
 
   broadcast.reviewChanged('updated', review, await currentRatings(review.product));
 
@@ -118,6 +143,7 @@ exports.deleteReview = asyncHandler(async (req, res) => {
   }
 
   await review.deleteOne();
+  releaseMedia(review.media);
 
   broadcast.reviewChanged('deleted', review, await currentRatings(review.product));
 

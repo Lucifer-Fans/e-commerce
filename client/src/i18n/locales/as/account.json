@@ -263,6 +263,7 @@
     "showPasswordAria": "পাছৱৰ্ড দেখুৱাওক",
     "hidePasswordAria": "পাছৱৰ্ড লুকুৱাওক",
     "or": "নাইবা",
+    "continueWithGoogle": "Google ৰ সৈতে অব্যাহত ৰাখক",
     "googleUnavailable": "Google ছাইন-ইন এতিয়া উপলব্ধ নহয়। অনুগ্ৰহ কৰি আপোনাৰ ইমেইল আৰু পাছৱৰ্ড ব্যৱহাৰ কৰক।",
     "rules": {
       "length": "কমেও ৮টা আখৰ",

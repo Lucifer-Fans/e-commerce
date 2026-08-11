@@ -263,6 +263,7 @@
     "showPasswordAria": "கடவுச்சொல்லைக் காட்டு",
     "hidePasswordAria": "கடவுச்சொல்லை மறை",
     "or": "அல்லது",
+    "continueWithGoogle": "Google மூலம் தொடரவும்",
     "googleUnavailable": "Google உள்நுழைவு இப்போது கிடைக்கவில்லை. உங்கள் மின்னஞ்சல் மற்றும் கடவுச்சொல்லைப் பயன்படுத்தவும்.",
     "rules": {
       "length": "குறைந்தது 8 எழுத்துகள்",

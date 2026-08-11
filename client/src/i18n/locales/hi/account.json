@@ -263,6 +263,7 @@
     "showPasswordAria": "पासवर्ड दिखाएँ",
     "hidePasswordAria": "पासवर्ड छिपाएँ",
     "or": "या",
+    "continueWithGoogle": "Google से जारी रखें",
     "googleUnavailable": "Google साइन-इन अभी उपलब्ध नहीं है। कृपया अपने ईमेल और पासवर्ड का उपयोग करें।",
     "rules": {
       "length": "कम से कम 8 अक्षर",

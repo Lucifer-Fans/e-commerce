@@ -109,6 +109,71 @@ const STATIC_ROUTES = {
     title: 'Careers',
     description: 'Open roles and how to apply.',
   },
+
+  /*
+   * The informational and policy pages. They are the pages most often shared as a
+   * bare link — a shopper sending "here's their return policy" to a colleague —
+   * and the ones a search engine is most likely to index for a question, so an
+   * unfurled preview and an indexed snippet both have to say something real.
+   *
+   * Mirrors the `legal` translation bundle the SPA renders from; see
+   * client/src/i18n/locales/en/legal.json.
+   */
+  '/about': {
+    title: 'About Us',
+    description:
+      'An Indian online store for building materials, hardware and tools — genuine brands, transparent pricing, secure payments and delivery across India.',
+  },
+  '/shipping-policy': {
+    title: 'Shipping Policy',
+    description:
+      'Order processing, delivery charges, estimated delivery times, delivery areas across India, tracking, delays, address problems and damaged parcels.',
+  },
+  '/returns': {
+    title: 'Returns & Refunds',
+    description:
+      'Return eligibility, the 7-day return window, product condition, non-returnable items, damaged or wrong deliveries, pickup, inspection and replacement.',
+  },
+  '/refund-policy': {
+    title: 'Refund Policy',
+    description:
+      'When a refund is due, how long it takes, which method it returns to, and how cancelled orders, approved returns, failed payments and cash on delivery are treated.',
+  },
+  '/faq': {
+    title: 'FAQs',
+    description:
+      'Answers to common questions about ordering, payment, delivery, cancellation, returns, refunds and your account.',
+  },
+  '/terms': {
+    title: 'Terms & Conditions',
+    description:
+      'The terms governing accounts, orders, pricing, payments, cancellation, shipping, returns, refunds, coupons, intellectual property and liability.',
+  },
+  '/privacy': {
+    title: 'Privacy Policy',
+    description:
+      'What personal information we collect, how it is used, the cookies we rely on, the payment and service providers involved, security, retention and your rights.',
+  },
+};
+
+/**
+ * Policy URLs people type or link to that are not the canonical one. The SPA
+ * redirects them client-side; this makes the server say the same thing with a
+ * 301, so a crawler follows it to the real page instead of recording the alias as
+ * a duplicate — or, worse, as the soft 404 an unknown path resolves to below.
+ *
+ * Kept in step with the alias routes in client/src/routes/index.jsx.
+ */
+const ALIAS_ROUTES = {
+  '/about-us': '/about',
+  '/shipping': '/shipping-policy',
+  '/return-policy': '/returns',
+  '/returns-policy': '/returns',
+  '/refunds': '/refund-policy',
+  '/faqs': '/faq',
+  '/terms-and-conditions': '/terms',
+  '/terms-of-service': '/terms',
+  '/privacy-policy': '/privacy',
 };
 
 const isPrivate = (pathname) =>
@@ -146,6 +211,10 @@ async function resolveMeta(pathname, lang = DEFAULT_LANGUAGE) {
     // "soft 404" — a page that claims to exist and shows nothing.
     status: 200,
   };
+
+  // Before anything else: an alias is not a page, it is a pointer to one.
+  const alias = ALIAS_ROUTES[pathname.replace(/\/$/, '')];
+  if (alias) return { ...base, redirectTo: alias, canonicalPath: alias, status: 301 };
 
   if (isPrivate(pathname)) {
     return { ...base, title: `${siteName}`, noIndex: true };

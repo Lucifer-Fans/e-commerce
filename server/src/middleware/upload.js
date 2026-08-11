@@ -16,6 +16,32 @@ const upload = multer({
   },
 });
 
+/* ---------------- Review attachments (photo or video) ---------------- */
+
+const VIDEO_ALLOWED = ['video/mp4', 'video/webm', 'video/quicktime'];
+const VIDEO_MAX_BYTES = 30 * 1024 * 1024;
+
+/**
+ * One file per request, image or video.
+ *
+ * multer applies a single size cap per instance, so the ceiling here is the video
+ * one and the tighter image limit is enforced in the controller once the buffer —
+ * and its mimetype — are both in hand. `uploadMaxLabel` is left on the request so
+ * a rejection names the limit that was actually exceeded rather than the other one.
+ */
+const mediaUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: VIDEO_MAX_BYTES, files: 1 },
+  fileFilter(req, file, cb) {
+    const isVideo = VIDEO_ALLOWED.includes(file.mimetype);
+    if (!isVideo && !ALLOWED.includes(file.mimetype)) {
+      return cb(ApiError.badRequest('Only JPG, PNG, WEBP, AVIF images and MP4, WEBM, MOV videos are allowed'));
+    }
+    req.uploadMaxLabel = isVideo ? '30MB' : '5MB';
+    cb(null, true);
+  },
+});
+
 /* ---------------- Résumés (careers form) ---------------- */
 
 const RESUME_MIMES = [
@@ -42,9 +68,12 @@ const resumeUpload = multer({
 module.exports = {
   uploadSingle: upload.single('image'),
   uploadMultiple: upload.array('images', 5),
+  uploadMedia: mediaUpload.single('file'),
   uploadResume: resumeUpload.single('resume'),
   MAX_BYTES,
   ALLOWED,
+  VIDEO_ALLOWED,
+  VIDEO_MAX_BYTES,
   RESUME_MAX_BYTES,
   RESUME_MIMES,
 };
