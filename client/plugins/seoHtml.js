@@ -37,6 +37,11 @@ const absolute = (url, siteUrl) => {
   return `${siteUrl.replace(/\/+$/, '')}/${String(url).replace(/^\/+/, '')}`;
 };
 
+const warnOrConsole = (ctx, message) => {
+  if (ctx?.warn) ctx.warn(message);
+  else console.warn(message);
+};
+
 async function fetchSettings(apiUrl, timeoutMs) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -112,7 +117,7 @@ export default function seoHtml(env = {}) {
 
     async transformIndexHtml(html) {
       if (!MARKER.test(html)) {
-        this.warn?.('index.html has no <!--seo--> block — meta tags were left untouched.');
+        warnOrConsole(this, 'index.html has no <!--seo--> block — meta tags were left untouched.');
         return html;
       }
 
@@ -120,7 +125,8 @@ export default function seoHtml(env = {}) {
       try {
         settings = await fetchSettings(apiUrl, timeoutMs);
       } catch (err) {
-        this.warn?.(
+        warnOrConsole(
+          this,
           `Could not read SEO settings from ${apiUrl}/settings (${err.message}). ` +
             'index.html keeps its placeholder meta tags — rebuild once the API is reachable.'
         );
