@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "ಗುಣಮಟ್ಟದ ಕಟ್ಟಡ ಸಾಮಗ್ರಿ, ಹಾರ್ಡ್‌ವೇರ್ ಮತ್ತು ಉಪಕರಣಗಳು",
     "seoDescription": "ಪ್ರೀಮಿಯಂ ಪ್ಲೈವುಡ್, ಲ್ಯಾಮಿನೇಟ್, ಹಾರ್ಡ್‌ವೇರ್, ಪೇಂಟ್, ಪವರ್ ಟೂಲ್ಸ್ ಮತ್ತು ಎಲೆಕ್ಟ್ರಿಕಲ್ಸ್ ಖರೀದಿಸಿ. ಅಸಲಿ ಬ್ರಾಂಡ್‌ಗಳು, ಸುರಕ್ಷಿತ ಪಾವತಿ ಮತ್ತು ವೇಗದ ವಿತರಣೆ.",
     "feedError": "ಉತ್ಪನ್ನಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+    "bannersError": "ಬ್ಯಾನರ್‌ಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
+    "categoriesError": "ವರ್ಗಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ",
     "forYou": "ನಿಮಗಾಗಿ ಉತ್ಪನ್ನಗಳು",
     "topSelling": "ಅತಿ ಹೆಚ್ಚು ಮಾರಾಟವಾಗುವ ಉತ್ಪನ್ನಗಳು",
     "recentlyViewed": "ಇತ್ತೀಚೆಗೆ ನೋಡಿದವು",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} ರೇಟಿಂಗ್‌ಗಳು",
     "noRatings": "ಇನ್ನೂ ರೇಟಿಂಗ್‌ಗಳಿಲ್ಲ",
     "hurryLeft_one": "ಬೇಗ ಮಾಡಿ! ಕೇವಲ {{count}} ಉಳಿದಿವೆ",
-
     "hurryLeft_other": "ಬೇಗ ಮಾಡಿ! ಕೇವಲ {{count}} ಉಳಿದಿವೆ",
-
     "youSave": "ನೀವು {{amount}} ಉಳಿಸುತ್ತೀರಿ",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ಒಂದು ಆಯ್ಕೆಯನ್ನು ಆರಿಸಿ",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "ಆರಿಸಿ",
     "selectedAttribute": "ಆಯ್ಕೆಮಾಡಿದ {{attribute}}",
-
     "selectAttribute": "{{attribute}} ಆರಿಸಿ",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "ಲಭ್ಯವಿಲ್ಲ",
@@ -192,7 +190,7 @@
     "anonymous": "ಅನಾಮಧೇಯ",
     "verified": "ಪರಿಶೀಲಿಸಿದ ಖರೀದಿ",
     "mediaLabel": "ಫೋಟೋ ಅಥವಾ ವಿಡಿಯೊ",
-    "mediaAdd": "ಸೇರಿಸಿ",
+    "mediaAdd": "ಫೋಟೋ ಅಥವಾ ವಿಡಿಯೊ ಸೇರಿಸಿ",
     "mediaHint": "ಗರಿಷ್ಠ {{max}} ಫೈಲ್‌ಗಳು · ಫೋಟೋ {{imageSize}}MB ವರೆಗೆ, ವಿಡಿಯೊ {{videoSize}}MB ವರೆಗೆ",
     "mediaRemove": "ಲಗತ್ತನ್ನು ತೆಗೆದುಹಾಕಿ",
     "mediaTooMany": "ನೀವು ಗರಿಷ್ಠ {{max}} ಫೋಟೋ ಅಥವಾ ವಿಡಿಯೊಗಳನ್ನು ಲಗತ್ತಿಸಬಹುದು",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: ಅಪ್‌ಲೋಡ್ ವಿಫಲವಾಗಿದೆ",
     "mediaWait": "ನಿಮ್ಮ ಲಗತ್ತುಗಳ ಅಪ್‌ಲೋಡ್ ಮುಗಿಯುವವರೆಗೆ ಕಾಯಿರಿ",
     "mediaViewAria": "ಲಗತ್ತು {{index}} ನೋಡಿ",
-    "mediaViewerTitle": "{{name}} ಅವರ ಫೋಟೋ ಮತ್ತು ವಿಡಿಯೊಗಳು",
+    "mediaNone": "ಯಾವುದೇ ಫೋಟೋ ಅಥವಾ ವಿಡಿಯೊ ಸೇರಿಸಿಲ್ಲ",
+    "mediaChosen": "{{max}} ರಲ್ಲಿ {{used}} ಸೇರಿಸಲಾಗಿದೆ",
     "emptyTitle": "ಇನ್ನೂ ವಿಮರ್ಶೆಗಳಿಲ್ಲ",
     "emptyMessage": "ಈ ಉತ್ಪನ್ನದ ಬಗ್ಗೆ ನಿಮ್ಮ ಅನುಭವವನ್ನು ಹಂಚಿಕೊಳ್ಳುವ ಮೊದಲ ವ್ಯಕ್ತಿಯಾಗಿ.",
     "sort": {

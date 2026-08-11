@@ -11,6 +11,64 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+/* ---------------- Retry policy for transient failures ---------------- */
+/**
+ * A read that fails because nothing answered is retried here rather than handed
+ * to the screen as an error.
+ *
+ * This is the difference between "the backend was still waking up" and "the page
+ * is broken". A cold or briefly saturated API drops the *first* request of a
+ * visit and answers every one after it — which is exactly the shape of the bug
+ * this policy exists for: the storefront used to paint a red retry panel that a
+ * manual browser refresh always cleared, because by then the server was warm.
+ *
+ * Only idempotent methods qualify. A POST that timed out may well have been
+ * received and acted on, so re-sending it could place a second order.
+ */
+const RETRY_METHODS = new Set(['get', 'head', 'options']);
+/** Gateway-shaped statuses only: the request never reached a handler that decided anything. */
+const RETRY_STATUSES = new Set([502, 503, 504]);
+
+/**
+ * A timeout has already cost the caller the full 30s, so it gets one more go and
+ * no more; a refused connection or a 502 failed in milliseconds and can afford two.
+ * Nothing here raises the per-attempt deadline — a slow request is still a failed
+ * request, it is simply no longer a *terminal* one.
+ */
+const maxAttemptsFor = (code) => (code === 'ECONNABORTED' ? 2 : 3);
+
+/** 400ms, then 1200ms, each ±25% so a crowd of boot requests doesn't retry in lockstep. */
+const backoffMs = (attempt) => {
+  const base = 400 * 3 ** (attempt - 1);
+  return Math.round(base * (0.75 + Math.random() * 0.5));
+};
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function shouldRetry(error) {
+  const { config, response } = error;
+  // `_noRetry` is the per-call opt-out for a read whose caller would rather fail fast.
+  if (!config || config._noRetry) return false;
+  if (!RETRY_METHODS.has((config.method || 'get').toLowerCase())) return false;
+
+  if (response) {
+    // A response that arrived and said something other than "I couldn't route this"
+    // is an answer, not a blip — retrying it would just repeat the same answer.
+    if (!RETRY_STATUSES.has(response.status)) return false;
+    /*
+     * …with one exception inside the retryable set. The API's own backstop
+     * (server/src/middleware/requestTimeout.js) answers a stalled handler with a
+     * 503 at 25s. That is not a blip the network dropped, it is the server saying
+     * a handler is stuck — and asking it again just buys another 25s of skeleton
+     * before the same answer. Report it and let the shopper decide.
+     */
+    if (response.data?.code === 'REQUEST_TIMEOUT') return false;
+  }
+
+  const attempts = config._attempt || 1;
+  return attempts < maxAttemptsFor(error.code);
+}
+
 /* ---------------- Access token (memory + localStorage mirror) ---------------- */
 const TOKEN_KEY = 'ps_access_token';
 let accessToken = localStorage.getItem(TOKEN_KEY) || null;
@@ -23,16 +81,45 @@ export const setAccessToken = (token) => {
 export const getAccessToken = () => accessToken;
 
 api.interceptors.request.use((config) => {
+  const method = (config.method || 'get').toLowerCase();
+  const isRead = method === 'get' || method === 'head';
+
   if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+
+  /*
+   * Keep reads inside the CORS "simple request" rules, so the browser sends them
+   * straight out instead of preceding each one with an OPTIONS preflight.
+   *
+   * `application/json` is not a safelisted Content-Type value, and the instance
+   * default above applied it to every call — including bodyless GETs, where it
+   * describes nothing. That alone doubled the round trips the storefront's boot
+   * burst had to survive (session, settings, categories, banners, home feed), and
+   * the API sends no Access-Control-Max-Age, so browsers re-ran the preflight
+   * every few seconds rather than reusing one. Against a cold backend that was
+   * the difference between the home page loading and the home page timing out.
+   *
+   * Writes keep the header: they carry a body, and their preflight is one
+   * round trip on a deliberate user action rather than five on every page view.
+   */
+  if (isRead || config.data === undefined || config.data === null) {
+    delete config.headers['Content-Type'];
+  }
   // Let the browser set the multipart boundary itself — with the JSON default left in
   // place axios serialises the FormData to JSON and the file never reaches the server.
   if (config.data instanceof FormData) delete config.headers['Content-Type'];
+
   // Lets the server tag its broadcast as originating here, so this tab can skip the
-  // echo of a change it already applied.
-  const socketId = getSocketId();
-  if (socketId) config.headers['X-Socket-Id'] = socketId;
+  // echo of a change it already applied. Only writes are broadcast, so only writes
+  // need to be attributable — and this header is the other thing that would drag a
+  // read back into preflight territory.
+  if (!isRead) {
+    const socketId = getSocketId();
+    if (socketId) config.headers['X-Socket-Id'] = socketId;
+  }
+
   // Which language the catalogue should come back in. Read per request rather than
   // captured at module load, so a switch applies to the very next call.
+  // (`Accept-Language` is CORS-safelisted, so it costs no preflight.)
   config.headers['Accept-Language'] = i18n.language;
   return config;
 });
@@ -68,6 +155,9 @@ const logFailure = (error, summary) => {
     code: error.code || response?.data?.code || null,
     serverMessage: response?.data?.message || null,
     timeoutMs: config?.timeout,
+    // How many times this was tried before giving up — a failure that got here
+    // after three attempts is a different problem from one that never retried.
+    attempts: config?._attempt || 1,
     error,
   });
 };
@@ -76,6 +166,18 @@ api.interceptors.response.use(
   (response) => response.data,
   async (error) => {
     const { config, response } = error;
+
+    /*
+     * Ride out a blip before anyone is told about it. Placed ahead of every branch
+     * below so a retried request that succeeds never reaches the logging or the
+     * rejection at all — the screen simply gets its data, a beat later.
+     */
+    if (shouldRetry(error)) {
+      const attempt = config._attempt || 1;
+      config._attempt = attempt + 1;
+      await wait(backoffMs(attempt));
+      return api(config);
+    }
 
     if (!response) {
       const timedOut = error.code === 'ECONNABORTED';

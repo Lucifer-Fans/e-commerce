@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "Quality Building Materials, Hardware & Tools",
     "seoDescription": "Shop premium plywood, laminates, hardware, paints, power tools and electricals. Genuine brands, secure payments and fast delivery.",
     "feedError": "Could not load products",
+    "bannersError": "Could not load banners",
+    "categoriesError": "Could not load categories",
     "forYou": "Products For You",
     "topSelling": "Top Selling Products",
     "recentlyViewed": "Recently Viewed",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} ratings",
     "noRatings": "No ratings yet",
     "hurryLeft_one": "Hurry! Only {{count}} left in stock",
-
     "hurryLeft_other": "Hurry! Only {{count}} left in stock",
-
     "youSave": "You save {{amount}}",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "Select an option",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "Select",
     "selectedAttribute": "Selected {{attribute}}",
-
     "selectAttribute": "Select {{attribute}}",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "unavailable",
@@ -192,7 +190,7 @@
     "anonymous": "Anonymous",
     "verified": "Verified purchase",
     "mediaLabel": "Photos or video",
-    "mediaAdd": "Add",
+    "mediaAdd": "Add photos or video",
     "mediaHint": "Up to {{max}} files · photos up to {{imageSize}}MB, videos up to {{videoSize}}MB",
     "mediaRemove": "Remove attachment",
     "mediaTooMany": "You can attach up to {{max}} photos or videos",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: upload failed",
     "mediaWait": "Please wait for your attachments to finish uploading",
     "mediaViewAria": "View attachment {{index}}",
-    "mediaViewerTitle": "Photos & videos by {{name}}",
+    "mediaNone": "No photos or video added",
+    "mediaChosen": "{{used}} of {{max}} added",
     "emptyTitle": "No reviews yet",
     "emptyMessage": "Be the first to share your experience with this product.",
     "sort": {

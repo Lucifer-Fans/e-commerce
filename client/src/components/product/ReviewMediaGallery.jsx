@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { optimisedImage } from '../../utils/format';
 import Icon from '../common/Icon';
-import Modal from '../common/Modal';
+import ImageViewer from '../common/ImageViewer';
 
 const thumbnailFor = (item) =>
-  item.type === 'video' ? item.thumbnail : optimisedImage(item.url, { width: 200, height: 200 });
+  item.type === 'video' ? item.thumbnail : optimisedImage(item.url, { width: 160, height: 160 });
 
 /** mm:ss, so a clip's tile says how long it runs before anyone opens it. */
 function clipLength(seconds) {
@@ -15,29 +15,32 @@ function clipLength(seconds) {
 }
 
 /**
- * The photos and clips attached to a posted review: a thumbnail rail that opens
- * the tapped item full size. Videos are never loaded until one is opened —
- * the rail shows the poster frame Cloudinary derives from the clip.
+ * The photos and clips attached to a posted review — the same thumbnail rail the
+ * product gallery uses, opening the shared media sheet on tap. Videos load no
+ * bytes until one is opened: the rail shows the poster frame Cloudinary derives
+ * from the clip.
  */
-export default function ReviewMediaGallery({ media = [], authorName }) {
+export default function ReviewMediaGallery({ media = [], alt = '' }) {
   const { t } = useTranslation('shop');
-  const [openIndex, setOpenIndex] = useState(null);
+  const [active, setActive] = useState(0);
+  const [viewer, setViewer] = useState(false);
 
   if (!media.length) return null;
 
-  const active = openIndex === null ? null : media[openIndex];
-
   return (
     <>
-      <div className="mt-2.5 flex flex-wrap gap-2">
-        {media.map((item, index) => (
+      <div className="hide-scrollbar mt-2.5 flex gap-2.5 overflow-x-auto">
+        {media.map((item, i) => (
           <button
             key={item.publicId || item.url}
             type="button"
-            onClick={() => setOpenIndex(index)}
-            aria-label={t('reviews.mediaViewAria', { index: index + 1 })}
-            className="relative h-16 w-16 overflow-hidden rounded-lg border border-ink-200
-                       bg-ink-50 transition hover:border-brand-500"
+            onClick={() => {
+              setActive(i);
+              setViewer(true);
+            }}
+            aria-label={t('reviews.mediaViewAria', { index: i + 1 })}
+            className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 border-ink-200
+                       bg-white transition hover:border-ink-300"
           >
             <img src={thumbnailFor(item)} alt="" loading="lazy" className="h-full w-full object-cover" />
 
@@ -60,51 +63,14 @@ export default function ReviewMediaGallery({ media = [], authorName }) {
         ))}
       </div>
 
-      <Modal
-        open={active !== null}
-        onClose={() => setOpenIndex(null)}
-        title={t('reviews.mediaViewerTitle', { name: authorName || t('reviews.anonymous') })}
-        size="lg"
-      >
-        {active?.type === 'video' ? (
-          <video
-            key={active.url}
-            src={active.url}
-            poster={active.thumbnail || undefined}
-            controls
-            autoPlay
-            playsInline
-            className="max-h-[60vh] w-full rounded-lg bg-ink-900"
-          />
-        ) : (
-          active && (
-            <img
-              src={optimisedImage(active.url, { width: 1200, crop: 'limit' })}
-              alt=""
-              className="mx-auto max-h-[60vh] w-auto rounded-lg object-contain"
-            />
-          )
-        )}
-
-        {media.length > 1 && (
-          <div className="hide-scrollbar mt-3 flex gap-2 overflow-x-auto">
-            {media.map((item, index) => (
-              <button
-                key={item.publicId || item.url}
-                type="button"
-                onClick={() => setOpenIndex(index)}
-                aria-label={t('reviews.mediaViewAria', { index: index + 1 })}
-                aria-current={index === openIndex}
-                className={`h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 transition ${
-                  index === openIndex ? 'border-brand-600' : 'border-ink-200'
-                }`}
-              >
-                <img src={thumbnailFor(item)} alt="" loading="lazy" className="h-full w-full object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
-      </Modal>
+      <ImageViewer
+        open={viewer}
+        images={media}
+        index={active}
+        onIndexChange={setActive}
+        onClose={() => setViewer(false)}
+        alt={alt}
+      />
     </>
   );
 }

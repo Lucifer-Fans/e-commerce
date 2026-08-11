@@ -40,6 +40,16 @@ app.use(
     },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    /**
+     * How long a browser may reuse one preflight instead of re-asking.
+     *
+     * Without this the answer is cached for the browser's default — 5 seconds in
+     * Chrome — so a burst of calls on a single page load pays for the same OPTIONS
+     * over and over. The storefront's reads no longer preflight at all (see
+     * client/src/api/client.js), which leaves writes and authenticated calls; those
+     * are what this keeps off the wire. 24h is the Chromium ceiling.
+     */
+    maxAge: 86400,
   })
 );
 

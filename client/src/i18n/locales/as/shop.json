@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "মানসম্পন্ন নিৰ্মাণ সামগ্ৰী, হাৰ্ডৱেৰ আৰু সঁজুলি",
     "seoDescription": "প্ৰিমিয়াম প্লাইউড, লেমিনেট, হাৰ্ডৱেৰ, ৰং, পাৱাৰ টুল আৰু ইলেকট্ৰিকেল কিনক। আচল ব্ৰেণ্ড, সুৰক্ষিত পেমেণ্ট আৰু দ্ৰুত ডেলিভাৰী।",
     "feedError": "সামগ্ৰী ল'ড কৰিব পৰা নগ'ল",
+    "bannersError": "বেনাৰ ল'ড কৰিব পৰা নগ'ল",
+    "categoriesError": "শ্ৰেণীসমূহ ল'ড কৰিব পৰা নগ'ল",
     "forYou": "আপোনাৰ বাবে সামগ্ৰী",
     "topSelling": "সৰ্বাধিক বিক্ৰী হোৱা সামগ্ৰী",
     "recentlyViewed": "শেহতীয়াকৈ চোৱা",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} ৰেটিং",
     "noRatings": "এতিয়ালৈকে কোনো ৰেটিং নাই",
     "hurryLeft_one": "সোনকালে কৰক! মাত্ৰ {{count}} বাকী আছে",
-
     "hurryLeft_other": "সোনকালে কৰক! মাত্ৰ {{count}} বাকী আছে",
-
     "youSave": "আপুনি {{amount}} সাঁচি আছে",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "এটা বিকল্প বাছনি কৰক",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "বাছনি কৰক",
     "selectedAttribute": "নিৰ্বাচিত {{attribute}}",
-
     "selectAttribute": "{{attribute}} বাছনি কৰক",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "অনুপলব্ধ",
@@ -192,7 +190,7 @@
     "anonymous": "নামবিহীন",
     "verified": "সত্যাপিত ক্ৰয়",
     "mediaLabel": "ফটো বা ভিডিঅ'",
-    "mediaAdd": "যোগ কৰক",
+    "mediaAdd": "ফটো বা ভিডিঅ' যোগ কৰক",
     "mediaHint": "সৰ্বাধিক {{max}} টা ফাইল · ফটো {{imageSize}}MB লৈ, ভিডিঅ' {{videoSize}}MB লৈ",
     "mediaRemove": "সংলগ্নক আঁতৰাওক",
     "mediaTooMany": "আপুনি সৰ্বাধিক {{max}} টা ফটো বা ভিডিঅ' সংলগ্ন কৰিব পাৰে",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: আপল'ড বিফল হ'ল",
     "mediaWait": "আপোনাৰ সংলগ্নকসমূহ আপল'ড হৈ শেষ হোৱালৈ অপেক্ষা কৰক",
     "mediaViewAria": "সংলগ্নক {{index}} চাওক",
-    "mediaViewerTitle": "{{name}}ৰ ফটো আৰু ভিডিঅ'",
+    "mediaNone": "কোনো ফটো বা ভিডিঅ' যোগ কৰা হোৱা নাই",
+    "mediaChosen": "{{max}}ৰ ভিতৰত {{used}} যোগ কৰা হৈছে",
     "emptyTitle": "এতিয়ালৈকে কোনো পৰ্যালোচনা নাই",
     "emptyMessage": "এই সামগ্ৰীৰ বিষয়ে আপোনাৰ অভিজ্ঞতা ভাগ কৰা প্ৰথম ব্যক্তি হওক।",
     "sort": {

@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "ਵਧੀਆ ਉਸਾਰੀ ਸਮੱਗਰੀ, ਹਾਰਡਵੇਅਰ ਅਤੇ ਔਜ਼ਾਰ",
     "seoDescription": "ਪ੍ਰੀਮੀਅਮ ਪਲਾਈਵੁੱਡ, ਲੈਮੀਨੇਟ, ਹਾਰਡਵੇਅਰ, ਪੇਂਟ, ਪਾਵਰ ਟੂਲ ਅਤੇ ਇਲੈਕਟ੍ਰੀਕਲ ਖਰੀਦੋ। ਅਸਲੀ ਬ੍ਰਾਂਡ, ਸੁਰੱਖਿਅਤ ਭੁਗਤਾਨ ਅਤੇ ਤੇਜ਼ ਡਿਲੀਵਰੀ।",
     "feedError": "ਉਤਪਾਦ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕੇ",
+    "bannersError": "ਬੈਨਰ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕੇ",
+    "categoriesError": "ਸ਼੍ਰੇਣੀਆਂ ਲੋਡ ਨਹੀਂ ਹੋ ਸਕੀਆਂ",
     "forYou": "ਤੁਹਾਡੇ ਲਈ ਉਤਪਾਦ",
     "topSelling": "ਸਭ ਤੋਂ ਵੱਧ ਵਿਕਣ ਵਾਲੇ ਉਤਪਾਦ",
     "recentlyViewed": "ਹਾਲ ਹੀ ਵਿੱਚ ਵੇਖੇ",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} ਰੇਟਿੰਗਾਂ",
     "noRatings": "ਹਾਲੇ ਕੋਈ ਰੇਟਿੰਗ ਨਹੀਂ",
     "hurryLeft_one": "ਜਲਦੀ ਕਰੋ! ਸਿਰਫ਼ {{count}} ਬਾਕੀ ਹਨ",
-
     "hurryLeft_other": "ਜਲਦੀ ਕਰੋ! ਸਿਰਫ਼ {{count}} ਬਾਕੀ ਹਨ",
-
     "youSave": "ਤੁਸੀਂ {{amount}} ਬਚਾਉਂਦੇ ਹੋ",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ਇੱਕ ਵਿਕਲਪ ਚੁਣੋ",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "ਚੁਣੋ",
     "selectedAttribute": "ਚੁਣਿਆ {{attribute}}",
-
     "selectAttribute": "{{attribute}} ਚੁਣੋ",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "ਅਣਉਪਲਬਧ",
@@ -192,7 +190,7 @@
     "anonymous": "ਗੁਮਨਾਮ",
     "verified": "ਪ੍ਰਮਾਣਿਤ ਖਰੀਦ",
     "mediaLabel": "ਫੋਟੋ ਜਾਂ ਵੀਡੀਓ",
-    "mediaAdd": "ਸ਼ਾਮਲ ਕਰੋ",
+    "mediaAdd": "ਫੋਟੋ ਜਾਂ ਵੀਡੀਓ ਸ਼ਾਮਲ ਕਰੋ",
     "mediaHint": "ਵੱਧ ਤੋਂ ਵੱਧ {{max}} ਫ਼ਾਈਲਾਂ · ਫੋਟੋ {{imageSize}}MB ਤੱਕ, ਵੀਡੀਓ {{videoSize}}MB ਤੱਕ",
     "mediaRemove": "ਅਟੈਚਮੈਂਟ ਹਟਾਓ",
     "mediaTooMany": "ਤੁਸੀਂ ਵੱਧ ਤੋਂ ਵੱਧ {{max}} ਫੋਟੋ ਜਾਂ ਵੀਡੀਓ ਜੋੜ ਸਕਦੇ ਹੋ",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: ਅੱਪਲੋਡ ਅਸਫਲ ਰਿਹਾ",
     "mediaWait": "ਕਿਰਪਾ ਕਰਕੇ ਅਟੈਚਮੈਂਟ ਅੱਪਲੋਡ ਹੋਣ ਤੱਕ ਉਡੀਕ ਕਰੋ",
     "mediaViewAria": "ਅਟੈਚਮੈਂਟ {{index}} ਵੇਖੋ",
-    "mediaViewerTitle": "{{name}} ਦੀਆਂ ਫੋਟੋਆਂ ਅਤੇ ਵੀਡੀਓ",
+    "mediaNone": "ਕੋਈ ਫੋਟੋ ਜਾਂ ਵੀਡੀਓ ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤੀ",
+    "mediaChosen": "{{max}} ਵਿੱਚੋਂ {{used}} ਸ਼ਾਮਲ ਕੀਤੀਆਂ",
     "emptyTitle": "ਹਾਲੇ ਕੋਈ ਸਮੀਖਿਆ ਨਹੀਂ",
     "emptyMessage": "ਇਸ ਉਤਪਾਦ ਬਾਰੇ ਆਪਣਾ ਤਜਰਬਾ ਸਾਂਝਾ ਕਰਨ ਵਾਲੇ ਪਹਿਲੇ ਬਣੋ।",
     "sort": {

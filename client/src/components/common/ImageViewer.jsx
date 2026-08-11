@@ -14,14 +14,18 @@ const PAGE_RATIO = 0.25;
 const DISMISS_DISTANCE = 120;
 
 /**
- * The project's single product-image viewer: a bottom sheet that slides up from
- * the bottom edge over the dimmed product page, holding the tapped image, a
- * close button and — when there is more than one image — a swipeable carousel
- * with a thumbnail rail. Dragging the sheet down follows the finger and flings
- * it closed, and closing slides it back down rather than blinking out.
+ * The project's single media viewer: a bottom sheet that slides up from the
+ * bottom edge over the dimmed page, holding the tapped image, a close button
+ * and — when there is more than one item — a swipeable carousel with a
+ * thumbnail rail. Dragging the sheet down follows the finger and flings it
+ * closed, and closing slides it back down rather than blinking out.
  *
  * The page underneath stays visible but cannot scroll or be interacted with
  * until the sheet has finished sliding away.
+ *
+ * An entry with `type: 'video'` plays instead of rendering as a still; it needs
+ * a `thumbnail` for the rail. Only the slide on screen mounts a <video>, so a
+ * clip two swipes away neither downloads nor plays over the one being watched.
  *
  *   <ImageViewer open={open} images={images} index={i}
  *                onIndexChange={setI} onClose={() => setOpen(false)} />
@@ -214,19 +218,48 @@ export default function ImageViewer({
               transition: drag ? 'none' : `transform ${DURATION}ms ${EASING}`,
             }}
           >
-            {images.map((image, i) => (
-              <div
-                key={image.publicId || i}
-                className="flex h-[58vh] w-full shrink-0 items-center justify-center p-3"
-              >
-                <img
-                  src={optimisedImage(image.url, { width: 1200, crop: 'limit' })}
-                  alt={image.alt || alt}
-                  className="max-h-full max-w-full object-contain"
-                  draggable="false"
-                />
-              </div>
-            ))}
+            {images.map((image, i) =>
+              image.type === 'video' ? (
+                <div
+                  key={image.publicId || i}
+                  className="flex h-[58vh] w-full shrink-0 items-center justify-center p-3"
+                  // The player's own controls need the touches the sheet would
+                  // otherwise read as a swipe or a drag-to-dismiss.
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchMove={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
+                >
+                  {i === safeIndex ? (
+                    <video
+                      src={image.url}
+                      poster={image.thumbnail || undefined}
+                      controls
+                      playsInline
+                      className="max-h-full max-w-full rounded-lg bg-ink-900"
+                    />
+                  ) : (
+                    <img
+                      src={image.thumbnail}
+                      alt={image.alt || alt}
+                      className="max-h-full max-w-full object-contain"
+                      draggable="false"
+                    />
+                  )}
+                </div>
+              ) : (
+                <div
+                  key={image.publicId || i}
+                  className="flex h-[58vh] w-full shrink-0 items-center justify-center p-3"
+                >
+                  <img
+                    src={optimisedImage(image.url, { width: 1200, crop: 'limit' })}
+                    alt={image.alt || alt}
+                    className="max-h-full max-w-full object-contain"
+                    draggable="false"
+                  />
+                </div>
+              )
+            )}
           </div>
         </div>
 
@@ -252,16 +285,28 @@ export default function ImageViewer({
                   onClick={() => onIndexChange?.(i)}
                   aria-label={t('gallery.viewImage', { index: i + 1 })}
                   aria-current={i === safeIndex}
-                  className={`h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-white transition ${
+                  className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-white transition ${
                     i === safeIndex ? 'border-brand-600' : 'border-ink-200'
                   }`}
                 >
                   <img
-                    src={optimisedImage(image.url, { width: 160, height: 160 })}
+                    src={
+                      image.type === 'video'
+                        ? image.thumbnail
+                        : optimisedImage(image.url, { width: 160, height: 160 })
+                    }
                     alt=""
                     loading="lazy"
                     className="h-full w-full object-cover"
                   />
+                  {image.type === 'video' && (
+                    <span
+                      className="absolute inset-0 grid place-items-center bg-ink-900/30 text-white"
+                      aria-hidden="true"
+                    >
+                      <Icon name="play" size={16} filled />
+                    </span>
+                  )}
                 </button>
               ))}
             </div>

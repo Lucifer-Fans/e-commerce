@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Counter = require('./Counter');
+
 const ORDER_STATUSES = [
   'pending',
   'confirmed',
@@ -223,15 +225,32 @@ orderSchema.virtual('isCancellable').get(function isCancellable() {
   return CUSTOMER_CANCELLABLE.includes(this.orderStatus);
 });
 
+/**
+ * ORD<yy><mm><5 digit serial> — "ORD260800001" is the first order of Aug 2026.
+ *
+ * The serial is a per-month counter, so it is the running order count for the
+ * month rather than an opaque id: readable over the phone, sortable as text, and
+ * it tells staff at a glance where in the month an order sits. The invoice takes
+ * the same serial under an INV prefix, keeping the pair obviously related.
+ *
+ * The counter is claimed inside whatever session the save is running under, so a
+ * checkout that aborts (out of stock, payment never started) returns its number.
+ */
 orderSchema.pre('validate', async function assignNumbers(next) {
-  if (this.isNew && !this.orderNumber) {
-    // ORD-<yy><mm>-<6 char suffix from the ObjectId> — sortable and collision-free.
+  if (!this.isNew || this.orderNumber) return next();
+
+  try {
     const now = new Date();
     const ym = `${String(now.getFullYear()).slice(2)}${String(now.getMonth() + 1).padStart(2, '0')}`;
-    this.orderNumber = `ORD-${ym}-${this._id.toString().slice(-6).toUpperCase()}`;
-    this.invoiceNumber = `INV-${ym}-${this._id.toString().slice(-6).toUpperCase()}`;
+    const seq = await Counter.next(`order:${ym}`, this.$session());
+    const serial = String(seq).padStart(5, '0');
+
+    this.orderNumber = `ORD${ym}${serial}`;
+    this.invoiceNumber = `INV${ym}${serial}`;
+    return next();
+  } catch (err) {
+    return next(err);
   }
-  next();
 });
 
 orderSchema.statics.ORDER_STATUSES = ORDER_STATUSES;

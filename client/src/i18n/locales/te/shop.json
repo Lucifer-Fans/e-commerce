@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "నాణ్యమైన నిర్మాణ సామగ్రి, హార్డ్‌వేర్ మరియు పరికరాలు",
     "seoDescription": "ప్రీమియం ప్లైవుడ్, లామినేట్‌లు, హార్డ్‌వేర్, పెయింట్‌లు, పవర్ టూల్స్ మరియు ఎలక్ట్రికల్స్ కొనండి. అసలైన బ్రాండ్‌లు, సురక్షిత చెల్లింపులు మరియు వేగవంతమైన డెలివరీ.",
     "feedError": "ఉత్పత్తులను లోడ్ చేయలేకపోయాము",
+    "bannersError": "బ్యానర్‌లను లోడ్ చేయలేకపోయాము",
+    "categoriesError": "వర్గాలను లోడ్ చేయలేకపోయాము",
     "forYou": "మీ కోసం ఉత్పత్తులు",
     "topSelling": "అత్యధికంగా అమ్ముడయ్యే ఉత్పత్తులు",
     "recentlyViewed": "ఇటీవల చూసినవి",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} రేటింగ్‌లు",
     "noRatings": "ఇంకా రేటింగ్‌లు లేవు",
     "hurryLeft_one": "త్వరపడండి! కేవలం {{count}} మాత్రమే మిగిలి ఉన్నాయి",
-
     "hurryLeft_other": "త్వరపడండి! కేవలం {{count}} మాత్రమే మిగిలి ఉన్నాయి",
-
     "youSave": "మీరు {{amount}} ఆదా చేస్తారు",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ఒక ఎంపికను ఎంచుకోండి",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "ఎంచుకోండి",
     "selectedAttribute": "ఎంచుకున్న {{attribute}}",
-
     "selectAttribute": "{{attribute}} ఎంచుకోండి",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "అందుబాటులో లేదు",
@@ -192,7 +190,7 @@
     "anonymous": "అనామక",
     "verified": "ధృవీకరించిన కొనుగోలు",
     "mediaLabel": "ఫోటోలు లేదా వీడియో",
-    "mediaAdd": "జోడించు",
+    "mediaAdd": "ఫోటోలు లేదా వీడియో జోడించండి",
     "mediaHint": "గరిష్ఠంగా {{max}} ఫైల్‌లు · ఫోటోలు {{imageSize}}MB వరకు, వీడియో {{videoSize}}MB వరకు",
     "mediaRemove": "అటాచ్‌మెంట్‌ను తీసివేయి",
     "mediaTooMany": "మీరు గరిష్ఠంగా {{max}} ఫోటోలు లేదా వీడియోలను జోడించవచ్చు",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: అప్‌లోడ్ విఫలమైంది",
     "mediaWait": "అటాచ్‌మెంట్‌ల అప్‌లోడ్ పూర్తయ్యే వరకు వేచి ఉండండి",
     "mediaViewAria": "అటాచ్‌మెంట్ {{index}} చూడండి",
-    "mediaViewerTitle": "{{name}} ఫోటోలు మరియు వీడియోలు",
+    "mediaNone": "ఫోటోలు లేదా వీడియో ఏవీ జోడించలేదు",
+    "mediaChosen": "{{max}}లో {{used}} జోడించారు",
     "emptyTitle": "ఇంకా సమీక్షలు లేవు",
     "emptyMessage": "ఈ ఉత్పత్తిపై మీ అనుభవాన్ని పంచుకునే మొదటి వ్యక్తి అవ్వండి.",
     "sort": {

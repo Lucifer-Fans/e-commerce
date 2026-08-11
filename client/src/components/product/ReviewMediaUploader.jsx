@@ -13,9 +13,12 @@ import {
 import Icon from '../common/Icon';
 
 const ACCEPT = [...REVIEW_IMAGE_TYPES, ...REVIEW_VIDEO_TYPES].join(',');
+const asMb = (bytes) => Math.round(bytes / (1024 * 1024));
 
 /**
- * The photo / video picker inside the "write a review" dialog.
+ * The photo / video picker inside the "write a review" dialog — the same styled
+ * dropzone over a hidden native input that the careers form uses for résumés,
+ * with a thumbnail rail underneath for what has been picked so far.
  *
  * Each file is uploaded on selection rather than on submit: the review itself
  * posts only URLs, so by the time the shopper presses Submit there is nothing
@@ -31,11 +34,12 @@ const ACCEPT = [...REVIEW_IMAGE_TYPES, ...REVIEW_VIDEO_TYPES].join(',');
 export default function ReviewMediaUploader({ value = [], onChange, onBusyChange, disabled }) {
   const { t } = useTranslation('shop');
   const [uploads, setUploads] = useState({}); // tempId -> { name, progress, preview, isVideo }
-  const inputRef = useRef(null);
+  const fileInput = useRef(null);
   const tempIdRef = useRef(0);
 
   const inFlight = Object.entries(uploads);
-  const slotsLeft = REVIEW_MEDIA_MAX - value.length - inFlight.length;
+  const used = value.length + inFlight.length;
+  const slotsLeft = REVIEW_MEDIA_MAX - used;
 
   // The dialog disables Submit while anything is still going up.
   const busy = inFlight.length > 0;
@@ -50,10 +54,7 @@ export default function ReviewMediaUploader({ value = [], onChange, onBusyChange
     }
     const limit = isVideo ? MAX_REVIEW_VIDEO_BYTES : MAX_REVIEW_IMAGE_BYTES;
     if (file.size > limit) {
-      return t('reviews.mediaTooLarge', {
-        name: file.name,
-        size: Math.round(limit / (1024 * 1024)),
-      });
+      return t('reviews.mediaTooLarge', { name: file.name, size: asMb(limit) });
     }
     return null;
   };
@@ -85,8 +86,10 @@ export default function ReviewMediaUploader({ value = [], onChange, onBusyChange
     }
   };
 
-  const handleFiles = async (fileList) => {
-    const picked = Array.from(fileList || []);
+  const pickFiles = async (e) => {
+    const picked = Array.from(e.target.files || []);
+    // Reset immediately so re-picking the same file still fires a change event.
+    e.target.value = '';
     if (!picked.length) return;
 
     if (picked.length > slotsLeft) {
@@ -122,11 +125,6 @@ export default function ReviewMediaUploader({ value = [], onChange, onBusyChange
     }
   };
 
-  const openPicker = () => {
-    if (inputRef.current) inputRef.current.value = ''; // allows re-picking the same file
-    inputRef.current?.click();
-  };
-
   const removeAt = (index) => onChange((current) => current.filter((_, i) => i !== index));
 
   return (
@@ -136,98 +134,101 @@ export default function ReviewMediaUploader({ value = [], onChange, onBusyChange
         <span className="font-normal text-ink-400">{t('reviews.optional')}</span>
       </span>
 
+      <div className="rounded-lg border border-dashed border-ink-300 bg-ink-50/60 px-4 py-3.5">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => fileInput.current?.click()}
+            disabled={disabled || slotsLeft <= 0}
+            className="btn-outline shrink-0 px-3 py-2 text-xs disabled:opacity-60"
+          >
+            <Icon name="camera" size={14} />
+            {t('reviews.mediaAdd')}
+          </button>
+          <span className="min-w-0 flex-1 truncate text-xs text-ink-500">
+            {used
+              ? t('reviews.mediaChosen', { used, max: REVIEW_MEDIA_MAX })
+              : t('reviews.mediaNone')}
+          </span>
+        </div>
+
+        {used > 0 && (
+          <div className="hide-scrollbar mt-3 flex gap-2.5 overflow-x-auto">
+            {value.map((item, index) => (
+              <div
+                key={item.publicId || item.url}
+                className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2
+                           border-ink-200 bg-white"
+              >
+                <img
+                  src={
+                    item.type === 'video'
+                      ? item.thumbnail
+                      : optimisedImage(item.url, { width: 160, height: 160 })
+                  }
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
+
+                {item.type === 'video' && (
+                  <span
+                    className="absolute inset-0 grid place-items-center bg-ink-900/30 text-white"
+                    aria-hidden="true"
+                  >
+                    <Icon name="play" size={16} filled />
+                  </span>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => removeAt(index)}
+                  aria-label={t('reviews.mediaRemove')}
+                  className="absolute right-0.5 top-0.5 grid h-5 w-5 place-items-center rounded-full
+                             bg-ink-900/70 text-white transition hover:bg-danger"
+                >
+                  <Icon name="close" size={11} />
+                </button>
+              </div>
+            ))}
+
+            {/* In-flight uploads hold their own tile so the rail never jumps. */}
+            {inFlight.map(([tempId, upload]) => (
+              <div
+                key={tempId}
+                className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2
+                           border-ink-200 bg-white"
+              >
+                {upload.isVideo ? (
+                  <video src={upload.preview} muted className="h-full w-full object-cover opacity-40" />
+                ) : (
+                  <img src={upload.preview} alt="" className="h-full w-full object-cover opacity-40" />
+                )}
+                <span className="absolute inset-0 grid place-items-center text-xs font-bold text-brand-600">
+                  {upload.progress}%
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <p className="mt-2 text-center text-[11px] text-ink-400">
+          {t('reviews.mediaHint', {
+            max: REVIEW_MEDIA_MAX,
+            imageSize: asMb(MAX_REVIEW_IMAGE_BYTES),
+            videoSize: asMb(MAX_REVIEW_VIDEO_BYTES),
+          })}
+        </p>
+      </div>
+
       <input
-        ref={inputRef}
+        ref={fileInput}
         type="file"
         accept={ACCEPT}
         multiple
-        hidden
-        disabled={disabled}
-        onChange={(e) => handleFiles(e.target.files)}
+        onChange={pickFiles}
+        className="sr-only"
       />
-
-      <div className="flex flex-wrap gap-2.5">
-        {value.map((item, index) => (
-          <figure
-            key={item.publicId || item.url}
-            className="relative h-20 w-20 overflow-hidden rounded-lg border border-ink-200 bg-ink-50"
-          >
-            <img
-              src={
-                item.type === 'video'
-                  ? item.thumbnail
-                  : optimisedImage(item.url, { width: 160, height: 160 })
-              }
-              alt=""
-              loading="lazy"
-              className="h-full w-full object-cover"
-            />
-
-            {item.type === 'video' && (
-              <span
-                className="absolute inset-0 grid place-items-center bg-ink-900/30 text-white"
-                aria-hidden="true"
-              >
-                <Icon name="play" size={22} filled />
-              </span>
-            )}
-
-            <button
-              type="button"
-              onClick={() => removeAt(index)}
-              aria-label={t('reviews.mediaRemove')}
-              className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full
-                         bg-ink-900/70 text-white transition hover:bg-ink-900"
-            >
-              <Icon name="close" size={13} />
-            </button>
-          </figure>
-        ))}
-
-        {/* In-flight uploads hold their own tile so the grid never jumps. */}
-        {inFlight.map(([tempId, upload]) => (
-          <div
-            key={tempId}
-            className="relative h-20 w-20 overflow-hidden rounded-lg border border-ink-200 bg-ink-50"
-          >
-            {upload.isVideo ? (
-              <video src={upload.preview} muted className="h-full w-full object-cover opacity-40" />
-            ) : (
-              <img src={upload.preview} alt="" className="h-full w-full object-cover opacity-40" />
-            )}
-            <span className="absolute inset-0 grid place-items-center text-xs font-bold text-brand-700">
-              {upload.progress}%
-            </span>
-            <span
-              className="absolute inset-x-0 bottom-0 h-1 bg-brand-600 transition-all"
-              style={{ width: `${upload.progress}%` }}
-              aria-hidden="true"
-            />
-          </div>
-        ))}
-
-        {slotsLeft > 0 && (
-          <button
-            type="button"
-            onClick={openPicker}
-            disabled={disabled}
-            className="grid h-20 w-20 place-items-center gap-1 rounded-lg border border-dashed
-                       border-ink-300 text-ink-400 transition hover:border-brand-500
-                       hover:text-brand-600 disabled:opacity-50"
-          >
-            <Icon name="camera" size={20} />
-            <span className="text-[11px] font-medium">{t('reviews.mediaAdd')}</span>
-          </button>
-        )}
-      </div>
-
-      <p className="mt-1.5 text-xs text-ink-400">
-        {t('reviews.mediaHint', {
-          max: REVIEW_MEDIA_MAX,
-          imageSize: Math.round(MAX_REVIEW_IMAGE_BYTES / (1024 * 1024)),
-          videoSize: Math.round(MAX_REVIEW_VIDEO_BYTES / (1024 * 1024)),
-        })}
-      </p>
     </div>
   );
 }

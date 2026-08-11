@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "गुणवत्तापूर्ण निर्माण सामग्री, हार्डवेयर और उपकरण",
     "seoDescription": "प्रीमियम प्लाईवुड, लैमिनेट, हार्डवेयर, पेंट, पावर टूल्स और इलेक्ट्रिकल खरीदें। असली ब्रांड, सुरक्षित भुगतान और तेज़ डिलीवरी।",
     "feedError": "उत्पाद लोड नहीं हो सके",
+    "bannersError": "बैनर लोड नहीं हो सके",
+    "categoriesError": "श्रेणियाँ लोड नहीं हो सकीं",
     "forYou": "आपके लिए उत्पाद",
     "topSelling": "सर्वाधिक बिकने वाले उत्पाद",
     "recentlyViewed": "हाल ही में देखे गए",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} रेटिंग",
     "noRatings": "अभी कोई रेटिंग नहीं",
     "hurryLeft_one": "जल्दी करें! केवल {{count}} बचे हैं",
-
     "hurryLeft_other": "जल्दी करें! केवल {{count}} बचे हैं",
-
     "youSave": "आप {{amount}} बचाते हैं",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "एक विकल्प चुनें",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "चुनें",
     "selectedAttribute": "चयनित {{attribute}}",
-
     "selectAttribute": "{{attribute}} चुनें",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "अनुपलब्ध",
@@ -192,7 +190,7 @@
     "anonymous": "अनाम",
     "verified": "सत्यापित खरीद",
     "mediaLabel": "फ़ोटो या वीडियो",
-    "mediaAdd": "जोड़ें",
+    "mediaAdd": "फ़ोटो या वीडियो जोड़ें",
     "mediaHint": "अधिकतम {{max}} फ़ाइलें · फ़ोटो {{imageSize}}MB तक, वीडियो {{videoSize}}MB तक",
     "mediaRemove": "अटैचमेंट हटाएँ",
     "mediaTooMany": "आप अधिकतम {{max}} फ़ोटो या वीडियो जोड़ सकते हैं",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: अपलोड नहीं हो सका",
     "mediaWait": "कृपया अटैचमेंट अपलोड होने तक प्रतीक्षा करें",
     "mediaViewAria": "अटैचमेंट {{index}} देखें",
-    "mediaViewerTitle": "{{name}} की फ़ोटो और वीडियो",
+    "mediaNone": "कोई फ़ोटो या वीडियो नहीं जोड़ा गया",
+    "mediaChosen": "{{max}} में से {{used}} जोड़े गए",
     "emptyTitle": "अभी कोई समीक्षा नहीं",
     "emptyMessage": "इस उत्पाद पर अपना अनुभव साझा करने वाले पहले व्यक्ति बनें।",
     "sort": {

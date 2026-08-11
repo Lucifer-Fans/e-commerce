@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "ગુણવત્તાયુક્ત બાંધકામ સામગ્રી, હાર્ડવેર અને સાધનો",
     "seoDescription": "પ્રીમિયમ પ્લાયવુડ, લેમિનેટ, હાર્ડવેર, પેઇન્ટ, પાવર ટૂલ્સ અને ઇલેક્ટ્રિકલ્સ ખરીદો. અસલી બ્રાન્ડ, સુરક્ષિત ચુકવણી અને ઝડપી ડિલિવરી.",
     "feedError": "ઉત્પાદનો લોડ થઈ શક્યાં નહીં",
+    "bannersError": "બેનર લોડ થઈ શક્યાં નહીં",
+    "categoriesError": "શ્રેણીઓ લોડ થઈ શકી નહીં",
     "forYou": "તમારા માટે ઉત્પાદનો",
     "topSelling": "સૌથી વધુ વેચાતાં ઉત્પાદનો",
     "recentlyViewed": "તાજેતરમાં જોયેલાં",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} રેટિંગ",
     "noRatings": "હજી કોઈ રેટિંગ નથી",
     "hurryLeft_one": "ઉતાવળ કરો! ફક્ત {{count}} બાકી છે",
-
     "hurryLeft_other": "ઉતાવળ કરો! ફક્ત {{count}} બાકી છે",
-
     "youSave": "તમે {{amount}} બચાવો છો",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "એક વિકલ્પ પસંદ કરો",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "પસંદ કરો",
     "selectedAttribute": "પસંદ કરેલ {{attribute}}",
-
     "selectAttribute": "{{attribute}} પસંદ કરો",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "અનુપલબ્ધ",
@@ -192,7 +190,7 @@
     "anonymous": "અનામી",
     "verified": "ચકાસાયેલ ખરીદી",
     "mediaLabel": "ફોટા અથવા વિડિયો",
-    "mediaAdd": "ઉમેરો",
+    "mediaAdd": "ફોટા અથવા વિડિયો ઉમેરો",
     "mediaHint": "વધુમાં વધુ {{max}} ફાઇલ · ફોટા {{imageSize}}MB સુધી, વિડિયો {{videoSize}}MB સુધી",
     "mediaRemove": "જોડાણ દૂર કરો",
     "mediaTooMany": "તમે વધુમાં વધુ {{max}} ફોટા અથવા વિડિયો જોડી શકો છો",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: અપલોડ નિષ્ફળ",
     "mediaWait": "તમારાં જોડાણ અપલોડ થઈ જાય ત્યાં સુધી રાહ જુઓ",
     "mediaViewAria": "જોડાણ {{index}} જુઓ",
-    "mediaViewerTitle": "{{name}}ના ફોટા અને વિડિયો",
+    "mediaNone": "કોઈ ફોટા અથવા વિડિયો ઉમેર્યા નથી",
+    "mediaChosen": "{{max}} માંથી {{used}} ઉમેર્યા",
     "emptyTitle": "હજી કોઈ સમીક્ષા નથી",
     "emptyMessage": "આ ઉત્પાદન વિશે તમારો અનુભવ શેર કરનારા પ્રથમ બનો.",
     "sort": {

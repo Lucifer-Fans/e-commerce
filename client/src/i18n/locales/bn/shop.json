@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "মানসম্পন্ন নির্মাণ সামগ্রী, হার্ডওয়্যার ও সরঞ্জাম",
     "seoDescription": "প্রিমিয়াম প্লাইউড, ল্যামিনেট, হার্ডওয়্যার, রং, পাওয়ার টুল ও ইলেকট্রিক্যাল কিনুন। আসল ব্র্যান্ড, নিরাপদ পেমেন্ট ও দ্রুত ডেলিভারি।",
     "feedError": "পণ্য লোড করা যায়নি",
+    "bannersError": "ব্যানার লোড করা যায়নি",
+    "categoriesError": "বিভাগ লোড করা যায়নি",
     "forYou": "আপনার জন্য পণ্য",
     "topSelling": "সর্বাধিক বিক্রিত পণ্য",
     "recentlyViewed": "সম্প্রতি দেখা",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} রেটিং",
     "noRatings": "এখনও কোনো রেটিং নেই",
     "hurryLeft_one": "তাড়াতাড়ি করুন! মাত্র {{count}}টি বাকি আছে",
-
     "hurryLeft_other": "তাড়াতাড়ি করুন! মাত্র {{count}}টি বাকি আছে",
-
     "youSave": "আপনি {{amount}} সাশ্রয় করছেন",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "একটি বিকল্প নির্বাচন করুন",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "নির্বাচন করুন",
     "selectedAttribute": "নির্বাচিত {{attribute}}",
-
     "selectAttribute": "{{attribute}} নির্বাচন করুন",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "অনুপলব্ধ",
@@ -192,7 +190,7 @@
     "anonymous": "নামহীন",
     "verified": "যাচাইকৃত ক্রয়",
     "mediaLabel": "ছবি বা ভিডিও",
-    "mediaAdd": "যোগ করুন",
+    "mediaAdd": "ছবি বা ভিডিও যোগ করুন",
     "mediaHint": "সর্বাধিক {{max}}টি ফাইল · ছবি {{imageSize}}MB পর্যন্ত, ভিডিও {{videoSize}}MB পর্যন্ত",
     "mediaRemove": "সংযুক্তি সরান",
     "mediaTooMany": "আপনি সর্বাধিক {{max}}টি ছবি বা ভিডিও যোগ করতে পারেন",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: আপলোড ব্যর্থ হয়েছে",
     "mediaWait": "আপনার সংযুক্তিগুলি আপলোড শেষ হওয়া পর্যন্ত অপেক্ষা করুন",
     "mediaViewAria": "সংযুক্তি {{index}} দেখুন",
-    "mediaViewerTitle": "{{name}}-এর ছবি ও ভিডিও",
+    "mediaNone": "কোনো ছবি বা ভিডিও যোগ করা হয়নি",
+    "mediaChosen": "{{max}}টির মধ্যে {{used}}টি যোগ করা হয়েছে",
     "emptyTitle": "এখনও কোনো পর্যালোচনা নেই",
     "emptyMessage": "এই পণ্য সম্পর্কে আপনার অভিজ্ঞতা ভাগ করে নেওয়া প্রথম ব্যক্তি হোন।",
     "sort": {

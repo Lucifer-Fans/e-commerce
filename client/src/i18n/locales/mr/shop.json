@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "दर्जेदार बांधकाम साहित्य, हार्डवेअर आणि अवजारे",
     "seoDescription": "प्रीमियम प्लायवूड, लॅमिनेट, हार्डवेअर, पेंट, पॉवर टूल्स आणि इलेक्ट्रिकल्स खरेदी करा. अस्सल ब्रँड, सुरक्षित पेमेंट आणि जलद वितरण.",
     "feedError": "उत्पादने लोड करता आली नाहीत",
+    "bannersError": "बॅनर लोड करता आले नाहीत",
+    "categoriesError": "श्रेणी लोड करता आल्या नाहीत",
     "forYou": "तुमच्यासाठी उत्पादने",
     "topSelling": "सर्वाधिक विकली जाणारी उत्पादने",
     "recentlyViewed": "अलीकडे पाहिलेली",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} रेटिंग",
     "noRatings": "अजून कोणतेही रेटिंग नाही",
     "hurryLeft_one": "घाई करा! फक्त {{count}} शिल्लक आहेत",
-
     "hurryLeft_other": "घाई करा! फक्त {{count}} शिल्लक आहेत",
-
     "youSave": "तुम्ही {{amount}} वाचवता",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "एक पर्याय निवडा",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "निवडा",
     "selectedAttribute": "निवडलेला {{attribute}}",
-
     "selectAttribute": "{{attribute}} निवडा",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "अनुपलब्ध",
@@ -192,7 +190,7 @@
     "anonymous": "निनावी",
     "verified": "सत्यापित खरेदी",
     "mediaLabel": "फोटो किंवा व्हिडिओ",
-    "mediaAdd": "जोडा",
+    "mediaAdd": "फोटो किंवा व्हिडिओ जोडा",
     "mediaHint": "जास्तीत जास्त {{max}} फाइल्स · फोटो {{imageSize}}MB पर्यंत, व्हिडिओ {{videoSize}}MB पर्यंत",
     "mediaRemove": "संलग्नक काढा",
     "mediaTooMany": "तुम्ही जास्तीत जास्त {{max}} फोटो किंवा व्हिडिओ जोडू शकता",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: अपलोड होऊ शकले नाही",
     "mediaWait": "कृपया संलग्नके अपलोड होईपर्यंत थांबा",
     "mediaViewAria": "संलग्नक {{index}} पहा",
-    "mediaViewerTitle": "{{name}} यांचे फोटो आणि व्हिडिओ",
+    "mediaNone": "कोणतेही फोटो किंवा व्हिडिओ जोडलेले नाहीत",
+    "mediaChosen": "{{max}} पैकी {{used}} जोडले",
     "emptyTitle": "अजून कोणतेही पुनरावलोकन नाही",
     "emptyMessage": "या उत्पादनाबद्दल तुमचा अनुभव सांगणारे पहिले व्हा.",
     "sort": {

@@ -285,7 +285,7 @@ export default function ProductReviews({ product }) {
                   <p className="text-sm leading-relaxed text-ink-600">{review.comment}</p>
                 )}
 
-                <ReviewMediaGallery media={review.media || []} authorName={review.user?.name} />
+                <ReviewMediaGallery media={review.media || []} alt={product.name} />
               </article>
             ))}
           </div>

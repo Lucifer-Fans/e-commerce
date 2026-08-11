@@ -12,6 +12,7 @@ module.exports = {
   Coupon: require('./Coupon'),
   Review: require('./Review'),
   Banner: require('./Banner'),
+  Counter: require('./Counter'),
   Order: require('./Order'),
   CancellationReason: require('./CancellationReason'),
   Payment: require('./Payment'),

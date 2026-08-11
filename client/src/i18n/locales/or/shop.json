@@ -1,8 +1,10 @@
-﻿{
+{
   "home": {
     "seoTitle": "ଗୁଣାତ୍ମକ ନିର୍ମାଣ ସାମଗ୍ରୀ, ହାର୍ଡୱେୟାର ଓ ଉପକରଣ",
     "seoDescription": "ପ୍ରିମିୟମ ପ୍ଲାଏଉଡ, ଲାମିନେଟ, ହାର୍ଡୱେୟାର, ରଙ୍ଗ, ପାୱାର ଟୁଲ୍ସ ଓ ଇଲେକ୍ଟ୍ରିକାଲ୍ସ କିଣନ୍ତୁ। ଅସଲି ବ୍ରାଣ୍ଡ, ସୁରକ୍ଷିତ ପେମେଣ୍ଟ ଓ ଦ୍ରୁତ ଡେଲିଭରୀ।",
     "feedError": "ଉତ୍ପାଦ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ",
+    "bannersError": "ବ୍ୟାନର ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ",
+    "categoriesError": "ବର୍ଗ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ",
     "forYou": "ଆପଣଙ୍କ ପାଇଁ ଉତ୍ପାଦ",
     "topSelling": "ସର୍ବାଧିକ ବିକ୍ରି ହେଉଥିବା ଉତ୍ପାଦ",
     "recentlyViewed": "ସମ୍ପ୍ରତି ଦେଖାଯାଇଥିବା",
@@ -101,9 +103,7 @@
     "ratingsCount_other": "{{count}} ରେଟିଂ",
     "noRatings": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ରେଟିଂ ନାହିଁ",
     "hurryLeft_one": "ଶୀଘ୍ର! କେବଳ {{count}} ବାକି ଅଛି",
-
     "hurryLeft_other": "ଶୀଘ୍ର! କେବଳ {{count}} ବାକି ଅଛି",
-
     "youSave": "ଆପଣ {{amount}} ସଞ୍ଚୟ କରୁଛନ୍ତି",
     "sku": "SKU: {{sku}}",
     "selectAnOption": "ଏକ ବିକଳ୍ପ ବାଛନ୍ତୁ",
@@ -152,9 +152,7 @@
   "variants": {
     "selectPrompt": "ବାଛନ୍ତୁ",
     "selectedAttribute": "ମନୋନୀତ {{attribute}}",
-
     "selectAttribute": "{{attribute}} ବାଛନ୍ତୁ",
-
     "optionAria": "{{attribute}} {{value}}{{status}}",
     "optionTitle": "{{value}} — {{reason}}",
     "stateUnavailable": "ଅନୁପଲବ୍ଧ",
@@ -192,7 +190,7 @@
     "anonymous": "ଅଜ୍ଞାତ",
     "verified": "ଯାଞ୍ଚିତ କ୍ରୟ",
     "mediaLabel": "ଫଟୋ କିମ୍ବା ଭିଡିଓ",
-    "mediaAdd": "ଯୋଡ଼ନ୍ତୁ",
+    "mediaAdd": "ଫଟୋ କିମ୍ବା ଭିଡିଓ ଯୋଡ଼ନ୍ତୁ",
     "mediaHint": "ସର୍ବାଧିକ {{max}} ଫାଇଲ · ଫଟୋ {{imageSize}}MB ପର୍ଯ୍ୟନ୍ତ, ଭିଡିଓ {{videoSize}}MB ପର୍ଯ୍ୟନ୍ତ",
     "mediaRemove": "ସଂଲଗ୍ନକ ହଟାନ୍ତୁ",
     "mediaTooMany": "ଆପଣ ସର୍ବାଧିକ {{max}} ଫଟୋ କିମ୍ବା ଭିଡିଓ ଯୋଡ଼ିପାରିବେ",
@@ -201,7 +199,8 @@
     "mediaUploadFailed": "{{name}}: ଅପଲୋଡ ବିଫଳ ହେଲା",
     "mediaWait": "ଦୟାକରି ସଂଲଗ୍ନକ ଅପଲୋଡ ଶେଷ ହେବା ପର୍ଯ୍ୟନ୍ତ ଅପେକ୍ଷା କରନ୍ତୁ",
     "mediaViewAria": "ସଂଲଗ୍ନକ {{index}} ଦେଖନ୍ତୁ",
-    "mediaViewerTitle": "{{name}}ଙ୍କ ଫଟୋ ଓ ଭିଡିଓ",
+    "mediaNone": "କୌଣସି ଫଟୋ କିମ୍ବା ଭିଡିଓ ଯୋଡ଼ାଯାଇନାହିଁ",
+    "mediaChosen": "{{max}}ରୁ {{used}} ଯୋଡ଼ାଯାଇଛି",
     "emptyTitle": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ସମୀକ୍ଷା ନାହିଁ",
     "emptyMessage": "ଏହି ଉତ୍ପାଦ ବିଷୟରେ ଆପଣଙ୍କ ଅଭିଜ୍ଞତା ବାଣ୍ଟିବାରେ ପ୍ରଥମ ହୁଅନ୍ତୁ।",
     "sort": {
