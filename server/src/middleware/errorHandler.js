@@ -20,6 +20,31 @@ function normalise(err) {
     const field = Object.keys(err.keyValue || {})[0] || 'field';
     return ApiError.conflict(`A record with this ${field} already exists`);
   }
+  /**
+   * The database is unreachable, or a query sat in mongoose's buffer until it
+   * gave up. Left alone these arrive as an anonymous 500 ("Something went wrong")
+   * that reads identically to a bug in a controller — and on a sign-up, where the
+   * shopper is about to press the button again, "try again in a moment" is both
+   * truer and more useful. The full driver message still reaches the log below;
+   * only what the client is told is rewritten.
+   */
+  if (
+    err.name === 'MongoNetworkError' ||
+    err.name === 'MongoServerSelectionError' ||
+    err.name === 'MongoNotConnectedError' ||
+    err.name === 'MongooseServerSelectionError' ||
+    (err.name === 'MongooseError' && /buffering timed out/i.test(err.message))
+  ) {
+    const dbError = ApiError.serviceUnavailable(
+      'We could not reach our database just now. Please try again in a moment.'
+    );
+    dbError.code = 'DB_UNAVAILABLE';
+    // Keep the driver's own words for the log line — `normalise` returns the
+    // replacement, so without this the cause would be lost at the boundary.
+    dbError.cause = err;
+    return dbError;
+  }
+
   if (err.name === 'JsonWebTokenError') return ApiError.unauthorized('Invalid token');
   if (err.name === 'TokenExpiredError') return ApiError.unauthorized('Token expired');
   if (err.name === 'MulterError') {
@@ -34,8 +59,7 @@ function normalise(err) {
   return err;
 }
 
-// eslint-disable-next-line no-unused-vars -- Express identifies error middleware by arity
-function errorHandler(err, req, res, _next) {
+function errorHandler(err, req, res, next) {
   const error = normalise(err);
   const statusCode = error.statusCode || 500;
   const isOperational = error.isOperational === true;
@@ -44,7 +68,16 @@ function errorHandler(err, req, res, _next) {
     logger.error(`${req.method} ${req.originalUrl} → ${statusCode} ${error.message}\n${err.stack}`);
   }
 
-  res.status(statusCode).json({
+  /**
+   * Something already answered this request — in practice the request-timeout
+   * backstop, with the slow handler now arriving to find the shopper long since
+   * told to try again. There is no second response to send, and attempting one
+   * only turns a handled timeout into a stack trace; Express's own final handler
+   * closes the socket from here.
+   */
+  if (res.headersSent) return next(err);
+
+  return res.status(statusCode).json({
     success: false,
     // Never leak internals of an unexpected failure to production clients.
     message: isOperational || !env.isProd ? error.message : 'Something went wrong',

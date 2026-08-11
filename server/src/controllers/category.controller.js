@@ -5,33 +5,62 @@ const { Category, SubCategory, Product } = require('../models');
 const { destroyAsset } = require('../config/cloudinary');
 const broadcast = require('../realtime/broadcast');
 const { localize, localizeAll } = require('../utils/localize');
+const { createTtlCache } = require('../utils/ttlCache');
 
 /* ------------------------------------------------------------------ *
  * Categories
  * ------------------------------------------------------------------ */
 
-/** GET /categories — public nav feed (categories + nested sub-categories). */
-exports.listCategories = asyncHandler(async (req, res) => {
-  const includeInactive = req.query.includeInactive === 'true' && req.user?.role === 'admin';
-  const filter = includeInactive ? {} : { isActive: true };
+/**
+ * The public nav tree is requested by every cold page load and edited a few times a
+ * month, so it is held in memory between writes. Only the *source* documents are
+ * cached — translation is applied per request afterwards, so one cached copy serves
+ * every language, and `localize` is a pure spread that never mutates its input.
+ *
+ * The admin view is deliberately not cached: it reads back its own writes.
+ */
+const taxonomyCache = createTtlCache({ ttlMs: 5 * 60 * 1000 });
 
-  const categories = await Category.find(filter)
+/** Called by every write below — the panel must see its own edit immediately. */
+const clearTaxonomyCache = () => taxonomyCache.clear();
+exports.clearTaxonomyCache = clearTaxonomyCache;
+
+const fetchPublicCategories = () =>
+  Category.find({ isActive: true })
     .sort({ displayOrder: 1, name: 1 })
     .populate({
       path: 'subCategories',
-      match: includeInactive ? {} : { isActive: true },
+      match: { isActive: true },
       options: { sort: { displayOrder: 1, name: 1 } },
       select: 'name slug image displayOrder isActive category translations',
     })
     .lean({ virtuals: true });
 
-  // The admin's category manager edits the source copy, so it must stay untranslated.
-  const localized = includeInactive
-    ? categories
-    : localizeAll(categories, req.language).map((c) => ({
-        ...c,
-        subCategories: localizeAll(c.subCategories, req.language),
-      }));
+/** GET /categories — public nav feed (categories + nested sub-categories). */
+exports.listCategories = asyncHandler(async (req, res) => {
+  const includeInactive = req.query.includeInactive === 'true' && req.user?.role === 'admin';
+
+  // The admin's category manager edits the source copy, so it must stay untranslated
+  // — and uncached, so a save is visible on the next refresh.
+  if (includeInactive) {
+    const categories = await Category.find({})
+      .sort({ displayOrder: 1, name: 1 })
+      .populate({
+        path: 'subCategories',
+        options: { sort: { displayOrder: 1, name: 1 } },
+        select: 'name slug image displayOrder isActive category translations',
+      })
+      .lean({ virtuals: true });
+
+    return sendSuccess(res, { message: 'Categories fetched', data: { categories } });
+  }
+
+  const categories = await taxonomyCache.resolve('public', fetchPublicCategories);
+
+  const localized = localizeAll(categories, req.language).map((c) => ({
+    ...c,
+    subCategories: localizeAll(c.subCategories, req.language),
+  }));
 
   return sendSuccess(res, { message: 'Categories fetched', data: { categories: localized } });
 });
@@ -57,6 +86,7 @@ exports.getCategory = asyncHandler(async (req, res) => {
 /** POST /categories (admin) */
 exports.createCategory = asyncHandler(async (req, res) => {
   const category = await Category.create(req.body);
+  clearTaxonomyCache();
   broadcast.categoryChanged('created', category);
 
   return sendSuccess(res, {
@@ -79,6 +109,7 @@ exports.updateCategory = asyncHandler(async (req, res) => {
   Object.assign(category, req.body);
   await category.save();
 
+  clearTaxonomyCache();
   broadcast.categoryChanged('updated', category);
 
   return sendSuccess(res, { message: 'Category updated', data: { category } });
@@ -100,6 +131,7 @@ exports.deleteCategory = asyncHandler(async (req, res) => {
   await destroyAsset(category.image?.publicId);
   await category.deleteOne();
 
+  clearTaxonomyCache();
   broadcast.categoryChanged('deleted', category);
 
   return sendSuccess(res, { message: 'Category deleted' });
@@ -128,6 +160,7 @@ exports.createSubCategory = asyncHandler(async (req, res) => {
     throw ApiError.badRequest('Parent category does not exist');
   }
   const subCategory = await SubCategory.create(req.body);
+  clearTaxonomyCache();
   broadcast.subCategoryChanged('created', subCategory);
 
   return sendSuccess(res, {
@@ -154,6 +187,7 @@ exports.updateSubCategory = asyncHandler(async (req, res) => {
   Object.assign(subCategory, req.body);
   await subCategory.save();
 
+  clearTaxonomyCache();
   broadcast.subCategoryChanged('updated', subCategory);
 
   return sendSuccess(res, { message: 'Sub-category updated', data: { subCategory } });
@@ -172,6 +206,7 @@ exports.deleteSubCategory = asyncHandler(async (req, res) => {
   await destroyAsset(subCategory.image?.publicId);
   await subCategory.deleteOne();
 
+  clearTaxonomyCache();
   broadcast.subCategoryChanged('deleted', subCategory);
 
   return sendSuccess(res, { message: 'Sub-category deleted' });

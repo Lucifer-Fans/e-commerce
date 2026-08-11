@@ -82,7 +82,11 @@ export default function HeroSlider({ slides = [], loading = false }) {
                   alt={slide.title}
                   // The first slide is the LCP element — it must not be lazy.
                   loading={i === 0 ? 'eager' : 'lazy'}
-                  // React 18 does not map camelCase `fetchPriority` to the DOM attribute.
+                  // React 18 does not map camelCase `fetchPriority` to the DOM attribute
+                  // — react-dom 18.3.1 contains no such mapping, and unknown lowercase
+                  // props are the ones it passes straight through. Writing it the way
+                  // the lint rule prefers would drop the hint on the LCP image entirely.
+                  // eslint-disable-next-line react/no-unknown-property
                   fetchpriority={i === 0 ? 'high' : undefined}
                   className="h-full w-full object-cover"
                 />

@@ -4,7 +4,16 @@ const { Setting } = require('../models');
 const { destroyAsset } = require('../config/cloudinary');
 const broadcast = require('../realtime/broadcast');
 const mailService = require('../services/mail.service');
+const seoService = require('../services/seo.service');
 const { DEFAULT_LANGUAGE } = require('../config/languages');
+const { createTtlCache } = require('../utils/ttlCache');
+
+/**
+ * Every cold storefront load reads the store settings to render its title, logo and
+ * footer, and an admin changes them a few times a month — so the singleton is held
+ * in memory and dropped explicitly by the save below.
+ */
+const settingsCache = createTtlCache({ ttlMs: 5 * 60 * 1000 });
 
 /** "general.siteName" -> the value held at that path. */
 const readPath = (source, path) =>
@@ -57,15 +66,34 @@ function isSameValue(path, before, after) {
  * so it stays open; nothing here is sensitive.
  */
 exports.getSettings = asyncHandler(async (req, res) => {
-  const settings = await Setting.getSingleton();
+  // The admin panel edits the source, so it keeps the raw `translations` map — and
+  // reads straight through, so a save is visible on the next refresh. Every other
+  // caller gets the leaves already resolved to their language, off the cached copy.
+  if (req.user?.role === 'admin') {
+    const settings = await Setting.getSingleton();
+    return sendSuccess(res, { message: 'Settings fetched', data: { settings: settings.toJSON() } });
+  }
 
-  // The admin panel edits the source, so it keeps the raw `translations` map; every
-  // other caller gets the leaves already resolved to their language.
-  const payload =
-    req.user?.role === 'admin' ? settings.toJSON() : localizeSettings(settings, req.language);
+  const json = await settingsCache.resolve('store', loadSettingsJson);
 
-  return sendSuccess(res, { message: 'Settings fetched', data: { settings: payload } });
+  return sendSuccess(res, {
+    message: 'Settings fetched',
+    data: { settings: localizeSettings(json, req.language) },
+  });
 });
+
+/**
+ * The cached shape is the *serialised* document, not the hydrated one.
+ *
+ * Round-tripping through JSON is what makes it safe to hand the same object to
+ * concurrent requests: Maps flatten, ObjectIds and Dates become the strings the
+ * client already receives, and nothing left in the tree holds a reference back
+ * into Mongoose. The result is byte-identical to what `res.json` produced before.
+ */
+async function loadSettingsJson() {
+  const settings = await Setting.getSingleton();
+  return JSON.parse(JSON.stringify(settings.toJSON()));
+}
 
 /**
  * Overlays `translations[lang]` onto the settings leaves that carry prose.
@@ -73,20 +101,25 @@ exports.getSettings = asyncHandler(async (req, res) => {
  * Unlike the catalogue documents this shape is nested and fixed, so the whitelist in
  * the model is walked directly rather than going through the generic `localize`.
  * A blank translation falls through to the English, same as everywhere else.
+ *
+ * @param {object} json  a plain serialised settings document — this function copies
+ *                       before writing, because the caller's object is shared.
  */
-function localizeSettings(settings, lang) {
-  const json = settings.toJSON();
+function localizeSettings(json, lang) {
   const raw = json.translations;
   const patch = raw instanceof Map ? raw.get(lang) : raw?.[lang];
 
-  delete json.translations;
-  if (!patch || !lang || lang === DEFAULT_LANGUAGE) return json;
+  const { translations: _translations, ...rest } = json;
+  if (!patch || !lang || lang === DEFAULT_LANGUAGE) return rest;
 
+  // `writePath` mutates nested objects, which the shallow spread above still shares
+  // with the cached copy — so the branch that writes gets its own tree.
+  const out = JSON.parse(JSON.stringify(rest));
   for (const [key, path] of Object.entries(Setting.TRANSLATABLE_PATHS)) {
     const value = patch[key];
-    if (typeof value === 'string' && value.trim()) writePath(json, path, value);
+    if (typeof value === 'string' && value.trim()) writePath(out, path, value);
   }
-  return json;
+  return out;
 }
 
 /**
@@ -132,8 +165,16 @@ exports.updateSettings = asyncHandler(async (req, res) => {
 
   await Promise.all(orphanedAssets.map((publicId) => destroyAsset(publicId).catch(() => {})));
 
+  // Every cached view of this document is now wrong. Cleared before the broadcast so
+  // a storefront that refetches on the socket event cannot race the stale copy.
+  settingsCache.clear();
+
   // Emails carry the same name, support address and socials — drop the cached copy.
   mailService.clearBrandingCache();
+
+  // Server-rendered meta tags read the same document; without this an admin who
+  // fixes the meta title would still see the old one in a link preview for a minute.
+  seoService.clearSettingsCache();
 
   // Storefronts re-title themselves and swap logo/favicon without a reload. The
   // per-language map is stripped: a socket payload has no one language to resolve to,

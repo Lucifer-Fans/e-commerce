@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
@@ -38,6 +38,25 @@ export default function Register() {
   // Consent already given on the way to the code screen stands; coming back to fix
   // a typo in the phone number is not a reason to ask for it again.
   const [agreed, setAgreed] = useState(Boolean(registrationDraft?.agreed));
+
+  // Where to go once verified. Read once, because the address is about to be
+  // stripped out of the router state below and this has to outlive that.
+  const from = useRef(location.state?.from);
+
+  /**
+   * The seeding above has happened by now, so the address has done its job. It is
+   * dropped from the history entry immediately, because router state — unlike the
+   * draft in the store — survives a reload: leave it and a refresh reopens a blank
+   * form with one field mysteriously filled in. A reload is a fresh start, and the
+   * form it lands on should look like one.
+   */
+  useEffect(() => {
+    if (!location.state?.email) return;
+    navigate(location.pathname + location.search, {
+      replace: true,
+      state: from.current ? { from: from.current } : null,
+    });
+  }, [location.state, location.pathname, location.search, navigate]);
 
   useEffect(() => {
     if (isAuthenticated) navigate('/', { replace: true });
@@ -92,7 +111,7 @@ export default function Register() {
       dispatch(setRegistrationDraft({ values, agreed }));
       toast.success(t('auth.codeSent'));
       navigate('/verify-email', {
-        state: { ...pending, from: location.state?.from },
+        state: { ...pending, from: from.current },
         replace: true,
       });
     } catch (err) {

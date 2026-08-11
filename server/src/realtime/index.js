@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 const logger = require('../utils/logger');
 const User = require('../models/User');
+const dashboardCache = require('../services/dashboardCache');
 const EVENTS = require('./events');
 
 /**
@@ -221,9 +222,16 @@ function toOrderAudience(order, event, payload) {
   channel.emit(event, payload);
 }
 
-/** Tells admin dashboards their aggregates are stale. */
-const invalidateDashboard = (reason) =>
+/**
+ * Tells admin dashboards their aggregates are stale.
+ *
+ * The server's own memo of the KPI block is dropped *before* the event goes out, so
+ * the refetch it provokes cannot land on the copy it was sent to replace.
+ */
+const invalidateDashboard = (reason) => {
+  dashboardCache.clearStats();
   toAdmins(EVENTS.DASHBOARD_INVALIDATED, { reason, at: new Date().toISOString() });
+};
 
 /** Live count of connected admins, shown in the admin topbar. */
 async function broadcastPresence() {

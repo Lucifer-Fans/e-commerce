@@ -8,6 +8,7 @@ const sessionService = require('../services/session.service');
 const mailService = require('../services/mail.service');
 const googleService = require('../services/google.service');
 const broadcast = require('../realtime/broadcast');
+const logger = require('../utils/logger');
 const env = require('../config/env');
 
 const authPayload = (user, accessToken, sessionId) => ({
@@ -75,6 +76,13 @@ async function issueEmailOtp(user, { resend = false } = {}) {
   // the whole thing (and its validators) along for a field the user never touched.
   await User.updateOne({ _id: user._id }, { $set: { otp: user.otp } });
 
+  const startedAt = Date.now();
+
+  // `sendEmailVerificationEmail` already answers false rather than throwing, and
+  // caps how long it can take (see mail.service). This catch is the last resort
+  // for a failure *before* the transport is reached — a template that throws,
+  // say — and it logs rather than swallowing: a silent `catch(() => false)` here
+  // is how a broken relay used to leave nothing at all behind to look at.
   const sent = await mailService
     .sendEmailVerificationEmail({
       to: user.email,
@@ -82,7 +90,22 @@ async function issueEmailOtp(user, { resend = false } = {}) {
       code,
       minutes: env.otp.expiryMinutes,
     })
-    .catch(() => false);
+    .catch((err) => {
+      logger.error(`Could not compose verification email for ${user.email}: ${err.message}\n${err.stack}`);
+      return false;
+    });
+
+  const took = Date.now() - startedAt;
+  if (!sent) {
+    logger.error(
+      `Verification code for ${user.email} was generated but not delivered (mail step took ${took}ms). ` +
+        `The account stays pending; the shopper can retry or use resend.`
+    );
+  } else if (took > 5000) {
+    // Not a failure, but the sign-up is now within sight of the client's own
+    // timeout — worth seeing in the log before it becomes one.
+    logger.warn(`Verification email to ${user.email} took ${took}ms — SMTP is running slow.`);
+  }
 
   return { code, sent };
 }
@@ -146,16 +169,36 @@ exports.register = asyncHandler(async (req, res) => {
   user.password = password;
   user.isEmailVerified = false;
   user.emailVerificationPending = true;
-  await user.save();
+
+  /**
+   * The account row and the two empty collections beneath it. Both steps are
+   * wrapped so a storage failure is *named* in the log — a bare driver message
+   * arriving at the error handler says "MongoServerError" and nothing about which
+   * half of a sign-up it came from. The rethrow is what the client sees: a
+   * write that did not happen must not be answered with a 201.
+   */
+  try {
+    await user.save();
+  } catch (err) {
+    logger.error(`Registration failed saving account ${address}: ${err.message}\n${err.stack}`);
+    throw err;
+  }
 
   // Give every new shopper an empty cart + wishlist so later writes are pure
   // updates. Upserted rather than created: a repeated sign-up on the same pending
   // account already has both, and a duplicate-key error there would fail a
   // registration that is otherwise perfectly fine.
-  await Promise.all([
-    Cart.updateOne({ user: user._id }, { $setOnInsert: { user: user._id } }, { upsert: true }),
-    Wishlist.updateOne({ user: user._id }, { $setOnInsert: { user: user._id } }, { upsert: true }),
-  ]);
+  try {
+    await Promise.all([
+      Cart.updateOne({ user: user._id }, { $setOnInsert: { user: user._id } }, { upsert: true }),
+      Wishlist.updateOne({ user: user._id }, { $setOnInsert: { user: user._id } }, { upsert: true }),
+    ]);
+  } catch (err) {
+    logger.error(
+      `Registration for ${address} could not create cart/wishlist: ${err.message}\n${err.stack}`
+    );
+    throw err;
+  }
 
   // Deliberately no `userChanged` broadcast here. A pending sign-up is not yet an
   // account anybody can see: it is invisible to the admin users list (which filters

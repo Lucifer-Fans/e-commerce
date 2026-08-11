@@ -12,6 +12,7 @@ const routes = require('./routes');
 const healthRoutes = require('./routes/health.routes');
 const sanitizeRequest = require('./middleware/sanitize');
 const resolveLanguage = require('./middleware/language');
+const requestTimeout = require('./middleware/requestTimeout');
 const { apiLimiter } = require('./middleware/rateLimiter');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 const paymentController = require('./controllers/payment.controller');
@@ -87,9 +88,20 @@ app.use(
 );
 
 /* ---------------- Routes ---------------- */
-app.get('/', (req, res) => {
-  res.send('Server is Working');
-});
+/**
+ * robots.txt and the sitemaps sit at the site root because that is the only place
+ * a crawler looks for them, and ahead of the API limiter because a crawl burst
+ * must not spend a real visitor's request budget.
+ */
+app.use('/', require('./routes/seo.routes'));
+
+// Only a bare API deployment answers here; with the storefront mounted (below)
+// "/" is the storefront's own home page.
+if (!env.clientDistPath) {
+  app.get('/', (req, res) => {
+    res.send('Server is Working');
+  });
+}
 
 /**
  * Mounted ahead of the API rate limiter: an uptime monitor polling every few
@@ -98,7 +110,43 @@ app.get('/', (req, res) => {
  */
 app.use(`${env.apiPrefix}/health`, healthRoutes);
 
-app.use(env.apiPrefix, apiLimiter, routes);
+/**
+ * `requestTimeout` guards the API only. The static mounts above it stream files
+ * of whatever size, and the SPA catch-all below is a page load rather than an
+ * XHR the client is timing — neither has a browser-side deadline to beat.
+ */
+app.use(env.apiPrefix, apiLimiter, requestTimeout(), routes);
+
+/* ---------------- Storefront (optional) ---------------- */
+/**
+ * Serving the built SPA from here is what buys per-page link previews: the
+ * catch-all hands every navigable URL an index.html whose meta tags were rewritten
+ * for that URL, so the crawler behind a WhatsApp or Facebook unfurl — which never
+ * executes the bundle — reads the right product's title, description and photo.
+ *
+ * Mounted last so it can never shadow the API, and only when CLIENT_DIST_PATH
+ * points somewhere: an API-only deployment behaves exactly as before.
+ */
+if (env.clientDistPath) {
+  const clientDist = path.resolve(env.clientDistPath);
+  const htmlMeta = require('./middleware/htmlMeta')(clientDist);
+
+  app.use(
+    express.static(clientDist, {
+      // index.html must go through htmlMeta, never straight off disk — served
+      // directly it would carry the build's site-wide defaults on every route.
+      index: false,
+      // Vite fingerprints everything under /assets; the rest may change in place.
+      setHeaders(res, filePath) {
+        if (filePath.includes(`${path.sep}assets${path.sep}`)) {
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+      },
+    })
+  );
+
+  app.get('*', htmlMeta);
+}
 
 /* ---------------- Errors ---------------- */
 app.use(notFound);

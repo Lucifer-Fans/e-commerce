@@ -4,9 +4,18 @@ const { sendSuccess } = require('../utils/apiResponse');
 const { Address } = require('../models');
 const broadcast = require('../realtime/broadcast');
 
-/** GET /addresses */
+/**
+ * GET /addresses
+ *
+ * Read-only, so the rows are returned lean. The schema declares no virtuals and no
+ * `toJSON` transform, so the serialised output is identical to the hydrated one —
+ * this only skips building documents nothing is going to call a method on. The
+ * checkout address picker fetches this on every visit, which is where it shows.
+ */
 exports.listAddresses = asyncHandler(async (req, res) => {
-  const addresses = await Address.find({ user: req.user._id }).sort({ isDefault: -1, updatedAt: -1 });
+  const addresses = await Address.find({ user: req.user._id })
+    .sort({ isDefault: -1, updatedAt: -1 })
+    .lean();
   return sendSuccess(res, { message: 'Addresses fetched', data: { addresses } });
 });
 

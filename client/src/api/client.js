@@ -49,17 +49,50 @@ const AUTH_FREE_PATHS = [
   '/auth/admin/login',
 ];
 
+/**
+ * What actually went wrong, in the console, while the caller still gets the one
+ * clean sentence it renders.
+ *
+ * Every rejection below is a plain object, and a rejected *object* is not an
+ * Error — the browser prints it as an uncaught value at best and, once a thunk
+ * catches it, not at all. That is why a request that timed out used to paint a
+ * red banner over an empty console with nothing to debug from: the failure was
+ * handled correctly and reported nowhere. The user-facing copy is untouched;
+ * this only writes the parts a developer needs beside it.
+ */
+const logFailure = (error, summary) => {
+  const { config, response } = error;
+  const route = `${config?.method?.toUpperCase() || 'REQUEST'} ${config?.baseURL || ''}${config?.url || ''}`;
+  console.error(`[api] ${route} → ${summary}`, {
+    status: response?.status ?? 0,
+    code: error.code || response?.data?.code || null,
+    serverMessage: response?.data?.message || null,
+    timeoutMs: config?.timeout,
+    error,
+  });
+};
+
 api.interceptors.response.use(
   (response) => response.data,
   async (error) => {
     const { config, response } = error;
 
     if (!response) {
+      const timedOut = error.code === 'ECONNABORTED';
+      logFailure(
+        error,
+        timedOut
+          ? `no response within ${config?.timeout ?? '?'}ms — the server accepted the request but ` +
+            `never answered. Check the API logs for a stalled handler.`
+          : 'no response — server unreachable, CORS-blocked, or the API is not running.'
+      );
+
       return Promise.reject({
-        message: error.code === 'ECONNABORTED'
+        message: timedOut
           ? 'The request timed out. Please try again.'
           : 'Cannot reach the server. Check your connection and try again.',
         status: 0,
+        code: timedOut ? 'TIMEOUT' : 'NETWORK_ERROR',
       });
     }
 
@@ -80,6 +113,13 @@ api.interceptors.response.use(
         window.dispatchEvent(new CustomEvent('auth:expired'));
         return Promise.reject({ message: 'Your session expired. Please log in again.', status: 401 });
       }
+    }
+
+    // 4xx is the API answering as designed (a duplicate email, a wrong code) and
+    // the screen already shows it; 5xx is the API breaking, which is worth a line
+    // in the console next to whatever the shopper is being shown.
+    if (response.status >= 500) {
+      logFailure(error, `server error ${response.status}`);
     }
 
     return Promise.reject({

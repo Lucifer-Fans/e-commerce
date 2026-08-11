@@ -1,222 +1,29 @@
-const fs = require('fs');
-const path = require('path');
-const nodemailer = require('nodemailer');
+/**
+ * Transactional email: every message the store sends a customer or an admin.
+ *
+ * The mechanical layers live beside this file in ./mail — the SMTP transport, the
+ * price/date formatters, the palette and the artwork helpers. What stays here is
+ * the part that is actually about *email*: the branding lookup, the shared layout
+ * chrome, and the templates themselves.
+ */
+
 const env = require('../config/env');
 const logger = require('../utils/logger');
 const Setting = require('../models/Setting');
 const { ORDER_STATUSES } = require('../models/Order');
 
-let transporter = null;
-if (env.mailEnabled) {
-  transporter = nodemailer.createTransport({
-    host: env.mail.host,
-    port: env.mail.port,
-    secure: env.mail.secure,
-    auth: { user: env.mail.user, pass: env.mail.pass },
-  });
-}
-
-const ASSET_DIR = path.join(__dirname, '../assets/email');
-
-/**
- * Content-ID for a piece of artwork. Every image travels *with* the message as
- * an inline attachment rather than as a link back to us: a hosted URL only
- * renders once the server is reachable from the recipient's mail client — and
- * in development `env.serverUrl` is localhost, which Gmail's image proxy can
- * never fetch, so every mark arrives as a broken frame. `cid:` bytes are in the
- * envelope and render everywhere, dev and production alike.
- */
-const cidFor = (file) => `${file.replace(/[^a-z0-9]+/gi, '-')}@springwala.mail`;
-
-/**
- * The artwork a composed message actually refers to. Only what the HTML uses is
- * attached, so a password-reset email does not carry the order tracker's glyphs.
- */
-function inlineAttachments(html = '') {
-  const wanted = new Set();
-  for (const match of html.matchAll(/src="cid:([^"]+)"/g)) wanted.add(match[1]);
-  if (!wanted.size) return [];
-
-  return fs
-    .readdirSync(ASSET_DIR)
-    .filter((file) => file.endsWith('.png') && wanted.has(cidFor(file)))
-    .map((file) => ({
-      filename: file,
-      path: path.join(ASSET_DIR, file),
-      cid: cidFor(file),
-      contentDisposition: 'inline',
-    }));
-}
-
-/**
- * Never throws — a mail outage must not fail the request that triggered it.
- * Returns false when the message could not be sent so callers can adjust copy.
- */
-async function sendMail({ to, subject, html, text }) {
-  if (!transporter) {
-    logger.warn(`SMTP not configured — skipped "${subject}" to ${to}`);
-    if (!env.isProd) logger.debug(text || html);
-    return false;
-  }
-  try {
-    await transporter.sendMail({
-      from: env.mail.from,
-      to,
-      subject,
-      html,
-      text,
-      attachments: inlineAttachments(html),
-    });
-    return true;
-  } catch (err) {
-    logger.error(`Mail send failed (${subject} → ${to}): ${err.message}`);
-    return false;
-  }
-}
-
-/** Escapes visitor-supplied text before it is interpolated into an HTML email. */
-const escapeHtml = (value = '') =>
-  String(value).replace(
-    /[&<>"']/g,
-    (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]
-  );
-
-/* ------------------------------------------------------------------ *
- * Formatting — mirrors client/src/utils/format.js so an email and the
- * order page it links to never disagree on a price or a date.
- * ------------------------------------------------------------------ */
-const inr = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-/** &#8377; rather than the literal glyph — some Windows clients mangle it. */
-const money = (value) => `&#8377;${inr.format(Number(value) || 0)}`;
-const moneyText = (value) => `₹${inr.format(Number(value) || 0)}`;
-
-const dateTime = (value) =>
-  new Date(value || Date.now()).toLocaleString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-  });
-
-/** Date only — the tracker has room for "12 May 2024", not the time as well. */
-const shortDate = (value) =>
-  new Date(value || Date.now()).toLocaleDateString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-
-/**
- * An appointment, spelled out — weekday included, because "12 Aug" alone makes
- * a reader open a calendar to find out whether they can make it. The time is
- * separated by a middot rather than a comma, which the date already uses.
- *
- * Formatted in the server's own timezone, as every other date in these mails is.
- */
-const appointment = (value) => {
-  const at = new Date(value);
-  const day = at.toLocaleDateString('en-IN', {
-    weekday: 'short',
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-  const time = at.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' });
-  return { day, time, full: `${day} at ${time}` };
-};
-
-const titleCase = (value = '') =>
-  String(value)
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-
-/** Cloudinary on-the-fly resize, same as the storefront's optimisedImage(). */
-const thumb = (url, size = 120) =>
-  !url || !url.includes('/upload/')
-    ? url
-    : url.replace('/upload/', `/upload/w_${size},h_${size},c_fill,q_auto,f_auto/`);
-
-/* ------------------------------------------------------------------ *
- * Brand palette — mirrors tailwind.config.js so mail and storefront
- * stay one design system. Emails cannot read CSS variables, so the
- * hex values are duplicated here on purpose.
- * ------------------------------------------------------------------ */
-const C = {
-  brand50: '#eff6ff',
-  brand100: '#dbeafe',
-  brand600: '#2563eb',
-  brand700: '#1d4ed8',
-  // The deep end of the same ramp. The order-placed mail leads with it — its
-  // headline, its button and its total are one navy, the way the storefront's
-  // own confirmation screen leads with a single dark accent.
-  brand900: '#1e3a8a',
-  // tailwind `success` (#16a34a) and the tints the storefront pairs with it
-  green50: '#f0fdf4',
-  green100: '#dcfce7',
-  green600: '#16a34a',
-  green700: '#15803d',
-  ink50: '#f8fafc',
-  ink100: '#f1f5f9',
-  ink200: '#e2e8f0',
-  ink400: '#94a3b8',
-  ink500: '#64748b',
-  ink600: '#475569',
-  ink900: '#0f172a',
-  // Periwinkle tints — the panel behind the enquiry artwork. They sit a step
-  // cooler than `brand` on purpose: an illustration should read as artwork, not
-  // as a second call to action.
-  iris50: '#f4f5fe',
-  iris100: '#e8eafc',
-  iris300: '#c3c8f3',
-  iris400: '#a8afe8',
-  iris700: '#4c56b8',
-};
-const FONT = "Inter,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
-
-/* ------------------------------------------------------------------ *
- * Branding
- * ------------------------------------------------------------------ */
-
-/**
- * The networks the storefront footer offers, in the footer's own order. Each
- * chip is a pre-rendered disc in server/src/assets/email — cut from the very
- * paths client/src/components/common/Icon.jsx draws, so an email chip and a
- * footer chip are the identical mark.
- */
-const SOCIAL_ICONS = {
-  facebook: { label: 'Facebook', file: 'social-facebook.png' },
-  instagram: { label: 'Instagram', file: 'social-instagram.png' },
-  twitter: { label: 'Twitter (X)', file: 'social-twitter.png' },
-  linkedin: { label: 'LinkedIn', file: 'social-linkedin.png' },
-  whatsapp: {
-    label: 'WhatsApp',
-    file: 'social-whatsapp.png',
-    // Admins may store either a wa.me link or a bare number — same rule as Footer.jsx.
-    href: (value) => (/^https?:/i.test(value) ? value : `https://wa.me/${value.replace(/\D/g, '')}`),
-  },
-};
-
-/**
- * Artwork lives in server/src/assets/email and rides along with the message as
- * an inline `cid:` attachment (see inlineAttachments above). It has to be a real
- * image file: inline SVG is stripped by Gmail and most webmail, and a data: URI
- * fares no better, so an <img> is the only mark that survives the trip. Every
- * PNG is cut at 2x and scaled down by the width/height attributes below, which
- * Outlook needs stated explicitly anyway.
- */
-const asset = (file) => `cid:${cidFor(file)}`;
-
-/**
- * Every image carries alt text and sits on a coloured cell, so a client that
- * blocks images still shows a labelled shape rather than a broken frame.
- */
-const image = (file, { width, height, alt = '', style = '', cls = '' }) =>
-  `<img src="${asset(file)}" width="${width}" height="${height}" alt="${escapeHtml(alt)}"
-        ${cls ? `class="${cls}"` : ''}
-        style="width:${width}px;height:${height}px;border:0;outline:none;display:block;${style}">`;
-
+const { sendMail } = require('./mail/transport');
+const { C, FONT, SOCIAL_ICONS, image } = require('./mail/theme');
+const {
+  escapeHtml,
+  money,
+  moneyText,
+  dateTime,
+  shortDate,
+  appointment,
+  titleCase,
+  thumb,
+} = require('./mail/format');
 let brandCache = { value: null, at: 0 };
 const BRAND_TTL = 5 * 60 * 1000;
 
@@ -233,7 +40,10 @@ async function getBranding() {
   let social = {};
   let branding = {};
   try {
-    const doc = await Setting.findOne({ key: 'store' }).lean();
+    // Capped: this lookup sits on the sign-up path, and branding is decoration —
+    // a slow settings read must not be what holds a verification code back. The
+    // env defaults below take over if it does.
+    const doc = await Setting.findOne({ key: 'store' }).maxTimeMS(5000).lean();
     general = doc?.general || {};
     social = doc?.social || {};
     branding = doc?.branding || {};

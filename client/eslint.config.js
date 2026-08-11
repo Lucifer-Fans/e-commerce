@@ -58,7 +58,13 @@ export default [
 
   // Build config and maintenance scripts run in Node, not the browser.
   {
-    files: ['*.config.js', '*.config.mjs', 'scripts/**/*.{js,mjs,cjs}'],
+    files: [
+      '*.config.js',
+      '*.config.mjs',
+      'scripts/**/*.{js,mjs,cjs}',
+      // Vite plugins are part of the build, so they run in Node too.
+      'plugins/**/*.{js,mjs,cjs}',
+    ],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',

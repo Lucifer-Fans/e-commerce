@@ -1,15 +1,19 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import useCartActions from '../../hooks/useCartActions';
+import useCartActions, { useIsWishlisted } from '../../hooks/useCartActions';
 import Icon from '../common/Icon';
 
 /**
  * One heart per product, as always — `variant` only records which option the shopper was
  * looking at, so moving the item to the cart later restores that exact SKU.
+ *
+ * Subscribes to its own membership as a boolean, so toggling one product in a grid
+ * re-renders that heart and no others.
  */
-export default function WishlistButton({ product, variant = null, className = '', size = 18 }) {
+function WishlistButton({ product, variant = null, className = '', size = 18 }) {
   const { t } = useTranslation();
-  const { handleToggleWishlist, isWishlisted } = useCartActions();
-  const active = isWishlisted(product._id);
+  const { handleToggleWishlist } = useCartActions();
+  const active = useIsWishlisted(product._id);
 
   return (
     <button
@@ -29,3 +33,5 @@ export default function WishlistButton({ product, variant = null, className = ''
     </button>
   );
 }
+
+export default memo(WishlistButton);

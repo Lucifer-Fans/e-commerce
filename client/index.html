@@ -12,11 +12,20 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <title>Premium Store — Quality Building Materials, Hardware & Tools</title>
-    <meta
-      name="description"
-      content="Shop premium building materials, hardware, paints, power tools and electricals with fast delivery and secure payments."
-    />
+    <!--
+      Everything between the seo markers is generated, never hand-edited:
+        • at build time by client/plugins/seoHtml.js, from the admin's Organization
+          settings, so a static deploy ships the store's own copy rather than this
+          placeholder;
+        • at request time by the server's html-meta middleware (when it serves the
+          build), which rewrites the same block per route so a shared product link
+          previews as that product.
+      The tags below are only what a crawler sees if neither ran. Keep the markers.
+    -->
+    <!--seo-->
+    <title>Premium Store</title>
+    <meta name="description" content="" />
+    <!--/seo-->
   </head>
   <body>
     <div id="root"></div>

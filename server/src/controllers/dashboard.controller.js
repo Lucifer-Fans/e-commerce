@@ -1,6 +1,7 @@
 const asyncHandler = require('../utils/asyncHandler');
 const { sendSuccess } = require('../utils/apiResponse');
 const { Order, Product, ProductVariant, User, Category, Review } = require('../models');
+const { resolveStats } = require('../services/dashboardCache');
 
 const startOfDay = (d) => new Date(new Date(d).setHours(0, 0, 0, 0));
 const endOfDay = (d) => new Date(new Date(d).setHours(23, 59, 59, 999));
@@ -15,8 +16,21 @@ const REVENUE_MATCH = { paymentStatus: 'paid', orderStatus: { $ne: 'cancelled' }
  */
 const CUSTOMER_MATCH = { role: 'user', emailVerificationPending: { $ne: true } };
 
-/** GET /dashboard/stats (admin) — headline KPI cards. */
+/**
+ * GET /dashboard/stats (admin) — headline KPI cards.
+ *
+ * Served from `dashboardCache`, which any write that emits `dashboard:invalidated`
+ * clears first — so the live refetch an order triggers still recomputes, while the
+ * fifteen counts and aggregates below are not re-run for every tab and poll.
+ */
 exports.getStats = asyncHandler(async (_req, res) => {
+  const data = await resolveStats(computeStats);
+
+  return sendSuccess(res, { message: 'Dashboard stats fetched', data });
+});
+
+/** The fan-out itself. Runs only on a cache miss. */
+async function computeStats() {
   const today = startOfDay(Date.now());
   const last30 = daysAgo(30);
   const prev30 = daysAgo(60);
@@ -65,35 +79,32 @@ exports.getStats = asyncHandler(async (_req, res) => {
   const current = current30Agg[0]?.total || 0;
   const previous = previous30Agg[0]?.total || 0;
 
-  return sendSuccess(res, {
-    message: 'Dashboard stats fetched',
-    data: {
-      revenue: {
-        total: Math.round(revenue * 100) / 100,
-        today: Math.round((todayAgg[0]?.total || 0) * 100) / 100,
-        last30Days: Math.round(current * 100) / 100,
-        // No previous period to compare against reads as 100% growth, not Infinity.
-        growthPercent: previous > 0 ? Math.round(((current - previous) / previous) * 1000) / 10 : current > 0 ? 100 : 0,
-      },
-      orders: {
-        total: totalOrders,
-        today: todayAgg[0]?.count || 0,
-        pending: pendingOrders,
-        averageValue: paidOrders ? Math.round((revenue / paidOrders) * 100) / 100 : 0,
-      },
-      products: {
-        total: totalProducts,
-        published: publishedProducts,
-        outOfStock,
-        lowStock,
-        totalSkus,
-        lowStockSkus,
-      },
-      users: { total: totalUsers, newLast30Days: newUsers30 },
-      moderation: { pendingReviews },
+  return {
+    revenue: {
+      total: Math.round(revenue * 100) / 100,
+      today: Math.round((todayAgg[0]?.total || 0) * 100) / 100,
+      last30Days: Math.round(current * 100) / 100,
+      // No previous period to compare against reads as 100% growth, not Infinity.
+      growthPercent: previous > 0 ? Math.round(((current - previous) / previous) * 1000) / 10 : current > 0 ? 100 : 0,
     },
-  });
-});
+    orders: {
+      total: totalOrders,
+      today: todayAgg[0]?.count || 0,
+      pending: pendingOrders,
+      averageValue: paidOrders ? Math.round((revenue / paidOrders) * 100) / 100 : 0,
+    },
+    products: {
+      total: totalProducts,
+      published: publishedProducts,
+      outOfStock,
+      lowStock,
+      totalSkus,
+      lowStockSkus,
+    },
+    users: { total: totalUsers, newLast30Days: newUsers30 },
+    moderation: { pendingReviews },
+  };
+}
 
 const BUCKET_FORMAT = { day: '%Y-%m-%d', month: '%Y-%m', year: '%Y' };
 const round2 = (n) => Math.round((Number(n) || 0) * 100) / 100;

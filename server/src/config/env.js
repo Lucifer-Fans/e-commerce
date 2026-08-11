@@ -27,6 +27,15 @@ const env = {
     ''
   ),
 
+  /**
+   * Absolute path to the storefront's `dist` folder. Set it and this process also
+   * serves the built SPA, rewriting each page's meta tags for the URL requested —
+   * which is what makes a shared product link unfurl as that product in WhatsApp
+   * and Facebook, neither of which runs the JavaScript that would otherwise set
+   * them. Left blank the API serves no HTML and nothing about it changes.
+   */
+  clientDistPath: process.env.CLIENT_DIST_PATH || '',
+
   mongoUri: process.env.MONGO_URI,
 
   jwt: {
@@ -120,6 +129,23 @@ const env = {
     clientId: process.env.GOOGLE_CLIENT_ID,
   },
 
+  /**
+   * SMTP, and the four clocks that keep it from holding a request open.
+   *
+   * Nodemailer's own defaults are generous to the point of being dangerous on a
+   * request path: two minutes to connect, thirty seconds for the greeting and ten
+   * minutes on an idle socket. A relay that is merely *unreachable* — an ISP or
+   * office firewall dropping outbound 587, which is the common case in India —
+   * therefore parks the handler for two minutes without ever failing, and the
+   * browser gives up at thirty seconds with "the request timed out" while the
+   * server is still politely waiting. Every one of these is stated explicitly, and
+   * `sendTimeoutMs` is the ceiling over the whole attempt in case a transport ever
+   * finds a way to hang that none of the other three cover.
+   *
+   * They are deliberately shorter than the client's own 30s timeout: a sign-up
+   * must come back with an answer of *some* kind while the shopper is still
+   * looking at the form.
+   */
   mail: {
     host: process.env.SMTP_HOST,
     port: num(process.env.SMTP_PORT, 587),
@@ -127,7 +153,18 @@ const env = {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
     from: process.env.MAIL_FROM || 'Premium Store <no-reply@premiumstore.com>',
+    connectionTimeoutMs: num(process.env.SMTP_CONNECTION_TIMEOUT_MS, 8000),
+    greetingTimeoutMs: num(process.env.SMTP_GREETING_TIMEOUT_MS, 8000),
+    socketTimeoutMs: num(process.env.SMTP_SOCKET_TIMEOUT_MS, 12000),
+    sendTimeoutMs: num(process.env.MAIL_SEND_TIMEOUT_MS, 12000),
   },
+
+  /**
+   * Hard ceiling on a single API request. Whatever a handler is waiting on, the
+   * client gets a real response before its own 30s timeout turns into a blank
+   * "request timed out" with nothing in the logs to explain it.
+   */
+  requestTimeoutMs: num(process.env.REQUEST_TIMEOUT_MS, 25000),
 
   commerce: {
     freeShippingThreshold: num(process.env.FREE_SHIPPING_THRESHOLD, 499),
