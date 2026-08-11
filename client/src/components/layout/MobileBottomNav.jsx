@@ -105,7 +105,14 @@ export default function MobileBottomNav() {
         {/* Padding, not margin, so the bar's own background reaches the screen
             edge on handsets with a home indicator. */}
         <div className="flex h-16 items-stretch pb-[env(safe-area-inset-bottom)]">
-          <Link to={links[0].to} className={tabClass(links[0].active)}>
+          {/* Closing on tap, not just on a pathname change: tapping the tab for
+              the route already underneath the sheet navigates nowhere, so the
+              pathname effect would never fire and the sheet would stay up. */}
+          <Link
+            to={links[0].to}
+            onClick={() => setCategoryOpen(false)}
+            className={tabClass(links[0].active)}
+          >
             <TabInner {...links[0]} />
           </Link>
 
@@ -120,7 +127,12 @@ export default function MobileBottomNav() {
           </button>
 
           {links.slice(1).map((link) => (
-            <Link key={link.to} to={link.to} className={tabClass(link.active)}>
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={() => setCategoryOpen(false)}
+              className={tabClass(link.active)}
+            >
               <TabInner {...link} />
             </Link>
           ))}
