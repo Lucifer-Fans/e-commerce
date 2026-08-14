@@ -6,8 +6,12 @@
  *
  *   1. `lockBodyScroll` / `unlockBodyScroll` — freeze the document behind the
  *      overlay. Only inline styles are touched and the scroll position is never
- *      moved, so sticky headers stay put and nothing shifts when the overlay
- *      closes. The disappearing scrollbar is compensated with padding.
+ *      moved, so nothing shifts when the overlay closes; the disappearing
+ *      scrollbar is compensated with padding. Note that `overflow: hidden` does
+ *      stop the document being a scroll container, which un-sticks any
+ *      `position: sticky` element on the page — fine underneath a full-screen
+ *      overlay, wrong for one anchored inside the page, so those pass
+ *      `freezeBody: false` to `useScrollLock` and rely on piece 2 alone.
  *
  *   2. `registerOverlay` / `releaseOverlay` — remember which element is the
  *      active overlay. A non-passive `touchmove` listener then cancels any swipe

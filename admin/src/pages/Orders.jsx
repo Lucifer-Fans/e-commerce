@@ -8,7 +8,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import Button from '@mui/material/Button';
 
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/VisibilityOutlined';
@@ -24,6 +23,7 @@ import { ORDER_STATUSES } from '../utils/constants';
 import PageHeader from '../components/common/PageHeader';
 import DataTable from '../components/common/DataTable';
 import StatusChip from '../components/common/StatusChip';
+import ResetFiltersButton from '../components/common/ResetFiltersButton';
 import UpdateStatusDialog from '../components/orders/UpdateStatusDialog';
 
 export default function Orders() {
@@ -307,9 +307,7 @@ export default function Orders() {
               sx={{ minWidth: 145 }}
             />
 
-            <Button color="inherit" onClick={resetFilters}>
-              Reset
-            </Button>
+            <ResetFiltersButton onClick={resetFilters} />
           </Stack>
         }
       />

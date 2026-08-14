@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const { translationsField } = require('./translatable');
-
 const assetSchema = new mongoose.Schema(
   {
     url: { type: String, trim: true, default: '' },
@@ -62,20 +60,6 @@ const settingSchema = new mongoose.Schema(
     },
 
     /**
-     * The handful of settings leaves that are prose rather than data.
-     *
-     * Emails, phone numbers, URLs and `siteName` are absent on purpose: they are
-     * identifiers, not sentences, and translating them would break contact links and
-     * split the brand across languages. Keywords stay English because they feed the
-     * text index.
-     */
-    translations: translationsField({
-      companyAddress: { type: String, trim: true, maxlength: 300 },
-      metaTitle: { type: String, trim: true, maxlength: 70 },
-      metaDescription: { type: String, trim: true, maxlength: 200 },
-    }),
-
-    /**
      * One-time bookkeeping the panel never shows. A default list is planted on
      * first use; the flag is what stops it growing back after an admin has
      * deliberately emptied it.
@@ -130,17 +114,6 @@ settingSchema.statics.EDITABLE_PATHS = [
   'social.facebook',
   'social.linkedin',
 ];
-
-/**
- * Which translation key overlays which settings path. Flat on the translation side so
- * one language is one small object, nested on the document side because that is the
- * shape the storefront already reads.
- */
-settingSchema.statics.TRANSLATABLE_PATHS = {
-  companyAddress: 'general.companyAddress',
-  metaTitle: 'seo.metaTitle',
-  metaDescription: 'seo.metaDescription',
-};
 
 /** Fetches the singleton, creating it on first call so the panel never 404s. */
 settingSchema.statics.getSingleton = async function getSingleton() {

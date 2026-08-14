@@ -23,6 +23,7 @@ import { CAREER_EVENTS } from '../../realtime/events';
 import { formatDate } from '../../utils/format';
 import DataTable from '../common/DataTable';
 import ConfirmDialog from '../common/ConfirmDialog';
+import ResetFiltersButton from '../common/ResetFiltersButton';
 import ApplicantProfileDialog from './ApplicantProfileDialog';
 import CareerSetupDialog from './CareerSetupDialog';
 import InterviewScheduleDialog from './InterviewScheduleDialog';
@@ -422,16 +423,14 @@ export default function CareerApplicationsTab({ onCountsChanged }) {
           ))}
         </TextField>
 
-        <Button
-          color="inherit"
+        <ResetFiltersButton
+          size="small"
           disabled={!isFiltered}
           onClick={() => {
             setFilters(DEFAULT_FILTERS);
             setPage(1);
           }}
-        >
-          Reset
-        </Button>
+        />
 
         <Box sx={{ flex: 1 }} />
 

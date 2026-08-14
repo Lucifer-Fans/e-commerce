@@ -44,8 +44,11 @@ export default function Header() {
   const shopIconClass = usesHeaderShopIcons(pathname) ? 'block' : 'hidden lg:block';
 
   const accountRef = useClickOutside(useCallback(() => setAccountOpen(false), []), accountOpen);
-  // An open menu should not drift away under the finger on a touch screen.
-  const accountMenuRef = useScrollLock(accountOpen);
+  // An open menu should not drift away under the finger on a touch screen. The
+  // menu hangs off the sticky header, though, so the document has to keep
+  // scrolling itself — freezing it would leave the header nothing to stick to
+  // and drop the whole bar out of view.
+  const accountMenuRef = useScrollLock(accountOpen, { freezeBody: false });
 
   const handleLogout = async () => {
     setAccountOpen(false);

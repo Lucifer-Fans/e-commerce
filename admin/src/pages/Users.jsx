@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Switch from '@mui/material/Switch';
 import Tooltip from '@mui/material/Tooltip';
-import Button from '@mui/material/Button';
 
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -23,6 +22,7 @@ import PageHeader from '../components/common/PageHeader';
 import DataTable from '../components/common/DataTable';
 import StatusChip from '../components/common/StatusChip';
 import ConfirmDialog from '../components/common/ConfirmDialog';
+import ResetFiltersButton from '../components/common/ResetFiltersButton';
 
 export default function Users() {
   const { enqueueSnackbar } = useSnackbar();
@@ -239,17 +239,14 @@ export default function Users() {
               <MenuItem value="blocked">Blocked</MenuItem>
             </TextField>
 
-            <Button
-              color="inherit"
+            <ResetFiltersButton
               onClick={() => {
                 setSearch('');
                 setRole('all');
                 setStatus('all');
                 setPage(1);
               }}
-            >
-              Reset
-            </Button>
+            />
           </Stack>
         }
       />

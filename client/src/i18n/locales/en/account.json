@@ -16,7 +16,6 @@
       "wishlist": "Wishlist items"
     }
   },
-
   "photo": {
     "title": "Profile Photo",
     "hint": "JPG, PNG, WEBP or AVIF — up to 5 MB.",
@@ -33,7 +32,6 @@
     "removed": "Profile photo removed",
     "removeFailed": "Could not remove your photo"
   },
-
   "orders": {
     "loading": "Loading orders…",
     "noneYet": "You haven't placed any orders yet.",
@@ -57,7 +55,6 @@
     "willNotify": "We will notify you when this ships.",
     "viewDetails": "View details"
   },
-
   "detail": {
     "notFound": "Order not found",
     "backToOrders": "Back to orders",
@@ -110,7 +107,6 @@
       "delivered": "Delivered"
     }
   },
-
   "addresses": {
     "title": "Saved Addresses",
     "add": "Add address",
@@ -126,7 +122,6 @@
     "deleteMessage": "“{{name}}” will be permanently removed.",
     "deleteDefaultHint": "To delete this address, make another address default."
   },
-
   "devices": {
     "title": "Manage Devices",
     "subtitle": "Places where your account is currently signed in. If you don't recognise something, sign it out and change your password.",
@@ -162,7 +157,6 @@
     "confirmSignOutAllMessage": "Every device, including this one, will be signed out immediately. You will need to log in again.",
     "signedOutAll": "Signed out from all devices"
   },
-
   "settings": {
     "title": "Account Settings",
     "changePassword": "Change Password",
@@ -201,7 +195,6 @@
     "deactivated": "Your account has been deactivated",
     "deactivateFailed": "Could not deactivate your account"
   },
-
   "shell": {
     "title": "Everything you need to build, in one place.",
     "blurb": "Plywood, hardware, paints, power tools and electricals — sourced direct from the brands professionals trust.",
@@ -211,7 +204,6 @@
       "payments": "Secure payments and easy returns"
     }
   },
-
   "auth": {
     "loginTitle": "Login",
     "loginSeo": "Log in to your account to track orders and manage your wishlist.",
@@ -223,7 +215,6 @@
     "emailLabel": "Email address",
     "passwordLabel": "Password",
     "forgotPassword": "Forgot password?",
-
     "registerTitle": "Create Account",
     "registerSeo": "Create your account to shop faster and track orders.",
     "createYourAccount": "Create your account",
@@ -232,14 +223,13 @@
     "nameLabel": "Full name",
     "namePlaceholder": "Your name",
     "phoneLabel": "Mobile number",
-    "phonePlaceholder": "10 digit number",
+    "phonePlaceholder": "Enter 10 digit number",
     "confirmPasswordLabel": "Confirm password",
     "optional": "(optional)",
     "agreeTerms": "I agree to the <1>Terms of Service</1> and <2>Privacy Policy</2>",
     "acceptTerms": "Please accept the terms to continue",
     "accountCreated": "Account created — welcome!",
     "codeSent": "Almost there — check your email for the code",
-
     "verifyTitle": "Verify Email",
     "verifyHeading": "Check your inbox",
     "verifySubtitle": "Enter the code we sent to {{email}}",
@@ -256,7 +246,6 @@
     "resendFailed": "Could not send a new code",
     "wrongEmail": "Wrong email address?",
     "startOver": "Start over",
-
     "forgotTitle": "Forgot Password",
     "forgotHeading": "Forgot your password?",
     "forgotSubtitle": "Enter your email and we'll send you a reset link",
@@ -268,14 +257,12 @@
     "devMode": "Development mode — SMTP not configured",
     "differentEmail": "Send to a different email",
     "backToLogin": "Back to login",
-
     "resetTitle": "Reset Password",
     "resetHeading": "Set a new password",
     "resetSubtitle": "Choose a strong password you haven't used before",
     "resetAction": "Reset password",
     "resetSuccess": "Password reset successfully",
     "resetInvalid": "This reset link is invalid or has expired",
-
     "show": "Show",
     "hide": "Hide",
     "showPasswordAria": "Show password",

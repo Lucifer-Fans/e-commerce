@@ -19,22 +19,30 @@ import {
  *   const overlayRef = useScrollLock(open);
  *   ...
  *   <div ref={overlayRef} className="fixed inset-0">…</div>
+ *
+ * `freezeBody: false` keeps the gesture guard but leaves the document's own
+ * `overflow` alone. Pass it for an overlay anchored *inside* the page rather than
+ * laid over it: `overflow: hidden` stops the document being a scroll container,
+ * and any `position: sticky` ancestor then loses what it was sticking to and
+ * drops back to its static place — the header does exactly that. The wheel and
+ * touchmove handlers already cancel background scrolling on their own, so the
+ * freeze is only worth its cost for overlays that cover the viewport.
  */
-export default function useScrollLock(active = true) {
+export default function useScrollLock(active = true, { freezeBody = true } = {}) {
   const overlayRef = useRef(null);
 
   useEffect(() => {
     if (!active) return undefined;
 
     const node = overlayRef.current;
-    lockBodyScroll();
+    if (freezeBody) lockBodyScroll();
     registerOverlay(node);
 
     return () => {
       releaseOverlay(node);
-      unlockBodyScroll();
+      if (freezeBody) unlockBodyScroll();
     };
-  }, [active]);
+  }, [active, freezeBody]);
 
   return overlayRef;
 }

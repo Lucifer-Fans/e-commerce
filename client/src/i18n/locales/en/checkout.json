@@ -25,14 +25,12 @@
     "proceedToCheckout": "Proceed to Checkout",
     "securePayments": "Safe and secure payments"
   },
-
   "wishlist": {
     "title": "My Wishlist",
     "emptyTitle": "Your wishlist is empty",
     "emptyMessage": "Tap the heart on any product to save it here for later.",
     "browse": "Browse products"
   },
-
   "coupon": {
     "applyTitle": "Apply coupon",
     "label": "Coupon code",
@@ -47,7 +45,6 @@
     "hideAvailable": "Hide available coupons ({{count}})",
     "minOrder": "Min. order {{amount}}"
   },
-
   "summary": {
     "title": "Price Details",
     "subtotal_one": "Subtotal ({{count}} item)",
@@ -59,7 +56,6 @@
     "savings": "You save {{amount}} on this order",
     "freeShippingNudge": "Add {{amount}} more for free delivery"
   },
-
   "checkout": {
     "title": "Checkout",
     "orderTotal": "Order Total",
@@ -84,7 +80,6 @@
       "payment": "Payment"
     }
   },
-
   "address": {
     "addTitle": "Add a new address",
     "editTitle": "Edit address",
@@ -107,7 +102,7 @@
       "fullName": "Full Name",
       "fullNamePlaceholder": "Recipient Name",
       "phone": "Mobile Number",
-      "phonePlaceholder": "10 Digit Number",
+      "phonePlaceholder": "Enter 10 digit number",
       "addressLine1": "Address Line 1",
       "addressLine1Placeholder": "House / Flat No, Building, Street",
       "addressLine2": "Address Line 2",
@@ -117,9 +112,13 @@
       "pincode": "Pincode",
       "pincodePlaceholder": "6 Digit Pincode",
       "city": "City",
-      "cityPlaceholder": "City",
+      "cityPlaceholder": "Select City",
+      "cityCustomPlaceholder": "Enter city / town",
+      "cityOther": "Other (type city name)",
+      "cityFromList": "Choose from the list instead",
+      "selectStateFirst": "Select a state first",
       "state": "State",
-      "statePlaceholder": "State",
+      "statePlaceholder": "Select State",
       "alternatePhone": "Alternate Phone",
       "alternatePhonePlaceholder": "Alternate Phone"
     },
@@ -129,7 +128,6 @@
       "state": "State is required"
     }
   },
-
   "payment": {
     "methodTitle": "Payment Method",
     "onlineTitle": "Pay online (Card / UPI / Net Banking)",
@@ -142,14 +140,12 @@
     "cancelled": "Payment cancelled. Your order is saved as pending.",
     "failed": "Payment failed. Please try again."
   },
-
   "confirm": {
     "pill": "Order",
     "title": "Order Confirm",
     "subtitle": "Packing your items and handing them to our delivery partner",
     "status": "Confirming your order…"
   },
-
   "success": {
     "seoTitle": "Order Confirmed",
     "notFound": "Order not found",

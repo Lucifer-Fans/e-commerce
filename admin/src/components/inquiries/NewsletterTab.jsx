@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Chip from '@mui/material/Chip';
@@ -23,6 +22,7 @@ import { NEWSLETTER_EVENTS } from '../../realtime/events';
 import { formatDate } from '../../utils/format';
 import DataTable from '../common/DataTable';
 import ConfirmDialog from '../common/ConfirmDialog';
+import ResetFiltersButton from '../common/ResetFiltersButton';
 
 const SORTS = [
   { value: 'newest', label: 'Newest First' },
@@ -231,16 +231,14 @@ export default function NewsletterTab({ onCountsChanged }) {
           ))}
         </TextField>
 
-        <Button
-          color="inherit"
+        <ResetFiltersButton
+          size="small"
           disabled={!isFiltered}
           onClick={() => {
             setFilters(DEFAULT_FILTERS);
             setPage(1);
           }}
-        >
-          Reset
-        </Button>
+        />
       </Stack>
 
       <Divider />

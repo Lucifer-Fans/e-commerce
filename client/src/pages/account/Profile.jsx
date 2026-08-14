@@ -9,6 +9,7 @@ import useFetch from '../../hooks/useFetch';
 import { formatDate, formatPrice } from '../../utils/format';
 import Icon from '../../components/common/Icon';
 import Spinner from '../../components/common/Spinner';
+import PhoneInput from '../../components/common/PhoneInput';
 import StatusBadge from '../../components/common/StatusBadge';
 import UserAvatar from '../../components/common/UserAvatar';
 import LanguageSelector from '../../components/language/LanguageSelector';
@@ -216,13 +217,12 @@ export default function Profile() {
               <label htmlFor="phone" className="label">
                 {t('profile.mobile')}
               </label>
-              <input
+              <PhoneInput
                 id="phone"
                 value={values.phone}
                 onChange={(e) => setValues((v) => ({ ...v, phone: e.target.value }))}
-                inputMode="numeric"
-                maxLength={10}
-                className={`input ${errors.phone ? 'input-error' : ''}`}
+                error={errors.phone}
+                placeholder={t('auth.phonePlaceholder')}
               />
               {errors.phone && <p className="error-text">{errors.phone}</p>}
             </div>

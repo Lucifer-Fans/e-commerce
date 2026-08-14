@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { register, clearAuthError, setRegistrationDraft } from '../../store/authSlice';
 import Seo from '../../components/common/Seo';
 import Spinner from '../../components/common/Spinner';
+import PhoneInput from '../../components/common/PhoneInput';
 import AuthShell from '../../components/auth/AuthShell';
 import PasswordInput from '../../components/auth/PasswordInput';
 
@@ -180,15 +181,12 @@ export default function Register() {
               {t('auth.phoneLabel')}{' '}
               <span className="font-normal text-ink-400">{t('auth.optional')}</span>
             </label>
-            <input
+            <PhoneInput
               id="phone"
               value={values.phone}
               onChange={set('phone')}
-              inputMode="numeric"
-              maxLength={10}
-              autoComplete="tel"
+              error={errors.phone}
               placeholder={t('auth.phonePlaceholder')}
-              className={`input ${errors.phone ? 'input-error' : ''}`}
             />
             {errors.phone && <p className="error-text">{errors.phone}</p>}
           </div>

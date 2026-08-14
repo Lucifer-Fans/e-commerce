@@ -13,6 +13,7 @@ import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 import SendIcon from '@mui/icons-material/SendOutlined';
 import DateTimePickerField from '../common/DateTimePickerField';
+import PhoneField from '../common/PhoneField';
 
 /** Mirrors INTERVIEW_MODES on the server's JobApplication model. */
 const MODES = [
@@ -297,17 +298,16 @@ export default function InterviewScheduleDialog({ application, onClose, onSubmit
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
+              <PhoneField
                 fullWidth
                 label="Contact number"
-                placeholder="9876543210"
+                placeholder="Enter 10 digit number"
                 value={form.contactPhone}
                 onChange={setPhone}
                 error={Boolean(errors.contactPhone)}
                 helperText={
                   errors.contactPhone || 'Optional — a 10 digit number to reach on the day'
                 }
-                inputProps={{ inputMode: 'numeric', maxLength: 10, autoComplete: 'tel' }}
               />
             </Grid>
 

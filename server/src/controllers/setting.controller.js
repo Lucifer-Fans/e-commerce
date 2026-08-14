@@ -5,7 +5,6 @@ const { destroyAsset } = require('../config/cloudinary');
 const broadcast = require('../realtime/broadcast');
 const mailService = require('../services/mail.service');
 const seoService = require('../services/seo.service');
-const { DEFAULT_LANGUAGE } = require('../config/languages');
 const { createTtlCache } = require('../utils/ttlCache');
 
 /**
@@ -66,9 +65,8 @@ function isSameValue(path, before, after) {
  * so it stays open; nothing here is sensitive.
  */
 exports.getSettings = asyncHandler(async (req, res) => {
-  // The admin panel edits the source, so it keeps the raw `translations` map — and
-  // reads straight through, so a save is visible on the next refresh. Every other
-  // caller gets the leaves already resolved to their language, off the cached copy.
+  // The admin panel edits the source, so it reads straight through — a save is
+  // visible on the next refresh. Every other caller is served the cached copy.
   if (req.user?.role === 'admin') {
     const settings = await Setting.getSingleton();
     return sendSuccess(res, { message: 'Settings fetched', data: { settings: settings.toJSON() } });
@@ -76,10 +74,7 @@ exports.getSettings = asyncHandler(async (req, res) => {
 
   const json = await settingsCache.resolve('store', loadSettingsJson);
 
-  return sendSuccess(res, {
-    message: 'Settings fetched',
-    data: { settings: localizeSettings(json, req.language) },
-  });
+  return sendSuccess(res, { message: 'Settings fetched', data: { settings: json } });
 });
 
 /**
@@ -93,33 +88,6 @@ exports.getSettings = asyncHandler(async (req, res) => {
 async function loadSettingsJson() {
   const settings = await Setting.getSingleton();
   return JSON.parse(JSON.stringify(settings.toJSON()));
-}
-
-/**
- * Overlays `translations[lang]` onto the settings leaves that carry prose.
- *
- * Unlike the catalogue documents this shape is nested and fixed, so the whitelist in
- * the model is walked directly rather than going through the generic `localize`.
- * A blank translation falls through to the English, same as everywhere else.
- *
- * @param {object} json  a plain serialised settings document — this function copies
- *                       before writing, because the caller's object is shared.
- */
-function localizeSettings(json, lang) {
-  const raw = json.translations;
-  const patch = raw instanceof Map ? raw.get(lang) : raw?.[lang];
-
-  const { translations: _translations, ...rest } = json;
-  if (!patch || !lang || lang === DEFAULT_LANGUAGE) return rest;
-
-  // `writePath` mutates nested objects, which the shallow spread above still shares
-  // with the cached copy — so the branch that writes gets its own tree.
-  const out = JSON.parse(JSON.stringify(rest));
-  for (const [key, path] of Object.entries(Setting.TRANSLATABLE_PATHS)) {
-    const value = patch[key];
-    if (typeof value === 'string' && value.trim()) writePath(out, path, value);
-  }
-  return out;
 }
 
 /**
@@ -154,12 +122,6 @@ exports.updateSettings = asyncHandler(async (req, res) => {
     settings.fieldHistory.set(Setting.historyKey(path), now);
   }
 
-  // Translations arrive as a whole map (the panel always sends every language it has),
-  // so it is replaced rather than merged — that is how a language gets cleared.
-  if (req.body.translations !== undefined) {
-    settings.translations = req.body.translations || undefined;
-  }
-
   settings.updatedBy = req.user._id;
   await settings.save();
 
@@ -176,11 +138,8 @@ exports.updateSettings = asyncHandler(async (req, res) => {
   // fixes the meta title would still see the old one in a link preview for a minute.
   seoService.clearSettingsCache();
 
-  // Storefronts re-title themselves and swap logo/favicon without a reload. The
-  // per-language map is stripped: a socket payload has no one language to resolve to,
-  // and the refetch that follows a language change picks up the right copy anyway.
-  const { translations: _t, ...broadcastable } = settings.toJSON();
-  broadcast.settingsUpdated(broadcastable);
+  // Storefronts re-title themselves and swap logo/favicon without a reload.
+  broadcast.settingsUpdated(settings.toJSON());
 
   return sendSuccess(res, { message: 'Settings saved', data: { settings } });
 });

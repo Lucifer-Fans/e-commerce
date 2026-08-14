@@ -188,13 +188,11 @@ const isPrivate = (pathname) =>
  */
 async function resolveMeta(pathname, lang = DEFAULT_LANGUAGE) {
   const settings = await getSettings();
-  const patch =
-    lang && lang !== DEFAULT_LANGUAGE ? settings.translations?.[lang] || null : null;
 
   const siteName = settings.general?.siteName?.trim() || env.appName;
   const defaults = {
-    title: patch?.metaTitle?.trim() || settings.seo?.metaTitle?.trim() || siteName,
-    description: patch?.metaDescription?.trim() || settings.seo?.metaDescription?.trim() || '',
+    title: settings.seo?.metaTitle?.trim() || siteName,
+    description: settings.seo?.metaDescription?.trim() || '',
     keywords: settings.seo?.metaKeywords || [],
     image: absolute(settings.branding?.logo?.url),
   };

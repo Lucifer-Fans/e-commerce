@@ -31,15 +31,12 @@ import { EVENTS } from '../realtime/events';
 import PageHeader from '../components/common/PageHeader';
 import ErrorState from '../components/common/ErrorState';
 import AssetPicker from '../components/common/AssetPicker';
-import TranslationEditor from '../components/common/TranslationEditor';
-import { pruneTranslations } from '../utils/languages';
 
 const EMPTY = {
   general: { siteName: '', contactEmail: '', contactNumber: '', companyAddress: '', mapEmbedUrl: '' },
   seo: { metaTitle: '', metaDescription: '', metaKeywords: '' },
   branding: { logo: { url: '', publicId: '' }, favicon: { url: '', publicId: '' } },
   social: { instagram: '', twitter: '', whatsapp: '', facebook: '', linkedin: '' },
-  translations: {},
 };
 
 const asset = (value) => ({ url: value?.url || '', publicId: value?.publicId || '' });
@@ -56,7 +53,6 @@ function toForm(settings) {
     },
     branding: { logo: asset(settings.branding?.logo), favicon: asset(settings.branding?.favicon) },
     social: { ...EMPTY.social, ...settings.social },
-    translations: settings.translations || {},
   };
 }
 
@@ -65,7 +61,6 @@ const SECTION_LABEL = {
   seo: 'SEO settings',
   branding: 'Branding',
   social: 'Social profiles',
-  translations: 'Translations',
 };
 
 /** Card shell shared by every section: title, per-section reset, consistent padding. */
@@ -192,10 +187,7 @@ export default function Settings() {
     setErrors({});
     try {
       // The whole document goes up; the API stamps only the leaves that actually changed.
-      const res = await settingApi.update({
-        ...values,
-        translations: pruneTranslations(values.translations) ?? null,
-      });
+      const res = await settingApi.update(values);
       adopt(res.data.settings);
       enqueueSnackbar('Organization settings saved', { variant: 'success' });
     } catch (err) {
@@ -391,42 +383,6 @@ export default function Settings() {
                 </Grid>
               ))}
             </Grid>
-          </SectionCard>
-        </Grid>
-
-        {/* ---------- Translations ---------- */}
-        <Grid size={12}>
-          <SectionCard
-            title="Translations"
-            section="translations"
-            dirty={dirtySections.includes('translations')}
-            onReset={resetSection}
-          >
-            {/*
-              Only the prose leaves. Emails, phone numbers, links and the site name stay
-              in English — they are identifiers the storefront and inboxes match on.
-            */}
-            <TranslationEditor
-              value={values.translations}
-              onChange={(translations) => setValues((v) => ({ ...v, translations }))}
-              fields={[
-                {
-                  name: 'companyAddress',
-                  label: 'Company address',
-                  source: values.general.companyAddress,
-                  multiline: true,
-                  rows: 2,
-                },
-                { name: 'metaTitle', label: 'Meta title', source: values.seo.metaTitle },
-                {
-                  name: 'metaDescription',
-                  label: 'Meta description',
-                  source: values.seo.metaDescription,
-                  multiline: true,
-                  rows: 2,
-                },
-              ]}
-            />
           </SectionCard>
         </Grid>
       </Grid>

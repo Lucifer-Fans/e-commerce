@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { addressApi } from '../../api/endpoints';
+import { INDIAN_STATES, citiesForState } from '../../data/indiaLocations';
 import Spinner from '../common/Spinner';
+import PhoneInput from '../common/PhoneInput';
 
 const EMPTY = {
   label: 'home',
@@ -42,16 +44,55 @@ function validate(values, t) {
   return errors;
 }
 
+/** Sentinel option that swaps the city dropdown for a free-text box. */
+const OTHER_CITY = '__other__';
+
 export default function AddressForm({ address, onSaved, onCancel }) {
   const { t } = useTranslation(['checkout', 'common']);
   const [values, setValues] = useState({ ...EMPTY, ...address });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  // An address saved before this dropdown existed (or in a town we don't list)
+  // has to open in free-text mode, otherwise editing it would blank the city.
+  const [customCity, setCustomCity] = useState(
+    () => Boolean(address?.city) && !citiesForState(address.state).includes(address.city),
+  );
+
+  const stateOptions = INDIAN_STATES.map((name) => ({ value: name, label: name }));
+  // The "Other" escape hatch only makes sense once a state narrows the list down.
+  const cityOptions = citiesForState(values.state).map((name) => ({ value: name, label: name }));
+  if (values.state) {
+    cityOptions.push({ value: OTHER_CITY, label: t('address.fields.cityOther') });
+  }
 
   const set = (field) => (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setValues((v) => ({ ...v, [field]: value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
+
+  /** Changing state invalidates whatever city was picked for the old one. */
+  const setStateValue = (e) => {
+    const state = e.target.value;
+    setValues((v) => ({ ...v, state, city: '' }));
+    setCustomCity(false);
+    setErrors((prev) => ({ ...prev, state: undefined, city: undefined }));
+  };
+
+  const setCity = (e) => {
+    const value = e.target.value;
+    if (value === OTHER_CITY) {
+      setCustomCity(true);
+      setValues((v) => ({ ...v, city: '' }));
+      return;
+    }
+    setValues((v) => ({ ...v, city: value }));
+    if (errors.city) setErrors((prev) => ({ ...prev, city: undefined }));
+  };
+
+  const pickCityFromList = () => {
+    setCustomCity(false);
+    setValues((v) => ({ ...v, city: '' }));
   };
 
   const submit = async (e) => {
@@ -81,7 +122,7 @@ export default function AddressForm({ address, onSaved, onCancel }) {
   };
 
   /** `name` doubles as the translation key: address.fields.<name>{,Placeholder}. */
-  const field = (name, props = {}) => (
+  const field = (name, { type = 'input', options, placeholder, onChange, after, ...props } = {}) => (
     <div className={props.wide ? 'sm:col-span-2' : ''}>
       <label htmlFor={name} className="label">
         {t(`address.fields.${name}`)}
@@ -89,15 +130,45 @@ export default function AddressForm({ address, onSaved, onCancel }) {
           <span className="ml-1 font-normal text-ink-400">{t('address.optional')}</span>
         )}
       </label>
-      <input
-        id={name}
-        value={values[name]}
-        onChange={set(name)}
-        className={`input ${errors[name] ? 'input-error' : ''}`}
-        aria-invalid={Boolean(errors[name])}
-        placeholder={t(`address.fields.${name}Placeholder`, '')}
-        {...props.input}
-      />
+
+      {type === 'select' ? (
+        <select
+          id={name}
+          value={values[name]}
+          onChange={onChange || set(name)}
+          className={`input ${errors[name] ? 'input-error' : ''}`}
+          aria-invalid={Boolean(errors[name])}
+          {...props.input}
+        >
+          <option value="">{placeholder}</option>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      ) : type === 'phone' ? (
+        <PhoneInput
+          id={name}
+          value={values[name]}
+          onChange={set(name)}
+          error={errors[name]}
+          placeholder={placeholder ?? t(`address.fields.${name}Placeholder`, '')}
+          {...props.input}
+        />
+      ) : (
+        <input
+          id={name}
+          value={values[name]}
+          onChange={set(name)}
+          className={`input ${errors[name] ? 'input-error' : ''}`}
+          aria-invalid={Boolean(errors[name])}
+          placeholder={placeholder ?? t(`address.fields.${name}Placeholder`, '')}
+          {...props.input}
+        />
+      )}
+
+      {after}
       {errors[name] && <p className="error-text">{errors[name]}</p>}
     </div>
   );
@@ -105,16 +176,49 @@ export default function AddressForm({ address, onSaved, onCancel }) {
   return (
     <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
       {field('fullName', { input: { autoComplete: 'name' } })}
-      {field('phone', { input: { inputMode: 'numeric', maxLength: 10, autoComplete: 'tel' } })}
+      {field('phone', { type: 'phone' })}
       {field('addressLine1', { wide: true, input: { autoComplete: 'address-line1' } })}
       {field('addressLine2', { wide: true, optional: true, input: { autoComplete: 'address-line2' } })}
       {field('landmark', { optional: true })}
       {field('pincode', {
         input: { inputMode: 'numeric', maxLength: 6, autoComplete: 'postal-code' },
       })}
-      {field('city', { input: { autoComplete: 'address-level2' } })}
-      {field('state', { input: { autoComplete: 'address-level1' } })}
-      {field('alternatePhone', { optional: true, input: { inputMode: 'numeric', maxLength: 10 } })}
+      {field('state', {
+        type: 'select',
+        placeholder: t('address.fields.statePlaceholder'),
+        options: stateOptions,
+        onChange: setStateValue,
+        input: { autoComplete: 'address-level1' },
+      })}
+      {customCity
+        ? field('city', {
+            placeholder: t('address.fields.cityCustomPlaceholder'),
+            input: { autoComplete: 'address-level2' },
+            after: values.state && (
+              <button
+                type="button"
+                onClick={pickCityFromList}
+                className="mt-2 text-xs font-semibold text-brand-600 hover:underline"
+              >
+                {t('address.fields.cityFromList')}
+              </button>
+            ),
+          })
+        : field('city', {
+            type: 'select',
+            placeholder: values.state
+              ? t('address.fields.cityPlaceholder')
+              : t('address.fields.selectStateFirst'),
+            options: cityOptions,
+            onChange: setCity,
+            input: { autoComplete: 'address-level2', disabled: !values.state },
+          })}
+      {field('alternatePhone', {
+        type: 'phone',
+        optional: true,
+        placeholder: t('address.fields.phonePlaceholder'),
+        input: { autoComplete: 'tel' },
+      })}
 
       <div>
         <span className="label">{t('address.typeLabel')}</span>

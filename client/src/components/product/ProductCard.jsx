@@ -28,17 +28,6 @@ function ProductCard({ product, className = '' }) {
   const detailUrl = product.savedVariantSku
     ? `/product/${product.slug}?v=${product.savedVariantSku}`
     : `/product/${product.slug}`;
-  // "3 sizes · 2 colours" — the attribute names are admin-authored catalogue data,
-  // so only the count-and-noun frame is translated around them.
-  const optionSummary = (product.variantAttributes || [])
-    .filter((attribute) => (attribute.values?.length || 0) > 0)
-    .map((attribute) =>
-      t('product.optionCount', {
-        count: attribute.values.length,
-        name: attribute.name.toLowerCase(),
-      })
-    )
-    .join(' · ');
 
   return (
     <article
@@ -111,19 +100,12 @@ function ProductCard({ product, className = '' }) {
             {hasDiscount && (
               <span className="text-sm text-ink-400 line-through">{formatPrice(product.price)}</span>
             )}
+            {lowStock && (
+              <span className="text-[11px] font-semibold text-accent-dark">
+                {t('product.onlyLeft', { count: product.stock })}
+              </span>
+            )}
           </div>
-
-          {optionSummary && (
-            <p className="mb-2 text-[11px] font-medium text-ink-500">
-              {t('product.optionsAvailable', { summary: optionSummary })}
-            </p>
-          )}
-
-          {lowStock && (
-            <p className="mb-2 text-[11px] font-semibold text-accent-dark">
-              {t('product.onlyLeft', { count: product.stock })}
-            </p>
-          )}
 
           <button
             type="button"

@@ -8,6 +8,7 @@ import useSettings from '../settings/useSettings';
 import Seo from '../components/common/Seo';
 import Icon from '../components/common/Icon';
 import Spinner from '../components/common/Spinner';
+import PhoneInput from '../components/common/PhoneInput';
 import SuccessDialog from '../components/common/SuccessDialog';
 
 const EMPTY = {
@@ -194,29 +195,13 @@ export default function Careers() {
                 <label htmlFor="phone" className="label">
                   {t('careers.fields.phone')}
                 </label>
-                <div
-                  className={`flex overflow-hidden rounded-lg border bg-white transition
-                              focus-within:ring-2 focus-within:ring-brand-100 ${
-                                errors.phone
-                                  ? 'border-danger focus-within:border-danger focus-within:ring-red-100'
-                                  : 'border-ink-300 focus-within:border-brand-500'
-                              }`}
-                >
-                  <span className="grid place-items-center border-r border-ink-200 bg-ink-50 px-3 text-sm font-semibold text-ink-600">
-                    +91
-                  </span>
-                  <input
-                    id="phone"
-                    value={values.phone}
-                    onChange={set('phone')}
-                    inputMode="numeric"
-                    maxLength={10}
-                    autoComplete="tel"
-                    placeholder={t('careers.fields.phonePlaceholder')}
-                    aria-invalid={Boolean(errors.phone)}
-                    className="w-full bg-transparent px-3.5 py-2.5 text-sm text-ink-800 outline-none placeholder:text-ink-400"
-                  />
-                </div>
+                <PhoneInput
+                  id="phone"
+                  value={values.phone}
+                  onChange={set('phone')}
+                  error={errors.phone}
+                  placeholder={t('careers.fields.phonePlaceholder')}
+                />
                 {errors.phone && <p className="error-text">{errors.phone}</p>}
               </div>
 

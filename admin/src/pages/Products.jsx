@@ -30,6 +30,7 @@ import PageHeader from '../components/common/PageHeader';
 import DataTable from '../components/common/DataTable';
 import StatusChip from '../components/common/StatusChip';
 import ConfirmDialog from '../components/common/ConfirmDialog';
+import ResetFiltersButton from '../components/common/ResetFiltersButton';
 
 export default function Products() {
   const navigate = useNavigate();
@@ -38,8 +39,8 @@ export default function Products() {
 
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
-  const [category, setCategory] = useState('');
-  const [availability, setAvailability] = useState(searchParams.get('availability') || '');
+  const [category, setCategory] = useState('all');
+  const [availability, setAvailability] = useState(searchParams.get('availability') || 'all');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState(null);
@@ -57,8 +58,8 @@ export default function Products() {
           limit,
           status,
           search: debouncedSearch || undefined,
-          category: category || undefined,
-          availability: availability || undefined,
+          category: category === 'all' ? undefined : category,
+          availability: availability === 'all' ? undefined : availability,
           sort: 'newest',
         }),
       [page, limit, status, debouncedSearch, category, availability]
@@ -277,8 +278,8 @@ export default function Products() {
   const resetFilters = () => {
     setSearch('');
     setStatus('all');
-    setCategory('');
-    setAvailability('');
+    setCategory('all');
+    setAvailability('all');
     setPage(1);
   };
 
@@ -337,7 +338,7 @@ export default function Products() {
               onChange={(e) => resetPage(setCategory)(e.target.value)}
               sx={{ minWidth: 170 }}
             >
-              <MenuItem value="">All categories</MenuItem>
+              <MenuItem value="all">All categories</MenuItem>
               {categories.map((c) => (
                 <MenuItem key={c._id} value={c._id}>
                   {c.name}
@@ -365,14 +366,12 @@ export default function Products() {
               onChange={(e) => resetPage(setAvailability)(e.target.value)}
               sx={{ minWidth: 150 }}
             >
-              <MenuItem value="">Any stock level</MenuItem>
+              <MenuItem value="all">Any stock level</MenuItem>
               <MenuItem value="in_stock">In stock</MenuItem>
               <MenuItem value="out_of_stock">Out of stock</MenuItem>
             </TextField>
 
-            <Button color="inherit" onClick={resetFilters}>
-              Reset
-            </Button>
+            <ResetFiltersButton onClick={resetFilters} />
           </Stack>
         }
       />

@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Divider from '@mui/material/Divider';
@@ -24,6 +23,7 @@ import { INQUIRY_EVENTS } from '../../realtime/events';
 import { formatDateTime } from '../../utils/format';
 import DataTable from '../common/DataTable';
 import ConfirmDialog from '../common/ConfirmDialog';
+import ResetFiltersButton from '../common/ResetFiltersButton';
 import InquiryDetailDialog from './InquiryDetailDialog';
 import ReplyDialog from './ReplyDialog';
 
@@ -250,16 +250,14 @@ export default function ContactMessagesTab({ onCountsChanged }) {
           ))}
         </TextField>
 
-        <Button
-          color="inherit"
+        <ResetFiltersButton
+          size="small"
           disabled={!isFiltered}
           onClick={() => {
             setFilters(DEFAULT_FILTERS);
             setPage(1);
           }}
-        >
-          Reset
-        </Button>
+        />
       </Stack>
 
       <Divider />

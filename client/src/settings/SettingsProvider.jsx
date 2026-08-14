@@ -14,8 +14,7 @@ import SettingsContext from './SettingsContext';
  * The header, the footer and the auth screens all render the brand, and the footer
  * and the contact page both need the address block; fetching here means one request
  * on boot rather than one per consumer, and one place for the admin's changes to
- * land. `useFetch` re-runs on a language switch, so translated settings follow the
- * active language, and the realtime hook picks up an admin save without a reload.
+ * land. The realtime hook picks up an admin save without a reload.
  */
 export default function SettingsProvider({ children }) {
   const query = useFetch(useCallback(() => settingApi.get(), []), []);
