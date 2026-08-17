@@ -16,7 +16,6 @@ import BrandIcon from '@mui/icons-material/SellOutlined';
 import OrdersIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ReasonIcon from '@mui/icons-material/RuleOutlined';
 import PeopleIcon from '@mui/icons-material/PeopleAltOutlined';
-import ReactivationIcon from '@mui/icons-material/HowToRegOutlined';
 import InquiryIcon from '@mui/icons-material/ForumOutlined';
 import BannerIcon from '@mui/icons-material/SlideshowOutlined';
 import CouponIcon from '@mui/icons-material/ConfirmationNumberOutlined';
@@ -47,11 +46,6 @@ const NAV_GROUPS = [
       { to: '/orders', label: 'Orders', icon: <OrdersIcon /> },
       { to: '/reasons', label: 'Reasons', icon: <ReasonIcon /> },
       { to: '/users', label: 'Users', icon: <PeopleIcon /> },
-      {
-        to: '/reactivation-requests',
-        label: 'Reactivation Requests',
-        icon: <ReactivationIcon />,
-      },
       { to: '/inquiries', label: 'Inquiries', icon: <InquiryIcon /> },
     ],
   },
