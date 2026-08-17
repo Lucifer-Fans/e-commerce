@@ -33,7 +33,7 @@ import { variantLabel } from '../../utils/variants';
  * The SKU grid.
  *
  * Every generated combination is one row that owns its price, MRP, discount, stock and
- * availability inline; the rest — images, weight, dimensions, barcode — opens in a dialog so
+ * availability inline; the rest — images, barcode, HSN code — opens in a dialog so
  * the table stays scannable at fifty rows. Bulk fill exists because typing the same price
  * into forty cells is how pricing mistakes happen.
  */
@@ -282,7 +282,7 @@ export default function VariantMatrix({ value = [], onChange, productName = '', 
 
                   <TableCell align="center">
                     <Stack direction="row" spacing={0} justifyContent="center">
-                      <Tooltip title="Images, weight & dimensions">
+                      <Tooltip title="Images, barcode & HSN code">
                         <IconButton size="small" color="primary" onClick={() => setEditing(index)}>
                           <TuneIcon fontSize="small" />
                         </IconButton>

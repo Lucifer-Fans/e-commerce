@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
-import Divider from '@mui/material/Divider';
 import Popover from '@mui/material/Popover';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -34,15 +33,12 @@ const PRESETS = [
   { name: 'RAM', values: ['4 GB', '6 GB', '8 GB', '12 GB', '16 GB'], inputType: 'chip' },
   { name: 'Waist', values: ['28', '30', '32', '34', '36', '38'], inputType: 'chip' },
   { name: 'Shoe Size', values: ['6', '7', '8', '9', '10', '11'], inputType: 'chip' },
-  { name: 'Material', values: [], inputType: 'chip' },
-  { name: 'Thickness', values: [], inputType: 'chip' },
 ];
 
 const INPUT_TYPES = [
   { value: 'auto', label: 'Automatic', hint: 'Picks swatch or chip from the values' },
   { value: 'chip', label: 'Text chips', hint: 'Sizes, capacities, measurements' },
   { value: 'swatch', label: 'Colour swatches', hint: 'Needs a hex colour per value' },
-  { value: 'image', label: 'Image thumbnails', hint: 'Uses the value image if set' },
 ];
 
 /** Defines the axes of variation. Combinations are generated from this, not typed by hand. */
@@ -58,7 +54,6 @@ export default function VariantAttributeBuilder({ value = [], onChange, disabled
       {
         name: preset?.name || '',
         inputType: preset?.inputType || 'auto',
-        helpText: '',
         values: (preset?.values || []).map((label) => ({ label, slug: toSlug(label) })),
       },
     ]);
@@ -111,7 +106,7 @@ export default function VariantAttributeBuilder({ value = [], onChange, disabled
         return (
           <Paper key={index} variant="outlined" sx={{ p: 2, mb: 2 }}>
             <Grid container spacing={2} alignItems="flex-start">
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid size={{ xs: 12, sm: 5 }}>
                 <TextField
                   fullWidth
                   size="small"
@@ -130,7 +125,7 @@ export default function VariantAttributeBuilder({ value = [], onChange, disabled
                 />
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid size={{ xs: 12, sm: 5 }}>
                 <TextField
                   select
                   fullWidth
@@ -149,17 +144,8 @@ export default function VariantAttributeBuilder({ value = [], onChange, disabled
                 </TextField>
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label="Hint (optional)"
-                    placeholder="e.g. Size chart"
-                    value={attribute.helpText || ''}
-                    disabled={disabled}
-                    onChange={(e) => patch(index, { helpText: e.target.value })}
-                  />
+              <Grid size={{ xs: 12, sm: 2 }}>
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
                   <Tooltip title="Move up">
                     <span>
                       <IconButton size="small" disabled={disabled || index === 0} onClick={() => move(index, -1)}>
@@ -257,13 +243,7 @@ export default function VariantAttributeBuilder({ value = [], onChange, disabled
         );
       })}
 
-      <Divider sx={{ my: 2 }}>
-        <Typography variant="caption" color="text.secondary">
-          Add an attribute
-        </Typography>
-      </Divider>
-
-      <Stack direction="row" flexWrap="wrap" gap={1}>
+      <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 2 }}>
         <Button
           size="small"
           variant="outlined"

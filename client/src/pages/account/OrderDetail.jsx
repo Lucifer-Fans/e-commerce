@@ -200,7 +200,8 @@ export default function OrderDetail() {
   const cancel = async (payload) => {
     try {
       await orderApi.cancel(id, payload);
-      toast.success(t('detail.cancelled'));
+      // No toast here — the realtime order-status broadcast already announces the
+      // cancellation, and firing both stacked two near-identical toasts.
       refetch();
     } catch (err) {
       toast.error(err.message || t('detail.cancelFailed'));

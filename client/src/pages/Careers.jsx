@@ -1,10 +1,12 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 
 import { careerApi } from '../api/endpoints';
 import useFetch from '../hooks/useFetch';
 import useSettings from '../settings/useSettings';
+import { useLiveRefetch } from '../realtime/useRealtime';
+import { EVENTS } from '../realtime/events';
 import Seo from '../components/common/Seo';
 import Icon from '../components/common/Icon';
 import Spinner from '../components/common/Spinner';
@@ -57,9 +59,25 @@ export default function Careers() {
   // Positions, experience options and the HR card are all managed from the admin panel.
   const configQuery = useFetch(useCallback(() => careerApi.config(), []), []);
   const config = configQuery.data?.data || {};
-  const positions = config.positions || [];
+  // Memoised because the withdrawn-role effect below depends on it — a fresh array
+  // every render would re-run it every render.
+  const positions = useMemo(() => config.positions || [], [config.positions]);
   const experienceLevels = config.experienceLevels || [];
   const hr = config.hr || {};
+
+  // A role closed while this page sits open must stop being applied for — the select
+  // is the only place the applicant can name a position, so a stale option is a
+  // submission the server will reject.
+  useLiveRefetch(configQuery.refetch, EVENTS.CAREER_POSITION_CHANGED);
+
+  // A <select> whose value is no longer among its options renders blank while still
+  // holding the old title, so a withdrawn role is dropped from the form explicitly.
+  useEffect(() => {
+    if (configQuery.loading || !values.position) return;
+    if (!positions.some((position) => position.title === values.position)) {
+      setValues((v) => ({ ...v, position: '' }));
+    }
+  }, [positions, values.position, configQuery.loading]);
 
   const set = (field) => (e) => {
     const value = field === 'phone' ? e.target.value.replace(/\D/g, '').slice(0, 10) : e.target.value;

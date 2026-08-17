@@ -14,7 +14,7 @@ import StatusBadge from '../../components/common/StatusBadge';
 import UserAvatar from '../../components/common/UserAvatar';
 import LanguageSelector from '../../components/language/LanguageSelector';
 
-const AVATAR_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+const AVATAR_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 const AVATAR_MAX_BYTES = 5 * 1024 * 1024; // mirrors the server's multer limit
 
 export default function Profile() {

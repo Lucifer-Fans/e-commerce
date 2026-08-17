@@ -257,13 +257,13 @@ export default function CareerApplicationsTab({ onCountsChanged }) {
     },
     {
       key: 'resume',
-      label: 'Resume',
+      label: 'Résumé',
       align: 'center',
       width: 100,
       render: (row) =>
         row.resume?.hasFile ? (
           <Stack direction="row" spacing={0.25} justifyContent="center">
-            <Tooltip title="Open Resume">
+            <Tooltip title="Open Résumé">
               <span>
                 <IconButton
                   size="small"
@@ -275,7 +275,7 @@ export default function CareerApplicationsTab({ onCountsChanged }) {
                 </IconButton>
               </span>
             </Tooltip>
-            <Tooltip title="Download Resume">
+            <Tooltip title="Download Résumé">
               <span>
                 <IconButton
                   size="small"

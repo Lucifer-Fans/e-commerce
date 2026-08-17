@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { addressApi } from '../../api/endpoints';
+import { lookupPincode } from '../../api/pincode';
 import { INDIAN_STATES, citiesForState } from '../../data/indiaLocations';
+import useDebounce from '../../hooks/useDebounce';
 import Spinner from '../common/Spinner';
 import PhoneInput from '../common/PhoneInput';
 
@@ -57,6 +59,40 @@ export default function AddressForm({ address, onSaved, onCancel }) {
   const [customCity, setCustomCity] = useState(
     () => Boolean(address?.city) && !citiesForState(address.state).includes(address.city),
   );
+  const [lookup, setLookup] = useState('idle');
+
+  const debouncedPincode = useDebounce(values.pincode, 500);
+  // The pincode the dropdowns already reflect. Seeded from the address being
+  // edited so opening the form doesn't re-answer a question already answered.
+  const answeredFor = useRef(address?.pincode || '');
+
+  /* India Post fills state and city from the pincode; both stay editable after. */
+  useEffect(() => {
+    if (!/^\d{6}$/.test(debouncedPincode) || debouncedPincode === answeredFor.current) {
+      setLookup('idle');
+      return () => {};
+    }
+
+    const controller = new AbortController();
+    setLookup('searching');
+
+    lookupPincode(debouncedPincode, { signal: controller.signal }).then((found) => {
+      if (controller.signal.aborted) return;
+      answeredFor.current = debouncedPincode;
+
+      if (!found?.state) {
+        setLookup('notFound');
+        return;
+      }
+
+      setLookup('idle');
+      setCustomCity(!found.listed);
+      setValues((v) => ({ ...v, state: found.state, city: found.city }));
+      setErrors((prev) => ({ ...prev, state: undefined, city: undefined }));
+    });
+
+    return () => controller.abort();
+  }, [debouncedPincode]);
 
   const stateOptions = INDIAN_STATES.map((name) => ({ value: name, label: name }));
   // The "Other" escape hatch only makes sense once a state narrows the list down.
@@ -182,6 +218,12 @@ export default function AddressForm({ address, onSaved, onCancel }) {
       {field('landmark', { optional: true })}
       {field('pincode', {
         input: { inputMode: 'numeric', maxLength: 6, autoComplete: 'postal-code' },
+        after: lookup !== 'idle' && (
+          <p className="mt-2 flex items-center gap-1.5 text-xs text-ink-500">
+            {lookup === 'searching' && <Spinner size={12} />}
+            {t(lookup === 'searching' ? 'address.pincodeSearching' : 'address.pincodeNotFound')}
+          </p>
+        ),
       })}
       {field('state', {
         type: 'select',

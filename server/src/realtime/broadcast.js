@@ -279,6 +279,35 @@ exports.careerPositionChanged = safe((action, position) =>
   })
 );
 
+/**
+ * The cancel-dialog picklist changed. Public, because the storefront's dialog reads
+ * the same list — an option retired here must stop being offered without a reload.
+ */
+exports.cancellationReasonChanged = safe((action, reason) => {
+  const payload = {
+    action,
+    reasonId: reason ? String(reason._id) : null,
+    label: reason?.label,
+    isActive: reason?.isActive,
+  };
+  // Admins sit in the public room too, so one emit reaches the management screen.
+  rt.toPublic(EVENTS.CANCELLATION_REASON_CHANGED, payload);
+});
+
+/**
+ * The deactivation dialog's picklist changed. Same reach as the cancel list above
+ * for the same reason: the storefront dialog reads it, and the management screen
+ * that edits it sits in the public room too.
+ */
+exports.deactivationReasonChanged = safe((action, reason) => {
+  rt.toPublic(EVENTS.DEACTIVATION_REASON_CHANGED, {
+    action,
+    reasonId: reason ? String(reason._id) : null,
+    label: reason?.label,
+    isActive: reason?.isActive,
+  });
+});
+
 /* ------------------------------------------------------------------ *
  * Reviews
  * ------------------------------------------------------------------ */
@@ -440,7 +469,38 @@ exports.accountStatusChanged = safe((user) =>
   rt.toUser(user._id, EVENTS.ACCOUNT_STATUS_CHANGED, {
     status: user.status,
     role: user.role,
+    // Carried so the live toast can say why, matching what a fresh login is told.
+    blockedReason: user.blockedReason || undefined,
   })
 );
+
+/**
+ * The reactivation queue moved — a request arrived, or an admin decided one.
+ *
+ * Admin-only, and a hint rather than the document: the queue is a filtered, paged
+ * list, so an open screen refetches. A submission also raises a notification,
+ * because a request nobody opens is a person waiting several days for an email
+ * that is never sent — this is the one event in the flow with a deadline attached
+ * to it that only staff can meet.
+ */
+exports.reactivationRequestChanged = safe((action, request) => {
+  rt.toAdmins(EVENTS.REACTIVATION_REQUEST_CHANGED, {
+    action,
+    requestId: request ? String(request._id) : null,
+    userId: request?.user ? String(request.user._id || request.user) : null,
+    status: request?.status,
+  });
+
+  if (action === 'created') {
+    rt.toAdmins(EVENTS.ADMIN_NOTIFICATION, {
+      kind: 'user',
+      severity: 'info',
+      title: 'Account reactivation requested',
+      message: `${request?.name || 'A customer'} · ${request?.email || ''}`.trim(),
+      link: '/reactivation-requests',
+      at: new Date().toISOString(),
+    });
+  }
+});
 
 exports.orderSummary = orderSummary;

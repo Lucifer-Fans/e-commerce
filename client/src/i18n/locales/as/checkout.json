@@ -43,7 +43,8 @@
     "youSaved": "আপুনি {{amount}} সাঁচিলে",
     "viewAvailable": "উপলব্ধ কুপন চাওক ({{count}})",
     "hideAvailable": "উপলব্ধ কুপন লুকুৱাওক ({{count}})",
-    "minOrder": "নূন্যতম অৰ্ডাৰ {{amount}}"
+    "minOrder": "নূন্যতম অৰ্ডাৰ {{amount}}",
+    "validOn": "{{items}}-ত বৈধ"
   },
   "summary": {
     "title": "মূল্যৰ বিৱৰণ",
@@ -78,7 +79,9 @@
       "address": "ডেলিভাৰী ঠিকনা",
       "review": "অৰ্ডাৰ সাৰাংশ",
       "payment": "পেমেণ্ট"
-    }
+    },
+    "cartChanged": "আপোনাৰ অৰ্ডাৰৰ এটা সামগ্ৰী সলনি হৈছে — সাৰাংশ আপডেট কৰা হৈছে।",
+    "couponChanged": "আপোনাৰ কুপন সলনি হৈছে — সাৰাংশ আপডেট কৰা হৈছে।"
   },
   "address": {
     "addTitle": "নতুন ঠিকনা যোগ কৰক",

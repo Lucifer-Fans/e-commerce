@@ -149,6 +149,13 @@ const authSlice = createSlice({
      * message text, which is prose and changes.
      */
     errorCode: null,
+    /**
+     * Whatever else the server attached to the failure. Only one screen reads it
+     * today — the deactivated notice, which needs the address the refusal names so
+     * it can offer to mail a reactivation link to it. That address is the one thing
+     * a Google sign-in never has locally: nothing was typed.
+     */
+    errorDetails: null,
   },
   reducers: {
     /** Adopts a user object returned by a call that owns its own request lifecycle. */
@@ -158,6 +165,7 @@ const authSlice = createSlice({
     clearAuthError: (state) => {
       state.error = null;
       state.errorCode = null;
+      state.errorDetails = null;
     },
     /** Set by a login the API refused as unverified, so the code screen knows who. */
     setPendingVerification: (state, action) => {
@@ -181,6 +189,7 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
       state.errorCode = null;
+      state.errorDetails = null;
     };
     // Login, register and Google sign-in all return the same `{ user, sessionId }`.
     const authFulfilled = (state, action) => {
@@ -197,6 +206,10 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload?.message || 'Something went wrong';
       state.errorCode = action.payload?.code || null;
+      // `errors` is the field-level array on a validation failure; the account
+      // states use it to carry a small object instead, so only that shape is kept.
+      const extra = action.payload?.errors;
+      state.errorDetails = extra && !Array.isArray(extra) ? extra : null;
     };
 
     builder

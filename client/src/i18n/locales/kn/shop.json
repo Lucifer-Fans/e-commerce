@@ -122,8 +122,8 @@
       "freeText": "ಈ ವಸ್ತು ಉಚಿತವಾಗಿ ರವಾನೆಯಾಗುತ್ತದೆ",
       "paidTitle": "ವಿತರಣಾ ಶುಲ್ಕ ಅನ್ವಯಿಸುತ್ತದೆ",
       "paidText": "₹{{amount}} ಮೇಲೆ ಉಚಿತ",
-      "returnsTitle": "7 ದಿನಗಳ ಹಿಂತಿರುಗಿಸುವಿಕೆ",
-      "returnsText": "ತೊಂದರೆ ರಹಿತ ಬದಲಾವಣೆ",
+      "returnsTitle": "ಸುಲಭ ಹಿಂತಿರುಗಿಸುವಿಕೆ",
+      "returnsText": "7 ದಿನಗಳಲ್ಲಿ ತೊಂದರೆ ರಹಿತ ಹಿಂತಿರುಗಿಸುವಿಕೆ",
       "paymentTitle": "ಸುರಕ್ಷಿತ ಪಾವತಿ",
       "paymentText": "Razorpay ಮೂಲಕ ಸಂರಕ್ಷಿತ",
       "weightTitle": "ಸಾಗಣೆ ತೂಕ",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "ಚಿತ್ರ {{index}} ನೋಡಿ",
+    "viewVideo": "ವೀಡಿಯೊ {{index}} ಪ್ಲೇ ಮಾಡಿ",
     "image": "ಚಿತ್ರ {{index}}",
     "hoverToZoom": "ಜೂಮ್ ಮಾಡಲು ಹೋವರ್ ಮಾಡಿ",
     "previousImage": "ಹಿಂದಿನ ಚಿತ್ರ",

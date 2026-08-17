@@ -16,11 +16,11 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import StorefrontIcon from '@mui/icons-material/StorefrontOutlined';
 
 import { logout } from '../../store/authSlice';
-import { useRealtimeStatus } from '../../realtime/useRealtime';
 import { STOREFRONT_URL } from '../../utils/constants';
+import { useRealtimeStatus } from '../../realtime/useRealtime';
 import { DRAWER_WIDTH } from './Sidebar';
 
 /**
@@ -104,9 +104,15 @@ export default function Topbar({ onMenuClick }) {
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Open storefront">
-          <IconButton component="a" href={STOREFRONT_URL} target="_blank" rel="noreferrer" aria-label="Open storefront">
-            <OpenInNewIcon />
+        <Tooltip title="View storefront">
+          <IconButton
+            component="a"
+            href={STOREFRONT_URL}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="View storefront"
+          >
+            <StorefrontIcon />
           </IconButton>
         </Tooltip>
 
@@ -116,7 +122,16 @@ export default function Topbar({ onMenuClick }) {
           role="button"
           aria-haspopup="menu"
         >
-          <Avatar sx={{ width: 34, height: 34, bgcolor: 'primary.main', fontSize: 14, fontWeight: 700 }}>
+          {/* The profile photo when the account has one, the initial when it does not —
+              and the initial again if the image fails to load, which MUI handles by
+              falling back to the children. no-referrer: Google-hosted pictures 403 when
+              a referrer is sent, the same guard the Users table uses. */}
+          <Avatar
+            src={user?.avatar?.url}
+            alt={user?.name ? `${user.name}'s profile photo` : 'Profile photo'}
+            slotProps={{ img: { referrerPolicy: 'no-referrer' } }}
+            sx={{ width: 34, height: 34, bgcolor: 'primary.main', fontSize: 14, fontWeight: 700 }}
+          >
             {user?.name?.charAt(0).toUpperCase()}
           </Avatar>
           <Box sx={{ display: { xs: 'none', sm: 'block' }, lineHeight: 1.2 }}>

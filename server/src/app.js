@@ -24,10 +24,24 @@ const app = express();
 app.set('trust proxy', 1);
 
 /* ---------------- Security ---------------- */
+/**
+ * Helmet's default policy allows nothing but 'self', which is wrong for this app in
+ * one specific deployment shape: when CLIENT_DIST_PATH is set the storefront's own
+ * pages are served from here, and every product photo and clip is delivered by
+ * Cloudinary. `img-src` and `media-src` are widened to cover them — a video would
+ * otherwise fall through to `default-src` and never play — and nothing else is
+ * loosened. On an API-only deployment the policy only ever covers JSON responses.
+ */
+const cloudinaryCsp = {
+  ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+  'img-src': ["'self'", 'data:', 'blob:', 'https://res.cloudinary.com'],
+  'media-src': ["'self'", 'blob:', 'https://res.cloudinary.com'],
+};
+
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' }, // Cloudinary images
-    contentSecurityPolicy: env.isProd ? undefined : false,
+    contentSecurityPolicy: env.isProd ? { directives: cloudinaryCsp } : false,
   })
 );
 

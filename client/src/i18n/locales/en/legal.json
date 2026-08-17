@@ -22,7 +22,6 @@
       "contact": "Contact Us"
     }
   },
-
   "about": {
     "seoTitle": "About Us",
     "seoDescription": "{{app}} is an Indian online store for building materials, hardware and tools — genuine brands, transparent pricing, secure payments and delivery across India.",
@@ -34,17 +33,14 @@
       "Clear pricing with no surprises at checkout",
       "Delivered across India"
     ],
-
     "storyTitle": "Who we are",
     "story": [
       "Buying hardware has always meant knowing a person: which shop stocks the right grade, who quotes honestly, who will answer the phone when a delivery is late. That works — until you need forty items from six suppliers before Friday.",
       "{{app}} was built to keep the parts of that which are worth keeping and drop the parts that are not. Every product on the site carries the same information you would ask for across a counter — brand, specification, size, weight, what is actually in stock — and the price you see on the product page is the price the order is billed at. Nothing is added on the last screen.",
       "We are a small team of buyers, warehouse staff and support people. The catalogue is curated rather than endless: we would rather list one grade of a fastener we can vouch for and keep it in stock than list nine we cannot."
     ],
-
     "missionTitle": "What we are trying to do",
     "mission": "Make professional-grade building materials, hardware and tools available to every buyer in India at a fair, visible price — with the ordering, tracking and after-sales support that large buyers have always had and small ones rarely do.",
-
     "pillarsTitle": "How we work",
     "pillars": [
       {
@@ -78,14 +74,12 @@
         "text": "Damaged, wrong or defective items are our problem, not yours. Tell us within the return window and we arrange the pickup, the replacement or the refund."
       }
     ],
-
     "qualityTitle": "Product quality",
     "quality": [
       "Every product is listed with the brand, category, specification table and — where the product comes in more than one option — the exact variant you are buying, down to its own SKU, price and stock count. What you add to the cart is the unit that leaves our warehouse.",
       "Stock counts on the site are live. If a variant runs out while you are checking out, the order is stopped rather than accepted and quietly short-shipped.",
       "Ratings and written reviews come from buyers, and reviews left by a verified purchase are marked as such, so you can weigh them accordingly."
     ],
-
     "serviceTitle": "Our service commitment",
     "service": [
       "Orders placed on a working day are picked and packed the same or the next working day.",
@@ -94,16 +88,13 @@
       "Approved refunds are raised through the original payment method, with a reference you can quote to your bank.",
       "Every order carries a downloadable GST invoice."
     ],
-
     "languagesTitle": "Shop in your language",
     "languagesText": "The whole storefront — product pages, checkout, your orders and these policies — is available in 13 Indian languages. Pick yours from the header, and the choice is saved to your account and follows you to every device.",
-
     "ctaTitle": "Ready to order?",
     "ctaText": "Browse the catalogue, or talk to us first if you are not sure which grade or size you need.",
     "ctaBrowse": "Browse products",
     "ctaContact": "Talk to us"
   },
-
   "shipping": {
     "seoTitle": "Shipping Policy",
     "seoDescription": "How {{app}} processes, charges for, ships and tracks your order — delivery timelines, delivery areas across India, delays, address problems, failed deliveries and damaged parcels.",
@@ -150,10 +141,19 @@
           },
           {
             "type": "table",
-            "head": ["Order value (after discounts and coupon)", "Delivery charge"],
+            "head": [
+              "Order value (after discounts and coupon)",
+              "Delivery charge"
+            ],
             "rows": [
-              ["{{freeShipping}} and above", "Free"],
-              ["Below {{freeShipping}}", "{{shippingFee}}"]
+              [
+                "{{freeShipping}} and above",
+                "Free"
+              ],
+              [
+                "Below {{freeShipping}}",
+                "{{shippingFee}}"
+              ]
             ]
           },
           {
@@ -176,12 +176,27 @@
           },
           {
             "type": "table",
-            "head": ["Destination", "Typical delivery time"],
+            "head": [
+              "Destination",
+              "Typical delivery time"
+            ],
             "rows": [
-              ["Metro cities", "2–4 working days"],
-              ["Other cities and large towns", "3–6 working days"],
-              ["Smaller towns and rural pincodes", "5–8 working days"],
-              ["Remote, hill and island pincodes", "7–12 working days"]
+              [
+                "Metro cities",
+                "2–4 working days"
+              ],
+              [
+                "Other cities and large towns",
+                "3–6 working days"
+              ],
+              [
+                "Smaller towns and rural pincodes",
+                "5–8 working days"
+              ],
+              [
+                "Remote, hill and island pincodes",
+                "7–12 working days"
+              ]
             ]
           },
           {
@@ -356,7 +371,6 @@
       }
     ]
   },
-
   "returns": {
     "seoTitle": "Returns & Refunds",
     "seoDescription": "Return eligibility, the 7-day return window, product condition, non-returnable items, damaged or wrong deliveries, pickup, inspection, replacement and refund approval at {{app}}.",
@@ -364,9 +378,21 @@
     "heading": "Returns & Refunds",
     "intro": "If something arrives damaged, wrong or defective, we will put it right. This page explains exactly what can be returned, how long you have, and what happens between your request and your money.",
     "highlights": [
-      { "icon": "clock", "title": "7-day window", "text": "Report an issue within 7 days of delivery." },
-      { "icon": "truck", "title": "Free pickup", "text": "We arrange the courier — no charge for a valid return." },
-      { "icon": "refresh", "title": "Replace or refund", "text": "Your choice, once the return passes inspection." }
+      {
+        "icon": "clock",
+        "title": "7-day window",
+        "text": "Report an issue within 7 days of delivery."
+      },
+      {
+        "icon": "truck",
+        "title": "Free pickup",
+        "text": "We arrange the courier — no charge for a valid return."
+      },
+      {
+        "icon": "refresh",
+        "title": "Replace or refund",
+        "text": "Your choice, once the return passes inspection."
+      }
     ],
     "sections": [
       {
@@ -407,12 +433,27 @@
           },
           {
             "type": "table",
-            "head": ["Issue", "Report within"],
+            "head": [
+              "Issue",
+              "Report within"
+            ],
             "rows": [
-              ["Parcel damaged in transit", "48 hours of delivery"],
-              ["Wrong, missing or short-delivered item", "48 hours of delivery"],
-              ["Damaged or broken item inside the parcel", "48 hours of delivery"],
-              ["Defective item, or not as described", "7 days of delivery"]
+              [
+                "Parcel damaged in transit",
+                "48 hours of delivery"
+              ],
+              [
+                "Wrong, missing or short-delivered item",
+                "48 hours of delivery"
+              ],
+              [
+                "Damaged or broken item inside the parcel",
+                "48 hours of delivery"
+              ],
+              [
+                "Defective item, or not as described",
+                "7 days of delivery"
+              ]
             ]
           },
           {
@@ -645,7 +686,6 @@
       }
     ]
   },
-
   "faq": {
     "seoTitle": "FAQs",
     "seoDescription": "Answers to common questions about ordering, payment, delivery, cancellation, returns, refunds and your account at {{app}}.",
@@ -907,8 +947,20 @@
             "a": "Your name, email, phone, saved addresses, order and payment history, reviews, wishlist and cart, and technical details of each signed-in session. We do not run advertising or tracking cookies. The Privacy Policy explains all of it, and what you can ask us to delete."
           },
           {
-            "q": "Can I delete my account?",
-            "a": "Yes — contact us and we will close it. Orders and invoices are kept for the period tax and accounting law requires, but your account is deactivated and your marketing preferences are cleared immediately."
+            "q": "How do I deactivate my account?",
+            "a": "Go to Account → Settings → Danger Zone and choose “Deactivate my account”. We ask you to confirm, then to pick a reason, then to enter a 6-digit code we email you. Nothing changes until that code is accepted — so you can back out at any point up to it. Once it is, you are signed out on every device and can no longer sign in."
+          },
+          {
+            "q": "Why can I not deactivate my account right now?",
+            "a": "Because you have an order that is still on its way — anything not yet delivered, cancelled or returned. Deactivating signs you out everywhere, so you would not be able to track that order, cancel it, or get updates about it while we still owe it to you. Wait for it to arrive, or cancel it first if it has not shipped, and the option becomes available again."
+          },
+          {
+            "q": "I deactivated my account by mistake. Can I get it back?",
+            "a": "Yes. Go to the sign-in page, try to sign in, and choose the option to send a reactivation email. We email a secure single-use link to your registered address; open it within 15 minutes, confirm the name and mobile number on the account, and enter the code we send. Your request then goes to our team, who review it — normally within 2–3 working days — and we email you as soon as your account is active again. Your orders, addresses, cart and wishlist are all still there."
+          },
+          {
+            "q": "Is deactivating the same as deleting my data?",
+            "a": "No. Deactivating closes the account but keeps it, so it can be restored and so nobody else can register your email address. If you want your personal information erased, tell us and we will treat it as an erasure request — we delete what we are not legally required to keep and tell you plainly what must stay. Completed orders and invoices are kept either way, because tax and accounting law requires it."
           }
         ]
       },
@@ -949,7 +1001,6 @@
       }
     ]
   },
-
   "terms": {
     "seoTitle": "Terms & Conditions",
     "seoDescription": "The terms governing your use of {{app}} — accounts, orders, pricing, payments, cancellation, shipping, returns, refunds, coupons, intellectual property, prohibited conduct and liability.",
@@ -991,18 +1042,94 @@
               "You are responsible for keeping your password confidential and for everything done through your account.",
               "Repeated failed sign-in attempts temporarily lock an account. This protects you, and the lock lifts on its own.",
               "You can see every signed-in device under Account → Devices and sign any of them out. Please do so if you no longer recognise one.",
-              "One person may hold one account. Accounts may not be sold, shared or transferred."
+              "One person may hold one account. Accounts may not be sold, shared or transferred.",
+              "You may close your own account at any time. Doing so is not the same as a suspension by us — see the next clause."
             ]
           },
           {
             "type": "p",
-            "text": "We may suspend or close an account that breaches these terms, that is used for fraudulent or abusive activity, or that repeatedly refuses cash-on-delivery orders. Where we do so, any pending order is cancelled and any money you have actually paid is refunded."
+            "text": "We may suspend or close an account that breaches these terms, that is used for fraudulent or abusive activity, or that repeatedly refuses cash-on-delivery orders. Where we do so, any pending order is cancelled and any money you have actually paid is refunded. A suspension by us is separate from the deactivation you can request yourself, and is not lifted by the process in the next clause."
+          }
+        ]
+      },
+      {
+        "id": "deactivation",
+        "title": "3. Deactivating and reactivating your account",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You may deactivate your {{app}} account yourself at any time, from Account → Settings → Danger Zone. Deactivation is a closure you ask for. It is reversible, it is not a penalty, and it is separate from any suspension we may apply under clause 2."
+          },
+          {
+            "type": "p",
+            "text": "Deactivation takes three steps, and nothing changes until the last of them is complete:"
+          },
+          {
+            "type": "ol",
+            "items": [
+              "You confirm that you want to deactivate the account.",
+              "You choose a reason from the list we offer, or write your own under “Other”. A reason is required — we use it to understand why customers leave and, if you later ask to come back, to give whoever reviews that request the context for it.",
+              "You enter the one-time code we email to your registered address. The code proves the request came from you rather than from someone using a device you left signed in. Until it is accepted, your account is untouched."
+            ]
+          },
+          {
+            "type": "note",
+            "text": "You cannot deactivate while any order is still in progress. Deactivating signs you out everywhere, which would leave you unable to track, cancel or receive updates about an order we still owe you. Wait for it to arrive, or cancel it first where clause 11 allows."
+          },
+          {
+            "type": "p",
+            "text": "Once the code is accepted, and with immediate effect:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "you are signed out on every device, and every sign-in credential held by those devices stops working;",
+              "you can no longer sign in — with your email and password, or with Google;",
+              "the email address on the account cannot be used to open a new one, because it still belongs to the closed account;",
+              "we email you a confirmation recording the date, the address and the reason you gave;",
+              "your order history, invoices and payment records are retained — our Privacy Policy explains for how long and why;",
+              "we stop sending you marketing email, and send only what is needed to reach you about the account itself."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Deactivation is not deletion. Your account and the records attached to it continue to exist so that the account can be restored and so that we can meet our legal obligations. If you want your personal information erased rather than your account closed, that is a separate request — see “Your rights and choices” in our Privacy Policy."
+          },
+          {
+            "type": "p",
+            "text": "To come back, you ask us to reactivate the account:"
+          },
+          {
+            "type": "ol",
+            "items": [
+              "From the sign-in or sign-up page, ask us to email a reactivation link to the registered address. We will only ever send it to that address.",
+              "Open the link. It can be used once and expires 15 minutes after we send it; you can request another at any time.",
+              "Confirm the details we hold for the account — the name on it and, where we hold one, the registered mobile number.",
+              "Enter a fresh one-time code we email to the same address.",
+              "Submit the request, optionally with a note to whoever reviews it."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "The link alone does not reactivate anything. Reaching an inbox is not the same as being the account holder, so the link only opens the checks above; a request reaches us only when all of them pass."
+          },
+          {
+            "type": "p",
+            "text": "Reactivation requests are reviewed by a person, normally within 2–3 working days. Your account stays deactivated while the request is open, and we email you the outcome either way. If it is approved, your account returns to active with your orders, addresses, cart and wishlist as you left them, and you can sign in again by email and password or with Google. If it is refused, we tell you why, the account stays deactivated, nothing is deleted, and you may apply again."
+          },
+          {
+            "type": "note",
+            "text": "We may refuse a reactivation request — for example where we cannot satisfy ourselves that the person asking is the account holder, where the account is also suspended under clause 2, or where reinstating it would breach clause 17. Refusing a request does not affect any other right you have, including your right to ask for a copy of your data or for its erasure."
+          },
+          {
+            "type": "p",
+            "text": "Two further points. Approving a reactivation request is the only way a deactivated account is reopened: our staff cannot simply switch it back on, because doing so would skip the checks that establish it is you. And an account holding administrator access cannot be deactivated through this process — that access must be handed over first."
           }
         ]
       },
       {
         "id": "responsibilities",
-        "title": "3. Your responsibilities",
+        "title": "4. Your responsibilities",
         "blocks": [
           {
             "type": "ul",
@@ -1019,7 +1146,7 @@
       },
       {
         "id": "products",
-        "title": "4. Products, descriptions and images",
+        "title": "5. Products, descriptions and images",
         "blocks": [
           {
             "type": "p",
@@ -1041,7 +1168,7 @@
       },
       {
         "id": "pricing",
-        "title": "5. Pricing",
+        "title": "6. Pricing",
         "blocks": [
           {
             "type": "p",
@@ -1063,7 +1190,7 @@
       },
       {
         "id": "availability",
-        "title": "6. Availability",
+        "title": "7. Availability",
         "blocks": [
           {
             "type": "p",
@@ -1081,7 +1208,7 @@
       },
       {
         "id": "orders",
-        "title": "7. Orders and the contract",
+        "title": "8. Orders and the contract",
         "blocks": [
           {
             "type": "p",
@@ -1099,7 +1226,7 @@
       },
       {
         "id": "payments",
-        "title": "8. Payments",
+        "title": "9. Payments",
         "blocks": [
           {
             "type": "p",
@@ -1122,7 +1249,7 @@
       },
       {
         "id": "failed-payments",
-        "title": "9. Failed and incomplete payments",
+        "title": "10. Failed and incomplete payments",
         "blocks": [
           {
             "type": "p",
@@ -1144,7 +1271,7 @@
       },
       {
         "id": "cancellation",
-        "title": "10. Cancellation",
+        "title": "11. Cancellation",
         "blocks": [
           {
             "type": "p",
@@ -1160,13 +1287,13 @@
           },
           {
             "type": "p",
-            "text": "We may cancel an order for the reasons set out in clause 7. Where we cancel, you are refunded in full including the delivery charge."
+            "text": "We may cancel an order for the reasons set out in clause 8. Where we cancel, you are refunded in full including the delivery charge."
           }
         ]
       },
       {
         "id": "shipping",
-        "title": "11. Shipping and delivery",
+        "title": "12. Shipping and delivery",
         "blocks": [
           {
             "type": "p",
@@ -1188,7 +1315,7 @@
       },
       {
         "id": "returns-refunds",
-        "title": "12. Returns and refunds",
+        "title": "13. Returns and refunds",
         "blocks": [
           {
             "type": "p",
@@ -1206,7 +1333,7 @@
       },
       {
         "id": "coupons",
-        "title": "13. Coupons and promotions",
+        "title": "14. Coupons and promotions",
         "blocks": [
           {
             "type": "ul",
@@ -1223,7 +1350,7 @@
       },
       {
         "id": "reviews",
-        "title": "14. Reviews and content you submit",
+        "title": "15. Reviews and content you submit",
         "blocks": [
           {
             "type": "p",
@@ -1241,7 +1368,7 @@
       },
       {
         "id": "ip",
-        "title": "15. Intellectual property",
+        "title": "16. Intellectual property",
         "blocks": [
           {
             "type": "p",
@@ -1259,9 +1386,12 @@
       },
       {
         "id": "prohibited",
-        "title": "16. Prohibited activities",
+        "title": "17. Prohibited activities",
         "blocks": [
-          { "type": "p", "text": "You must not:" },
+          {
+            "type": "p",
+            "text": "You must not:"
+          },
           {
             "type": "ul",
             "items": [
@@ -1284,7 +1414,7 @@
       },
       {
         "id": "liability",
-        "title": "17. Limitation of liability",
+        "title": "18. Limitation of liability",
         "blocks": [
           {
             "type": "p",
@@ -1306,7 +1436,7 @@
       },
       {
         "id": "force-majeure",
-        "title": "18. Events outside our control",
+        "title": "19. Events outside our control",
         "blocks": [
           {
             "type": "p",
@@ -1316,7 +1446,7 @@
       },
       {
         "id": "changes",
-        "title": "19. Changes to these terms",
+        "title": "20. Changes to these terms",
         "blocks": [
           {
             "type": "p",
@@ -1330,7 +1460,7 @@
       },
       {
         "id": "law",
-        "title": "20. Governing law and disputes",
+        "title": "21. Governing law and disputes",
         "blocks": [
           {
             "type": "p",
@@ -1352,7 +1482,6 @@
       }
     ]
   },
-
   "privacy": {
     "seoTitle": "Privacy Policy",
     "seoDescription": "What personal information {{app}} collects, how it is used, the cookies and browser storage we rely on, the payment and service providers involved, how your data is secured and retained, and the rights you have over it.",
@@ -1378,7 +1507,10 @@
         "id": "information-we-collect",
         "title": "2. Information we collect",
         "blocks": [
-          { "type": "p", "text": "Information you give us:" },
+          {
+            "type": "p",
+            "text": "Information you give us:"
+          },
           {
             "type": "ul",
             "items": [
@@ -1389,7 +1521,10 @@
               "Preferences — your chosen interface language, your wishlist, your cart, and whether you subscribed to the newsletter."
             ]
           },
-          { "type": "p", "text": "Information collected automatically:" },
+          {
+            "type": "p",
+            "text": "Information collected automatically:"
+          },
           {
             "type": "ul",
             "items": [
@@ -1410,17 +1545,47 @@
         "blocks": [
           {
             "type": "table",
-            "head": ["Purpose", "What we use"],
+            "head": [
+              "Purpose",
+              "What we use"
+            ],
             "rows": [
-              ["Creating and securing your account", "Name, email, phone, password hash, verification codes, sign-in attempts, session and device details"],
-              ["Processing and delivering orders", "Order items, delivery address, phone number, payment status"],
-              ["Taking payment and issuing refunds", "Order total, payment method, gateway payment and refund references"],
-              ["Keeping you informed", "Email address, for order confirmation, status changes, cancellation and refund notices"],
-              ["Customer support", "Order history, enquiries you send, return photographs"],
-              ["Invoicing, tax and accounting", "Order, price and address details, as required by law"],
-              ["Improving the store", "Aggregated order and browsing patterns, product ratings and reviews"],
-              ["Preventing fraud and abuse", "IP address, device and session details, order and payment patterns"],
-              ["Marketing, only if you subscribe", "Email address"]
+              [
+                "Creating and securing your account",
+                "Name, email, phone, password hash, verification codes, sign-in attempts, session and device details"
+              ],
+              [
+                "Processing and delivering orders",
+                "Order items, delivery address, phone number, payment status"
+              ],
+              [
+                "Taking payment and issuing refunds",
+                "Order total, payment method, gateway payment and refund references"
+              ],
+              [
+                "Keeping you informed",
+                "Email address, for order confirmation, status changes, cancellation and refund notices"
+              ],
+              [
+                "Customer support",
+                "Order history, enquiries you send, return photographs"
+              ],
+              [
+                "Invoicing, tax and accounting",
+                "Order, price and address details, as required by law"
+              ],
+              [
+                "Improving the store",
+                "Aggregated order and browsing patterns, product ratings and reviews"
+              ],
+              [
+                "Preventing fraud and abuse",
+                "IP address, device and session details, order and payment patterns"
+              ],
+              [
+                "Marketing, only if you subscribe",
+                "Email address"
+              ]
             ]
           },
           {
@@ -1439,13 +1604,43 @@
           },
           {
             "type": "table",
-            "head": ["What", "Where", "Why", "How long"],
+            "head": [
+              "What",
+              "Where",
+              "Why",
+              "How long"
+            ],
             "rows": [
-              ["Session cookie", "Secure, HTTP-only cookie", "Keeps you signed in and renews your session. Cannot be read by JavaScript.", "Until you sign out, or the session expires"],
-              ["Access token", "Browser local storage", "Authorises each request while you are signed in", "Until you sign out"],
-              ["Language preference", "Browser local storage", "Remembers the language you chose", "Until you clear it"],
-              ["Cart and recently viewed", "Browser local storage", "Keeps a guest cart and your recently viewed products", "Until you clear it"],
-              ["Scroll positions", "Browser session storage", "Puts you back where you were when you press Back", "Until you close the tab"]
+              [
+                "Session cookie",
+                "Secure, HTTP-only cookie",
+                "Keeps you signed in and renews your session. Cannot be read by JavaScript.",
+                "Until you sign out, or the session expires"
+              ],
+              [
+                "Access token",
+                "Browser local storage",
+                "Authorises each request while you are signed in",
+                "Until you sign out"
+              ],
+              [
+                "Language preference",
+                "Browser local storage",
+                "Remembers the language you chose",
+                "Until you clear it"
+              ],
+              [
+                "Cart and recently viewed",
+                "Browser local storage",
+                "Keeps a guest cart and your recently viewed products",
+                "Until you clear it"
+              ],
+              [
+                "Scroll positions",
+                "Browser session storage",
+                "Puts you back where you were when you press Back",
+                "Until you close the tab"
+              ]
             ]
           },
           {
@@ -1468,14 +1663,42 @@
           },
           {
             "type": "table",
-            "head": ["Provider", "What they receive", "Why"],
+            "head": [
+              "Provider",
+              "What they receive",
+              "Why"
+            ],
             "rows": [
-              ["Razorpay", "Order amount and reference, your name, email and phone; your card, UPI or bank details are given directly to them, not to us", "To take payments and process refunds"],
-              ["Courier partners", "Recipient name, phone number and delivery address", "To deliver your order and handle return pickups"],
-              ["Cloudinary", "Images uploaded with reviews, and our own product imagery", "Image hosting and delivery"],
-              ["Google", "Your Google account details, when you choose Sign in with Google", "Authentication"],
-              ["Email service provider", "Your email address and the content of the message", "To send order, account and support email"],
-              ["IP geolocation service", "The IP address of a sign-in", "To show an approximate city on the Devices screen so you can recognise your own logins"]
+              [
+                "Razorpay",
+                "Order amount and reference, your name, email and phone; your card, UPI or bank details are given directly to them, not to us",
+                "To take payments and process refunds"
+              ],
+              [
+                "Courier partners",
+                "Recipient name, phone number and delivery address",
+                "To deliver your order and handle return pickups"
+              ],
+              [
+                "Cloudinary",
+                "Images uploaded with reviews, and our own product imagery",
+                "Image hosting and delivery"
+              ],
+              [
+                "Google",
+                "Your Google account details, when you choose Sign in with Google",
+                "Authentication"
+              ],
+              [
+                "Email service provider",
+                "Your email address and the content of the message",
+                "To send order, account and support email"
+              ],
+              [
+                "IP geolocation service",
+                "The IP address of a sign-in",
+                "To show an approximate city on the Devices screen so you can recognise your own logins"
+              ]
             ]
           },
           {
@@ -1534,17 +1757,63 @@
         "blocks": [
           {
             "type": "table",
-            "head": ["Data", "Kept for"],
+            "head": [
+              "Data",
+              "Kept for"
+            ],
             "rows": [
-              ["Account details", "While your account is open"],
-              ["Orders, invoices and payment records", "As long as tax and accounting law requires, even after an account closes"],
-              ["Delivery addresses", "While your account is open, or until you delete them"],
-              ["Sessions and device records", "Until revoked, or until the session expires — then deleted automatically"],
-              ["One-time verification codes", "Minutes — they expire and are cleared"],
-              ["Reviews and ratings", "While the product is listed, unless you ask us to remove them"],
-              ["Contact enquiries", "Until the query is resolved, and a reasonable period afterwards"],
-              ["Job applications and résumés", "For the duration of the recruitment process and a reasonable period afterwards"],
-              ["Newsletter subscription", "Until you unsubscribe"]
+              [
+                "Account details",
+                "While your account is open"
+              ],
+              [
+                "A deactivated account",
+                "Kept in a closed state so it can be restored and so nobody else can register its email address — until you ask us to erase it"
+              ],
+              [
+                "Deactivation reason and date",
+                "Kept for as long as the account exists, and used to answer any reactivation request that follows"
+              ],
+              [
+                "Reactivation requests and what was verified for them",
+                "Kept as a record of the decision for the life of the account and a reasonable period afterwards"
+              ],
+              [
+                "Account activity log (deactivation, verification, sign-in refusals, admin decisions)",
+                "Kept as a security and compliance record for the life of the account and a reasonable period afterwards"
+              ],
+              [
+                "Orders, invoices and payment records",
+                "As long as tax and accounting law requires, even after an account closes"
+              ],
+              [
+                "Delivery addresses",
+                "While your account is open, or until you delete them"
+              ],
+              [
+                "Sessions and device records",
+                "Until revoked, or until the session expires — then deleted automatically"
+              ],
+              [
+                "One-time verification codes",
+                "Minutes — they expire and are cleared"
+              ],
+              [
+                "Reviews and ratings",
+                "While the product is listed, unless you ask us to remove them"
+              ],
+              [
+                "Contact enquiries",
+                "Until the query is resolved, and a reasonable period afterwards"
+              ],
+              [
+                "Job applications and résumés",
+                "For the duration of the recruitment process and a reasonable period afterwards"
+              ],
+              [
+                "Newsletter subscription",
+                "Until you unsubscribe"
+              ]
             ]
           },
           {
@@ -1554,10 +1823,130 @@
         ]
       },
       {
-        "id": "your-rights",
-        "title": "9. Your rights and choices",
+        "id": "account-closure",
+        "title": "9. Deactivating, reactivating and closing your account",
         "blocks": [
-          { "type": "p", "text": "You can, at any time:" },
+          {
+            "type": "p",
+            "text": "You can close your own {{app}} account at any time from Account → Settings. Our Terms explain the steps and what they mean for your ability to shop; this section explains what happens to your information."
+          },
+          {
+            "type": "p",
+            "text": "The moment a deactivation takes effect:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "every signed-in session on the account is revoked, and the device records behind them are marked ended and removed as they expire;",
+              "your profile stops being visible anywhere it was, and the account is closed to every way of signing in;",
+              "the reason you gave and the date and time are stored on the account;",
+              "we stop sending marketing email and send only what is needed to reach you about the account itself;",
+              "the one-time code used to confirm the closure is destroyed, not kept."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Deactivating is not the same as erasing. Your information is retained in a closed state rather than deleted, for three reasons: so the account can be restored with your orders and addresses intact if you ask to come back; so nobody else can register your email address and inherit what is attached to it; and because tax and accounting law requires us to keep completed orders, invoices and payment records regardless of whether the account that placed them is open."
+          },
+          {
+            "type": "table",
+            "head": [
+              "Information",
+              "What happens when you deactivate"
+            ],
+            "rows": [
+              [
+                "Name, email address, phone number",
+                "Retained in the closed account, so it can be restored and its address cannot be re-registered"
+              ],
+              [
+                "Deactivation reason and date",
+                "Stored on the account; used to answer support and reactivation requests, and in aggregate to understand why customers leave"
+              ],
+              [
+                "Orders, invoices and payment records",
+                "Retained for the periods in the previous section — a closure does not shorten them"
+              ],
+              [
+                "Delivery addresses",
+                "Retained with the account and restored if it is reactivated"
+              ],
+              [
+                "Cart and wishlist",
+                "Retained but unreachable while the account is closed; restored if it is reactivated"
+              ],
+              [
+                "Reviews and ratings you published",
+                "Stay published — they inform other shoppers — unless you ask us to remove them"
+              ],
+              [
+                "Sessions and device records",
+                "Revoked immediately, and deleted automatically as they expire"
+              ],
+              [
+                "One-time verification codes",
+                "Destroyed as soon as they are used or expire"
+              ],
+              [
+                "Marketing preferences",
+                "Marketing stops; the record of your preference is kept so it is not silently reset"
+              ],
+              [
+                "Account activity log",
+                "Retained as a security record — see below"
+              ]
+            ]
+          },
+          {
+            "type": "p",
+            "text": "We keep a record of the account lifecycle itself. It contains:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "that a deactivation was started, and the reason chosen;",
+              "that a confirmation code was sent, and whether it was accepted or rejected;",
+              "the moment the account was closed;",
+              "attempts to sign in to, or register on, the closed account, and that they were refused;",
+              "each reactivation link we sent, when it was opened, and what was verified against it;",
+              "the reactivation request, and the decision on it with the reviewing administrator and the time."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "Each entry carries the date, the IP address and the browser or device the request came from. We hold this as a security record — it is how we can tell an account holder returning from someone probing a closed account, how we answer a dispute about whether a closure was authorised, and how we show that a reactivation was properly verified. It is not used for marketing or profiling, and it is not shared except as described in “Service providers we share data with” or where the law requires it."
+          },
+          {
+            "type": "p",
+            "text": "Reactivating an account means asking us to confirm it is you. To do that we process:"
+          },
+          {
+            "type": "ul",
+            "items": [
+              "the email address you ask us to send the link to, and the single-use link itself, which is stored only as an irreversible hash and expires after 15 minutes;",
+              "the name and mobile number you re-enter, compared against what the account already holds — we do not display them to you first, because the comparison is the check;",
+              "a one-time code sent to the registered address, held only as a hash and destroyed once used;",
+              "the IP address and browser the request was submitted from, and any note you choose to add for the reviewer."
+            ]
+          },
+          {
+            "type": "p",
+            "text": "The request itself — your name, email, phone, the original deactivation reason, what was verified and when, and the decision — is kept as the record of that decision, including where a request was refused. A refused request is retained precisely so that a later one can be judged in context."
+          },
+          {
+            "type": "note",
+            "text": "If you want your personal information erased rather than your account closed, deactivating is not enough — tell us, and we will treat it as an erasure request under the next section. We will delete what we are not legally required to keep, and tell you plainly what we must retain and for how long."
+          }
+        ]
+      },
+      {
+        "id": "your-rights",
+        "title": "10. Your rights and choices",
+        "blocks": [
+          {
+            "type": "p",
+            "text": "You can, at any time:"
+          },
           {
             "type": "ul",
             "items": [
@@ -1565,6 +1954,7 @@
               "Add, edit or delete your delivery addresses under Account → Addresses.",
               "See your full order history and download every invoice under Account → My Orders.",
               "See every signed-in device and sign any of them out under Account → Devices.",
+              "Deactivate your account yourself under Account → Settings, and ask us to reactivate it later from the sign-in page.",
               "Unsubscribe from marketing email using the link in any such email.",
               "Ask us for a copy of the personal information we hold about you.",
               "Ask us to correct anything that is wrong.",
@@ -1578,13 +1968,13 @@
           },
           {
             "type": "note",
-            "text": "Closing an account does not erase completed orders and invoices. We are required to keep those for tax and accounting purposes, and they are retained separately from your account."
+            "text": "Closing an account does not erase completed orders and invoices. We are required to keep those for tax and accounting purposes, and they are retained separately from your account. Deactivating your account is also not the same as asking us to erase your information — the previous section sets out the difference and what each one does to your data."
           }
         ]
       },
       {
         "id": "children",
-        "title": "10. Children",
+        "title": "11. Children",
         "blocks": [
           {
             "type": "p",
@@ -1594,7 +1984,7 @@
       },
       {
         "id": "updates",
-        "title": "11. Changes to this policy",
+        "title": "12. Changes to this policy",
         "blocks": [
           {
             "type": "p",
@@ -1608,7 +1998,6 @@
       }
     ]
   },
-
   "refund": {
     "seoTitle": "Refund Policy",
     "seoDescription": "When {{app}} issues a refund, how long it takes, which method it comes back to, how cancelled orders, approved returns, damaged goods, failed payments and cash-on-delivery orders are treated, and the exceptions.",
@@ -1616,16 +2005,31 @@
     "heading": "Refund Policy",
     "intro": "This policy explains exactly when money comes back to you, how much, by what route and how long it takes. It applies alongside our Returns & Refunds policy, which covers what can be returned in the first place.",
     "highlights": [
-      { "icon": "check", "title": "Raised in 2 days", "text": "Approved refunds are sent to the gateway within 2 working days." },
-      { "icon": "creditCard", "title": "Original method", "text": "Money returns to the card, UPI ID or account you paid from." },
-      { "icon": "file", "title": "With a reference", "text": "Every refund carries a reference you can quote to your bank." }
+      {
+        "icon": "check",
+        "title": "Raised in 2 days",
+        "text": "Approved refunds are sent to the gateway within 2 working days."
+      },
+      {
+        "icon": "creditCard",
+        "title": "Original method",
+        "text": "Money returns to the card, UPI ID or account you paid from."
+      },
+      {
+        "icon": "file",
+        "title": "With a reference",
+        "text": "Every refund carries a reference you can quote to your bank."
+      }
     ],
     "sections": [
       {
         "id": "eligibility",
         "title": "When you are entitled to a refund",
         "blocks": [
-          { "type": "p", "text": "A refund is due in each of these cases:" },
+          {
+            "type": "p",
+            "text": "A refund is due in each of these cases:"
+          },
           {
             "type": "ul",
             "items": [
@@ -1738,12 +2142,27 @@
           },
           {
             "type": "table",
-            "head": ["Situation", "What happens"],
+            "head": [
+              "Situation",
+              "What happens"
+            ],
             "rows": [
-              ["Cancelled before delivery", "Nothing was collected, so there is nothing to refund. The order simply closes."],
-              ["Delivery failed after three attempts", "Nothing was collected. The order is cancelled and closes."],
-              ["Delivered, then returned and approved", "You paid cash, so the refund is made by bank transfer to an account you give us."],
-              ["Delivered, damaged or wrong, replacement chosen", "No money moves — a replacement is sent free of charge."]
+              [
+                "Cancelled before delivery",
+                "Nothing was collected, so there is nothing to refund. The order simply closes."
+              ],
+              [
+                "Delivery failed after three attempts",
+                "Nothing was collected. The order is cancelled and closes."
+              ],
+              [
+                "Delivered, then returned and approved",
+                "You paid cash, so the refund is made by bank transfer to an account you give us."
+              ],
+              [
+                "Delivered, damaged or wrong, replacement chosen",
+                "No money moves — a replacement is sent free of charge."
+              ]
             ]
           },
           {
@@ -1791,12 +2210,32 @@
           },
           {
             "type": "table",
-            "head": ["Paid by", "Refunded to", "Typical time after we raise it"],
+            "head": [
+              "Paid by",
+              "Refunded to",
+              "Typical time after we raise it"
+            ],
             "rows": [
-              ["Credit or debit card", "The same card", "5–7 working days"],
-              ["UPI", "The same UPI ID", "1–3 working days"],
-              ["Net banking", "The same bank account", "3–5 working days"],
-              ["Cash on delivery", "Bank transfer to the account you give us", "3–5 working days"]
+              [
+                "Credit or debit card",
+                "The same card",
+                "5–7 working days"
+              ],
+              [
+                "UPI",
+                "The same UPI ID",
+                "1–3 working days"
+              ],
+              [
+                "Net banking",
+                "The same bank account",
+                "3–5 working days"
+              ],
+              [
+                "Cash on delivery",
+                "Bank transfer to the account you give us",
+                "3–5 working days"
+              ]
             ]
           },
           {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid2';
@@ -17,13 +17,18 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import CircularProgress from '@mui/material/CircularProgress';
+import Autocomplete from '@mui/material/Autocomplete';
+import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
-import { couponApi } from '../api/endpoints';
+import { couponApi, categoryApi, productApi } from '../api/endpoints';
 import useFetch from '../hooks/useFetch';
+import useDebounce from '../hooks/useDebounce';
 import { useLiveRefetch } from '../realtime/useRealtime';
 import { EVENTS } from '../realtime/events';
 import { formatPrice, formatDate } from '../utils/format';
@@ -31,23 +36,94 @@ import PageHeader from '../components/common/PageHeader';
 import DataTable from '../components/common/DataTable';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 
-const inThirtyDays = () => {
-  const date = new Date();
-  date.setDate(date.getDate() + 30);
-  return date.toISOString().slice(0, 10);
-};
+/**
+ * The expiry field is an admin's own calendar day, so it is built from local
+ * parts: toISOString would hand an IST evening back as yesterday, and today
+ * would then read as a past date.
+ */
+const asDay = (date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+const today = () => asDay(new Date());
+
+/**
+ * Blank is how this screen says "unlimited"/"no cap", and the API stores it as
+ * null. A 0 means the same thing to older coupons, so both come back to the form
+ * as an empty field and go back out as null — never as a limit of zero, which is
+ * what once capped a flat ₹500 coupon at ₹0 and marked a coupon "used 3 / 0".
+ */
+const UNLIMITED = '∞';
+const toField = (value) => (value == null || Number(value) <= 0 ? '' : String(value));
+const toLimit = (value) => (value === '' || Number(value) <= 0 ? null : Number(value));
+const limitLabel = (value) => (value == null || Number(value) <= 0 ? UNLIMITED : String(value));
 
 const EMPTY = {
   code: '', description: '', discountType: 'percentage', discountValue: 10,
   maxDiscountAmount: '', minOrderAmount: 0, usageLimit: '', perUserLimit: 1,
-  expiresAt: inThirtyDays(), isActive: true,
+  // A new coupon starts at today — the earliest the picker allows — so the
+  // admin sets a run length deliberately rather than inheriting one.
+  expiresAt: today(), isActive: true,
+  // Both lists empty is the default and the common case: the coupon comes off
+  // the whole cart. Naming anything here pins it to those goods alone.
+  appliesTo: { categories: [], products: [] },
 };
+
+/** The coupon's scope, as the objects the pickers render. */
+const toScope = (appliesTo) => ({
+  categories: appliesTo?.categories || [],
+  products: appliesTo?.products || [],
+});
+
+const scopeNames = (row) => [
+  ...(row.appliesTo?.categories || []).map((c) => c.name).filter(Boolean),
+  ...(row.appliesTo?.products || []).map((p) => p.name).filter(Boolean),
+];
+
+/**
+ * The product picker searches the catalogue rather than listing it — a store
+ * with thousands of SKUs cannot be poured into a dropdown. Products already on
+ * the coupon are merged into the options so an edit shows their names before
+ * any search has run.
+ */
+function useProductSearch(selected) {
+  const [input, setInput] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const search = useDebounce(input, 400);
+
+  useEffect(() => {
+    let alive = true;
+    setLoading(true);
+    productApi
+      .list({ search: search || undefined, limit: 20, sort: 'newest' })
+      .then((res) => alive && setResults(res.data?.products || []))
+      .catch(() => alive && setResults([]))
+      .finally(() => alive && setLoading(false));
+    return () => {
+      alive = false;
+    };
+  }, [search]);
+
+  const options = useMemo(() => {
+    const ids = new Set(results.map((p) => p._id));
+    return [...selected.filter((p) => !ids.has(p._id)), ...results];
+  }, [results, selected]);
+
+  return { options, loading, setInput };
+}
 
 function CouponDialog({ initial, onClose, onSaved }) {
   const { enqueueSnackbar } = useSnackbar();
   const [values, setValues] = useState(
     initial
-      ? { ...initial, expiresAt: new Date(initial.expiresAt).toISOString().slice(0, 10) }
+      ? {
+          ...initial,
+          appliesTo: toScope(initial.appliesTo),
+          expiresAt: asDay(new Date(initial.expiresAt)),
+          maxDiscountAmount: toField(initial.maxDiscountAmount),
+          usageLimit: toField(initial.usageLimit),
+          perUserLimit: toField(initial.perUserLimit),
+        }
       : EMPTY
   );
   const [errors, setErrors] = useState({});
@@ -59,16 +135,43 @@ function CouponDialog({ initial, onClose, onSaved }) {
       [field]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
     }));
 
+  const isPercentage = values.discountType === 'percentage';
+
+  const categoriesQuery = useFetch(useCallback(() => categoryApi.list(), []), []);
+  const categories = categoriesQuery.data?.data?.categories || [];
+  const products = useProductSearch(values.appliesTo.products);
+
+  const setScope = (field) => (_event, next) =>
+    setValues((v) => ({ ...v, appliesTo: { ...v.appliesTo, [field]: next } }));
+
   const submit = async () => {
     const found = {};
-    if (values.code.trim().length < 3) found.code = 'Code must be at least 3 characters';
+    const code = values.code.trim();
+    if (!code) found.code = 'Enter coupon code';
+    else if (code.length < 3) found.code = 'Code must be at least 3 characters';
     const amount = Number(values.discountValue);
     if (!amount || amount <= 0) found.discountValue = 'Enter a discount value';
     if (values.discountType === 'percentage' && amount > 90) {
       found.discountValue = 'Percentage discount cannot exceed 90%';
     }
+    // A coupon that expires before it is saved can never be redeemed, so the
+    // picker's min is backed by a check here — typed input and edits of an
+    // already expired coupon both reach this path.
     if (!values.expiresAt) found.expiresAt = 'Choose an expiry date';
-    if (Object.keys(found).length) return setErrors(found);
+    else if (values.expiresAt < today()) found.expiresAt = 'Expiry date cannot be in the past';
+    // The two limits are independent: a coupon can allow 2 redemptions in total
+    // while allowing one customer 3, and neither is derived from the other.
+    if (values.usageLimit !== '' && Number(values.usageLimit) < 1) {
+      found.usageLimit = 'Enter 1 or more, or leave blank for unlimited';
+    }
+    if (values.perUserLimit !== '' && Number(values.perUserLimit) < 1) {
+      found.perUserLimit = 'Enter 1 or more, or leave blank for unlimited';
+    }
+    if (Object.keys(found).length) {
+      setErrors(found);
+      enqueueSnackbar('Please fill the required fields first', { variant: 'warning' });
+      return;
+    }
 
     setSaving(true);
     try {
@@ -77,13 +180,19 @@ function CouponDialog({ initial, onClose, onSaved }) {
         description: values.description?.trim() || undefined,
         discountType: values.discountType,
         discountValue: amount,
-        // Empty string means "no cap" / "unlimited", not zero.
-        maxDiscountAmount: values.maxDiscountAmount === '' ? null : Number(values.maxDiscountAmount),
+        // Blank means "no cap" / "unlimited", never zero — and a cap is only ever
+        // a percentage-coupon device, so a flat coupon never carries one.
+        maxDiscountAmount: isPercentage ? toLimit(values.maxDiscountAmount) : null,
         minOrderAmount: Number(values.minOrderAmount) || 0,
-        usageLimit: values.usageLimit === '' ? null : Number(values.usageLimit),
-        perUserLimit: Number(values.perUserLimit) || 1,
+        usageLimit: toLimit(values.usageLimit),
+        perUserLimit: toLimit(values.perUserLimit),
         expiresAt: new Date(`${values.expiresAt}T23:59:59`).toISOString(),
         isActive: values.isActive,
+        // Ids only — the API stores references and hands the names back populated.
+        appliesTo: {
+          categories: values.appliesTo.categories.map((c) => c._id),
+          products: values.appliesTo.products.map((p) => p._id),
+        },
       };
 
       if (values._id) await couponApi.update(values._id, payload);
@@ -98,11 +207,20 @@ function CouponDialog({ initial, onClose, onSaved }) {
     }
   };
 
-  const isPercentage = values.discountType === 'percentage';
-
   return (
     <Dialog open onClose={saving ? undefined : onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 700 }}>{values._id ? 'Edit coupon' : 'New coupon'}</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 700, pr: 6 }}>
+        {values._id ? 'Edit coupon' : 'New coupon'}
+        <IconButton
+          onClick={onClose}
+          size="small"
+          disabled={saving}
+          sx={{ position: 'absolute', right: 12, top: 12, color: 'text.secondary' }}
+          aria-label="Close without saving"
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </DialogTitle>
 
       <DialogContent dividers>
         <Grid container spacing={2.5}>
@@ -161,7 +279,7 @@ function CouponDialog({ initial, onClose, onSaved }) {
               fullWidth
               type="number"
               label="Maximum discount cap"
-              value={values.maxDiscountAmount ?? ''}
+              value={isPercentage ? values.maxDiscountAmount : ''}
               onChange={set('maxDiscountAmount')}
               disabled={!isPercentage}
               helperText={isPercentage ? 'Leave blank for no cap' : 'Only applies to percentage coupons'}
@@ -193,6 +311,7 @@ function CouponDialog({ initial, onClose, onSaved }) {
               error={Boolean(errors.expiresAt)}
               helperText={errors.expiresAt}
               InputLabelProps={{ shrink: true }}
+              inputProps={{ min: today() }}
             />
           </Grid>
 
@@ -201,9 +320,10 @@ function CouponDialog({ initial, onClose, onSaved }) {
               fullWidth
               type="number"
               label="Total usage limit"
-              value={values.usageLimit ?? ''}
+              value={values.usageLimit}
               onChange={set('usageLimit')}
-              helperText="Leave blank for unlimited"
+              error={Boolean(errors.usageLimit)}
+              helperText={errors.usageLimit || 'Successful orders across all customers — blank for unlimited'}
               inputProps={{ min: 1 }}
             />
           </Grid>
@@ -215,7 +335,92 @@ function CouponDialog({ initial, onClose, onSaved }) {
               label="Uses per customer"
               value={values.perUserLimit}
               onChange={set('perUserLimit')}
+              error={Boolean(errors.perUserLimit)}
+              helperText={errors.perUserLimit || 'Successful orders by one customer — blank for unlimited'}
               inputProps={{ min: 1 }}
+            />
+          </Grid>
+
+          <Grid size={12}>
+            <Divider textAlign="left">
+              <Typography variant="caption" color="text.secondary">
+                Where this coupon applies
+              </Typography>
+            </Divider>
+          </Grid>
+
+          <Grid size={12}>
+            <Autocomplete
+              multiple
+              options={categories}
+              value={values.appliesTo.categories}
+              onChange={setScope('categories')}
+              loading={categoriesQuery.loading}
+              getOptionLabel={(option) => option.name || ''}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
+              renderTags={(tags, getTagProps) =>
+                tags.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    size="small"
+                    label={option.name}
+                    {...getTagProps({ index })}
+                    key={option._id}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Categories"
+                  placeholder={values.appliesTo.categories.length ? '' : 'Any category'}
+                  helperText="Leave both fields empty and the coupon comes off the whole cart"
+                />
+              )}
+            />
+          </Grid>
+
+          <Grid size={12}>
+            <Autocomplete
+              multiple
+              options={products.options}
+              value={values.appliesTo.products}
+              onChange={setScope('products')}
+              loading={products.loading}
+              // The catalogue is searched server-side; filtering again here would
+              // hide results the API already decided were matches.
+              filterOptions={(option) => option}
+              onInputChange={(_event, next, reason) => reason === 'input' && products.setInput(next)}
+              getOptionLabel={(option) => option.name || ''}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
+              renderTags={(tags, getTagProps) =>
+                tags.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    size="small"
+                    label={option.name}
+                    {...getTagProps({ index })}
+                    key={option._id}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Products"
+                  placeholder={values.appliesTo.products.length ? '' : 'Any product'}
+                  helperText="Type to search. A named product counts whatever category it sits in"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {products.loading ? <CircularProgress size={15} color="inherit" /> : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
             />
           </Grid>
 
@@ -229,9 +434,6 @@ function CouponDialog({ initial, onClose, onSaved }) {
       </DialogContent>
 
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button onClick={onClose} color="inherit" disabled={saving}>
-          Cancel
-        </Button>
         <Button
           variant="contained"
           onClick={submit}
@@ -274,32 +476,71 @@ export default function Coupons() {
     }
   };
 
+  /*
+   * Switching a promotion off is the one edit that is urgent — a code being abused at
+   * checkout should not need a dialog and a Save. The status chip toggles it in place,
+   * the way the product table's chip toggles published/draft.
+   */
+  const toggleActive = async (coupon) => {
+    const next = !coupon.isActive;
+    try {
+      await couponApi.update(coupon._id, { isActive: next });
+      enqueueSnackbar(next ? 'Coupon activated' : 'Coupon deactivated', { variant: 'success' });
+      query.refetch();
+    } catch (err) {
+      enqueueSnackbar(err.message || 'Could not update the coupon', { variant: 'error' });
+    }
+  };
+
   const columns = [
     {
       key: 'code',
       label: 'Code',
-      minWidth: 160,
-      render: (row) => (
-        <Box>
-          <Typography variant="body2" fontWeight={800} letterSpacing={0.5}>
-            {row.code}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {row.description || '—'}
-          </Typography>
-        </Box>
-      ),
+      width: '30%',
+      minWidth: 220,
+      render: (row) => {
+        const scope = scopeNames(row);
+        return (
+          <Box>
+            <Typography variant="body2" fontWeight={800} letterSpacing={0.5}>
+              {row.code}
+            </Typography>
+            {/* `display: block` — caption renders a span, and the scope chip below was
+                flowing onto the end of this line rather than starting its own. */}
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+              {row.description || '—'}
+            </Typography>
+
+            {/* A coupon pinned to part of the catalogue must say so here — the discount
+                column alone reads as if it came off everything. This is the widest column
+                in the table, so the name gets the room to be recognisable; the tooltip
+                carries the full list when there is more than one. */}
+            {scope.length > 0 && (
+              <Tooltip title={scope.join(', ')}>
+                <Chip
+                  size="small"
+                  variant="outlined"
+                  label={scope.length > 1 ? `Only ${scope[0]} +${scope.length - 1}` : `Only ${scope[0]}`}
+                  sx={{ mt: 0.75, height: 20, fontSize: 11, maxWidth: '100%' }}
+                />
+              </Tooltip>
+            )}
+          </Box>
+        );
+      },
     },
     {
       key: 'discount',
       label: 'Discount',
+      align: 'right',
+      width: 120,
       render: (row) => (
         <Box>
-          <Typography variant="body2" fontWeight={700}>
+          <Typography variant="body2" fontWeight={700} noWrap>
             {row.discountType === 'percentage' ? `${row.discountValue}%` : formatPrice(row.discountValue)}
           </Typography>
-          {row.maxDiscountAmount != null && (
-            <Typography variant="caption" color="text.secondary">
+          {row.discountType === 'percentage' && row.maxDiscountAmount > 0 && (
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }} noWrap>
               max {formatPrice(row.maxDiscountAmount)}
             </Typography>
           )}
@@ -310,8 +551,9 @@ export default function Coupons() {
       key: 'minOrderAmount',
       label: 'Min. order',
       align: 'right',
+      width: 120,
       render: (row) => (
-        <Typography variant="body2">
+        <Typography variant="body2" noWrap>
           {row.minOrderAmount ? formatPrice(row.minOrderAmount) : '—'}
         </Typography>
       ),
@@ -320,21 +562,29 @@ export default function Coupons() {
       key: 'usage',
       label: 'Used',
       align: 'center',
+      width: 120,
       render: (row) => (
-        <Typography variant="body2">
-          {row.usedCount}
-          {row.usageLimit != null ? ` / ${row.usageLimit}` : ' / ∞'}
-        </Typography>
+        <Box>
+          {/* Successful redemptions across every customer, against the global limit. */}
+          <Typography variant="body2" noWrap>
+            {row.usedCount || 0} / {limitLabel(row.usageLimit)}
+          </Typography>
+          {/* Tracked separately — one customer's allowance, not a share of the above. */}
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }} noWrap>
+            {limitLabel(row.perUserLimit)} per customer
+          </Typography>
+        </Box>
       ),
     },
     {
       key: 'expiresAt',
       label: 'Expires',
-      minWidth: 120,
+      align: 'center',
+      width: 120,
       render: (row) => {
         const expired = new Date(row.expiresAt) < new Date();
         return (
-          <Typography variant="body2" color={expired ? 'error.main' : 'text.primary'}>
+          <Typography variant="body2" color={expired ? 'error.main' : 'text.primary'} noWrap>
             {formatDate(row.expiresAt)}
           </Typography>
         );
@@ -344,14 +594,32 @@ export default function Coupons() {
       key: 'isActive',
       label: 'Status',
       align: 'center',
+      width: 120,
       render: (row) => {
         const expired = new Date(row.expiresAt) < new Date();
-        return (
+        const chip = (
           <Chip
             label={expired ? 'Expired' : row.isActive ? 'Active' : 'Inactive'}
             size="small"
             color={expired ? 'error' : row.isActive ? 'success' : 'default'}
           />
+        );
+
+        /*
+         * An expired coupon is off for a reason the chip cannot change — the date is.
+         * Leaving it clickable would let an admin "activate" a code that still would
+         * not work at checkout, so it says what to do instead.
+         */
+        if (expired) {
+          return <Tooltip title="Expired — edit the coupon to extend it">{chip}</Tooltip>;
+        }
+
+        return (
+          <Tooltip title="Click to toggle active / inactive">
+            <Box component="span" onClick={() => toggleActive(row)} sx={{ cursor: 'pointer' }}>
+              {chip}
+            </Box>
+          </Tooltip>
         );
       },
     },
@@ -359,9 +627,9 @@ export default function Coupons() {
       key: 'actions',
       label: 'Action',
       align: 'center',
-      width: 100,
+      width: 96,
       render: (row) => (
-        <Stack direction="row" spacing={0.25} justifyContent="center">
+        <Stack direction="row" spacing={0.25} justifyContent="center" sx={{ whiteSpace: 'nowrap' }}>
           <IconButton size="small" color="primary" onClick={() => setDialog(row)}>
             <EditIcon fontSize="small" />
           </IconButton>
@@ -389,6 +657,7 @@ export default function Coupons() {
       <DataTable
         columns={columns}
         rows={coupons}
+        verticalAlign="center"
         loading={query.loading}
         page={page}
         limit={limit}

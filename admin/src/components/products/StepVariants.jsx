@@ -191,7 +191,7 @@ export default function StepVariants({ values, errors, onChange }) {
               <>
                 <Alert severity="info" sx={{ mb: 2 }}>
                   Each row is an independent SKU. Edit price and stock inline; open the tune icon
-                  for that variant&apos;s own images, weight and dimensions. A row left at zero
+                  for that variant&apos;s own images, barcode and HSN code. A row left at zero
                   stock shows as sold out on the storefront rather than disappearing.
                 </Alert>
 

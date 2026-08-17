@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import AdminLayout from '../components/layout/AdminLayout';
 import ProtectedRoute from './ProtectedRoute';
 import ErrorPage from '../pages/ErrorPage';
@@ -12,8 +12,9 @@ const Categories = lazy(() => import('../pages/Categories'));
 const Brands = lazy(() => import('../pages/Brands'));
 const Orders = lazy(() => import('../pages/Orders'));
 const OrderDetail = lazy(() => import('../pages/OrderDetail'));
-const CancellationReasons = lazy(() => import('../pages/CancellationReasons'));
+const Reasons = lazy(() => import('../pages/Reasons'));
 const Users = lazy(() => import('../pages/Users'));
+const ReactivationRequests = lazy(() => import('../pages/ReactivationRequests'));
 const Banners = lazy(() => import('../pages/Banners'));
 const Coupons = lazy(() => import('../pages/Coupons'));
 const Inquiries = lazy(() => import('../pages/Inquiries'));
@@ -41,8 +42,13 @@ export const router = createBrowserRouter([
       { path: 'brands', element: <Brands /> },
       { path: 'orders', element: <Orders /> },
       { path: 'orders/:id', element: <OrderDetail /> },
-      { path: 'cancellation-reasons', element: <CancellationReasons /> },
+      { path: 'reasons', element: <Reasons /> },
+      // The old single-list URL, kept working: it is in browser histories and in
+      // at least one bookmark bar, and it now names one tab of the screen it
+      // became rather than a page that no longer exists.
+      { path: 'cancellation-reasons', element: <Navigate to="/reasons" replace /> },
       { path: 'users', element: <Users /> },
+      { path: 'reactivation-requests', element: <ReactivationRequests /> },
       { path: 'banners', element: <Banners /> },
       { path: 'coupons', element: <Coupons /> },
       { path: 'inquiries', element: <Inquiries /> },

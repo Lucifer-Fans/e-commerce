@@ -43,7 +43,8 @@
     "youSaved": "तुम्ही {{amount}} वाचवले",
     "viewAvailable": "उपलब्ध कूपन पहा ({{count}})",
     "hideAvailable": "उपलब्ध कूपन लपवा ({{count}})",
-    "minOrder": "किमान ऑर्डर {{amount}}"
+    "minOrder": "किमान ऑर्डर {{amount}}",
+    "validOn": "{{items}} वर लागू"
   },
   "summary": {
     "title": "किंमत तपशील",
@@ -78,7 +79,9 @@
       "address": "वितरण पत्ता",
       "review": "ऑर्डर सारांश",
       "payment": "पेमेंट"
-    }
+    },
+    "cartChanged": "तुमच्या ऑर्डरमधील एक वस्तू बदलली आहे — सारांश अद्ययावत केला आहे.",
+    "couponChanged": "तुमचे कूपन बदलले आहे — सारांश अद्ययावत केला आहे."
   },
   "address": {
     "addTitle": "नवीन पत्ता जोडा",

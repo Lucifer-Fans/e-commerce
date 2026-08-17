@@ -3,6 +3,7 @@ const ApiError = require('../utils/ApiError');
 const { sendSuccess } = require('../utils/apiResponse');
 const { Order, Payment, Cart } = require('../models');
 const { releaseStock } = require('../services/inventory.service');
+const { redeemForOrder, releaseForOrder } = require('../services/coupon.service');
 const razorpay = require('../services/razorpay.service');
 const mailService = require('../services/mail.service');
 const broadcast = require('../realtime/broadcast');
@@ -117,6 +118,18 @@ exports.verifyPayment = asyncHandler(async (req, res) => {
   }
   await order.save();
 
+  // The money landed, so the order is earned and its coupon is now spent. The
+  // flag inside redeemForOrder makes this exactly-once: a shopper who refreshes
+  // into a second /verify, or a webhook that lands after this one, changes
+  // nothing. If the coupon filled up store-wide while this shopper was paying we
+  // honour the discount they were charged and only log it — refusing money that
+  // has already been captured would be the worse failure.
+  if ((await redeemForOrder(order)) === 'exhausted') {
+    logger.warn(
+      `Order ${order.orderNumber} paid with ${order.pricing.couponCode} after its usage limit filled; discount honoured`
+    );
+  }
+
   // Only the purchased lines leave the cart; "saved for later" survives checkout.
   await Cart.updateOne(
     { user: req.user._id },
@@ -186,10 +199,15 @@ exports.webhook = asyncHandler(async (req, res) => {
         { paymentStatus: 'paid', orderStatus: 'confirmed' }
       );
 
+      // The webhook is the safety net for a shopper who closed the tab before
+      // /payments/verify ran, so it redeems too. redeemForOrder is idempotent per
+      // order, so whichever of the two arrives second consumes nothing.
+      const order = await Order.findById(payment.order);
+      if (order) await redeemForOrder(order);
+
       // Only announce when this webhook is the one that moved the order — otherwise
       // /payments/verify already told everyone.
-      if (promoted.modifiedCount > 0) {
-        const order = await Order.findById(payment.order);
+      if (promoted.modifiedCount > 0 && order) {
         broadcast.paymentUpdated(order, payment);
         broadcast.orderStatusChanged(order, 'Payment confirmed by provider');
       }
@@ -234,6 +252,9 @@ exports.refund = asyncHandler(async (req, res) => {
   if (order) {
     order.paymentStatus = 'refunded';
     await order.save();
+    // A refunded order is no longer a successful redemption.
+    await releaseForOrder(order);
+
     // Refunding an order that never shipped should release its inventory.
     if (['pending', 'confirmed', 'packed'].includes(order.orderStatus)) {
       // Released against the exact SKU each line reserved.

@@ -15,6 +15,17 @@ import Spinner from '../common/Spinner';
  * `discountAmount` can be the larger figure the coupon was worth when it was
  * applied, and confirming a saving the total never gave is worse than none.
  */
+/**
+ * A coupon can be pinned to named categories or products, in which case it only
+ * ever comes off those goods. Listing them is the difference between a code that
+ * looks broken in the basket and one the shopper knows how to earn.
+ */
+const scopeOf = (item) =>
+  [
+    ...(item.appliesTo?.categories || []).map((c) => c.name),
+    ...(item.appliesTo?.products || []).map((p) => p.name),
+  ].filter(Boolean);
+
 export default function CouponBox({ coupon, appliedDiscount }) {
   const { t } = useTranslation(['checkout', 'common']);
   const dispatch = useDispatch();
@@ -131,6 +142,11 @@ export default function CouponBox({ coupon, appliedDiscount }) {
                     {item.minOrderAmount > 0 && (
                       <p className="mt-0.5 text-[11px] text-ink-400">
                         {t('coupon.minOrder', { amount: formatPrice(item.minOrderAmount) })}
+                      </p>
+                    )}
+                    {scopeOf(item).length > 0 && (
+                      <p className="mt-0.5 truncate text-[11px] text-ink-400" title={scopeOf(item).join(', ')}>
+                        {t('coupon.validOn', { items: scopeOf(item).join(', ') })}
                       </p>
                     )}
                   </div>

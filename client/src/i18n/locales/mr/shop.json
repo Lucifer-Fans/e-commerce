@@ -122,8 +122,8 @@
       "freeText": "ही वस्तू मोफत पाठवली जाते",
       "paidTitle": "वितरण शुल्क लागू",
       "paidText": "₹{{amount}} वर मोफत",
-      "returnsTitle": "7 दिवसांत परतावा",
-      "returnsText": "त्रासमुक्त बदली",
+      "returnsTitle": "सोपा परतावा",
+      "returnsText": "7 दिवसांत त्रासमुक्त परतावा",
       "paymentTitle": "सुरक्षित पेमेंट",
       "paymentText": "Razorpay द्वारे संरक्षित",
       "weightTitle": "शिपिंग वजन",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "प्रतिमा {{index}} पहा",
+    "viewVideo": "व्हिडिओ {{index}} चालवा",
     "image": "प्रतिमा {{index}}",
     "hoverToZoom": "झूम करण्यासाठी होवर करा",
     "previousImage": "मागील प्रतिमा",

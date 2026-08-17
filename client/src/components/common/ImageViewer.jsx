@@ -235,6 +235,11 @@ export default function ImageViewer({
                       poster={image.thumbnail || undefined}
                       controls
                       playsInline
+                      loop
+                      // Muted is what makes autoplay permitted at all; the controls
+                      // are right there for anyone who wants sound.
+                      autoPlay
+                      muted
                       className="max-h-full max-w-full rounded-lg bg-ink-900"
                     />
                   ) : (

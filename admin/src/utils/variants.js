@@ -59,7 +59,6 @@ export function normaliseAttributes(raw = []) {
         name,
         slug,
         inputType: attribute.inputType || 'auto',
-        helpText: attribute.helpText?.trim() || undefined,
         values,
         displayOrder: index,
       };
@@ -124,20 +123,13 @@ export function mergeCombinations(existing = [], attributes = [], defaults = {},
       stock: defaults.stock ?? 0,
       lowStockThreshold: defaults.lowStockThreshold ?? 5,
       images: [],
-      weight: { value: '', unit: 'g' },
-      dimensions: { length: '', width: '', height: '', unit: 'cm' },
       isActive: true,
       displayOrder: index,
     };
   });
 }
 
-/** Shapes a wizard row for the API — blanks become undefined rather than NaN. */
-const numberOrUndefined = (value) => {
-  const n = Number(value);
-  return value === '' || value === null || value === undefined || Number.isNaN(n) ? undefined : n;
-};
-
+/** Shapes a wizard row for the API. */
 export function toApiVariant(row, index) {
   return {
     _id: row._id,
@@ -160,20 +152,6 @@ export function toApiVariant(row, index) {
       isPrimary: i === 0,
       displayOrder: i,
     })),
-    weight: numberOrUndefined(row.weight?.value)
-      ? { value: numberOrUndefined(row.weight.value), unit: row.weight.unit || 'g' }
-      : undefined,
-    dimensions:
-      numberOrUndefined(row.dimensions?.length) ||
-      numberOrUndefined(row.dimensions?.width) ||
-      numberOrUndefined(row.dimensions?.height)
-        ? {
-            length: numberOrUndefined(row.dimensions.length),
-            width: numberOrUndefined(row.dimensions.width),
-            height: numberOrUndefined(row.dimensions.height),
-            unit: row.dimensions.unit || 'cm',
-          }
-        : undefined,
     barcode: row.barcode?.trim() || undefined,
     hsnCode: row.hsnCode?.trim() || undefined,
     isActive: row.isActive !== false,
@@ -192,13 +170,6 @@ export const fromApiVariant = (variant) => ({
   stock: variant.stock ?? 0,
   lowStockThreshold: variant.lowStockThreshold ?? 5,
   images: variant.images || [],
-  weight: { value: variant.weight?.value ?? '', unit: variant.weight?.unit || 'g' },
-  dimensions: {
-    length: variant.dimensions?.length ?? '',
-    width: variant.dimensions?.width ?? '',
-    height: variant.dimensions?.height ?? '',
-    unit: variant.dimensions?.unit || 'cm',
-  },
   barcode: variant.barcode || '',
   hsnCode: variant.hsnCode || '',
   isActive: variant.isActive !== false,

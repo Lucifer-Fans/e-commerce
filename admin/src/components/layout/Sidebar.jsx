@@ -14,15 +14,15 @@ import InventoryIcon from '@mui/icons-material/Inventory2Outlined';
 import CategoryIcon from '@mui/icons-material/AccountTreeOutlined';
 import BrandIcon from '@mui/icons-material/SellOutlined';
 import OrdersIcon from '@mui/icons-material/ReceiptLongOutlined';
-import CancelIcon from '@mui/icons-material/CancelPresentationOutlined';
+import ReasonIcon from '@mui/icons-material/RuleOutlined';
 import PeopleIcon from '@mui/icons-material/PeopleAltOutlined';
+import ReactivationIcon from '@mui/icons-material/HowToRegOutlined';
 import InquiryIcon from '@mui/icons-material/ForumOutlined';
 import BannerIcon from '@mui/icons-material/SlideshowOutlined';
 import CouponIcon from '@mui/icons-material/ConfirmationNumberOutlined';
-import StorefrontIcon from '@mui/icons-material/StorefrontOutlined';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 
-import { APP_NAME, STOREFRONT_URL } from '../../utils/constants';
+import { APP_NAME } from '../../utils/constants';
 
 export const DRAWER_WIDTH = 252;
 
@@ -45,8 +45,13 @@ const NAV_GROUPS = [
     heading: 'Commerce',
     items: [
       { to: '/orders', label: 'Orders', icon: <OrdersIcon /> },
-      { to: '/cancellation-reasons', label: 'Cancel Reasons', icon: <CancelIcon /> },
+      { to: '/reasons', label: 'Reasons', icon: <ReasonIcon /> },
       { to: '/users', label: 'Users', icon: <PeopleIcon /> },
+      {
+        to: '/reactivation-requests',
+        label: 'Reactivation Requests',
+        icon: <ReactivationIcon />,
+      },
       { to: '/inquiries', label: 'Inquiries', icon: <InquiryIcon /> },
     ],
   },
@@ -88,7 +93,20 @@ function NavContent({ onNavigate }) {
 
       <Divider sx={{ borderColor: 'rgba(255,255,255,.08)' }} />
 
-      <Box sx={{ flex: 1, overflowY: 'auto', py: 1 }}>
+      {/* The theme's slate scrollbar thumb is tuned for light cards and all but
+          disappears on this navy panel, so the nav inverts it: a translucent
+          white bar at the same width, brightening on hover exactly as the light
+          one darkens. */}
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: 'auto',
+          py: 1,
+          scrollbarColor: 'rgba(255,255,255,.22) transparent',
+          '&::-webkit-scrollbar-thumb': { backgroundColor: 'rgba(255,255,255,.22)' },
+          '&::-webkit-scrollbar-thumb:hover': { backgroundColor: 'rgba(255,255,255,.38)' },
+        }}
+      >
         {NAV_GROUPS.map((group) => (
           <Box key={group.heading} sx={{ mb: 1 }}>
             <Typography
@@ -144,27 +162,10 @@ function NavContent({ onNavigate }) {
       <Divider sx={{ borderColor: 'rgba(255,255,255,.08)' }} />
 
       <Box sx={{ p: 2 }}>
-        <ListItemButton
-          component="a"
-          href={STOREFRONT_URL}
-          target="_blank"
-          rel="noreferrer"
-          sx={{
-            borderRadius: 2,
-            color: 'rgba(255,255,255,.7)',
-            '&:hover': { bgcolor: 'rgba(255,255,255,.07)' },
-          }}
-        >
-          <ListItemIcon sx={{ minWidth: 36, color: 'inherit' }}>
-            <StorefrontIcon />
-          </ListItemIcon>
-          <ListItemText primary="View storefront" primaryTypographyProps={{ fontSize: 13 }} />
-        </ListItemButton>
-
         <Chip
           label="v1.0.0"
           size="small"
-          sx={{ mt: 1, ml: 1, bgcolor: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.6)' }}
+          sx={{ ml: 1, bgcolor: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.6)' }}
         />
       </Box>
     </Box>

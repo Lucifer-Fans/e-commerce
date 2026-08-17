@@ -220,6 +220,77 @@ const CASES = [
     run: (mail) => mail.sendAccountLockedEmail({ ...CUSTOMER, minutes: env.login.lockMinutes }),
   },
   {
+    file: 'account-deactivation-code',
+    group: 'Account',
+    label: 'Deactivation code',
+    note: 'The verification mail re-pointed at closing an account',
+    run: (mail) =>
+      mail.sendDeactivationOtpEmail({
+        ...CUSTOMER,
+        code: '731094',
+        minutes: env.otp.expiryMinutes,
+      }),
+  },
+  {
+    file: 'account-deactivated',
+    group: 'Account',
+    label: 'Account deactivated',
+    note: 'Closure receipt — what it means, the facts, the way back',
+    run: (mail) =>
+      mail.sendAccountDeactivatedEmail({
+        ...CUSTOMER,
+        reason: 'Privacy concerns',
+        at: ago(0),
+      }),
+  },
+  {
+    file: 'account-reactivation-link',
+    group: 'Account',
+    label: 'Re-activation link',
+    note: 'Single-use link, benefits row, expiry',
+    run: (mail) =>
+      mail.sendReactivationLinkEmail({
+        ...CUSTOMER,
+        activateUrl: `${env.clientUrl}/reactivate/4c1d8a6f2b9e0d7c3a5f1e8b6d4c2a9f7e3b1d5c`,
+      }),
+  },
+  {
+    file: 'account-reactivation-submitted',
+    group: 'Account',
+    label: 'Re-activation request received',
+    note: 'The 2-3 working day wait, stated three times on purpose',
+    run: (mail) =>
+      mail.sendReactivationSubmittedEmail({
+        ...CUSTOMER,
+        requestedAt: ago(0),
+        reason: 'Privacy concerns',
+      }),
+  },
+  {
+    file: 'account-reactivated',
+    group: 'Account',
+    label: 'Account reactivated',
+    note: 'The approval — one fact and the button under it',
+    run: (mail) =>
+      mail.sendAccountReactivatedEmail({
+        ...CUSTOMER,
+        reviewedAt: ago(0),
+        adminNotes: 'Verified against the original order history. Welcome back!',
+      }),
+  },
+  {
+    file: 'account-reactivation-rejected',
+    group: 'Account',
+    label: 'Re-activation refused',
+    note: 'The refusal, with the reason given its own panel',
+    run: (mail) =>
+      mail.sendReactivationRejectedEmail({
+        ...CUSTOMER,
+        reason: 'We could not match the details provided against the account on record.',
+        reviewedAt: ago(0),
+      }),
+  },
+  {
     file: 'order-placed',
     group: 'Orders',
     label: 'Order confirmation',

@@ -8,22 +8,23 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Divider from '@mui/material/Divider';
 import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
 
 import ImageUploader from './ImageUploader';
 import { formatPrice, computeFinalPrice } from '../../utils/format';
 import { variantLabel } from '../../utils/variants';
 
 /**
- * Everything about one SKU that doesn't fit in the grid: its own photography, shipping
- * weight and dimensions, barcode and HSN code.
+ * Everything about one SKU that doesn't fit in the grid: its own photography, barcode
+ * and HSN code.
  *
  * Images are optional — a variant with none inherits the product's gallery, so an admin
  * only has to shoot the colours that actually look different.
@@ -41,13 +42,21 @@ export default function VariantEditorDialog({ open, variant, productName, onClos
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>
+      <DialogTitle sx={{ pr: 6 }}>
         <Typography variant="h6" component="span">
           {label}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {productName}
         </Typography>
+        <IconButton
+          onClick={onClose}
+          size="small"
+          sx={{ position: 'absolute', right: 12, top: 12, color: 'text.secondary' }}
+          aria-label="Close without applying"
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
       </DialogTitle>
 
       <DialogContent dividers>
@@ -162,64 +171,6 @@ export default function VariantEditorDialog({ open, variant, productName, onClos
             </Box>
           </Grid>
 
-          {/* ---------- Shipping ---------- */}
-          <Grid size={12}>
-            <Divider textAlign="left">
-              <Typography variant="caption" color="text.secondary">
-                Shipping — used for packing and courier rates
-              </Typography>
-            </Divider>
-          </Grid>
-
-          <Grid size={{ xs: 8, sm: 3 }}>
-            <TextField
-              fullWidth
-              type="number"
-              label="Weight"
-              value={draft.weight?.value ?? ''}
-              onChange={(e) => patch({ weight: { ...draft.weight, value: e.target.value } })}
-              inputProps={{ min: 0, step: '0.01' }}
-            />
-          </Grid>
-          <Grid size={{ xs: 4, sm: 2 }}>
-            <TextField
-              select
-              fullWidth
-              label="Unit"
-              value={draft.weight?.unit || 'g'}
-              onChange={(e) => patch({ weight: { ...draft.weight, unit: e.target.value } })}
-            >
-              <MenuItem value="g">g</MenuItem>
-              <MenuItem value="kg">kg</MenuItem>
-            </TextField>
-          </Grid>
-
-          {['length', 'width', 'height'].map((side) => (
-            <Grid key={side} size={{ xs: 4, sm: 2 }}>
-              <TextField
-                fullWidth
-                type="number"
-                label={side[0].toUpperCase() + side.slice(1)}
-                value={draft.dimensions?.[side] ?? ''}
-                onChange={(e) => patch({ dimensions: { ...draft.dimensions, [side]: e.target.value } })}
-                inputProps={{ min: 0, step: '0.1' }}
-              />
-            </Grid>
-          ))}
-
-          <Grid size={{ xs: 12, sm: 1 }}>
-            <TextField
-              select
-              fullWidth
-              label="Unit"
-              value={draft.dimensions?.unit || 'cm'}
-              onChange={(e) => patch({ dimensions: { ...draft.dimensions, unit: e.target.value } })}
-            >
-              <MenuItem value="cm">cm</MenuItem>
-              <MenuItem value="in">in</MenuItem>
-            </TextField>
-          </Grid>
-
           {/* ---------- Images ---------- */}
           <Grid size={12}>
             <Divider textAlign="left">
@@ -234,7 +185,11 @@ export default function VariantEditorDialog({ open, variant, productName, onClos
               Optional. A variant with no images of its own shows the product gallery instead —
               so only upload here for options that genuinely look different, such as colours.
             </Alert>
-            <ImageUploader value={draft.images || []} onChange={(images) => patch({ images })} />
+            <ImageUploader
+              subject="images for this variant"
+              value={draft.images || []}
+              onChange={(images) => patch({ images })}
+            />
           </Grid>
 
           <Grid size={12}>
@@ -274,9 +229,6 @@ export default function VariantEditorDialog({ open, variant, productName, onClos
       </DialogContent>
 
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button color="inherit" onClick={onClose}>
-          Cancel
-        </Button>
         <Button variant="contained" onClick={() => onSave(draft)}>
           Apply
         </Button>

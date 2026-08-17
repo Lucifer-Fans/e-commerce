@@ -24,6 +24,40 @@ const theme = createTheme({
   },
   shape: { borderRadius: 10 },
   components: {
+    /**
+     * Scrollbars are styled once, here, rather than per scroll container: the
+     * sidebar, the sub-category lists and any table that overflows all end up
+     * with the same slim slate bar instead of the chunky native Windows one.
+     *
+     * A transparent track means the bar reads as part of the surface it sits on
+     * rather than as a grey channel cut into it, and the thumb only firms up on
+     * hover so a resting card stays quiet. Both the WebKit pseudo-elements and
+     * the standard `scrollbar-*` properties are set — Firefox honours only the
+     * latter, Chrome and Edge prefer the former.
+     */
+    MuiCssBaseline: {
+      styleOverrides: {
+        '*': {
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#cbd5e1 transparent',
+        },
+        '*::-webkit-scrollbar': { width: 8, height: 8 },
+        '*::-webkit-scrollbar-track': { background: 'transparent' },
+        '*::-webkit-scrollbar-thumb': {
+          backgroundColor: '#cbd5e1',
+          borderRadius: 8,
+          // A transparent border with `background-clip` is the only way to inset
+          // a WebKit thumb — padding does nothing there. It leaves the bar
+          // reading as ~4px while the 8px track stays an easy pointer target.
+          border: '2px solid transparent',
+          backgroundClip: 'content-box',
+        },
+        '*::-webkit-scrollbar-thumb:hover': { backgroundColor: '#94a3b8' },
+        // Where a vertical and a horizontal bar meet, the default corner is a
+        // light grey square that shows up against a white card.
+        '*::-webkit-scrollbar-corner': { background: 'transparent' },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: { backgroundImage: 'none' },

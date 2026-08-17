@@ -5,12 +5,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { orderApi, cancellationReasonApi } from '../../api/endpoints';
 import { STATUS_FLOW } from '../../utils/constants';
@@ -92,11 +94,20 @@ export default function UpdateStatusDialog({ order, onClose, onUpdated }) {
 
   return (
     <Dialog open onClose={saving ? undefined : onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 700 }}>
+      <DialogTitle sx={{ fontWeight: 700, pr: 6 }}>
         Update order status
         <Typography variant="body2" color="text.secondary">
           {order.orderNumber}
         </Typography>
+        <IconButton
+          onClick={onClose}
+          size="small"
+          disabled={saving}
+          sx={{ position: 'absolute', right: 12, top: 12, color: 'text.secondary' }}
+          aria-label="Close without saving"
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
       </DialogTitle>
 
       <DialogContent dividers>
@@ -204,9 +215,6 @@ export default function UpdateStatusDialog({ order, onClose, onUpdated }) {
       </DialogContent>
 
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button onClick={onClose} color="inherit" disabled={saving}>
-          Cancel
-        </Button>
         <Button
           variant="contained"
           color={isDestructive ? 'error' : 'primary'}

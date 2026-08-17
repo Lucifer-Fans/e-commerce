@@ -117,3 +117,76 @@ export const INDIAN_STATES = Object.keys(CITIES_BY_STATE).sort((a, b) => a.local
 export function citiesForState(state) {
   return CITIES_BY_STATE[state] || [];
 }
+
+/**
+ * The postal API answers with a few pre-reorganisation names, so its reply is
+ * mapped back onto the canonical spelling used by the dropdown before we try to
+ * match it. Keys are lower-cased.
+ */
+const STATE_ALIASES = {
+  'pondicherry': 'Puducherry',
+  'orissa': 'Odisha',
+  'uttaranchal': 'Uttarakhand',
+  'jammu & kashmir': 'Jammu and Kashmir',
+  'andaman & nicobar islands': 'Andaman and Nicobar Islands',
+  'dadra & nagar haveli': 'Dadra and Nagar Haveli and Daman and Diu',
+  'dadra and nagar haveli': 'Dadra and Nagar Haveli and Daman and Diu',
+  'daman & diu': 'Dadra and Nagar Haveli and Daman and Diu',
+  'daman and diu': 'Dadra and Nagar Haveli and Daman and Diu',
+};
+
+/**
+ * Canonical state name for an arbitrary spelling, or '' when it matches nothing
+ * we ship — the caller then leaves the dropdown for the shopper to answer.
+ */
+export function normaliseState(raw) {
+  const key = String(raw || '').trim().toLowerCase();
+  if (!key) return '';
+  if (STATE_ALIASES[key]) return STATE_ALIASES[key];
+  return INDIAN_STATES.find((state) => state.toLowerCase() === key) || '';
+}
+
+/**
+ * The postal directory still answers with the pre-rename district for many
+ * cities — 560001 comes back as "Bangalore", 605001 as "Pondicherry". Without
+ * this the dropdown would fall through to its free-text mode for a city it
+ * actually lists. Keys are lower-cased.
+ */
+const CITY_ALIASES = {
+  allahabad: 'Prayagraj',
+  bangalore: 'Bengaluru',
+  baroda: 'Vadodara',
+  belgaum: 'Belagavi',
+  bellary: 'Ballari',
+  bombay: 'Mumbai',
+  calicut: 'Kozhikode',
+  chikmagalur: 'Chikkamagaluru',
+  cochin: 'Kochi',
+  cuddapah: 'Kadapa',
+  ernakulam: 'Kochi',
+  gulbarga: 'Kalaburagi',
+  gurgaon: 'Gurugram',
+  hubli: 'Hubballi',
+  madras: 'Chennai',
+  mangalore: 'Mangaluru',
+  mysore: 'Mysuru',
+  panjim: 'Panaji',
+  pondicherry: 'Puducherry',
+  poona: 'Pune',
+  shimoga: 'Shivamogga',
+  simla: 'Shimla',
+  tiruchirapalli: 'Tiruchirappalli',
+  trichy: 'Tiruchirappalli',
+  trivandrum: 'Thiruvananthapuram',
+  tumkur: 'Tumakuru',
+  tuticorin: 'Thoothukudi',
+  vizag: 'Visakhapatnam',
+};
+
+/** The listed city matching `raw` for that state, or '' when it isn't listed. */
+export function matchCity(state, raw) {
+  const key = String(raw || '').trim().toLowerCase();
+  if (!key) return '';
+  const canonical = (CITY_ALIASES[key] || '').toLowerCase() || key;
+  return citiesForState(state).find((city) => city.toLowerCase() === canonical) || '';
+}

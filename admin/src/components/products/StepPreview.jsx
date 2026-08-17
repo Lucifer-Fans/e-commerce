@@ -16,6 +16,7 @@ import Radio from '@mui/material/Radio';
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
+import PlayIcon from '@mui/icons-material/PlayArrow';
 
 import { formatPrice, computeFinalPrice } from '../../utils/format';
 import { variantLabel } from '../../utils/variants';
@@ -34,7 +35,6 @@ function Section({ title, children }) {
 /** Step 4 — full review of everything entered, plus the publish/draft choice. */
 export default function StepPreview({ values, categories, subCategoryName, issues = [] }) {
   const finalPrice = computeFinalPrice(values.price, values.discountPercent);
-  const savings = (Number(values.price) || 0) - finalPrice;
   const categoryName = categories.find((c) => c._id === values.category)?.name || '—';
   const primary = values.images[0];
 
@@ -103,11 +103,6 @@ export default function StepPreview({ values, categories, subCategoryName, issue
             </Box>
 
             <Box sx={{ p: 1.75 }}>
-              {values.brand && (
-                <Typography variant="caption" color="text.secondary" fontWeight={700} textTransform="uppercase">
-                  {values.brand}
-                </Typography>
-              )}
               <Typography variant="body2" fontWeight={500} sx={{ mb: 1, minHeight: 40 }}>
                 {values.name || 'Product name'}
               </Typography>
@@ -124,7 +119,7 @@ export default function StepPreview({ values, categories, subCategoryName, issue
             </Box>
           </Paper>
 
-          {values.images.length > 1 && (
+          {(values.images.length > 1 || values.videos.length > 0) && (
             <Stack direction="row" spacing={1} sx={{ mt: 1.5 }}>
               {values.images.slice(1).map((image, index) => (
                 <Box
@@ -141,6 +136,44 @@ export default function StepPreview({ values, categories, subCategoryName, issue
                     borderColor: 'divider',
                   }}
                 />
+              ))}
+
+              {/* Clips sit at the end of the gallery, which is where they render on the storefront. */}
+              {values.videos.map((video, index) => (
+                <Box
+                  key={video.publicId || index}
+                  sx={{
+                    position: 'relative',
+                    width: 52,
+                    height: 52,
+                    borderRadius: 1,
+                    border: 1,
+                    borderColor: 'divider',
+                    overflow: 'hidden',
+                    bgcolor: 'grey.900',
+                  }}
+                >
+                  {video.thumbnail && (
+                    <Box
+                      component="img"
+                      src={video.thumbnail}
+                      alt=""
+                      sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  )}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'grid',
+                      placeItems: 'center',
+                      color: '#fff',
+                      bgcolor: 'rgba(15,23,42,.35)',
+                    }}
+                  >
+                    <PlayIcon sx={{ fontSize: 20 }} />
+                  </Box>
+                </Box>
               ))}
             </Stack>
           )}
@@ -167,7 +200,6 @@ export default function StepPreview({ values, categories, subCategoryName, issue
                         : `${formatPrice(priceRange.min)} – ${formatPrice(priceRange.max)} across variants`
                       : formatPrice(finalPrice, true),
                   ],
-                  ['Customer saves', savings > 0 && !variants.length ? formatPrice(savings, true) : '—'],
                   [
                     'Stock',
                     variants.length
@@ -298,16 +330,14 @@ export default function StepPreview({ values, categories, subCategoryName, issue
 
           <Divider sx={{ my: 3 }} />
 
-          <Section title="Visibility">
-            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-              {values.isFeatured && <Chip label="Products For You" size="small" color="primary" />}
-              {values.isTopSelling && <Chip label="Top Selling" size="small" color="secondary" />}
-              {!values.isFeatured && !values.isTopSelling && (
-                <Typography variant="body2" color="text.disabled">
-                  Not featured in any homepage section
-                </Typography>
-              )}
-            </Stack>
+          <Section title="Homepage rails">
+            {/* "Products For You" and "Top Selling" are worked out from sales and from
+                what each shopper browses — there is no switch to preview here. */}
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Homepage sections are automatic. Once published, this product appears in
+              “Top Selling” as it sells, and in “Products For You” for shoppers browsing
+              this category or brand.
+            </Typography>
           </Section>
         </Grid>
       </Grid>

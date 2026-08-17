@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -7,17 +8,18 @@ import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import Switch from '@mui/material/Switch';
 import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
 
 import SearchIcon from '@mui/icons-material/Search';
+import ReactivationIcon from '@mui/icons-material/HowToRegOutlined';
 
 import { userApi } from '../api/endpoints';
 import useFetch from '../hooks/useFetch';
 import { useLiveRefetch } from '../realtime/useRealtime';
 import { EVENTS } from '../realtime/events';
 import useDebounce from '../hooks/useDebounce';
-import { formatDate, formatPrice } from '../utils/format';
+import { formatDate, formatDateTime, formatPrice } from '../utils/format';
 import PageHeader from '../components/common/PageHeader';
 import DataTable from '../components/common/DataTable';
 import StatusChip from '../components/common/StatusChip';
@@ -50,10 +52,33 @@ export default function Users() {
   const users = query.data?.data?.users || [];
   const meta = query.data?.meta;
 
-  const applyToggle = async () => {
+  /**
+   * An account its owner closed is not this control's to move.
+   *
+   * The server refuses it too — that is the check that matters — but a chip that
+   * silently does nothing when clicked is worse than one that says why, so the
+   * click is intercepted here and answered with the place the decision actually
+   * gets made.
+   */
+  const SELF_CLOSED = ['deactivated', 'reactivation-pending'];
+
+  const onStatusClick = (row) => {
+    if (!SELF_CLOSED.includes(row.status)) {
+      setPendingToggle(row);
+      return;
+    }
+    enqueueSnackbar(
+      row.status === 'reactivation-pending'
+        ? `${row.name} has asked to come back — approve or reject it under Reactivation Requests.`
+        : `${row.name} deactivated this account. It can only be reopened by approving a reactivation request.`,
+      { variant: 'info' }
+    );
+  };
+
+  const applyToggle = async (reason) => {
     const next = pendingToggle.status === 'active' ? 'blocked' : 'active';
     try {
-      await userApi.setStatus(pendingToggle._id, next);
+      await userApi.setStatus(pendingToggle._id, next, next === 'blocked' ? reason : undefined);
       enqueueSnackbar(next === 'blocked' ? 'User blocked' : 'User reactivated', { variant: 'success' });
       query.refetch();
     } catch (err) {
@@ -64,7 +89,7 @@ export default function Users() {
   const changeRole = async (user, nextRole) => {
     try {
       await userApi.setRole(user._id, nextRole);
-      enqueueSnackbar(`Role changed to ${nextRole}`, { variant: 'success' });
+      enqueueSnackbar(`${user.name} role changed to ${nextRole}`, { variant: 'success' });
       query.refetch();
     } catch (err) {
       enqueueSnackbar(err.message || 'Could not change the role', { variant: 'error' });
@@ -124,12 +149,6 @@ export default function Users() {
       render: (row) => <Typography variant="body2">{formatDate(row.createdAt)}</Typography>,
     },
     {
-      key: 'status',
-      label: 'Status',
-      align: 'center',
-      render: (row) => <StatusChip status={row.status} kind="user" />,
-    },
-    {
       key: 'role',
       label: 'Role',
       align: 'center',
@@ -140,6 +159,9 @@ export default function Users() {
           size="small"
           value={row.role}
           onChange={(e) => changeRole(row, e.target.value)}
+          // Promoting a closed account to admin would give it a role it cannot
+          // use and one more thing to undo on the way back.
+          disabled={SELF_CLOSED.includes(row.status)}
           sx={{ minWidth: 110 }}
         >
           <MenuItem value="user">User</MenuItem>
@@ -148,19 +170,49 @@ export default function Users() {
       ),
     },
     {
-      key: 'actions',
-      label: 'Active',
+      key: 'status',
+      label: 'Status',
       align: 'center',
-      width: 90,
-      render: (row) => (
-        <Tooltip title={row.status === 'active' ? 'Block this user' : 'Reactivate this user'}>
-          <Switch
-            size="small"
-            checked={row.status === 'active'}
-            onChange={() => setPendingToggle(row)}
-          />
-        </Tooltip>
-      ),
+      minWidth: 150,
+      render: (row) => {
+        const selfClosed = SELF_CLOSED.includes(row.status);
+
+        /*
+         * A closed account keeps *why* and *when* on the record, and this column is
+         * where an admin meets that first — before they think to open the
+         * reactivation queue, and for the accounts that never reach it because the
+         * customer simply left. The chip alone would say a person is gone without
+         * saying anything about it.
+         */
+        return (
+          <Tooltip
+            title={
+              selfClosed
+                ? 'Closed by the customer — reopened only from Reactivation Requests'
+                : 'Click to toggle active / blocked'
+            }
+          >
+            <Box
+              component="span"
+              onClick={() => onStatusClick(row)}
+              sx={{ cursor: selfClosed ? 'help' : 'pointer', display: 'inline-block' }}
+            >
+              <StatusChip status={row.status} kind="user" />
+
+              {selfClosed && row.deactivation?.at && (
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ display: 'block', mt: 0.5, maxWidth: 200, whiteSpace: 'normal' }}
+                >
+                  {formatDateTime(row.deactivation.at)}
+                  {row.deactivation.reason ? ` · ${row.deactivation.reason}` : ''}
+                </Typography>
+              )}
+            </Box>
+          </Tooltip>
+        );
+      },
     },
   ];
 
@@ -170,12 +222,23 @@ export default function Users() {
         title="Users"
         subtitle={`${meta?.total ?? 0} registered account(s)`}
         breadcrumbs={[{ label: 'Users' }]}
+        action={
+          <Button
+            component={RouterLink}
+            to="/reactivation-requests"
+            variant="outlined"
+            startIcon={<ReactivationIcon />}
+          >
+            Reactivation Requests
+          </Button>
+        }
       />
 
       <DataTable
         columns={columns}
         rows={users}
         loading={query.loading}
+        verticalAlign="top"
         page={page}
         limit={limit}
         total={meta?.total || 0}
@@ -237,6 +300,9 @@ export default function Users() {
               <MenuItem value="all">All statuses</MenuItem>
               <MenuItem value="active">Active</MenuItem>
               <MenuItem value="blocked">Blocked</MenuItem>
+              {/* Covers both halves of a self-closure — with a request pending
+                  and without — because "who has left" is one question. */}
+              <MenuItem value="deactivated">Deactivated</MenuItem>
             </TextField>
 
             <ResetFiltersButton
@@ -256,13 +322,21 @@ export default function Users() {
         onClose={() => setPendingToggle(null)}
         onConfirm={applyToggle}
         danger={pendingToggle?.status === 'active'}
-        title={pendingToggle?.status === 'active' ? 'Block this user?' : 'Reactivate this user?'}
+        title={
+          pendingToggle?.status === 'active'
+            ? `Block ${pendingToggle?.name}?`
+            : `Reactivate ${pendingToggle?.name}?`
+        }
         message={
           pendingToggle?.status === 'active'
-            ? `${pendingToggle?.name} will be signed out everywhere and cannot log in until reactivated.`
+            ? `${pendingToggle?.name} will be signed out everywhere and cannot log in until unblocked.`
             : `${pendingToggle?.name} will be able to log in and shop again.`
         }
         confirmLabel={pendingToggle?.status === 'active' ? 'Block user' : 'Reactivate'}
+        reasonLabel={pendingToggle?.status === 'active' ? 'Reason for blocking' : undefined}
+        reasonPlaceholder="e.g. Repeated fraudulent orders"
+        reasonHelperText="Shown to the user when they try to log in"
+        reasonRequiredText="Enter the reason for blocking"
       />
     </Box>
   );

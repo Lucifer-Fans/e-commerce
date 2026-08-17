@@ -122,8 +122,8 @@
       "freeText": "This item ships free",
       "paidTitle": "Delivery charges apply",
       "paidText": "Free above ₹{{amount}}",
-      "returnsTitle": "7 day returns",
-      "returnsText": "Hassle-free replacement",
+      "returnsTitle": "Easy returns",
+      "returnsText": "7 day hassle-free returns",
       "paymentTitle": "Secure payment",
       "paymentText": "Protected by Razorpay",
       "weightTitle": "Shipping weight",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "View image {{index}}",
+    "viewVideo": "Play video {{index}}",
     "image": "Image {{index}}",
     "hoverToZoom": "Hover to zoom",
     "previousImage": "Previous image",

@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { fetchCart } from '../store/cartSlice';
+import { useLiveRefetch } from '../realtime/useRealtime';
+import { CATALOG_EVENTS } from '../realtime/events';
 import Seo from '../components/common/Seo';
 import Icon from '../components/common/Icon';
 import EmptyState from '../components/common/EmptyState';
@@ -23,6 +25,27 @@ export default function Cart() {
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
+
+  /*
+   * The cart itself arrives over the socket already, but its lines carry catalogue
+   * data — price, discount, stock — that the cart document does not own. A repricing
+   * or a sell-out elsewhere therefore leaves the totals and the availability warning
+   * here wrong until a reload, so the cart is re-read whenever a product it holds
+   * moves. Products not in the cart are ignored: a busy catalogue would otherwise
+   * refetch this page constantly for lines it does not show.
+   */
+  const holdsProduct = useCallback(
+    (payload) => {
+      const productId = String(payload?.productId || '');
+      if (!productId) return false;
+      return [...items, ...savedForLater].some(
+        (item) => String(item.product?._id || item.product || '') === productId
+      );
+    },
+    [items, savedForLater]
+  );
+
+  useLiveRefetch(() => dispatch(fetchCart()), CATALOG_EVENTS, { filter: holdsProduct });
 
   const isEmpty = !loading && items.length === 0;
   const canCheckout = items.length > 0 && !items.every((i) => !i.inStock);

@@ -33,6 +33,7 @@ const Register = lazy(() => import('../pages/auth/Register'));
 const VerifyEmail = lazy(() => import('../pages/auth/VerifyEmail'));
 const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'));
 const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'));
+const Reactivate = lazy(() => import('../pages/auth/Reactivate'));
 
 const AccountLayout = lazy(() => import('../pages/account/AccountLayout'));
 const Profile = lazy(() => import('../pages/account/Profile'));
@@ -74,6 +75,9 @@ export const router = createBrowserRouter([
       { path: 'verify-email', element: <VerifyEmail /> },
       { path: 'forgot-password', element: <ForgotPassword /> },
       { path: 'reset-password/:token', element: <ResetPassword /> },
+      // Where the 'Activate My Account' button in the reactivation email lands. It
+      // starts the verification steps rather than reactivating anything.
+      { path: 'reactivate/:token', element: <Reactivate /> },
 
       { path: 'cart', element: guard(<Cart />) },
       { path: 'checkout', element: guard(<Checkout />) },

@@ -9,6 +9,8 @@ import useFetch from '../hooks/useFetch';
 import { loadRazorpayScript, openRazorpayCheckout } from '../utils/razorpay';
 import { formatPrice, optimisedImage, primaryImageOf } from '../utils/format';
 import useSettings from '../settings/useSettings';
+import { useLiveRefetch } from '../realtime/useRealtime';
+import { CATALOG_EVENTS, EVENTS } from '../realtime/events';
 import Seo from '../components/common/Seo';
 import Icon from '../components/common/Icon';
 import Spinner from '../components/common/Spinner';
@@ -18,6 +20,7 @@ import { ListRowSkeleton } from '../components/common/Skeleton';
 import AddressForm from '../components/checkout/AddressForm';
 import OrderConfirmAnimation from '../components/checkout/OrderConfirmAnimation';
 import PriceSummary from '../components/cart/PriceSummary';
+import CouponBox from '../components/cart/CouponBox';
 
 const STEPS = ['address', 'review', 'payment'];
 
@@ -47,6 +50,48 @@ export default function Checkout() {
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
+
+  /*
+   * Everything the review step totals up can move under the shopper while they are
+   * still filling in an address: a line can be repriced or sold out, and the coupon
+   * they applied on the cart page can be withdrawn. The server re-checks all of it
+   * when the order is placed, so the risk here is not a bad order — it is a shopper
+   * who agreed to one figure and is charged another. Re-reading the cart keeps the
+   * summary honest before they commit rather than after.
+   */
+  const affectsThisOrder = useCallback(
+    (payload) => {
+      const productId = String(payload?.productId || '');
+      return Boolean(
+        productId &&
+          items.some((item) => String(item.product?._id || item.product || '') === productId)
+      );
+    },
+    [items]
+  );
+
+  // Refreshed rather than left stale, but said out loud — a shopper who reads a total,
+  // fills in an address and then pays a different figure has been misled either way.
+  const refreshOrder = useCallback(
+    (message) => () => {
+      dispatch(fetchCart());
+      toast(message, { icon: 'ℹ️' });
+    },
+    [dispatch]
+  );
+
+  useLiveRefetch(refreshOrder(t('checkout.cartChanged')), CATALOG_EVENTS, {
+    filter: affectsThisOrder,
+  });
+
+  useLiveRefetch(refreshOrder(t('checkout.couponChanged')), EVENTS.COUPON_CHANGED, {
+    enabled: Boolean(coupon?.code),
+    filter: (payload) => !payload?.code || payload.code === coupon?.code,
+  });
+
+  // An admin switching the gateway off mid-checkout must not leave the shopper on a
+  // payment option that will fail — the fallback effect below moves them to COD.
+  useLiveRefetch(paymentConfig.refetch, EVENTS.SETTINGS_UPDATED);
 
   // Preselect the default address so most shoppers can skip step 1 entirely.
   useEffect(() => {
@@ -448,7 +493,13 @@ export default function Checkout() {
               )}
             </div>
 
-            <div className="lg:sticky lg:top-[160px] lg:self-start">
+            <div className="space-y-4 lg:sticky lg:top-[160px] lg:self-start">
+              {/* The same control the cart shows, in the same place in the column:
+                  a shopper who reaches payment and remembers a code should not have
+                  to walk back to /cart to use it. The applied coupon travels here
+                  in the cart itself, so arriving with one already on needs nothing. */}
+              <CouponBox coupon={coupon} appliedDiscount={totals.couponDiscount} />
+
               <PriceSummary
                 totals={totals}
                 couponCode={coupon?.code}

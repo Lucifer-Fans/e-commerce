@@ -43,7 +43,8 @@
     "youSaved": "You saved {{amount}}",
     "viewAvailable": "View available coupons ({{count}})",
     "hideAvailable": "Hide available coupons ({{count}})",
-    "minOrder": "Min. order {{amount}}"
+    "minOrder": "Min. order {{amount}}",
+    "validOn": "Valid on {{items}}"
   },
   "summary": {
     "title": "Price Details",
@@ -78,7 +79,9 @@
       "address": "Delivery Address",
       "review": "Order Summary",
       "payment": "Payment"
-    }
+    },
+    "cartChanged": "An item in your order was updated — the summary has been refreshed.",
+    "couponChanged": "Your coupon has changed — the summary has been refreshed."
   },
   "address": {
     "addTitle": "Add a new address",
@@ -91,6 +94,8 @@
     "default": "Default",
     "makeDefault": "Make this my default delivery address",
     "typeLabel": "Address type",
+    "pincodeSearching": "Finding your city…",
+    "pincodeNotFound": "We could not find this pincode — please pick your state and city below.",
     "optional": "(Optional)",
     "phoneLine": "Phone: {{phone}}",
     "labels": {

@@ -122,8 +122,8 @@
       "freeText": "এই সামগ্ৰী বিনামূলীয়াকৈ পঠোৱা হয়",
       "paidTitle": "ডেলিভাৰী মাচুল প্ৰযোজ্য",
       "paidText": "₹{{amount}} ৰ ওপৰত বিনামূলীয়া",
-      "returnsTitle": "৭ দিনত ঘূৰাই দিয়া",
-      "returnsText": "ঝামেলাবিহীন সলনি",
+      "returnsTitle": "সহজ ঘূৰাই দিয়া",
+      "returnsText": "৭ দিনত ঝামেলাবিহীন ঘূৰাই দিয়া",
       "paymentTitle": "সুৰক্ষিত পেমেণ্ট",
       "paymentText": "Razorpay ৰ দ্বাৰা সুৰক্ষিত",
       "weightTitle": "শ্বিপিং ওজন",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "ছবি {{index}} চাওক",
+    "viewVideo": "ভিডিঅ' {{index}} চাওক",
     "image": "ছবি {{index}}",
     "hoverToZoom": "জুম কৰিবলৈ হোভাৰ কৰক",
     "previousImage": "আগৰ ছবি",

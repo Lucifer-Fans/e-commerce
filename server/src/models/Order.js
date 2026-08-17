@@ -32,6 +32,22 @@ const STATUS_FLOW = {
 };
 
 /**
+ * The statuses where nobody is still waiting on anything — the set account
+ * deactivation is gated on.
+ *
+ * Not derived from STATUS_FLOW's leaves, because `delivered` is not one: a
+ * delivered order can still become `returned`. That edge is a *new* decision the
+ * customer may or may not take, not an outstanding obligation of ours — the
+ * parcel arrived, which is the whole of what "still in progress" was asking
+ * about. `returned` sits here for the mirror-image reason: it is only reachable
+ * from `delivered`, so an order carrying it has been through the entire journey.
+ */
+const SETTLED_STATUSES = ['delivered', 'cancelled', 'returned'];
+
+/** The complement: an order still on its way, or still waiting to be. */
+const OPEN_STATUSES = ORDER_STATUSES.filter((status) => !SETTLED_STATUSES.includes(status));
+
+/**
  * How far a shopper may cancel on their own: up to, but not including, the moment
  * the parcel leaves the warehouse. Once it is with a courier the money and the
  * goods are both in motion, and stopping that is a support decision — staff keep
@@ -154,11 +170,22 @@ const orderSchema = new mongoose.Schema(
       /** MRP less `subtotal`: the saving already baked into the prices above. */
       discount: { type: Number, default: 0 },
       couponCode: String,
+      /** Which coupon the code resolved to, so a redemption can be given back. */
+      couponId: { type: mongoose.Schema.Types.ObjectId, ref: 'Coupon' },
       /** The one deduction from `subtotal`. */
       couponDiscount: { type: Number, default: 0 },
       shipping: { type: Number, default: 0 },
       total: { type: Number, required: true },
     },
+
+    /**
+     * True while this order holds one of its coupon's redemptions. Set when the
+     * order is earned (COD placed, or a payment captured) and cleared when it is
+     * cancelled or refunded — never by applying the code. Every counter change is
+     * gated on flipping this, so one order can never consume a second redemption
+     * however many times payment is retried, verified or webhooked.
+     */
+    couponRedeemed: { type: Boolean, default: false },
 
     paymentMethod: { type: String, enum: ['razorpay', 'cod'], default: 'razorpay' },
     paymentStatus: {
@@ -256,6 +283,8 @@ orderSchema.pre('validate', async function assignNumbers(next) {
 orderSchema.statics.ORDER_STATUSES = ORDER_STATUSES;
 orderSchema.statics.STATUS_FLOW = STATUS_FLOW;
 orderSchema.statics.CUSTOMER_CANCELLABLE = CUSTOMER_CANCELLABLE;
+orderSchema.statics.SETTLED_STATUSES = SETTLED_STATUSES;
+orderSchema.statics.OPEN_STATUSES = OPEN_STATUSES;
 orderSchema.statics.PAYMENT_STATUSES = PAYMENT_STATUSES;
 orderSchema.statics.canMarkRefunded = canMarkRefunded;
 orderSchema.statics.canTransition = (from, to) => Boolean(STATUS_FLOW[from]?.includes(to));
@@ -264,6 +293,8 @@ module.exports = mongoose.model('Order', orderSchema);
 module.exports.ORDER_STATUSES = ORDER_STATUSES;
 module.exports.STATUS_FLOW = STATUS_FLOW;
 module.exports.CUSTOMER_CANCELLABLE = CUSTOMER_CANCELLABLE;
+module.exports.SETTLED_STATUSES = SETTLED_STATUSES;
+module.exports.OPEN_STATUSES = OPEN_STATUSES;
 module.exports.CANCELLED_BY = CANCELLED_BY;
 module.exports.PAYMENT_STATUSES = PAYMENT_STATUSES;
 module.exports.canMarkRefunded = canMarkRefunded;

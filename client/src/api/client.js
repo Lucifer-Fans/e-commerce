@@ -125,6 +125,9 @@ api.interceptors.request.use((config) => {
 });
 
 /* ---------------- Silent refresh with request queueing ---------------- */
+/** Account states that make an otherwise valid token worthless. */
+const CLOSED_ACCOUNT_CODES = ['ACCOUNT_SUSPENDED', 'ACCOUNT_DEACTIVATED', 'REACTIVATION_PENDING'];
+
 let refreshPromise = null;
 const AUTH_FREE_PATHS = [
   '/auth/login',
@@ -215,6 +218,29 @@ api.interceptors.response.use(
         window.dispatchEvent(new CustomEvent('auth:expired'));
         return Promise.reject({ message: 'Your session expired. Please log in again.', status: 401 });
       }
+    }
+
+    /**
+     * The account itself was closed while this tab was open — suspended by staff,
+     * or deactivated from another device.
+     *
+     * The server answers 403 rather than 401 here (the token is fine; the account
+     * is not), so none of the refresh handling above applies and, left alone, the
+     * tab would keep believing it is signed in while every request it makes fails.
+     * The realtime broadcast normally signs it out within the second; this is what
+     * catches the tab that was not listening — socket down, laptop asleep, a page
+     * open since before the block.
+     *
+     * Sign-in and sign-up are excluded by `isAuthCall`: they answer with these very
+     * codes on a normal refusal, and their forms render the reason themselves.
+     */
+    if (
+      response.status === 403 &&
+      !isAuthCall &&
+      CLOSED_ACCOUNT_CODES.includes(response.data?.code)
+    ) {
+      setAccessToken(null);
+      window.dispatchEvent(new CustomEvent('auth:expired'));
     }
 
     // 4xx is the API answering as designed (a duplicate email, a wrong code) and

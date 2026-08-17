@@ -20,7 +20,8 @@ import StarIcon from '@mui/icons-material/Star';
 import AddPhotoIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 
 import { uploadApi } from '../../api/endpoints';
-import { MAX_PRODUCT_IMAGES, MAX_IMAGE_BYTES, ACCEPTED_IMAGE_TYPES } from '../../utils/constants';
+import { uploadMedia } from '../../utils/media';
+import { MAX_PRODUCT_IMAGES, MAX_IMAGE_SOURCE_BYTES, ACCEPTED_IMAGE_TYPES } from '../../utils/constants';
 
 /**
  * Product image manager.
@@ -33,7 +34,31 @@ import { MAX_PRODUCT_IMAGES, MAX_IMAGE_BYTES, ACCEPTED_IMAGE_TYPES } from '../..
  *
  * `value` is the array persisted on the product: [{ url, publicId, isPrimary, displayOrder }]
  */
-export default function ImageUploader({ value = [], onChange, max = MAX_PRODUCT_IMAGES }) {
+export default function ImageUploader({
+  value = [],
+  onChange,
+  max = MAX_PRODUCT_IMAGES,
+  kind = 'products',
+  // Product and banner records are saved with whatever the uploader last showed, so a
+  // dropped file is genuinely dead and is released immediately. Forms whose controller
+  // already frees the replaced asset on save (categories, brands) pass false, so
+  // cancelling out of the dialog cannot destroy an image the record still points at.
+  destroyOnRemove = true,
+  // What this uploader is collecting, named in its own words — the drop zone reads
+  // 'Drag & drop <subject> here', so a banner never invites 'product images'.
+  subject = 'product images',
+  // Optional note shown while nothing has been uploaded yet. Only worth passing where
+  // there is something to explain, such as which slot becomes the primary image.
+  emptyHint,
+  /*
+   * Drop the drop zone once the last slot is taken, rather than leaving a large dead
+   * panel that only says it cannot be used. Worth it on the single-image forms —
+   * categories, sub-categories, brands — where "full" is the normal state and the tile
+   * below already offers replace and delete. A multi-image form keeps the zone, because
+   * there the message is a temporary condition the admin is expected to act on.
+   */
+  hideDropzoneWhenFull = false,
+}) {
   const { enqueueSnackbar } = useSnackbar();
   const [dragging, setDragging] = useState(false);
   const [uploads, setUploads] = useState({}); // tempId -> { name, progress, preview }
@@ -45,10 +70,12 @@ export default function ImageUploader({ value = [], onChange, max = MAX_PRODUCT_
 
   const validate = (file) => {
     if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      return `${file.name}: only JPG, PNG, WEBP and AVIF are allowed`;
+      return `${file.name}: only JPG, JPEG, PNG and GIF are allowed`;
     }
-    if (file.size > MAX_IMAGE_BYTES) {
-      return `${file.name}: file is larger than 5MB`;
+    // Oversized photos are resized in the browser before they are sent, so the ceiling
+    // here is only a guard against someone picking a RAW-sized file by mistake.
+    if (file.size > MAX_IMAGE_SOURCE_BYTES) {
+      return `${file.name}: file is larger than 25MB`;
     }
     return null;
   };
@@ -64,12 +91,12 @@ export default function ImageUploader({ value = [], onChange, max = MAX_PRODUCT_
     setUploads((u) => ({ ...u, [tempId]: { name: file.name, progress: 0, preview } }));
 
     try {
-      const res = await uploadApi.image(file, {
-        kind: 'products',
+      // Downscaled in the browser and posted straight to Cloudinary — see utils/media.js.
+      return await uploadMedia(file, {
+        kind,
         onProgress: (progress) =>
           setUploads((u) => (u[tempId] ? { ...u, [tempId]: { ...u[tempId], progress } } : u)),
       });
-      return res.data.image;
     } finally {
       URL.revokeObjectURL(preview);
       setUploads((u) => {
@@ -122,7 +149,7 @@ export default function ImageUploader({ value = [], onChange, max = MAX_PRODUCT_
     if (replacing !== null) {
       // Free the replaced asset in Cloudinary — nothing else references it.
       const old = value[replacing];
-      if (old?.publicId) uploadApi.remove(old.publicId).catch(() => {});
+      if (destroyOnRemove && old?.publicId) uploadApi.remove(old.publicId).catch(() => {});
 
       const next = [...value];
       next[replacing] = uploaded[0];
@@ -143,7 +170,7 @@ export default function ImageUploader({ value = [], onChange, max = MAX_PRODUCT_
 
   const removeAt = (index) => {
     const target = value[index];
-    if (target?.publicId) uploadApi.remove(target.publicId).catch(() => {});
+    if (destroyOnRemove && target?.publicId) uploadApi.remove(target.publicId).catch(() => {});
     onChange(normalise(value.filter((_, i) => i !== index)));
     enqueueSnackbar('Image removed', { variant: 'info' });
   };
@@ -177,51 +204,54 @@ export default function ImageUploader({ value = [], onChange, max = MAX_PRODUCT_
       />
 
       {/* ---------- Drop zone ---------- */}
-      <Paper
-        variant="outlined"
-        onDragOver={(e) => {
-          e.preventDefault();
-          if (!isFull) setDragging(true);
-        }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={onDrop}
-        onClick={() => !isFull && openPicker()}
-        sx={{
-          p: { xs: 3, sm: 5 },
-          textAlign: 'center',
-          borderStyle: 'dashed',
-          borderWidth: 2,
-          borderColor: dragging ? 'primary.main' : 'divider',
-          bgcolor: dragging ? 'primary.lighter' : isFull ? 'action.disabledBackground' : 'background.paper',
-          cursor: isFull ? 'not-allowed' : 'pointer',
-          transition: 'all .2s',
-          '&:hover': !isFull ? { borderColor: 'primary.main', bgcolor: 'action.hover' } : undefined,
-        }}
-      >
-        <CloudUploadIcon
-          sx={{ fontSize: 46, color: dragging ? 'primary.main' : 'text.disabled', mb: 1 }}
-        />
-        <Typography fontWeight={700} gutterBottom>
-          {isFull
-            ? `Maximum ${max} images reached`
-            : dragging
-              ? 'Drop your images here'
-              : 'Drag & drop product images here'}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {isFull
-            ? 'Delete or replace an image to add a different one.'
-            : `or click to browse · ${slotsLeft} slot${slotsLeft === 1 ? '' : 's'} remaining`}
-        </Typography>
-        <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mt: 1 }}>
-          JPG, PNG, WEBP or AVIF · up to 5MB each · maximum {max} images
-        </Typography>
-      </Paper>
+      {!(isFull && hideDropzoneWhenFull) && (
+        <Paper
+          variant="outlined"
+          onDragOver={(e) => {
+            e.preventDefault();
+            if (!isFull) setDragging(true);
+          }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={onDrop}
+          onClick={() => !isFull && openPicker()}
+          sx={{
+            p: { xs: 3, sm: 5 },
+            textAlign: 'center',
+            borderStyle: 'dashed',
+            borderWidth: 2,
+            borderColor: dragging ? 'primary.main' : 'divider',
+            bgcolor: dragging ? 'primary.lighter' : isFull ? 'action.disabledBackground' : 'background.paper',
+            cursor: isFull ? 'not-allowed' : 'pointer',
+            transition: 'all .2s',
+            '&:hover': !isFull ? { borderColor: 'primary.main', bgcolor: 'action.hover' } : undefined,
+          }}
+        >
+          <CloudUploadIcon
+            sx={{ fontSize: 46, color: dragging ? 'primary.main' : 'text.disabled', mb: 1 }}
+          />
+          <Typography fontWeight={700} gutterBottom>
+            {isFull
+              ? `Maximum ${max} image${max === 1 ? '' : 's'} reached`
+              : dragging
+                ? 'Drop your files here'
+                : `Drag & drop ${subject} here`}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {isFull
+              ? 'Delete or replace an image to add a different one.'
+              : max === 1
+                ? 'or click to browse'
+                : `or click to browse · ${slotsLeft} slot${slotsLeft === 1 ? '' : 's'} remaining`}
+          </Typography>
+          <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mt: 1 }}>
+            JPG, JPEG, PNG or GIF{max > 1 ? ` · maximum ${max} images` : ''}
+          </Typography>
+        </Paper>
+      )}
 
-      {value.length === 0 && uploadEntries.length === 0 && (
+      {emptyHint && value.length === 0 && uploadEntries.length === 0 && (
         <Alert severity="info" sx={{ mt: 2 }}>
-          The first image you upload becomes the primary image shown on product cards, search
-          results and the storefront gallery. You can reorder images at any time.
+          {emptyHint}
         </Alert>
       )}
 

@@ -122,8 +122,8 @@
       "freeText": "ଏହି ଜିନିଷ ମାଗଣାରେ ପଠାଯାଏ",
       "paidTitle": "ଡେଲିଭରୀ ଶୁଳ୍କ ପ୍ରଯୁଜ୍ୟ",
       "paidText": "₹{{amount}} ଉପରେ ମାଗଣା",
-      "returnsTitle": "7 ଦିନରେ ଫେରସ୍ତ",
-      "returnsText": "ଝଞ୍ଜଟମୁକ୍ତ ବଦଳ",
+      "returnsTitle": "ସହଜ ଫେରସ୍ତ",
+      "returnsText": "7 ଦିନରେ ଝଞ୍ଜଟମୁକ୍ତ ଫେରସ୍ତ",
       "paymentTitle": "ସୁରକ୍ଷିତ ପେମେଣ୍ଟ",
       "paymentText": "Razorpay ଦ୍ୱାରା ସୁରକ୍ଷିତ",
       "weightTitle": "ଶିପିଂ ଓଜନ",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "ଛବି {{index}} ଦେଖନ୍ତୁ",
+    "viewVideo": "ଭିଡିଓ {{index}} ଚଲାନ୍ତୁ",
     "image": "ଛବି {{index}}",
     "hoverToZoom": "ଜୁମ୍ କରିବାକୁ ହୋଭର କରନ୍ତୁ",
     "previousImage": "ପୂର୍ବ ଛବି",

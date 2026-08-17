@@ -90,11 +90,38 @@ export const cancellationReasonApi = {
   remove: (id) => api.delete(`/cancellation-reasons/${id}`),
 };
 
+/**
+ * The picklist the storefront's deactivation dialog offers. Same shape as the
+ * cancellation list above, deliberately — the Reasons screen drives both through
+ * one component, so the two objects have to answer to the same four calls.
+ */
+export const deactivationReasonApi = {
+  list: () => api.get('/deactivation-reasons', { params: { adminView: true } }),
+  create: (payload) => api.post('/deactivation-reasons', payload),
+  update: (id, payload) => api.patch(`/deactivation-reasons/${id}`, payload),
+  remove: (id) => api.delete(`/deactivation-reasons/${id}`),
+};
+
 export const userApi = {
   list: (params) => api.get('/users', { params }),
   detail: (id) => api.get(`/users/${id}`),
-  setStatus: (id, status) => api.patch(`/users/${id}/status`, { status }),
+  /**
+   * Blocking and unblocking, and nothing else. An account its owner deactivated is
+   * refused by this route — it comes back only through an approved reactivation
+   * request, which is the one path that made the customer prove who they are.
+   */
+  setStatus: (id, status, blockedReason) =>
+    api.patch(`/users/${id}/status`, { status, blockedReason }),
   setRole: (id, role) => api.patch(`/users/${id}/role`, { role }),
+
+  /* ---- Reactivation queue ---- */
+  // params: { page, limit, status: 'pending'|'approved'|'rejected'|'all', search }
+  reactivationRequests: (params) => api.get('/users/reactivation-requests', { params }),
+  // The detail call also returns the account's whole audit trail — that is what
+  // the reviewer actually decides on.
+  reactivationRequest: (id) => api.get(`/users/reactivation-requests/${id}`),
+  // payload: { decision: 'approved'|'rejected', adminNotes?, rejectionReason? }
+  decideReactivation: (id, payload) => api.patch(`/users/reactivation-requests/${id}`, payload),
 };
 
 export const bannerApi = {
@@ -173,5 +200,21 @@ export const uploadApi = {
       },
     });
   },
-  remove: (publicId) => api.delete(`/uploads/${publicId}`),
+  /** Short-lived credentials for a browser → Cloudinary upload (see utils/media.js). */
+  signature: (kind = 'products') => api.post('/uploads/signature', { kind }),
+  /** Product clips ride the shared media route — one file per request, same progress contract. */
+  video: (file, { kind = 'products', onProgress } = {}) => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('kind', kind);
+    return api.post('/uploads/media', form, {
+      onUploadProgress: (event) => {
+        if (!onProgress || !event.total) return;
+        onProgress(Math.round((event.loaded * 100) / event.total));
+      },
+    });
+  },
+  /** `type: 'video'` picks the Cloudinary namespace the asset actually lives in. */
+  remove: (publicId, { type = 'image' } = {}) =>
+    api.delete(`/uploads/${publicId}`, { params: { type } }),
 };

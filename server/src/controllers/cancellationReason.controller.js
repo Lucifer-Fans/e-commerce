@@ -2,7 +2,14 @@ const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
 const { sendSuccess } = require('../utils/apiResponse');
 const { CancellationReason, Setting } = require('../models');
+const broadcast = require('../realtime/broadcast');
 const { DEFAULT_REASONS } = require('../models/CancellationReason');
+const {
+  nextDisplayOrder,
+  parseRequestedOrder,
+  resequence,
+  placeAndResequence,
+} = require('../utils/displayOrder');
 
 /**
  * Plants the starter list the very first time anybody asks for it, so the cancel
@@ -46,6 +53,13 @@ exports.listReasons = asyncHandler(async (req, res) => {
   await seedOnce();
 
   const isAdminView = req.query.adminView === 'true' && req.user?.role === 'admin';
+
+  // Rows written before the numbering was enforced can still carry gaps or a
+  // shared number. The management screen is the only place those figures are
+  // visible, so healing them as it opens costs nothing and spares the admin a
+  // table that contradicts itself. It is a no-op once the run is already clean.
+  if (isAdminView) await resequence(CancellationReason);
+
   const reasons = await CancellationReason.find(isAdminView ? {} : { isActive: true })
     .sort({ displayOrder: 1, createdAt: 1 })
     .lean();
@@ -53,10 +67,26 @@ exports.listReasons = asyncHandler(async (req, res) => {
   return sendSuccess(res, { message: 'Cancellation reasons fetched', data: { reasons } });
 });
 
-/** POST /cancellation-reasons (admin) */
+/**
+ * POST /cancellation-reasons (admin)
+ *
+ * A position another reason already holds is an instruction, not a clash: the
+ * newcomer takes it and the incumbent — with everything below — slides down one,
+ * exactly as categories and brands behave. Sending no order lands the reason at
+ * the end, which is what the panel proposes.
+ */
 exports.createReason = asyncHandler(async (req, res) => {
-  const { label, description, displayOrder, isActive } = req.body;
-  const reason = await CancellationReason.create({ label, description, displayOrder, isActive });
+  const { label, isActive } = req.body;
+
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
+  const reason = await CancellationReason.create({
+    label,
+    isActive,
+    displayOrder: requestedOrder ?? (await nextDisplayOrder(CancellationReason)),
+  });
+
+  await placeAndResequence(CancellationReason, {}, reason, requestedOrder);
+  broadcast.cancellationReasonChanged('created', reason);
 
   return sendSuccess(res, { statusCode: 201, message: 'Reason added', data: { reason } });
 });
@@ -66,12 +96,17 @@ exports.updateReason = asyncHandler(async (req, res) => {
   const reason = await CancellationReason.findById(req.params.id);
   if (!reason) throw ApiError.notFound('Reason not found');
 
-  const { label, description, displayOrder, isActive } = req.body;
+  // A patch that never mentions the order is not a move — the status chip flips
+  // the switch alone, and that must not shuffle the list.
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
+
+  const { label, isActive } = req.body;
   if (label !== undefined) reason.label = label;
-  if (description !== undefined) reason.description = description;
-  if (displayOrder !== undefined) reason.displayOrder = displayOrder;
   if (isActive !== undefined) reason.isActive = isActive;
   await reason.save();
+
+  await placeAndResequence(CancellationReason, {}, reason, requestedOrder);
+  broadcast.cancellationReasonChanged('updated', reason);
 
   return sendSuccess(res, { message: 'Reason updated', data: { reason } });
 });
@@ -87,6 +122,8 @@ exports.deleteReason = asyncHandler(async (req, res) => {
   if (!reason) throw ApiError.notFound('Reason not found');
 
   await reason.deleteOne();
+  await resequence(CancellationReason);
+  broadcast.cancellationReasonChanged('deleted', reason);
 
   return sendSuccess(res, { message: 'Reason deleted' });
 });

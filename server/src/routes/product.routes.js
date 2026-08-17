@@ -20,7 +20,10 @@ const router = express.Router();
 router.get('/', optionalAuth, pagination, validate, cache.catalogue, ctrl.listProducts);
 router.get('/filters', cache.catalogue, ctrl.getFilterMeta);
 router.get('/search', cache.search, ctrl.searchSuggestions);
-router.get('/home-feed', cache.catalogue, ctrl.getHomeFeed);
+// optionalAuth: the "For You" rail is personalised from the signed-in shopper's cart,
+// wishlist and orders. cache.catalogue follows it, and drops an authenticated response
+// to `private, no-cache` so one shopper's rail is never served to another.
+router.get('/home-feed', optionalAuth, cache.catalogue, ctrl.getHomeFeed);
 router.post('/by-ids', ctrl.getProductsByIds);
 
 /* ---- Admin writes (declared before /:idOrSlug so they aren't shadowed) ---- */

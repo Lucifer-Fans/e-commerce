@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 const ApiError = require('../utils/ApiError');
+const { inactiveAccountError } = require('../utils/accountStatus');
 const asyncHandler = require('../utils/asyncHandler');
 const User = require('../models/User');
 const sessionService = require('../services/session.service');
@@ -36,7 +37,18 @@ const protect = asyncHandler(async (req, _res, next) => {
 
   const user = await User.findById(decoded.sub).select('+passwordChangedAt');
   if (!user) throw ApiError.unauthorized('This account no longer exists');
-  if (user.status === 'blocked') throw ApiError.forbidden('Your account has been suspended');
+
+  /**
+   * Every closed state, not just the blocked one.
+   *
+   * This is the check that makes deactivation hold against a direct API call: the
+   * sessions are revoked the instant an account closes, but an access token
+   * already in flight is a bearer credential nobody can recall, and it stays
+   * signable for up to its fifteen minutes. Reading the live status on every
+   * request is what closes that window to zero.
+   */
+  const closed = inactiveAccountError(user);
+  if (closed) throw closed;
   if (user.passwordChangedAfter(decoded.iat)) {
     throw ApiError.unauthorized('Password was changed recently, please log in again');
   }

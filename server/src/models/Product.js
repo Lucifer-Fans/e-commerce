@@ -24,6 +24,23 @@ const imageSchema = new mongoose.Schema(
 );
 
 /**
+ * A short product clip. Videos live beside the images but never stand in for one:
+ * cards, search results and social previews all keep using `primaryImage`, so a
+ * product with only a video would still have nothing to show there.
+ */
+const videoSchema = new mongoose.Schema(
+  {
+    url: { type: String, required: true },
+    publicId: { type: String, required: true },
+    /** Poster frame Cloudinary derives from the clip — used for the gallery tile. */
+    thumbnail: { type: String },
+    duration: { type: Number },
+    displayOrder: { type: Number, default: 0 },
+  },
+  { _id: false }
+);
+
+/**
  * One selectable value of a variant attribute — "Black", "256 GB", "32 (Waist)".
  * `hex` paints a colour swatch and `image` a thumbnail swatch; both are optional and the
  * storefront falls back to a text chip, so a brand-new attribute needs no code change.
@@ -127,6 +144,14 @@ const productSchema = new mongoose.Schema(
       validate: {
         validator: (v) => v.length <= 5,
         message: 'A product can have at most 5 images',
+      },
+      default: [],
+    },
+    videos: {
+      type: [videoSchema],
+      validate: {
+        validator: (v) => v.length <= 2,
+        message: 'A product can have at most 2 videos',
       },
       default: [],
     },
@@ -301,6 +326,12 @@ productSchema.pre('validate', async function normalise(next) {
       img.displayOrder = index;
       // First image wins by default, matching the admin uploader's contract.
       img.isPrimary = hasPrimary ? img.isPrimary : index === 0;
+    });
+  }
+
+  if (this.videos?.length) {
+    this.videos.forEach((video, index) => {
+      video.displayOrder = index;
     });
   }
 

@@ -9,6 +9,8 @@ import Spinner from '../../components/common/Spinner';
 import PhoneInput from '../../components/common/PhoneInput';
 import AuthShell from '../../components/auth/AuthShell';
 import PasswordInput from '../../components/auth/PasswordInput';
+import ReactivationNotice from '../../components/auth/ReactivationNotice';
+import SuspendedNotice from '../../components/auth/SuspendedNotice';
 
 const EMPTY = { name: '', email: '', phone: '', password: '', confirmPassword: '' };
 
@@ -17,7 +19,25 @@ export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { loading, error, isAuthenticated, registrationDraft } = useSelector((s) => s.auth);
+  const { loading, error, errorCode, errorDetails, isAuthenticated, registrationDraft } =
+    useSelector((s) => s.auth);
+
+  /**
+   * The address belongs to an account its owner closed, so no new account is
+   * being made on it. That is a signpost rather than a validation failure — the
+   * person almost certainly *is* the account holder, having forgotten they had
+   * one — so it gets the notice and its button instead of the red error strip.
+   */
+  const isDeactivated = errorCode === 'ACCOUNT_DEACTIVATED';
+  const isReactivationPending = errorCode === 'REACTIVATION_PENDING';
+
+  /**
+   * The address is taken by an account staff suspended. Answering that with the
+   * bare "already exists" strip would send the person back to the sign-in form to
+   * be told something different, so the server's own sentence — reason and all —
+   * is shown here with the same way out the sign-in form offers.
+   */
+  const isSuspended = errorCode === 'ACCOUNT_SUSPENDED';
 
   /**
    * Two ways of arriving with something already known:
@@ -139,7 +159,21 @@ export default function Register() {
         }
       >
         <form onSubmit={submit} className="space-y-4" noValidate>
-          {error && (
+          {isSuspended && <SuspendedNotice message={error} />}
+
+          {(isDeactivated || isReactivationPending) && (
+            <ReactivationNotice
+              email={errorDetails?.email || values.email}
+              message={
+                isReactivationPending
+                  ? error
+                  : t('reactivate.registerBlocked')
+              }
+              pending={isReactivationPending}
+            />
+          )}
+
+          {error && !isDeactivated && !isReactivationPending && !isSuspended && (
             <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-danger" role="alert">
               {error}
             </div>

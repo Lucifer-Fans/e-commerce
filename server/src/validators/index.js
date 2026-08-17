@@ -1,6 +1,10 @@
 const { body } = require('express-validator');
 const { EXPERIENCE_LEVELS, APPLICATION_STATUSES, INTERVIEW_MODES } = require('../models/JobApplication');
 const { SUPPORTED_LANGUAGES } = require('../config/languages');
+const env = require('../config/env');
+
+/** Read once: several rules below build a fixed-width digit pattern from it. */
+const OTP_LENGTH = env.otp.length;
 
 const EXPERIENCE_VALUES = EXPERIENCE_LEVELS.map((level) => level.value);
 const INTERVIEW_MODE_VALUES = INTERVIEW_MODES.map((mode) => mode.value);
@@ -136,9 +140,93 @@ module.exports = {
 
   cancellationReasonRules: [
     body('label').trim().isLength({ min: 3, max: 120 }).withMessage('Reason must be 3-120 characters'),
-    body('description').optional({ values: 'falsy' }).trim().isLength({ max: 200 }),
     body('displayOrder').optional().isInt({ min: 0 }).toInt(),
     body('isActive').optional().isBoolean().toBoolean(),
+  ],
+
+  /** The twin of the rule above — same shape, because the two lists are twins. */
+  deactivationReasonRules: [
+    body('label').trim().isLength({ min: 3, max: 120 }).withMessage('Reason must be 3-120 characters'),
+    body('displayOrder').optional().isInt({ min: 0 }).toInt(),
+    body('isActive').optional().isBoolean().toBoolean(),
+  ],
+
+  /**
+   * Step one of closing an account: which reason, or the shopper's own words.
+   *
+   * Exactly one of the two must arrive. `reasonId` names a published row and is
+   * re-checked against the collection by the controller — a retired reason must
+   * not be selectable from a tab left open since yesterday — while `reason` is
+   * the free text behind "Other", held to the same 5-300 characters the order
+   * cancellation dialog asks for.
+   */
+  deactivationRequestRules: [
+    body('reasonId').optional({ values: 'falsy' }).isMongoId().withMessage('Please choose a valid reason'),
+    body('reason')
+      .optional({ values: 'falsy' })
+      .trim()
+      .isLength({ min: 5, max: 300 })
+      .withMessage('Tell us a little more — between 5 and 300 characters'),
+    body().custom((_value, { req }) => {
+      const hasId = Boolean(req.body.reasonId);
+      const hasText = Boolean(String(req.body.reason || '').trim());
+      if (!hasId && !hasText) throw new Error('Please select a reason for deactivating');
+      if (hasId && hasText) throw new Error('Choose a listed reason or write your own, not both');
+      return true;
+    }),
+  ],
+
+  /** The code that actually closes the account. Digits, at the configured width. */
+  deactivationConfirmRules: [
+    body('otp')
+      .trim()
+      .matches(new RegExp(`^\\d{${OTP_LENGTH}}$`))
+      .withMessage(`Enter the ${OTP_LENGTH}-digit code we emailed you`),
+  ],
+
+  /** Asking us to email a reactivation link. The address and nothing else. */
+  reactivationEmailRules: [
+    body('email').trim().isEmail().withMessage('Please enter a valid email').normalizeEmail(),
+  ],
+
+  /** Every later step in the reactivation carries the link's token. */
+  reactivationTokenRules: [
+    body('token').isString().trim().isLength({ min: 20 }).withMessage('Invalid reactivation link'),
+  ],
+
+  /**
+   * The submission itself: the token, a fresh code, and the account's own details
+   * re-typed from memory.
+   *
+   * The name and mobile number are checked against the record by the controller,
+   * not here — this only guarantees they arrived in a shape worth comparing.
+   * `phone` is optional because an account may never have had one; the controller
+   * requires it exactly when the record holds one.
+   */
+  reactivationSubmitRules: [
+    body('token').isString().trim().isLength({ min: 20 }).withMessage('Invalid reactivation link'),
+    body('otp')
+      .trim()
+      .matches(new RegExp(`^\\d{${OTP_LENGTH}}$`))
+      .withMessage(`Enter the ${OTP_LENGTH}-digit code we emailed you`),
+    body('name').trim().isLength({ min: 2, max: 60 }).withMessage('Enter the name on the account'),
+    body('phone')
+      .optional({ values: 'falsy' })
+      .trim()
+      .matches(/^[6-9]\d{9}$/)
+      .withMessage('Enter the 10 digit mobile number on the account'),
+    body('message').optional({ values: 'falsy' }).trim().isLength({ max: 500 }),
+  ],
+
+  /** An admin's decision on a reactivation request. */
+  reactivationDecisionRules: [
+    body('adminNotes').optional({ values: 'falsy' }).trim().isLength({ max: 500 }),
+    body('rejectionReason')
+      .if(body('decision').equals('rejected'))
+      .trim()
+      .isLength({ min: 3, max: 300 })
+      .withMessage('Tell the customer why the request was refused (at least 3 characters)'),
+    body('decision').isIn(['approved', 'rejected']).withMessage('Invalid decision'),
   ],
 
   verifyPaymentRules: [
@@ -177,8 +265,44 @@ module.exports = {
     body('discountType').isIn(['percentage', 'flat']).withMessage('Invalid discount type'),
     body('discountValue').isFloat({ min: 0 }).withMessage('Discount value must be positive').toFloat(),
     body('minOrderAmount').optional().isFloat({ min: 0 }).toFloat(),
-    body('maxDiscountAmount').optional({ values: 'null' }).isFloat({ min: 0 }).toFloat(),
+    body('maxDiscountAmount').optional({ values: 'falsy' }).isFloat({ min: 0 }).toFloat(),
+    // Blank is how the admin says "unlimited", so it must pass — the controller
+    // turns it into null. Only a supplied value has to be a sane whole number.
+    body('usageLimit').optional({ values: 'falsy' }).isInt({ min: 1 }).withMessage('Total usage limit must be at least 1').toInt(),
+    body('perUserLimit').optional({ values: 'falsy' }).isInt({ min: 1 }).withMessage('Uses per customer must be at least 1').toInt(),
+    body('startsAt').optional({ values: 'falsy' }).isISO8601(),
+    body('isActive').optional().isBoolean().toBoolean(),
+    // Empty/absent is the default and means the whole cart; anything listed pins
+    // the coupon to those goods. Ids only — the controller strips populated docs.
+    body('appliesTo.categories').optional({ values: 'null' }).isArray().withMessage('Select valid categories'),
+    body('appliesTo.categories.*').isMongoId().withMessage('Select valid categories'),
+    body('appliesTo.products').optional({ values: 'null' }).isArray().withMessage('Select valid products'),
+    body('appliesTo.products.*').isMongoId().withMessage('Select valid products'),
     body('expiresAt').isISO8601().withMessage('A valid expiry date is required'),
+  ],
+
+  /**
+   * The same rules with nothing required: the edit dialog sends whole documents,
+   * but a PATCH is free to send one field. Leaving this off the route was how an
+   * edit could set a percentage coupon to values create would have rejected.
+   */
+  couponUpdateRules: [
+    body('code').optional().trim().isLength({ min: 3, max: 24 }).withMessage('Coupon code must be 3-24 characters'),
+    body('discountType').optional().isIn(['percentage', 'flat']).withMessage('Invalid discount type'),
+    body('discountValue').optional().isFloat({ min: 0 }).withMessage('Discount value must be positive').toFloat(),
+    body('minOrderAmount').optional().isFloat({ min: 0 }).toFloat(),
+    body('maxDiscountAmount').optional({ values: 'falsy' }).isFloat({ min: 0 }).toFloat(),
+    body('usageLimit').optional({ values: 'falsy' }).isInt({ min: 1 }).withMessage('Total usage limit must be at least 1').toInt(),
+    body('perUserLimit').optional({ values: 'falsy' }).isInt({ min: 1 }).withMessage('Uses per customer must be at least 1').toInt(),
+    body('startsAt').optional({ values: 'falsy' }).isISO8601(),
+    body('isActive').optional().isBoolean().toBoolean(),
+    // Empty/absent is the default and means the whole cart; anything listed pins
+    // the coupon to those goods. Ids only — the controller strips populated docs.
+    body('appliesTo.categories').optional({ values: 'null' }).isArray().withMessage('Select valid categories'),
+    body('appliesTo.categories.*').isMongoId().withMessage('Select valid categories'),
+    body('appliesTo.products').optional({ values: 'null' }).isArray().withMessage('Select valid products'),
+    body('appliesTo.products.*').isMongoId().withMessage('Select valid products'),
+    body('expiresAt').optional().isISO8601().withMessage('A valid expiry date is required'),
   ],
 
   bannerRules: [
@@ -349,6 +473,23 @@ module.exports = {
     body('language').isIn(SUPPORTED_LANGUAGES).withMessage('That language is not supported'),
   ],
 
-  userStatusRules: [body('status').isIn(['active', 'blocked']).withMessage('Invalid status')],
+  /**
+   * The admin status control, which covers exactly two states.
+   *
+   * `deactivated` and `reactivation-pending` are deliberately not accepted here
+   * even as values to *set*: an account the owner closed comes back through an
+   * approved reactivation request and no other way, and staff close an account by
+   * blocking it. The controller refuses the reverse direction — a request that
+   * tries to move a deactivated account with this route — for the same reason.
+   */
+  userStatusRules: [
+    body('status').isIn(['active', 'blocked']).withMessage('Invalid status'),
+    // Only a block carries a reason — reactivating clears it, so nothing is required there.
+    body('blockedReason')
+      .if(body('status').equals('blocked'))
+      .trim()
+      .isLength({ min: 3, max: 200 })
+      .withMessage('Enter the reason for blocking (at least 3 characters)'),
+  ],
   userRoleRules: [body('role').isIn(['user', 'admin']).withMessage('Invalid role')],
 };

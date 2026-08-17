@@ -43,6 +43,10 @@ function billableLine(item) {
   if (stock <= 0) return null;
 
   return {
+    // Carried so a coupon pinned to a category or to named products can tell
+    // which lines it is entitled to discount.
+    productId: p._id,
+    categoryId: p.category?._id || p.category || null,
     price: v ? v.price : p.price,
     finalPrice: v ? v.finalPrice : p.finalPrice,
     // Out-of-stock lines stay visible but must not be billed; over-ordered ones
@@ -152,13 +156,14 @@ async function refreshCoupon(cart, userId) {
   if (!cart.coupon?.couponId) return;
 
   const coupon = await Coupon.findById(cart.coupon.couponId);
-  const subtotal = eligibleSubtotal(billableLines(cart));
+  const lines = billableLines(cart);
+  const subtotal = eligibleSubtotal(lines);
 
-  const check = coupon?.check({ userId, subtotal });
+  const check = coupon?.check({ userId, subtotal, lines });
   if (!coupon || !check?.valid) {
     cart.coupon = undefined;
   } else {
-    cart.coupon.discountAmount = coupon.computeDiscount(subtotal);
+    cart.coupon.discountAmount = coupon.computeDiscount(subtotal, lines);
   }
   await cart.save();
 }
@@ -374,13 +379,13 @@ exports.applyCoupon = asyncHandler(async (req, res) => {
 
   const subtotal = eligibleSubtotal(billable);
 
-  const check = coupon.check({ userId: req.user._id, subtotal });
+  const check = coupon.check({ userId: req.user._id, subtotal, lines: billable });
   if (!check.valid) throw ApiError.badRequest(check.reason);
 
   cart.coupon = {
     code: coupon.code,
     couponId: coupon._id,
-    discountAmount: coupon.computeDiscount(subtotal),
+    discountAmount: coupon.computeDiscount(subtotal, billable),
   };
   await cart.save();
 

@@ -122,8 +122,8 @@
       "freeText": "এই পণ্যটি বিনামূল্যে পাঠানো হয়",
       "paidTitle": "ডেলিভারি চার্জ প্রযোজ্য",
       "paidText": "₹{{amount}} এর উপরে বিনামূল্যে",
-      "returnsTitle": "৭ দিনে ফেরত",
-      "returnsText": "ঝামেলাহীন প্রতিস্থাপন",
+      "returnsTitle": "সহজ ফেরত",
+      "returnsText": "৭ দিনে ঝামেলাহীন ফেরত",
       "paymentTitle": "নিরাপদ পেমেন্ট",
       "paymentText": "Razorpay দ্বারা সুরক্ষিত",
       "weightTitle": "শিপিং ওজন",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "ছবি {{index}} দেখুন",
+    "viewVideo": "ভিডিও {{index}} দেখুন",
     "image": "ছবি {{index}}",
     "hoverToZoom": "জুম করতে হোভার করুন",
     "previousImage": "আগের ছবি",

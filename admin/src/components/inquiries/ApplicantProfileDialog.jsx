@@ -120,7 +120,7 @@ export default function ApplicantProfileDialog({ application, experienceLabel, r
                   <DescriptionIcon sx={{ color: 'success.main' }} />
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="body2" fontWeight={700} noWrap>
-                      Resume Attachment
+                      Résumé Attachment
                     </Typography>
                     {file.fileName && (
                       <Typography variant="caption" color="text.secondary" noWrap>

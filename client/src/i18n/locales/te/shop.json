@@ -122,8 +122,8 @@
       "freeText": "ఈ వస్తువు ఉచితంగా పంపబడుతుంది",
       "paidTitle": "డెలివరీ ఛార్జీలు వర్తిస్తాయి",
       "paidText": "₹{{amount}} పైన ఉచితం",
-      "returnsTitle": "7 రోజుల రిటర్న్",
-      "returnsText": "ఇబ్బంది లేని మార్పిడి",
+      "returnsTitle": "సులభమైన రిటర్న్‌లు",
+      "returnsText": "7 రోజుల్లో ఇబ్బంది లేని రిటర్న్",
       "paymentTitle": "సురక్షిత చెల్లింపు",
       "paymentText": "Razorpay ద్వారా రక్షించబడింది",
       "weightTitle": "షిప్పింగ్ బరువు",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "చిత్రం {{index}} చూడండి",
+    "viewVideo": "వీడియో {{index}} ప్లే చేయండి",
     "image": "చిత్రం {{index}}",
     "hoverToZoom": "జూమ్ కోసం హోవర్ చేయండి",
     "previousImage": "మునుపటి చిత్రం",

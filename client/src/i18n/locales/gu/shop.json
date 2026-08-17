@@ -122,8 +122,8 @@
       "freeText": "આ વસ્તુ મફત મોકલવામાં આવે છે",
       "paidTitle": "ડિલિવરી શુલ્ક લાગુ",
       "paidText": "₹{{amount}} થી વધુ પર મફત",
-      "returnsTitle": "7 દિવસમાં પરત",
-      "returnsText": "ઝંઝટ વગરની બદલી",
+      "returnsTitle": "સરળ પરત",
+      "returnsText": "7 દિવસમાં ઝંઝટ વગરની પરત",
       "paymentTitle": "સુરક્ષિત ચુકવણી",
       "paymentText": "Razorpay દ્વારા સુરક્ષિત",
       "weightTitle": "શિપિંગ વજન",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "છબી {{index}} જુઓ",
+    "viewVideo": "વિડિઓ {{index}} ચલાવો",
     "image": "છબી {{index}}",
     "hoverToZoom": "ઝૂમ કરવા હોવર કરો",
     "previousImage": "પાછલી છબી",

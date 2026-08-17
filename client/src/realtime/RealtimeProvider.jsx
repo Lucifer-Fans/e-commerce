@@ -120,7 +120,12 @@ export default function RealtimeProvider({ children }) {
       if (payload?.status !== 'blocked') return;
       dispatch(sessionExpired());
       dispatch(resetCart());
-      toast.error('Your account has been suspended.');
+      const reason = payload?.blockedReason?.trim();
+      toast.error(
+        reason
+          ? `Your account has been suspended due to ${reason}`
+          : 'Your account has been suspended.'
+      );
     },
     { enabled: isAuthenticated }
   );

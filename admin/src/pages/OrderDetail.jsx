@@ -231,7 +231,7 @@ function StatusTimeline({ order }) {
 
 function InfoCard({ title, children, action }) {
   return (
-    <Card sx={{ height: '100%' }}>
+    <Card>
       <CardContent>
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
           <Typography variant="subtitle2" color="text.secondary" textTransform="uppercase" letterSpacing={0.4}>

@@ -98,4 +98,15 @@ export const PRODUCT_STATUS_COLOR = {
 
 export const MAX_PRODUCT_IMAGES = 5;
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
-export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+/**
+ * What a *picked* photo may weigh. Uploads are downscaled in the browser first
+ * (see utils/media.js), so the file that actually leaves is far smaller than this
+ * and MAX_IMAGE_BYTES stays the ceiling for anything posted through the server.
+ */
+export const MAX_IMAGE_SOURCE_BYTES = 25 * 1024 * 1024;
+export const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+
+/** Mirrors VIDEO_ALLOWED / VIDEO_MAX_BYTES in server/src/middleware/upload.js. */
+export const MAX_PRODUCT_VIDEOS = 2;
+export const MAX_VIDEO_BYTES = 30 * 1024 * 1024;
+export const ACCEPTED_VIDEO_TYPES = ['video/mp4'];

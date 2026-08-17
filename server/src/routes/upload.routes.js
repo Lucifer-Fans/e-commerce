@@ -14,6 +14,9 @@ router.post('/image', uploadSingle, ctrl.uploadImage);
 // Review attachments: one photo or one short video per request.
 router.post('/media', uploadMedia, ctrl.uploadMedia);
 
+// Product media goes browser → Cloudinary directly; this only issues the signature.
+router.post('/signature', adminOnly, ctrl.createUploadSignature);
+
 // Bulk product imagery is admin-only.
 router.post('/images', adminOnly, uploadMultiple, ctrl.uploadImages);
 router.delete('/*', adminOnly, ctrl.deleteImage);

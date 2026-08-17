@@ -3,7 +3,15 @@ const ctrl = require('../controllers/auth.controller');
 const validate = require('../middleware/validate');
 const { protect } = require('../middleware/auth');
 const { authLimiter, otpLimiter, passwordResetLimiter } = require('../middleware/rateLimiter');
-const { auth: rules } = require('../validators');
+// The reactivation rules sit alongside the other account-lifecycle ones on the
+// top-level export rather than under the auth key, because user.routes reads the
+// deactivation half of that same set.
+const {
+  auth: rules,
+  reactivationEmailRules,
+  reactivationTokenRules,
+  reactivationSubmitRules,
+} = require('../validators');
 
 const router = express.Router();
 
@@ -28,6 +36,45 @@ router.get('/me', protect, ctrl.me);
 router.get('/sessions', protect, ctrl.listSessions);
 router.delete('/sessions', protect, ctrl.revokeAllSessions);
 router.delete('/sessions/:sessionId', protect, rules.sessionIdRules, validate, ctrl.revokeSession);
+
+/* ---------------- Reactivation — the way back from a closed account ---------------- *
+ * Every one of these is deliberately unauthenticated: the person using them
+ * cannot sign in, which is the whole problem they exist to solve. What stands in
+ * for a session is the single-use token from the emailed link, plus a one-time
+ * code, plus the account's own details — checked in the controller, all three.
+ *
+ * The limiters are chosen to match what each step can be abused for. Asking for
+ * a link sends mail to an address the caller names, so it takes the password
+ * reset budget; the code steps count every call, correct or not, exactly as the
+ * sign-up code screen does. */
+router.post(
+  '/reactivation/request',
+  passwordResetLimiter,
+  reactivationEmailRules,
+  validate,
+  ctrl.requestReactivation
+);
+router.post(
+  '/reactivation/open',
+  otpLimiter,
+  reactivationTokenRules,
+  validate,
+  ctrl.openReactivation
+);
+router.post(
+  '/reactivation/otp',
+  otpLimiter,
+  reactivationTokenRules,
+  validate,
+  ctrl.sendReactivationOtp
+);
+router.post(
+  '/reactivation/submit',
+  otpLimiter,
+  reactivationSubmitRules,
+  validate,
+  ctrl.submitReactivation
+);
 
 router.post('/forgot-password', passwordResetLimiter, rules.forgotPasswordRules, validate, ctrl.forgotPassword);
 router.post('/reset-password/:token', passwordResetLimiter, rules.resetPasswordRules, validate, ctrl.resetPassword);

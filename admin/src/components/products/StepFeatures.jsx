@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -18,10 +17,43 @@ import ArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 /** Quick-start rows so the admin isn't staring at an empty form. */
-const PRESETS = [
-  'Material', 'Thickness', 'Standard', 'Finish', 'Size', 'Colour',
-  'Weight', 'Warranty', 'Applications', 'Country of Origin',
-];
+const PRESETS = ['Material', 'Thickness', 'Weight', 'Warranty', 'Country of Origin'];
+
+/** Swap an entry with its neighbour; returns the list untouched at either edge. */
+const reorder = (list, index, direction) => {
+  const target = index + direction;
+  if (target < 0 || target >= list.length) return list;
+  const next = [...list];
+  [next[index], next[target]] = [next[target], next[index]];
+  return next;
+};
+
+/** Up / down / remove controls — shared so all three sections behave identically. */
+function RowControls({ index, count, onMove, onRemove, removeLabel }) {
+  return (
+    <Stack direction="row" spacing={0.25} sx={{ flexShrink: 0 }}>
+      <Tooltip title="Move up">
+        <span>
+          <IconButton size="small" disabled={index === 0} onClick={() => onMove(index, -1)}>
+            <ArrowUpIcon fontSize="small" />
+          </IconButton>
+        </span>
+      </Tooltip>
+      <Tooltip title="Move down">
+        <span>
+          <IconButton size="small" disabled={index === count - 1} onClick={() => onMove(index, 1)}>
+            <ArrowDownIcon fontSize="small" />
+          </IconButton>
+        </span>
+      </Tooltip>
+      <Tooltip title={removeLabel}>
+        <IconButton size="small" color="error" onClick={() => onRemove(index)}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  );
+}
 
 /**
  * Step 2 — unlimited key/value feature rows. These render as the specification
@@ -44,13 +76,8 @@ export default function StepFeatures({ values, errors, onChange }) {
   const removeFeature = (index) =>
     onChange({ features: features.filter((_, i) => i !== index) });
 
-  const moveFeature = (index, direction) => {
-    const target = index + direction;
-    if (target < 0 || target >= features.length) return;
-    const next = [...features];
-    [next[index], next[target]] = [next[target], next[index]];
-    onChange({ features: next });
-  };
+  const moveFeature = (index, direction) =>
+    onChange({ features: reorder(features, index, direction) });
 
   const usedKeys = new Set(features.map((f) => f.key.trim().toLowerCase()));
 
@@ -58,9 +85,19 @@ export default function StepFeatures({ values, errors, onChange }) {
   const setHighlight = (index, text) =>
     onChange({ highlights: highlights.map((h, i) => (i === index ? text : h)) });
 
+  const removeHighlight = (index) =>
+    onChange({ highlights: highlights.filter((_, i) => i !== index) });
+
+  const moveHighlight = (index, direction) =>
+    onChange({ highlights: reorder(highlights, index, direction) });
+
   /* ---------------- FAQs ---------------- */
   const setFaq = (index, patch) =>
     onChange({ faqs: faqs.map((f, i) => (i === index ? { ...f, ...patch } : f)) });
+
+  const removeFaq = (index) => onChange({ faqs: faqs.filter((_, i) => i !== index) });
+
+  const moveFaq = (index, direction) => onChange({ faqs: reorder(faqs, index, direction) });
 
   return (
     <Box>
@@ -91,61 +128,41 @@ export default function StepFeatures({ values, errors, onChange }) {
       <Stack spacing={1.5} sx={{ mb: 2 }}>
         {features.map((feature, index) => (
           <Paper key={index} variant="outlined" sx={{ p: 1.5 }}>
-            <Grid container spacing={1.5} alignItems="center">
-              <Grid size="auto" sx={{ display: { xs: 'none', sm: 'block' }, color: 'text.disabled' }}>
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={1.5}
+              alignItems={{ xs: 'stretch', sm: 'center' }}
+            >
+              <Box sx={{ display: { xs: 'none', sm: 'flex' }, color: 'text.disabled' }}>
                 <DragIndicatorIcon fontSize="small" />
-              </Grid>
+              </Box>
 
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
-                  fullWidth
-                  label={`Feature ${index + 1}`}
-                  placeholder="e.g. Material"
-                  value={feature.key}
-                  onChange={(e) => setFeature(index, { key: e.target.value })}
-                  inputProps={{ maxLength: 60 }}
-                />
-              </Grid>
+              <TextField
+                label={`Feature ${index + 1}`}
+                placeholder="e.g. Material"
+                value={feature.key}
+                onChange={(e) => setFeature(index, { key: e.target.value })}
+                inputProps={{ maxLength: 60 }}
+                sx={{ width: { xs: '100%', sm: 260 }, flexShrink: 0 }}
+              />
 
-              <Grid size={{ xs: 12, sm: true }}>
-                <TextField
-                  fullWidth
-                  label="Value"
-                  placeholder="e.g. 100% Hardwood Veneer"
-                  value={feature.value}
-                  onChange={(e) => setFeature(index, { value: e.target.value })}
-                  inputProps={{ maxLength: 500 }}
-                />
-              </Grid>
+              <TextField
+                label="Value"
+                placeholder="e.g. 100% Hardwood Veneer"
+                value={feature.value}
+                onChange={(e) => setFeature(index, { value: e.target.value })}
+                inputProps={{ maxLength: 500 }}
+                sx={{ flexGrow: 1, minWidth: 0 }}
+              />
 
-              <Grid size="auto">
-                <Stack direction="row" spacing={0.25}>
-                  <Tooltip title="Move up">
-                    <span>
-                      <IconButton size="small" disabled={index === 0} onClick={() => moveFeature(index, -1)}>
-                        <ArrowUpIcon fontSize="small" />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                  <Tooltip title="Move down">
-                    <span>
-                      <IconButton
-                        size="small"
-                        disabled={index === features.length - 1}
-                        onClick={() => moveFeature(index, 1)}
-                      >
-                        <ArrowDownIcon fontSize="small" />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                  <Tooltip title="Remove row">
-                    <IconButton size="small" color="error" onClick={() => removeFeature(index)}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                </Stack>
-              </Grid>
-            </Grid>
+              <RowControls
+                index={index}
+                count={features.length}
+                onMove={moveFeature}
+                onRemove={removeFeature}
+                removeLabel="Remove row"
+              />
+            </Stack>
           </Paper>
         ))}
       </Stack>
@@ -182,21 +199,29 @@ export default function StepFeatures({ values, errors, onChange }) {
 
       <Stack spacing={1.5} sx={{ mb: 2 }}>
         {highlights.map((highlight, index) => (
-          <Stack key={index} direction="row" spacing={1} alignItems="center">
-            <TextField
-              fullWidth
-              label={`Highlight ${index + 1}`}
-              value={highlight}
-              onChange={(e) => setHighlight(index, e.target.value)}
-              inputProps={{ maxLength: 140 }}
-            />
-            <IconButton
-              color="error"
-              onClick={() => onChange({ highlights: highlights.filter((_, i) => i !== index) })}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </Stack>
+          <Paper key={index} variant="outlined" sx={{ p: 1.5 }}>
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <Box sx={{ display: { xs: 'none', sm: 'flex' }, color: 'text.disabled' }}>
+                <DragIndicatorIcon fontSize="small" />
+              </Box>
+
+              <TextField
+                label={`Highlight ${index + 1}`}
+                value={highlight}
+                onChange={(e) => setHighlight(index, e.target.value)}
+                inputProps={{ maxLength: 140 }}
+                sx={{ flexGrow: 1, minWidth: 0 }}
+              />
+
+              <RowControls
+                index={index}
+                count={highlights.length}
+                onMove={moveHighlight}
+                onRemove={removeHighlight}
+                removeLabel="Remove highlight"
+              />
+            </Stack>
+          </Paper>
         ))}
       </Stack>
 
@@ -221,14 +246,19 @@ export default function StepFeatures({ values, errors, onChange }) {
         {faqs.map((faq, index) => (
           <Paper key={index} variant="outlined" sx={{ p: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
-              <Typography variant="subtitle2">Question {index + 1}</Typography>
-              <IconButton
-                size="small"
-                color="error"
-                onClick={() => onChange({ faqs: faqs.filter((_, i) => i !== index) })}
-              >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
+              <Stack direction="row" spacing={0.75} alignItems="center">
+                <Box sx={{ display: { xs: 'none', sm: 'flex' }, color: 'text.disabled' }}>
+                  <DragIndicatorIcon fontSize="small" />
+                </Box>
+                <Typography variant="subtitle2">Question {index + 1}</Typography>
+              </Stack>
+              <RowControls
+                index={index}
+                count={faqs.length}
+                onMove={moveFaq}
+                onRemove={removeFaq}
+                removeLabel="Remove FAQ"
+              />
             </Stack>
 
             <Stack spacing={1.5}>

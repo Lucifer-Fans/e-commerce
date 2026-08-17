@@ -5,6 +5,7 @@ const { sendSuccess, paginationMeta } = require('../utils/apiResponse');
 const { Order, Cart, Address, Coupon, CancellationReason } = require('../models');
 const { calculateTotals, eligibleSubtotal, lineTotal } = require('../services/pricing.service');
 const { reserveStock, releaseStock } = require('../services/inventory.service');
+const { redeemForOrder, releaseForOrder } = require('../services/coupon.service');
 const { streamInvoice } = require('../services/invoice.service');
 const mailService = require('../services/mail.service');
 const broadcast = require('../realtime/broadcast');
@@ -53,6 +54,10 @@ async function buildOrderDraft({ userId, addressId, couponCode }) {
   if (!address) throw ApiError.badRequest('Please select a valid delivery address');
 
   const items = [];
+  // Runs alongside `items`, line for line. The order document has no room for
+  // catalogue ids beyond the product's, and a coupon pinned to a category needs
+  // them, so the scoping keys ride here rather than in what gets persisted.
+  const couponLines = [];
   for (const line of active) {
     const p = line.product;
     if (!p || p.status !== 'published') {
@@ -108,6 +113,13 @@ async function buildOrderDraft({ userId, addressId, couponCode }) {
       // Billed from the discounted price; `price` above is the MRP, for display.
       lineTotal: lineTotal({ finalPrice, quantity: line.quantity }),
     });
+
+    couponLines.push({
+      productId: p._id,
+      categoryId: p.category?._id || p.category || null,
+      finalPrice,
+      quantity: line.quantity,
+    });
   }
 
   // The coupon is measured against exactly what is being charged for the goods.
@@ -118,9 +130,9 @@ async function buildOrderDraft({ userId, addressId, couponCode }) {
   const code = (couponCode || cart.coupon?.code || '').toUpperCase();
   if (code) {
     coupon = await Coupon.findOne({ code });
-    const check = coupon?.check({ userId, subtotal });
+    const check = coupon?.check({ userId, subtotal, lines: couponLines });
     if (!coupon || !check.valid) throw ApiError.badRequest(check?.reason || 'Invalid coupon code');
-    couponDiscount = coupon.computeDiscount(subtotal);
+    couponDiscount = coupon.computeDiscount(subtotal, couponLines);
   }
 
   const totals = calculateTotals(items, { couponDiscount });
@@ -197,6 +209,7 @@ exports.createOrder = asyncHandler(async (req, res) => {
             subtotal: totals.subtotal,
             discount: totals.discount,
             couponCode: coupon?.code,
+            couponId: coupon?._id,
             couponDiscount: totals.couponDiscount,
             shipping: totals.shipping,
             total: totals.total,
@@ -219,17 +232,25 @@ exports.createOrder = asyncHandler(async (req, res) => {
     );
     order = created;
 
-    if (coupon) {
-      const mine = coupon.usedBy.find((u) => String(u.user) === String(userId));
-      if (mine) mine.count += 1;
-      else coupon.usedBy.push({ user: userId, count: 1 });
-      coupon.usedCount += 1;
-      await coupon.save(opts);
-    }
-
-    // COD needs no payment step, so the cart can be emptied right away.
-    // Prepaid carts are cleared after verification instead.
+    // COD is placed confirmed, so this is the moment the order is earned and the
+    // moment its coupon is consumed. A prepaid order has earned nothing yet — it
+    // holds stock, not a redemption — so its coupon is claimed by /payments/verify
+    // (or the webhook) once money is actually captured. An abandoned or failed
+    // attempt therefore leaves the coupon exactly as the shopper found it.
     if (paymentMethod === 'cod') {
+      if ((await redeemForOrder(created, opts)) === 'exhausted') {
+        // Another shopper took the last slot between the draft and here.
+        if (!session) {
+          await Promise.all(decremented.map((d) => releaseStock(d)));
+          await Order.deleteOne({ _id: created._id });
+        }
+        throw ApiError.conflict(
+          `"${coupon.code}" has just been fully claimed. Please remove it and try again.`
+        );
+      }
+
+      // COD needs no payment step, so the cart can be emptied right away.
+      // Prepaid carts are cleared after verification instead.
       await Cart.updateOne(
         { user: userId },
         { $pull: { items: { savedForLater: { $ne: true } } }, $unset: { coupon: 1 } },
@@ -354,8 +375,11 @@ exports.cancelOrder = asyncHandler(async (req, res) => {
   // email quotes back and what staff read on the order.
   const reason = await resolveCancellationReason(req.body);
 
-  // Cancelling returns the reserved units to the exact SKU they were taken from.
+  // Cancelling returns the reserved units to the exact SKU they were taken from,
+  // and hands back the coupon redemption the order was holding — a cancelled order
+  // must not spend one of the shopper's uses, nor one of the store's.
   await Promise.all(order.items.map((item) => releaseStock(item)));
+  await releaseForOrder(order);
 
   order.orderStatus = 'cancelled';
   order.cancelledAt = new Date();
@@ -456,6 +480,8 @@ exports.updateOrderStatus = asyncHandler(async (req, res) => {
     // A return restocks the SKU that came back, not the product in general — a returned
     // Black/M must never make Blue/L look available.
     await Promise.all(order.items.map((item) => releaseStock(item)));
+    // The coupon goes back too, on the same terms as a shopper cancellation.
+    await releaseForOrder(order);
     // Queued for a refund, not refunded — see cancelOrder above.
     if (order.paymentStatus === 'paid') order.paymentStatus = 'refund_pending';
     order.cancelledAt = new Date();

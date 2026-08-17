@@ -43,7 +43,8 @@
     "youSaved": "ਤੁਸੀਂ {{amount}} ਬਚਾਏ",
     "viewAvailable": "ਉਪਲਬਧ ਕੂਪਨ ਵੇਖੋ ({{count}})",
     "hideAvailable": "ਉਪਲਬਧ ਕੂਪਨ ਲੁਕਾਓ ({{count}})",
-    "minOrder": "ਘੱਟੋ-ਘੱਟ ਆਰਡਰ {{amount}}"
+    "minOrder": "ਘੱਟੋ-ਘੱਟ ਆਰਡਰ {{amount}}",
+    "validOn": "{{items}} ਉੱਤੇ ਵੈਧ"
   },
   "summary": {
     "title": "ਕੀਮਤ ਵੇਰਵੇ",
@@ -78,7 +79,9 @@
       "address": "ਡਿਲੀਵਰੀ ਪਤਾ",
       "review": "ਆਰਡਰ ਸਾਰ",
       "payment": "ਭੁਗਤਾਨ"
-    }
+    },
+    "cartChanged": "ਤੁਹਾਡੇ ਆਰਡਰ ਦੀ ਇੱਕ ਚੀਜ਼ ਬਦਲ ਗਈ ਹੈ — ਸਾਰ ਅੱਪਡੇਟ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।",
+    "couponChanged": "ਤੁਹਾਡਾ ਕੂਪਨ ਬਦਲ ਗਿਆ ਹੈ — ਸਾਰ ਅੱਪਡੇਟ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।"
   },
   "address": {
     "addTitle": "ਨਵਾਂ ਪਤਾ ਜੋੜੋ",

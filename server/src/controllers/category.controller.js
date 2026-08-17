@@ -6,6 +6,12 @@ const { destroyAsset } = require('../config/cloudinary');
 const broadcast = require('../realtime/broadcast');
 const { localize, localizeAll } = require('../utils/localize');
 const { createTtlCache } = require('../utils/ttlCache');
+const {
+  parseRequestedOrder,
+  nextDisplayOrder,
+  resequence,
+  placeAndResequence,
+} = require('../utils/displayOrder');
 
 /* ------------------------------------------------------------------ *
  * Categories
@@ -83,9 +89,22 @@ exports.getCategory = asyncHandler(async (req, res) => {
   return sendSuccess(res, { message: 'Category fetched', data: { category: payload } });
 });
 
-/** POST /categories (admin) */
+/**
+ * POST /categories (admin)
+ *
+ * A display order another category already holds is an instruction, not a clash:
+ * the newcomer takes that position and the incumbent — with everything below it —
+ * slides down one. Sending no order at all lands the category at the end, which is
+ * what the panel proposes.
+ */
 exports.createCategory = asyncHandler(async (req, res) => {
-  const category = await Category.create(req.body);
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
+  const category = await Category.create({
+    ...req.body,
+    displayOrder: requestedOrder ?? (await nextDisplayOrder(Category)),
+  });
+
+  await placeAndResequence(Category, {}, category, requestedOrder);
   clearTaxonomyCache();
   broadcast.categoryChanged('created', category);
 
@@ -106,9 +125,13 @@ exports.updateCategory = asyncHandler(async (req, res) => {
     await destroyAsset(category.image.publicId);
   }
 
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
   Object.assign(category, req.body);
   await category.save();
 
+  // Re-typing the number of a sibling moves this row onto it and pushes that one
+  // down; a payload that never mentions the order leaves the running order alone.
+  await placeAndResequence(Category, {}, category, requestedOrder);
   clearTaxonomyCache();
   broadcast.categoryChanged('updated', category);
 
@@ -131,6 +154,8 @@ exports.deleteCategory = asyncHandler(async (req, res) => {
   await destroyAsset(category.image?.publicId);
   await category.deleteOne();
 
+  // Close the gap the removed row left, so the column stays a 0, 1, 2 … run.
+  await resequence(Category);
   clearTaxonomyCache();
   broadcast.categoryChanged('deleted', category);
 
@@ -159,7 +184,15 @@ exports.createSubCategory = asyncHandler(async (req, res) => {
   if (!(await Category.exists({ _id: req.body.category }))) {
     throw ApiError.badRequest('Parent category does not exist');
   }
-  const subCategory = await SubCategory.create(req.body);
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
+  const scope = { category: req.body.category };
+  const subCategory = await SubCategory.create({
+    ...req.body,
+    displayOrder: requestedOrder ?? (await nextDisplayOrder(SubCategory, scope)),
+  });
+
+  // Each parent numbers its own children, so the sibling lists never collide.
+  await placeAndResequence(SubCategory, scope, subCategory, requestedOrder);
   clearTaxonomyCache();
   broadcast.subCategoryChanged('created', subCategory);
 
@@ -184,9 +217,17 @@ exports.updateSubCategory = asyncHandler(async (req, res) => {
     await destroyAsset(subCategory.image.publicId);
   }
 
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
+  const previousParent = String(subCategory.category);
   Object.assign(subCategory, req.body);
   await subCategory.save();
 
+  // Re-parenting leaves a hole behind in the old list as well as taking a place in
+  // the new one, so both ends get renumbered.
+  if (String(subCategory.category) !== previousParent) {
+    await resequence(SubCategory, { category: previousParent });
+  }
+  await placeAndResequence(SubCategory, { category: subCategory.category }, subCategory, requestedOrder);
   clearTaxonomyCache();
   broadcast.subCategoryChanged('updated', subCategory);
 
@@ -206,6 +247,7 @@ exports.deleteSubCategory = asyncHandler(async (req, res) => {
   await destroyAsset(subCategory.image?.publicId);
   await subCategory.deleteOne();
 
+  await resequence(SubCategory, { category: subCategory.category });
   clearTaxonomyCache();
   broadcast.subCategoryChanged('deleted', subCategory);
 

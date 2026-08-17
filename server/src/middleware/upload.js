@@ -1,7 +1,7 @@
 const multer = require('multer');
 const ApiError = require('../utils/ApiError');
 
-const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
 const MAX_BYTES = 5 * 1024 * 1024;
 
 // Memory storage: buffers stream straight to Cloudinary, nothing touches local disk.
@@ -10,7 +10,7 @@ const upload = multer({
   limits: { fileSize: MAX_BYTES, files: 5 },
   fileFilter(_req, file, cb) {
     if (!ALLOWED.includes(file.mimetype)) {
-      return cb(ApiError.badRequest('Only JPG, PNG, WEBP and AVIF images are allowed'));
+      return cb(ApiError.badRequest('Only JPG, JPEG, PNG and GIF images are allowed'));
     }
     cb(null, true);
   },
@@ -18,7 +18,7 @@ const upload = multer({
 
 /* ---------------- Review attachments (photo or video) ---------------- */
 
-const VIDEO_ALLOWED = ['video/mp4', 'video/webm', 'video/quicktime'];
+const VIDEO_ALLOWED = ['video/mp4'];
 const VIDEO_MAX_BYTES = 30 * 1024 * 1024;
 
 /**
@@ -35,7 +35,7 @@ const mediaUpload = multer({
   fileFilter(req, file, cb) {
     const isVideo = VIDEO_ALLOWED.includes(file.mimetype);
     if (!isVideo && !ALLOWED.includes(file.mimetype)) {
-      return cb(ApiError.badRequest('Only JPG, PNG, WEBP, AVIF images and MP4, WEBM, MOV videos are allowed'));
+      return cb(ApiError.badRequest('Only JPG, JPEG, PNG, GIF images and MP4 videos are allowed'));
     }
     req.uploadMaxLabel = isVideo ? '30MB' : '5MB';
     cb(null, true);

@@ -57,12 +57,65 @@ const userSchema = new mongoose.Schema(
       // No default: accounts that predate this field must not be mislabelled.
       source: { type: String, enum: ['upload', 'google'] },
     },
+    /**
+     * Where the account stands. Only `active` may sign in.
+     *
+     * The last two are one story rather than two states an admin picks between:
+     * `deactivated` is where the account holder put it themselves, and
+     * `reactivation-pending` is that same closure with a verified request sitting
+     * in front of an approver. Neither is reachable from the admin status control
+     * — staff block and unblock, the owner deactivates, and only an approval on a
+     * reactivation request turns either back into `active`. Keeping those two
+     * doors apart is what stops an account the owner closed being quietly reopened
+     * from a screen that was only ever meant to lift a block.
+     */
     status: {
       type: String,
-      enum: ['active', 'blocked'],
+      enum: ['active', 'blocked', 'deactivated', 'reactivation-pending'],
       default: 'active',
       index: true,
     },
+
+    // Why the account was blocked, as typed by the admin who blocked it. Cleared on
+    // reactivation so it always describes the current block, never an older one.
+    blockedReason: { type: String, trim: true, maxlength: 200 },
+
+    /**
+     * Why and when the owner closed the account themselves.
+     *
+     * `reason` is stored as *text* rather than only as a pointer at the picklist
+     * row, exactly as a cancelled order stores its cancellation reason: an admin
+     * editing or retiring a reason must not rewrite what a closed account says it
+     * closed for. `reasonId` rides along for reporting, and is simply absent when
+     * the shopper wrote their own under "Other".
+     *
+     * `pending` holds the reason chosen at the first step while the one-time code
+     * of the second is still outstanding. It lives on the document rather than in
+     * the client's hands because the confirming request must not be able to
+     * substitute a different reason for the one the code was issued against.
+     */
+    deactivation: {
+      reason: { type: String, trim: true, maxlength: 300 },
+      reasonId: { type: mongoose.Schema.Types.ObjectId, ref: 'DeactivationReason' },
+      isOther: Boolean,
+      at: Date,
+      pending: {
+        reason: { type: String, trim: true, maxlength: 300 },
+        reasonId: { type: mongoose.Schema.Types.ObjectId, ref: 'DeactivationReason' },
+        isOther: Boolean,
+        at: Date,
+      },
+    },
+
+    /**
+     * The single-use link a deactivated account is mailed to start coming back.
+     * Hashed and hidden for the same reason the password-reset token is: this one
+     * opens a door that email/password and Google sign-in are both closed at.
+     */
+    reactivationToken: { type: String, select: false },
+    reactivationExpires: { type: Date, select: false },
+    /** When the pending request was submitted — mirrored for list and filter reads. */
+    reactivationRequestedAt: Date,
 
     /**
      * Preferred interface language, so the choice follows the account across
@@ -108,7 +161,10 @@ const userSchema = new mongoose.Schema(
     otp: {
       codeHash: { type: String, select: false },
       channel: { type: String, enum: ['email', 'sms'] },
-      purpose: { type: String, enum: ['email-verification'] },
+      purpose: {
+        type: String,
+        enum: ['email-verification', 'account-deactivation', 'account-reactivation'],
+      },
       expiresAt: Date,
       attempts: { type: Number, default: 0 },
       sentAt: Date,
@@ -144,6 +200,8 @@ const userSchema = new mongoose.Schema(
         delete ret.otp;
         delete ret.passwordResetToken;
         delete ret.passwordResetExpires;
+        delete ret.reactivationToken;
+        delete ret.reactivationExpires;
         delete ret.__v;
         return ret;
       },
@@ -275,9 +333,17 @@ const hashOtp = (code) => crypto.createHash('sha256').update(String(code)).diges
  * @param {object} [opts]
  * @param {boolean} [opts.resend] Counts against the resend budget. A first code
  *   for a sign-up starts that budget at zero; every later one spends from it.
+ * @param {string} [opts.purpose] What answering this code will do. Recorded on
+ *   the code and checked when it is spent, so a code minted to confirm a
+ *   deactivation cannot be typed into the sign-up screen — or the reverse. The
+ *   account only ever holds one code, and that code is only good for the one
+ *   thing it was asked for.
  * @returns {string} The plain code — emailed, never stored.
  */
-userSchema.methods.createEmailOtp = function createEmailOtp({ resend = false } = {}) {
+userSchema.methods.createEmailOtp = function createEmailOtp({
+  resend = false,
+  purpose = 'email-verification',
+} = {}) {
   const { length, expiryMinutes } = env.otp;
 
   // randomInt, not Math.random: the code is a credential, and it is short enough
@@ -288,7 +354,7 @@ userSchema.methods.createEmailOtp = function createEmailOtp({ resend = false } =
   this.otp = {
     codeHash: hashOtp(code),
     channel: 'email',
-    purpose: 'email-verification',
+    purpose,
     expiresAt: new Date(Date.now() + expiryMinutes * 60 * 1000),
     // A new code gets a clean attempt budget; that is what makes "request a new
     // code" the honest way out of having burnt the guesses on the old one.
@@ -322,14 +388,26 @@ userSchema.methods.otpResendsExhausted = function otpResendsExhausted() {
  * recorded until the end of the request is an attempt that parallel guesses can
  * ride over.
  *
+ * @param {string} [purpose] What the caller is spending the code on. A code
+ *   minted for something else answers 'no-code' — the same dead end as no code
+ *   at all, because that is exactly what this caller has: the account's one
+ *   outstanding code belongs to a different flow.
  * @returns {Promise<{ok: boolean, reason?: 'no-code'|'expired'|'exhausted'|'mismatch',
  *   remaining: number}>}
  */
-userSchema.methods.verifyEmailOtp = async function verifyEmailOtp(code) {
+userSchema.methods.verifyEmailOtp = async function verifyEmailOtp(
+  code,
+  purpose = 'email-verification'
+) {
   const { maxAttempts } = env.otp;
   const otp = this.otp;
 
   if (!otp?.codeHash || !otp.expiresAt) return { ok: false, reason: 'no-code', remaining: 0 };
+  // Codes written before purposes existed carry none, and every one of those is
+  // an email verification — the only flow there was.
+  if ((otp.purpose || 'email-verification') !== purpose) {
+    return { ok: false, reason: 'no-code', remaining: 0 };
+  }
   if (otp.expiresAt.getTime() <= Date.now()) return { ok: false, reason: 'expired', remaining: 0 };
   if ((otp.attempts || 0) >= maxAttempts) return { ok: false, reason: 'exhausted', remaining: 0 };
 
@@ -365,10 +443,44 @@ userSchema.methods.markEmailVerified = async function markEmailVerified() {
   this.otp = undefined;
 };
 
+/**
+ * Spends the outstanding code without marking anything verified.
+ *
+ * `markEmailVerified` is the sign-up's version of this and does two jobs at
+ * once; the deactivation and reactivation flows only ever want the first, and
+ * for the same reason it gives: a code that survives in the database is a code
+ * that can be replayed, and only `$unset` actually removes it.
+ */
+userSchema.methods.clearOtp = async function clearOtp() {
+  await this.constructor.updateOne({ _id: this._id }, { $unset: { otp: 1 } });
+  this.otp = undefined;
+};
+
+/**
+ * Mints the single-use link that starts a reactivation, exactly as the password
+ * reset token is minted: the raw value is emailed and only its digest is kept,
+ * so a database dump is not a folder of live keys to closed accounts.
+ *
+ * Fifteen minutes, matching the reset link. A reactivation link is the one
+ * credential a deactivated account has, and the person holding it is by
+ * definition already reading the inbox it was sent to — there is nothing for a
+ * longer window to buy.
+ */
+userSchema.methods.createReactivationToken = function createReactivationToken() {
+  const rawToken = crypto.randomBytes(32).toString('hex');
+  this.reactivationToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+  this.reactivationExpires = new Date(Date.now() + 10 * 60 * 1000);
+  return rawToken; // emailed to the user; only the hash is stored
+};
+
+/** The digest a submitted reactivation token has to match. */
+userSchema.statics.hashReactivationToken = (rawToken) =>
+  crypto.createHash('sha256').update(String(rawToken)).digest('hex');
+
 userSchema.methods.createPasswordResetToken = function createPasswordResetToken() {
   const rawToken = crypto.randomBytes(32).toString('hex');
   this.passwordResetToken = crypto.createHash('sha256').update(rawToken).digest('hex');
-  this.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000);
+  this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
   return rawToken; // emailed to the user; only the hash is stored
 };
 

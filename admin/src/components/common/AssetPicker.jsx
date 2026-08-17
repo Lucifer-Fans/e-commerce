@@ -12,8 +12,8 @@ import AddPhotoIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
 
-import { uploadApi } from '../../api/endpoints';
-import { MAX_IMAGE_BYTES, ACCEPTED_IMAGE_TYPES } from '../../utils/constants';
+import { uploadMedia } from '../../utils/media';
+import { MAX_IMAGE_SOURCE_BYTES, ACCEPTED_IMAGE_TYPES } from '../../utils/constants';
 
 /**
  * Single-image picker — branding assets, category artwork, brand logos.
@@ -44,16 +44,20 @@ export default function AssetPicker({
     if (!file) return;
 
     if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      return enqueueSnackbar('Only JPG, PNG, WEBP and AVIF images are allowed', { variant: 'error' });
+      return enqueueSnackbar('Only JPG, JPEG, PNG and GIF images are allowed', { variant: 'error' });
     }
-    if (file.size > MAX_IMAGE_BYTES) {
-      return enqueueSnackbar('The file is larger than 5MB', { variant: 'error' });
+    // Oversized photos are resized in the browser before they are sent, so this only
+    // guards against someone picking a RAW-sized file by mistake.
+    if (file.size > MAX_IMAGE_SOURCE_BYTES) {
+      return enqueueSnackbar('The file is larger than 25MB', { variant: 'error' });
     }
 
     setProgress(0);
     try {
-      const res = await uploadApi.image(file, { kind, onProgress: setProgress });
-      onChange(res.data.image);
+      // Same pipeline as the product uploaders: downscaled here, posted straight
+      // to Cloudinary.
+      const image = await uploadMedia(file, { kind, onProgress: setProgress });
+      onChange(image);
       enqueueSnackbar(`${label} uploaded — remember to save your changes`, { variant: 'success' });
     } catch (err) {
       enqueueSnackbar(err.message || 'Upload failed', { variant: 'error' });

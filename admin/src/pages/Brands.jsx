@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid2';
@@ -27,6 +28,7 @@ import EditIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
 import ImageIcon from '@mui/icons-material/ImageOutlined';
 import LaunchIcon from '@mui/icons-material/LaunchOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { brandApi } from '../api/endpoints';
 import useFetch from '../hooks/useFetch';
@@ -35,9 +37,7 @@ import { BRAND_EVENTS } from '../realtime/events';
 import PageHeader from '../components/common/PageHeader';
 import EmptyState from '../components/common/EmptyState';
 import ConfirmDialog from '../components/common/ConfirmDialog';
-import AssetPicker from '../components/common/AssetPicker';
-import TranslationEditor from '../components/common/TranslationEditor';
-import { pruneTranslations } from '../utils/languages';
+import ImageUploader from '../components/products/ImageUploader';
 
 const EMPTY_BRAND = {
   name: '',
@@ -47,21 +47,86 @@ const EMPTY_BRAND = {
   displayOrder: 0,
   isActive: true,
   isFeatured: false,
-  translations: {},
 };
+
+/**
+ * The product list inside a brand card, sized in rows for the same reason the
+ * sub-category list on the Categories page is: the row count is the decision, and
+ * the card height follows from it. A row is a 26px thumbnail with 4px of padding
+ * either side, plus the `spacing={0.5}` gap between rows.
+ */
+const VISIBLE_PRODUCT_ROWS = 5;
+const PRODUCT_ROW_HEIGHT = 34;
+const PRODUCT_ROW_GAP = 4;
+const PRODUCT_LIST_MAX_HEIGHT =
+  VISIBLE_PRODUCT_ROWS * PRODUCT_ROW_HEIGHT + (VISIBLE_PRODUCT_ROWS - 1) * PRODUCT_ROW_GAP;
+
+/**
+ * Everything in the card that is not the list: header, description slot, website line,
+ * divider, the products heading and the "Add product" button, with their padding. A
+ * floor rather than a hard height — a card that is pinned shorter than its own contents
+ * would clip the last row instead of showing it, and Grid rows are equal-height, so a
+ * card that does take an extra pixel brings its neighbours with it.
+ */
+// 160 header (52px logo row, two-line description, website line, 16px padding either
+// side) + 1 divider + 99 below it (16 padding, 20 heading, 8 list margin, 39 button,
+// 16 padding).
+const CARD_CHROME_HEIGHT = 260;
+const CARD_HEIGHT = CARD_CHROME_HEIGHT + PRODUCT_LIST_MAX_HEIGHT;
 
 /** Server documents leave `logo` undefined; the picker always wants both keys. */
 const asset = (value) => ({ url: value?.url || '', publicId: value?.publicId || '' });
 
-function BrandDialog({ initial, onClose, onSaved }) {
+/** Square thumbnail with a neutral placeholder, so rows stay aligned without an image. */
+function Thumb({ src, alt, size = 26 }) {
+  return (
+    <Box
+      sx={{
+        flexShrink: 0,
+        width: size,
+        height: size,
+        borderRadius: 1,
+        overflow: 'hidden',
+        display: 'grid',
+        placeItems: 'center',
+        bgcolor: 'grey.100',
+        border: 1,
+        borderColor: 'divider',
+        color: 'text.disabled',
+      }}
+    >
+      {src ? (
+        <Box
+          component="img"
+          src={src}
+          alt={alt}
+          loading="lazy"
+          sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      ) : (
+        <ImageIcon sx={{ fontSize: Math.max(14, size * 0.5) }} />
+      )}
+    </Box>
+  );
+}
+
+function BrandDialog({ initial, brandCount, onClose, onSaved }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [values, setValues] = useState(() => {
-    const base = initial || EMPTY_BRAND;
-    return { ...base, logo: asset(base.logo), translations: base.translations || {} };
+    const base = initial || { ...EMPTY_BRAND, displayOrder: brandCount };
+    return { ...base, logo: asset(base.logo) };
   });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+
+  /**
+   * A new brand is offered the end of the list, so the admin never has to work the
+   * next free number out. Typing a number another brand already holds is fine — the
+   * server splices this one in and pushes the rest down — but a number past the end
+   * of the list is not a position, so it lands on the last one instead.
+   */
+  const maxOrder = values._id ? Math.max(brandCount - 1, 0) : brandCount;
 
   const set = (field) => (e) =>
     setValues((v) => ({
@@ -71,11 +136,17 @@ function BrandDialog({ initial, onClose, onSaved }) {
 
   const submit = async () => {
     const found = {};
-    if (values.name.trim().length < 2) found.name = 'Name must be at least 2 characters';
+    const name = values.name.trim();
+    if (!name) found.name = 'Enter brand name';
+    else if (name.length < 2) found.name = 'Name must be at least 2 characters';
     if (values.website?.trim() && !/^https?:\/\//i.test(values.website.trim())) {
       found.website = 'Start the link with https://';
     }
-    if (Object.keys(found).length) return setErrors(found);
+    if (Object.keys(found).length) {
+      setErrors(found);
+      enqueueSnackbar('Please fill the required fields first', { variant: 'warning' });
+      return;
+    }
 
     setSaving(true);
     try {
@@ -85,10 +156,9 @@ function BrandDialog({ initial, onClose, onSaved }) {
         website: values.website?.trim() || undefined,
         // Always sent, so clearing the picker clears the stored logo too.
         logo: asset(values.logo),
-        displayOrder: Number(values.displayOrder) || 0,
+        displayOrder: Math.min(Math.max(Number(values.displayOrder) || 0, 0), maxOrder),
         isActive: values.isActive,
         isFeatured: values.isFeatured,
-        translations: pruneTranslations(values.translations) ?? null,
       };
 
       if (values._id) await brandApi.update(values._id, payload);
@@ -108,17 +178,42 @@ function BrandDialog({ initial, onClose, onSaved }) {
 
   return (
     <Dialog open onClose={saving ? undefined : onClose} maxWidth="md" fullWidth>
-      <DialogTitle sx={{ fontWeight: 700 }}>{values._id ? 'Edit brand' : 'New brand'}</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 700, pr: 6 }}>
+        {values._id ? 'Edit brand' : 'New brand'}
+        <IconButton
+          onClick={onClose}
+          size="small"
+          disabled={saving}
+          sx={{ position: 'absolute', right: 12, top: 12, color: 'text.secondary' }}
+          aria-label="Close without saving"
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </DialogTitle>
 
       <DialogContent dividers>
         <Stack spacing={2.5}>
-          <Box sx={{ maxWidth: 200, mx: 'auto', width: '100%' }}>
-            <AssetPicker
-              label="Logo"
+          <Box>
+            <Typography variant="subtitle2" gutterBottom>
+              Brand logo
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1.5 }}>
+              Square artwork works best — around 400×400px, ideally a transparent PNG.
+            </Typography>
+
+            {/* The uploader is array-based; a brand holds exactly one logo. The controller
+                frees the replaced asset when the change is saved, so this one must not
+                destroy anything on its own. */}
+            <ImageUploader
+              max={1}
               kind="brands"
-              hint="Transparent PNG works best, around 400×400px"
-              value={values.logo}
-              onChange={(logo) => setValues((v) => ({ ...v, logo: asset(logo) }))}
+              subject="the brand logo"
+              destroyOnRemove={false}
+              // One logo is the whole allowance here, so the drop zone steps aside once
+              // it is taken; the tile below still replaces and deletes.
+              hideDropzoneWhenFull
+              value={values.logo?.url ? [values.logo] : []}
+              onChange={(images) => setValues((v) => ({ ...v, logo: asset(images[0]) }))}
             />
           </Box>
 
@@ -129,9 +224,10 @@ function BrandDialog({ initial, onClose, onSaved }) {
             value={values.name}
             onChange={set('name')}
             error={Boolean(errors.name)}
+            // The rename warning is only true when editing; a new brand gets no helper
+            // line at all, rather than a blank one holding space open under the field.
             helperText={
-              errors.name ||
-              (values._id ? 'Renaming also updates every product carrying this brand' : ' ')
+              errors.name || (values._id ? 'Renaming also updates every product carrying this brand' : undefined)
             }
             inputProps={{ maxLength: 60 }}
           />
@@ -148,11 +244,13 @@ function BrandDialog({ initial, onClose, onSaved }) {
 
           <TextField
             fullWidth
-            label="Website"
+            label="Brand website"
             value={values.website || ''}
             onChange={set('website')}
             error={Boolean(errors.website)}
-            helperText={errors.website || 'Optional — e.g. https://brand.com'}
+            // Only speaks up when the link is malformed — the field is optional, and the
+            // rule about the https:// prefix is stated at the moment it is broken.
+            helperText={errors.website}
             inputProps={{ maxLength: 300 }}
           />
 
@@ -162,48 +260,26 @@ function BrandDialog({ initial, onClose, onSaved }) {
             label="Display order"
             value={values.displayOrder}
             onChange={set('displayOrder')}
-            helperText="Lower numbers appear first"
-            inputProps={{ min: 0 }}
+            helperText="Its place in the storefront brand list"
+            inputProps={{ min: 0, max: maxOrder }}
           />
 
-          <FormControlLabel
-            control={<Switch checked={values.isActive} onChange={set('isActive')} />}
-            label={<Typography variant="body2">Visible on the storefront</Typography>}
-          />
-          <FormControlLabel
-            control={<Switch checked={values.isFeatured} onChange={set('isFeatured')} />}
-            label={<Typography variant="body2">Highlight as a featured brand</Typography>}
-          />
-
-          <Divider sx={{ pt: 1 }}>
-            <Typography variant="overline" color="text.secondary">
-              Translations
-            </Typography>
-          </Divider>
-
-          {/*
-            The brand *name* is not translatable: products store it as a plain string and
-            the storefront filter, the search index and past orders all match on it.
-          */}
-          <TranslationEditor
-            value={values.translations}
-            onChange={(translations) => setValues((v) => ({ ...v, translations }))}
-            fields={[
-              {
-                name: 'description',
-                label: 'Description',
-                source: values.description,
-                multiline: true,
-              },
-            ]}
-          />
+          {/* Two visibility switches, one row — they are read together. They fall back to
+              a column on a narrow screen, where side by side would wrap mid-label. */}
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 1, sm: 3 }}>
+            <FormControlLabel
+              control={<Switch checked={values.isActive} onChange={set('isActive')} />}
+              label={<Typography variant="body2">Visible on the storefront</Typography>}
+            />
+            <FormControlLabel
+              control={<Switch checked={values.isFeatured} onChange={set('isFeatured')} />}
+              label={<Typography variant="body2">Highlight as a featured brand</Typography>}
+            />
+          </Stack>
         </Stack>
       </DialogContent>
 
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button onClick={onClose} color="inherit" disabled={saving}>
-          Cancel
-        </Button>
         <Button
           variant="contained"
           onClick={submit}
@@ -219,6 +295,7 @@ function BrandDialog({ initial, onClose, onSaved }) {
 
 export default function Brands() {
   const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
   const query = useFetch(useCallback(() => brandApi.list(), []), []);
   const brands = query.data?.data?.brands || [];
 
@@ -266,8 +343,17 @@ export default function Brands() {
         <Grid container spacing={2.5}>
           {brands.map((brand) => (
             <Grid key={brand._id} size={{ xs: 12, md: 6, xl: 4 }}>
-              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <CardContent sx={{ flex: 1 }}>
+              <Card
+                sx={{
+                  height: '100%', // fill the Grid row, which is as tall as its tallest card
+                  minHeight: CARD_HEIGHT,
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                {/* Header — fixed. Logo, name, badges, actions and the website link all
+                    stay put; only the product list below scrolls. */}
+                <CardContent sx={{ flexShrink: 0 }}>
                   <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1}>
                     <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
                       <Box
@@ -307,7 +393,12 @@ export default function Brands() {
                           {brand.isFeatured && <Chip label="Featured" size="small" color="primary" />}
                         </Stack>
                         <Typography variant="caption" color="text.secondary">
-                          /{brand.slug} · order {brand.displayOrder}
+                          /{brand.slug} ·{' '}
+                          <Tooltip title="The sequence this brand appears in on the storefront brand list">
+                            <Box component="span" sx={{ cursor: 'help' }}>
+                              display order {brand.displayOrder}
+                            </Box>
+                          </Tooltip>
                         </Typography>
                       </Box>
                     </Stack>
@@ -326,37 +417,158 @@ export default function Brands() {
                     </Stack>
                   </Stack>
 
+                  {/* Capped at two lines, but only as tall as the text it has. Holding the
+                      second line open to align the dividers across cards left a visible
+                      gap inside every card that did not need it; the card is a fixed
+                      height regardless, so the slack belongs at the bottom, not here. */}
                   {brand.description && (
-                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1.5 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        mt: 1.5,
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 2,
+                        overflow: 'hidden',
+                      }}
+                    >
                       {brand.description}
                     </Typography>
+                  )}
+
+                  {/* The website used to sit beside the product count; the lower half of
+                      the card belongs to the products now, so it moves up here. */}
+                  {brand.website && (
+                    <Link
+                      href={brand.website}
+                      target="_blank"
+                      rel="noreferrer"
+                      variant="caption"
+                      underline="hover"
+                      sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, maxWidth: '100%', mt: 0.5 }}
+                    >
+                      <Box component="span" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {brand.website.replace(/^https?:\/\//i, '')}
+                      </Box>
+                      <LaunchIcon sx={{ fontSize: 13 }} />
+                    </Link>
                   )}
                 </CardContent>
 
                 <Divider />
 
-                <CardContent sx={{ py: 1.5 }}>
-                  <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-                    <Typography variant="caption" color="text.secondary" fontWeight={700}>
-                      {brand.productCount || 0} product{brand.productCount === 1 ? '' : 's'}
+                {/* Heading and button pinned, product list scrolling between them.
+                    `minHeight: 0` is what lets the list shrink instead of growing the card. */}
+                <CardContent
+                  sx={{
+                    pt: 2,
+                    flex: 1,
+                    minHeight: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    // CardContent's last-child rule adds 24px; the button below supplies
+                    // its own breathing room, so keep the padding even.
+                    '&:last-child': { pb: 2 },
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    alignItems="baseline"
+                    justifyContent="space-between"
+                    spacing={1}
+                    sx={{ flexShrink: 0 }}
+                  >
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      fontWeight={700}
+                      textTransform="uppercase"
+                    >
+                      Products ({brand.productCount || 0})
                     </Typography>
 
-                    {brand.website && (
-                      <Link
-                        href={brand.website}
-                        target="_blank"
-                        rel="noreferrer"
-                        variant="caption"
-                        underline="hover"
-                        sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, minWidth: 0 }}
-                      >
-                        <Box component="span" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {brand.website.replace(/^https?:\/\//i, '')}
-                        </Box>
-                        <LaunchIcon sx={{ fontSize: 13 }} />
-                      </Link>
+                    {/* The count is the true total; the list is capped server-side. Said
+                        here, on a row that already exists, rather than on one of its own
+                        that would cost the card a product row. */}
+                    {brand.productCount > (brand.products?.length || 0) && (
+                      <Typography variant="caption" color="text.disabled" noWrap>
+                        newest {brand.products.length}
+                      </Typography>
                     )}
                   </Stack>
+
+                  {brand.products?.length ? (
+                    <Stack
+                      spacing={0.5}
+                      sx={{
+                        mt: 1,
+                        // Shrink-only: a short list keeps its natural height and the button
+                        // sits right under it. A long one scrolls rather than stretching.
+                        flex: '0 1 auto',
+                        minHeight: 0,
+                        maxHeight: PRODUCT_LIST_MAX_HEIGHT,
+                        overflowY: 'auto',
+                        pr: 0.5,
+                        // Stops a flick at the end of this list carrying on into the page.
+                        overscrollBehavior: 'contain',
+                      }}
+                    >
+                      {brand.products.map((product) => (
+                        <Stack
+                          key={product._id}
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          spacing={1}
+                          onClick={() => navigate(`/products/${product._id}/edit`)}
+                          // flexShrink: 0 — rows in a scrolling flex column would otherwise
+                          // compress to fit rather than overflow, and nothing would scroll.
+                          sx={{
+                            flexShrink: 0,
+                            py: 0.5,
+                            px: 1,
+                            borderRadius: 1,
+                            cursor: 'pointer',
+                            '&:hover': { bgcolor: 'action.hover' },
+                          }}
+                        >
+                          <Stack direction="row" spacing={1} alignItems="center" sx={{ minWidth: 0 }}>
+                            <Thumb src={product.image} alt={product.name} />
+                            <Typography variant="body2" noWrap>
+                              {product.name}
+                            </Typography>
+                          </Stack>
+
+                          {/* Only the states worth acting on are called out; a published
+                              product needs no badge. */}
+                          {product.status !== 'published' && (
+                            <Chip
+                              label={product.status === 'draft' ? 'Draft' : 'Archived'}
+                              size="small"
+                              color={product.status === 'draft' ? 'warning' : 'default'}
+                              sx={{ flexShrink: 0 }}
+                            />
+                          )}
+                        </Stack>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Typography variant="body2" color="text.disabled" sx={{ mt: 1, flexShrink: 0 }}>
+                      None yet
+                    </Typography>
+                  )}
+
+                  {/* Opens the product form with this brand already chosen, the way
+                      "Add sub-category" opens its dialog with the parent set. */}
+                  <Button
+                    size="small"
+                    startIcon={<AddIcon />}
+                    sx={{ mt: 1, flexShrink: 0, alignSelf: 'flex-start' }}
+                    onClick={() => navigate(`/products/new?brand=${encodeURIComponent(brand.name)}`)}
+                  >
+                    Add product
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>
@@ -367,6 +579,7 @@ export default function Brands() {
       {dialog && (
         <BrandDialog
           initial={dialog._id ? dialog : null}
+          brandCount={brands.length}
           onClose={() => setDialog(null)}
           onSaved={() => {
             setDialog(null);

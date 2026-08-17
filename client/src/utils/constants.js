@@ -82,7 +82,7 @@ export const SHIPPING_FLAT_RATE = Number(import.meta.env.VITE_SHIPPING_FLAT_RATE
  * `legal` translation bundle changes in a way a shopper would care about — it is
  * the date printed under every policy heading.
  */
-export const POLICY_LAST_UPDATED = '2026-08-11';
+export const POLICY_LAST_UPDATED = '2026-08-17';
 
 /*
  * What a shopper may attach to a review. Mirrored by the API — server/src/
@@ -91,8 +91,8 @@ export const POLICY_LAST_UPDATED = '2026-08-11';
  * before spending a round trip.
  */
 export const REVIEW_MEDIA_MAX = 5;
-export const REVIEW_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
-export const REVIEW_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime'];
+export const REVIEW_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+export const REVIEW_VIDEO_TYPES = ['video/mp4'];
 export const MAX_REVIEW_IMAGE_BYTES = 5 * 1024 * 1024;
 export const MAX_REVIEW_VIDEO_BYTES = 30 * 1024 * 1024;
 

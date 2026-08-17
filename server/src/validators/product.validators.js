@@ -12,6 +12,13 @@ const imageRules = [
   body('images.*.publicId').notEmpty().withMessage('Each image needs a Cloudinary publicId'),
 ];
 
+const videoRules = [
+  body('videos').optional().isArray({ max: 2 }).withMessage('At most 2 videos are allowed'),
+  body('videos.*.url').isURL().withMessage('Each video needs a valid URL'),
+  body('videos.*.publicId').notEmpty().withMessage('Each video needs a Cloudinary publicId'),
+  body('videos.*.duration').optional().isFloat({ min: 0 }).toFloat(),
+];
+
 /**
  * Products may carry their variant definition and their SKU rows in the same payload, so
  * the wizard saves everything in one round trip. Both are optional: a product with no
@@ -45,6 +52,7 @@ exports.createProductRules = [
   body('faqs.*.answer').optional().trim().notEmpty().withMessage('FAQ answer cannot be empty'),
   ...featureRules,
   ...imageRules,
+  ...videoRules,
   ...variantRules,
 ];
 
@@ -60,6 +68,7 @@ exports.updateProductRules = [
   body('status').optional().isIn(['draft', 'published', 'archived']),
   ...featureRules,
   ...imageRules,
+  ...videoRules,
   ...variantRules,
 ];
 

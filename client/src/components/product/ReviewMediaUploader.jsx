@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { uploadApi } from '../../api/endpoints';
+import compressImage from '../../utils/compressImage';
 import { optimisedImage } from '../../utils/format';
 import {
   REVIEW_MEDIA_MAX,
@@ -69,7 +70,9 @@ export default function ReviewMediaUploader({ value = [], onChange, onBusyChange
     }));
 
     try {
-      const res = await uploadApi.media(file, {
+      // Photos are resized in the browser first; a clip is sent as it is.
+      const payload = isVideo ? file : await compressImage(file);
+      const res = await uploadApi.media(payload, {
         onProgress: (progress) =>
           setUploads((current) =>
             current[tempId] ? { ...current, [tempId]: { ...current[tempId], progress } } : current

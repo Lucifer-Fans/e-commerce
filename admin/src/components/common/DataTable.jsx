@@ -15,6 +15,9 @@ import Pagination from './Pagination';
  *
  * @param {Array<{key:string, label:string, width?:number|string, align?:string,
  *                render?:(row:any)=>React.ReactNode}>} columns
+ * @param {'top'|'middle'} verticalAlign  When cells stack two lines of text, centring
+ *   every cell against the tallest one reads as ragged; `top` puts the first line of
+ *   every column on the same baseline instead.
  */
 export default function DataTable({
   columns,
@@ -31,6 +34,7 @@ export default function DataTable({
   getRowId = (row) => row._id,
   onRowClick,
   toolbar,
+  verticalAlign = 'middle',
 }) {
   const showEmpty = !loading && rows.length === 0;
 
@@ -46,7 +50,11 @@ export default function DataTable({
                 <TableCell
                   key={column.key}
                   align={column.align || 'left'}
-                  sx={{ width: column.width, minWidth: column.minWidth }}
+                  sx={{
+                    width: column.width,
+                    minWidth: column.minWidth,
+                    whiteSpace: 'nowrap',
+                  }}
                 >
                   {column.label}
                 </TableCell>
@@ -75,7 +83,15 @@ export default function DataTable({
                   sx={onRowClick ? { cursor: 'pointer' } : undefined}
                 >
                   {columns.map((column) => (
-                    <TableCell key={column.key} align={column.align || 'left'}>
+                    <TableCell
+                      key={column.key}
+                      align={column.align || 'left'}
+                      sx={{
+                        width: column.width,
+                        minWidth: column.minWidth,
+                        verticalAlign,
+                      }}
+                    >
                       {column.render ? column.render(row) : (row[column.key] ?? '—')}
                     </TableCell>
                   ))}

@@ -80,11 +80,7 @@ export default function CancelReasonDialog({ open, onClose, onConfirm }) {
   };
 
   const options = [
-    ...reasons.map((reason) => ({
-      value: reason._id,
-      label: reason.label,
-      description: reason.description,
-    })),
+    ...reasons.map((reason) => ({ value: reason._id, label: reason.label })),
     { value: OTHER, label: t('detail.reasonOther') },
   ];
 
@@ -133,12 +129,7 @@ export default function CancelReasonDialog({ open, onClose, onConfirm }) {
                   }}
                   className="mt-0.5 h-4 w-4 shrink-0 accent-brand-600"
                 />
-                <span className="min-w-0">
-                  <span className="block text-sm text-ink-800">{option.label}</span>
-                  {option.description && (
-                    <span className="mt-0.5 block text-xs text-ink-500">{option.description}</span>
-                  )}
-                </span>
+                <span className="min-w-0 text-sm text-ink-800">{option.label}</span>
               </label>
             );
           })}

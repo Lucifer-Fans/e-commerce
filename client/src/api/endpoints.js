@@ -19,6 +19,25 @@ export const authApi = {
 };
 
 /**
+ * Coming back from an account its owner closed.
+ *
+ * Every call here is made without a session, because the person making it cannot
+ * sign in — that is the whole problem. `request` is the only one that takes an
+ * address; the other three carry the single-use token from the emailed link,
+ * which is what stands in for being logged in.
+ */
+export const reactivationApi = {
+  /** Email me a link. Answers identically whatever the address turns out to be. */
+  request: (email) => api.post('/auth/reactivation/request', { email }),
+  /** The link has been opened — returns what the identity form needs to be answerable. */
+  open: (token) => api.post('/auth/reactivation/open', { token }),
+  /** Send the one-time code for the identity step. */
+  sendOtp: (token) => api.post('/auth/reactivation/otp', { token }),
+  /** The code, the account's own details, and the request itself. */
+  submit: (payload) => api.post('/auth/reactivation/submit', payload),
+};
+
+/**
  * The devices this account is signed in on. Every call is scoped server-side to the
  * caller, so there is no id to pass and no other account's sessions to reach.
  */
@@ -36,7 +55,27 @@ export const sessionApi = {
 
 export const userApi = {
   updateProfile: (payload) => api.patch('/users/me', payload),
-  deactivate: () => api.delete('/users/me'),
+
+  /**
+   * Closing your own account, in two calls.
+   *
+   * The reason goes first and earns a one-time code; the code does the closing.
+   * The reason is deliberately not repeated in the second call — the server holds
+   * it against the code it issued, so the two cannot describe different decisions.
+   */
+  deactivate: {
+    /**
+     * Whether the account may be closed at all. Read-only, and called on the click
+     * that opens the flow rather than inside it: an account with a parcel still on
+     * its way is turned away, and hearing that after choosing a reason and waiting
+     * for a code reads as a bug rather than as a rule.
+     */
+    eligibility: () => api.get('/users/me/deactivate/eligibility'),
+    reasons: () => api.get('/deactivation-reasons'),
+    /** `{ reasonId }` for a published reason, `{ reason }` for the shopper's own words. */
+    start: (payload) => api.post('/users/me/deactivate/request', payload),
+    confirm: (otp) => api.post('/users/me/deactivate/confirm', { otp }),
+  },
 
   /**
    * Persists the interface language so the choice follows the account to any
@@ -85,7 +124,13 @@ export const productApi = {
   list: (params) => api.get('/products', { params }),
   filterMeta: (params) => api.get('/products/filters', { params }),
   search: (q) => api.get('/products/search', { params: { q } }),
-  homeFeed: () => api.get('/products/home-feed'),
+  // `seen` is the browser's recently-viewed list. It is what personalises the
+  // "For You" rail for a shopper who is not signed in; omitted, the rail falls
+  // back to what is trending shop-wide.
+  homeFeed: (seenIds = []) =>
+    api.get('/products/home-feed', {
+      params: seenIds.length ? { seen: seenIds.slice(0, 20).join(',') } : undefined,
+    }),
   detail: (idOrSlug) => api.get(`/products/${idOrSlug}`),
   related: (id) => api.get(`/products/${id}/related`),
   // Every combination of a product, including the sold-out ones the selector shows disabled.

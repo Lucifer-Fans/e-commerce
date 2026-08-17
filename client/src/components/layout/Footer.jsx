@@ -39,7 +39,6 @@ const SERVICE_LINKS = [
   { to: '/faq', key: 'faq' },
   { to: '/terms', key: 'terms' },
   { to: '/privacy', key: 'privacy' },
-  { to: '/refund-policy', key: 'refundPolicy' },
 ];
 
 const NEWSLETTER_PERKS = [

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
@@ -12,6 +12,8 @@ import Icon from '../../components/common/Icon';
 import Spinner from '../../components/common/Spinner';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import PasswordInput from '../../components/auth/PasswordInput';
+import DeactivateAccountDialog from '../../components/account/DeactivateAccountDialog';
+import PendingOrdersDialog from '../../components/account/PendingOrdersDialog';
 
 export default function Settings() {
   const { t } = useTranslation(['account', 'common']);
@@ -22,7 +24,21 @@ export default function Settings() {
   const [values, setValues] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
-  const [deactivateOpen, setDeactivateOpen] = useState(false);
+  /**
+   * Closing an account is three dialogs, not one: are you sure, why, and prove
+   * it is you. `confirmOpen` is the first — the only one that can be dismissed
+   * without anything having happened — and `flowOpen` is the other two, which
+   * manage their own step between them.
+   */
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [flowOpen, setFlowOpen] = useState(false);
+  /**
+   * The orders standing in the way, when there are any. Set by the eligibility
+   * check the Danger Zone button runs before it opens anything — so the rule is
+   * met on the click that starts the flow rather than three screens into it.
+   */
+  const [blockingOrders, setBlockingOrders] = useState(null);
+  const [checking, setChecking] = useState(false);
 
   // Accounts created through Google have no password to prove, so they create one
   // instead of changing one. Google sign-in keeps working either way.
@@ -77,17 +93,45 @@ export default function Settings() {
     }
   };
 
-  const deactivate = async () => {
+  /**
+   * Runs once the account is actually closed — the dialog has already had the
+   * code accepted, so there is nothing left here that can fail in a way the
+   * shopper needs to hear about.
+   *
+   * `logout` is dispatched rather than `sessionExpired`: the server has revoked
+   * every session including this one, so the request it makes is expected to be
+   * refused, and the thunk clears the token either way. What matters is that the
+   * store, the cart and the wishlist are all emptied before the redirect, so the
+   * home page this lands on is a signed-out one.
+   */
+  /**
+   * The Danger Zone button.
+   *
+   * A failed check does not open the flow and does not block it either: if the
+   * eligibility call itself errors we let the shopper through, because both steps
+   * of the flow re-run the same check server-side and refusing here on a network
+   * blip would be a dead end with nothing to retry.
+   */
+  const startDeactivation = async () => {
+    setChecking(true);
     try {
-      await userApi.deactivate();
-      await dispatch(logout());
-      dispatch(resetCart());
-      dispatch(resetWishlist());
-      toast.success(t('settings.deactivated'));
-      navigate('/');
-    } catch (err) {
-      toast.error(err.message || t('settings.deactivateFailed'));
+      const res = await userApi.deactivate.eligibility();
+      if (res.data?.eligible) setConfirmOpen(true);
+      else setBlockingOrders(res.data?.openOrders || []);
+    } catch {
+      setConfirmOpen(true);
+    } finally {
+      setChecking(false);
     }
+  };
+
+  const finishDeactivation = async () => {
+    setFlowOpen(false);
+    await dispatch(logout());
+    dispatch(resetCart());
+    dispatch(resetWishlist());
+    toast.success(t('settings.deactivated'));
+    navigate('/');
   };
 
   return (
@@ -167,19 +211,62 @@ export default function Settings() {
           <Icon name="alert" size={18} />
           {t('settings.dangerZone')}
         </h2>
-        <p className="mb-4 text-sm text-ink-500">{t('settings.dangerHint')}</p>
-        <button type="button" onClick={() => setDeactivateOpen(true)} className="btn-danger">
+        <p className="mb-2 text-sm text-ink-500">{t('settings.dangerHint')}</p>
+
+        {/*
+         * The two clauses that actually govern this button, linked to the section
+         * rather than the page. Someone about to close an account is the one reader
+         * who genuinely wants the policy, and making them hunt for it in a
+         * twenty-clause document is how a considered decision becomes a support
+         * ticket a week later.
+         */}
+        <p className="mb-4 text-xs text-ink-500">
+          <Link to="/terms#deactivation" className="font-medium text-brand-600 hover:underline">
+            {t('settings.dangerTerms')}
+          </Link>
+          {' · '}
+          <Link to="/privacy#account-closure" className="font-medium text-brand-600 hover:underline">
+            {t('settings.dangerPrivacy')}
+          </Link>
+        </p>
+        <button
+          type="button"
+          onClick={startDeactivation}
+          disabled={checking}
+          className="btn-danger"
+        >
+          {checking && <Spinner size={14} />}
           {t('settings.deactivateAction')}
         </button>
       </section>
 
+      {/* Confirming here opens the reason dialog; nothing is written until the
+          code at the end of it is accepted. */}
       <ConfirmDialog
-        open={deactivateOpen}
-        onClose={() => setDeactivateOpen(false)}
-        onConfirm={deactivate}
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={() => setFlowOpen(true)}
         title={t('settings.deactivateTitle')}
         message={t('settings.deactivateMessage')}
-        confirmLabel={t('settings.deactivateConfirm')}
+        confirmLabel={t('settings.deactivateStart')}
+      />
+
+      <DeactivateAccountDialog
+        open={flowOpen}
+        onClose={() => setFlowOpen(false)}
+        onDeactivated={finishDeactivation}
+        // The flow re-checks server-side at both steps; if an order lands while a
+        // dialog is open, this is where that refusal surfaces.
+        onBlocked={(orders) => {
+          setFlowOpen(false);
+          setBlockingOrders(orders || []);
+        }}
+      />
+
+      <PendingOrdersDialog
+        open={Boolean(blockingOrders)}
+        onClose={() => setBlockingOrders(null)}
+        orders={blockingOrders || []}
       />
     </div>
   );

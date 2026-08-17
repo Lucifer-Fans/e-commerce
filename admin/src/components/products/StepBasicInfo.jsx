@@ -5,12 +5,9 @@ import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 
 import { subCategoryApi, brandApi } from '../../api/endpoints';
 import { formatPrice, computeFinalPrice } from '../../utils/format';
@@ -21,8 +18,9 @@ export default function StepBasicInfo({ values, errors, onChange, categories }) 
   const [loadingSubs, setLoadingSubs] = useState(false);
   const [brands, setBrands] = useState([]);
 
-  // The brand catalogue is the suggestion list; the field stays free text so a
-  // product saved before a brand existed still edits cleanly.
+  // The brand catalogue drives the dropdown. A product saved with a brand that
+  // has since been renamed/deactivated keeps its value as an extra option so
+  // editing it doesn't silently blank the field.
   useEffect(() => {
     brandApi
       .list()
@@ -49,6 +47,9 @@ export default function StepBasicInfo({ values, errors, onChange, categories }) 
       .catch(() => setSubCategories([]))
       .finally(() => setLoadingSubs(false));
   }, [values.category, categories]);
+
+  const brandOptions =
+    values.brand && !brands.includes(values.brand) ? [values.brand, ...brands] : brands;
 
   const finalPrice = computeFinalPrice(values.price, values.discountPercent);
   const savings = (Number(values.price) || 0) - finalPrice;
@@ -126,26 +127,29 @@ export default function StepBasicInfo({ values, errors, onChange, categories }) 
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
-        <Autocomplete
-          freeSolo
-          autoSelect
-          options={brands}
+        <TextField
+          select
+          fullWidth
+          label="Brand"
           value={values.brand || ''}
-          onChange={(_, next) => onChange({ brand: next || '' })}
-          onInputChange={(_, next) => onChange({ brand: next })}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              fullWidth
-              label="Brand"
-              helperText={
-                brands.length
-                  ? 'Pick one from the Brands catalogue, or type a new name'
-                  : 'Appears above the product name — add brands under Catalogue → Brands'
-              }
-            />
-          )}
-        />
+          onChange={set('brand')}
+          error={Boolean(errors.brand)}
+          helperText={
+            errors.brand ||
+            (brands.length
+              ? 'Pick one from the Brands catalogue'
+              : 'Add brands under Catalogue → Brands')
+          }
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {brandOptions.map((brand) => (
+            <MenuItem key={brand} value={brand}>
+              {brand}
+            </MenuItem>
+          ))}
+        </TextField>
       </Grid>
 
       <Grid size={{ xs: 12, sm: 6 }}>
@@ -300,29 +304,6 @@ export default function StepBasicInfo({ values, errors, onChange, categories }) 
             />
           )}
         />
-      </Grid>
-
-      <Grid size={12}>
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={values.isFeatured}
-                onChange={(e) => onChange({ isFeatured: e.target.checked })}
-              />
-            }
-            label={<Typography variant="body2">Show in “Products For You”</Typography>}
-          />
-          <FormControlLabel
-            control={
-              <Switch
-                checked={values.isTopSelling}
-                onChange={(e) => onChange({ isTopSelling: e.target.checked })}
-              />
-            }
-            label={<Typography variant="body2">Show in “Top Selling Products”</Typography>}
-          />
-        </Stack>
       </Grid>
     </Grid>
   );

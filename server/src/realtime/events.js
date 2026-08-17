@@ -31,6 +31,8 @@ const EVENTS = {
   COUPON_CHANGED: 'coupon:changed',
   SETTINGS_UPDATED: 'settings:updated',
   CAREER_POSITION_CHANGED: 'career:position-changed',
+  CANCELLATION_REASON_CHANGED: 'cancellation-reason:changed',
+  DEACTIVATION_REASON_CHANGED: 'deactivation-reason:changed',
 
   REVIEW_CREATED: 'review:created',
   REVIEW_UPDATED: 'review:updated',
@@ -64,6 +66,8 @@ const EVENTS = {
   NEWSLETTER_CHANGED: 'newsletter:changed',
 
   USER_CHANGED: 'user:changed',
+  /** A reactivation request was submitted, approved or rejected. */
+  REACTIVATION_REQUEST_CHANGED: 'reactivation-request:changed',
   DASHBOARD_INVALIDATED: 'dashboard:invalidated',
   ADMIN_NOTIFICATION: 'admin:notification',
   PRESENCE_UPDATED: 'presence:updated',

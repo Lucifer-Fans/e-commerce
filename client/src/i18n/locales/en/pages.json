@@ -21,7 +21,7 @@
       "email": "Email Address",
       "emailPlaceholder": "example@gmail.com",
       "phone": "Phone Number",
-      "phonePlaceholder": "Enter 10 digit number",
+      "phonePlaceholder": "Enter 10-digit number",
       "subject": "Subject",
       "subjectPlaceholder": "Order Inquiry, Product Info, etc.",
       "message": "Message",
@@ -41,11 +41,11 @@
     "noOpenings": "No openings right now",
     "noOpeningsNote": "There are no open positions right now. Please check back soon.",
     "selectExperience": "Select Experience",
-    "uploadResume": "Upload Resume",
+    "uploadResume": "Upload Résumé",
     "chooseFile": "Choose File",
     "noFile": "No file chosen",
     "removeFile": "Remove selected file",
-    "resumeHint": "(PDF, DOC, DOCX - Max 5MB)",
+    "resumeHint": "(PDF, DOC or DOCX — max 5 MB)",
     "submit": "Submit Application",
     "submitting": "Submitting…",
     "uploading": "Uploading {{percent}}%",
@@ -59,13 +59,13 @@
       "email": "Email Address",
       "emailPlaceholder": "example@gmail.com",
       "phone": "Phone Number",
-      "phonePlaceholder": "Enter 10 digit number",
+      "phonePlaceholder": "Enter 10-digit number",
       "position": "Position Applying For",
       "experience": "Experience",
       "location": "Current Location",
       "locationPlaceholder": "Your Location",
       "coverLetter": "Cover Letter / Message",
-      "coverLetterPlaceholder": "Tell us about yourself..."
+      "coverLetterPlaceholder": "Tell us about yourself…"
     },
     "perks": {
       "growthTitle": "Growth Opportunities",
@@ -80,7 +80,7 @@
       "experience": "Select your experience level",
       "resume": "Attach your résumé (PDF, DOC or DOCX)",
       "resumeType": "Only PDF, DOC and DOCX files are accepted",
-      "resumeSize": "Your résumé must be smaller than 5MB"
+      "resumeSize": "Your résumé must be smaller than 5 MB"
     }
   }
 }

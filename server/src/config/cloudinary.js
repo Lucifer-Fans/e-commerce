@@ -76,6 +76,27 @@ function uploadVideoBuffer(buffer, { folder = env.cloudinary.folder, tags = [] }
   });
 }
 
+/**
+ * Sign a browser-side upload.
+ *
+ * The admin panel posts large product media straight to Cloudinary rather than
+ * through this server: on a small dyno every megabyte would otherwise be carried
+ * twice — browser → API → Cloudinary — with the request held open the whole time.
+ * Only the signature is issued here, and it covers exactly the parameters the
+ * browser is allowed to send, so nothing else can be smuggled into the upload.
+ */
+function signUpload({ folder, timestamp = Math.floor(Date.now() / 1000) } = {}) {
+  const params = { folder, timestamp };
+  const signature = cloudinary.utils.api_sign_request(params, env.cloudinary.apiSecret);
+
+  return {
+    ...params,
+    signature,
+    apiKey: env.cloudinary.apiKey,
+    cloudName: env.cloudinary.cloudName,
+  };
+}
+
 /** A still frame from a video, sized for a thumbnail tile. */
 function videoPosterUrl(publicId, { width = 400, height = 400 } = {}) {
   if (!publicId || !env.cloudinaryEnabled) return null;
@@ -166,6 +187,7 @@ module.exports = {
   uploadBuffer,
   uploadVideoBuffer,
   uploadRawBuffer,
+  signUpload,
   videoPosterUrl,
   destroyAsset,
   transformedUrl,

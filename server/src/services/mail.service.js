@@ -601,6 +601,241 @@ const lockedBanner = (siteName) => `
   </tr>`;
 
 /**
+ * The panel the account-closed mail opens on.
+ *
+ * Fourth of the account set and built to the same measurements as the three
+ * above it, for the reason given there: the mails that arrive unasked-for prove
+ * they are ours largely by looking alike. What differs is the artwork — a
+ * profile card with a red cross rather than an envelope or a padlock, because
+ * this is the one of the four reporting something that has finished rather than
+ * something still waiting to be done.
+ *
+ * Goes in `layout`'s `banner` slot with `hideHeading`, since the <h1> lives here.
+ */
+const deactivatedBanner = (siteName) => `
+  <tr>
+    <td class="p-pad" style="background:${C.brand50};padding:34px 40px 32px;text-align:center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr><td align="center" style="padding-bottom:14px;font-size:0;line-height:0">
+          ${image('account-deactivated.png', { width: 210, height: 210, alt: '', style: 'margin:0 auto', cls: 'p-art' })}
+        </td></tr>
+        <tr><td align="center">
+          <h1 class="p-h1" style="margin:0 0 10px;font:800 30px/1.25 ${FONT};color:${C.ink900};
+                     letter-spacing:-.6px">Your Account Has Been Deactivated</h1>
+          <p style="margin:0;font:400 15px/1.7 ${FONT};color:${C.ink600}">
+            Your <b style="color:${C.brand600}">${escapeHtml(siteName)}</b> account is now deactivated,
+            exactly as you asked.
+          </p>
+        </td></tr>
+      </table>
+    </td>
+  </tr>`;
+
+/**
+ * The panel the reactivation-link mail opens on: the same envelope-and-card
+ * illustration answered with a green tick, so it reads as the exact opposite of
+ * the cross above it.
+ *
+ * The eyebrow above the heading is the one thing the other banners do not carry.
+ * This mail can arrive weeks after the closure it undoes, to someone who may
+ * have forgotten asking for it — so it names the transaction before the brand.
+ */
+const reactivateBanner = (siteName) => `
+  <tr>
+    <td class="p-pad" style="background:${C.brand50};padding:34px 40px 32px;text-align:center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr><td align="center" style="padding-bottom:14px;font-size:0;line-height:0">
+          ${image('account-reactivate.png', { width: 240, height: 240, alt: '', style: 'margin:0 auto', cls: 'p-art' })}
+        </td></tr>
+        <tr><td align="center">
+          <p style="margin:0 0 8px;font:700 12px/1.4 ${FONT};color:${C.brand600};
+                    letter-spacing:1.4px;text-transform:uppercase">Account Re-activation</p>
+          <h1 class="p-h1" style="margin:0 0 10px;font:800 30px/1.25 ${FONT};color:${C.ink900};
+                     letter-spacing:-.6px">Your account is ready to activate</h1>
+          <p style="margin:0;font:400 15px/1.7 ${FONT};color:${C.ink600}">
+            You asked to re-activate your
+            <b style="color:${C.brand600}">${escapeHtml(siteName)}</b> account, and we are glad
+            to have you back.
+          </p>
+        </td></tr>
+      </table>
+    </td>
+  </tr>`;
+
+/**
+ * The panel the three outcome mails open on — request received, request
+ * approved, request refused. Each answers something the reader is waiting on, so
+ * they share a shape and differ in the heading, the lead and the mark.
+ */
+const outcomeBanner = (art, title, lead, size = 210) => `
+  <tr>
+    <td class="p-pad" style="background:${C.brand50};padding:34px 40px 32px;text-align:center">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr><td align="center" style="padding-bottom:14px;font-size:0;line-height:0">
+          ${image(art, { width: size, height: size, alt: '', style: 'margin:0 auto', cls: 'p-art' })}
+        </td></tr>
+        <tr><td align="center">
+          <h1 class="p-h1" style="margin:0 0 10px;font:800 30px/1.25 ${FONT};color:${C.ink900};
+                     letter-spacing:-.6px">${title}</h1>
+          <p style="margin:0;font:400 15px/1.7 ${FONT};color:${C.ink600}">${lead}</p>
+        </td></tr>
+      </table>
+    </td>
+  </tr>`;
+
+/**
+ * A titled note on a tinted panel with a glyph beside it — `noteCard` widened
+ * into the two other tones the account mails need.
+ *
+ * `info` is the blue "what does this mean?" panel that explains a state; `help`
+ * is the amber one that offers a way out of it. The amber is deliberate and
+ * rationed: it is the only warm colour anywhere in the suite, and it marks the
+ * paragraph a reader who did *not* expect this email needs to find.
+ */
+const TONES = {
+  info: { bg: C.brand50, icon: 'shield-check-brand.png' },
+  help: { bg: '#fffbeb', icon: 'shield-check-amber.png' },
+};
+
+const toneCard = (tone, title, text, cta = null) => {
+  const { bg, icon } = TONES[tone] || TONES.info;
+  // With a button the card takes the support-bar shape: mark, copy, action in
+  // one row, the action right-aligned and everything centred against it. The
+  // `p-cta` cells stack on narrow screens, where a third column cannot fit.
+  // The button itself is a padded link on a coloured <td>, so it stays a filled
+  // shape in clients that drop background images.
+  const copy = `
+    <p style="margin:0 0 4px;font:700 14px/1.5 ${FONT};color:${C.ink900}">${title}</p>
+    <p style="margin:0;font:400 13px/1.7 ${FONT};color:${C.ink600}">${text}</p>`;
+
+  const inner = cta
+    ? // One padded wrapper cell holding the three `p-cta` columns, exactly as the
+      // inquiry support bar nests them: the mobile rule zeroes their own inset
+      // when they stack, and only the wrapper's padding then keeps the copy off
+      // the card edge.
+      `
+      <td style="padding:18px">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td class="p-cta" width="46" style="width:46px;padding-right:12px;
+                vertical-align:middle;font-size:0;line-height:0">
+              ${image(icon, { width: 30, height: 30, alt: '' })}
+            </td>
+            <td class="p-cta" style="vertical-align:middle">${copy}
+            </td>
+            <td class="p-cta" align="right" style="padding-left:14px;vertical-align:middle">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="p-btn"
+                     style="margin:0 0 0 auto">
+                <tr><td style="background:${C.brand600};border-radius:8px">
+                  <a href="${escapeHtml(cta.href)}"
+                     style="display:inline-block;padding:13px 24px;color:#ffffff;text-decoration:none;
+                            font:600 14px/1 ${FONT};border-radius:8px;white-space:nowrap">${escapeHtml(cta.label)}</a>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>`
+    : `
+      <td width="60" style="width:60px;padding:18px 0 18px 18px;vertical-align:top;
+          font-size:0;line-height:0">
+        ${image(icon, { width: 30, height: 30, alt: '' })}
+      </td>
+      <td style="padding:18px 20px 18px 0;vertical-align:top">${copy}
+      </td>`;
+
+  return `
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+         style="margin:22px 0 0;background:${bg};border-radius:10px">
+    <tr>${inner}
+    </tr>
+  </table>`;
+};
+
+/** The contact-page button those cards offer — the same destination the inquiry mails use. */
+const contactCta = (label = 'Contact Us') => ({ href: `${env.clientUrl}/contact`, label });
+
+/**
+ * The account facts a lifecycle mail states back: the address it concerns, the
+ * date it happened, and whatever else that particular message turns on.
+ *
+ * Same label-left / value-right rows and the same section heading the order
+ * mails use, so a shopper who has had a confirmation from us has already read
+ * this shape once. Rows arrive as [label, value] pairs and falsy ones are
+ * dropped, which is how an account with no reason on record simply shows one
+ * fewer line rather than an empty one.
+ */
+const accountFacts = (title, rows) => `
+  ${rule(24)}
+  ${sectionHead('user-brand.png', title)}
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+    ${rows
+      .filter(Boolean)
+      .map(([label, value]) => detailRow(label, value))
+      .join('')}
+  </table>`;
+
+/**
+ * Why coming back is worth the two minutes it takes — the four promises the
+ * reactivation mail closes on.
+ *
+ * Same construction as the order mail's trust row, and three of its four glyphs
+ * are cuts of marks that row already uses. That is not laziness: a shopper who
+ * has bought from us has met this panel at the foot of every order mail, and
+ * meeting it again in the one message asking them to come back is the most
+ * familiar thing we can put in front of them.
+ */
+const REACTIVATE_BENEFITS = [
+  { icon: 'shield-check-brand.png', title: 'Secure Access', text: 'Your data is safe with us' },
+  { icon: 'bag-brand.png', title: 'Seamless Experience', text: 'Pick up where you left off' },
+  { icon: 'percent-brand.png', title: 'Exclusive Offers', text: 'Deals and rewards await' },
+  { icon: 'job-headset.png', title: '24/7 Support', text: 'We are here to help you' },
+];
+
+/**
+ * Two lines of the 13px/1.4 title, reserved whether a tile needs them or not.
+ * Four tiles across a card leave each title about a quarter of the width, and
+ * "Seamless Experience" is one word too long for it: the wrap pushes that tile's
+ * description a line below its three neighbours', so the row reads as four
+ * different baselines. Reserving the taller of the two heights lands every
+ * description on the same line without touching the copy.
+ */
+const TRUST_TITLE_H = 37;
+
+const reactivateBenefits = () => `
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+         style="margin:26px 0 0;background:${C.iris50};border:1px solid ${C.iris100};border-radius:12px">
+    <tr>
+      <td style="padding:22px 14px">
+        <p style="margin:0 0 18px;font:800 15px/1.4 ${FONT};color:${C.ink900};text-align:center">
+          Why re-activate your account?
+        </p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            ${REACTIVATE_BENEFITS.map(
+              (point) => `
+              <td class="p-trust" width="25%" align="center" style="width:25%;padding:0 6px;vertical-align:top">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr><td align="center" style="padding:0 0 8px;font-size:0;line-height:0">
+                    ${image(point.icon, { width: 24, height: 24, alt: '', style: 'margin:0 auto' })}
+                  </td></tr>
+                  <tr><td align="center" height="${TRUST_TITLE_H}"
+                          style="height:${TRUST_TITLE_H}px;padding:0 0 3px;vertical-align:top">
+                    <p style="margin:0;font:700 13px/1.4 ${FONT};color:${C.ink900}">${point.title}</p>
+                  </td></tr>
+                  <tr><td align="center" style="vertical-align:top">
+                    <p style="margin:0;font:400 12px/1.5 ${FONT};color:${C.ink500}">${point.text}</p>
+                  </td></tr>
+                </table>
+              </td>`
+            ).join('')}
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>`;
+
+/**
  * How long the wait is, given the same treatment the verification code gets:
  * the one fact the reader opened this mail for, on its own line and at a size
  * they can read from the notification shade. Everything else in the message is
@@ -1480,7 +1715,7 @@ const orderTextSummary = (order, lead) =>
  * ------------------------------------------------------------------ */
 
 /** Token lifetime is set in User.createPasswordResetToken — keep the copy in step. */
-const RESET_VALIDITY = '15 minutes';
+const RESET_VALIDITY = '10 minutes';
 
 const sendPasswordResetEmail = async ({ to, name, resetUrl }) => {
   // Named rather than "your account": the reader has to be able to tell which
@@ -1626,6 +1861,350 @@ const sendAccountLockedEmail = async ({ to, name, minutes }) => {
         'Security Note:',
         `Nobody signed in and your password has not changed. This pause exists so that
          repeated guesses cannot be used to work out your password.`
+      )}`,
+  });
+};
+
+/* ------------------------------------------------------------------ *
+ * Account lifecycle — closing an account, and coming back from one
+ *
+ * Six messages that between them cover the whole of it. They are one
+ * suite on purpose: a reader meets several of them over weeks, often
+ * having forgotten the last, so each states plainly which account it is
+ * about and what has actually happened to it.
+ * ------------------------------------------------------------------ */
+
+/**
+ * The code that confirms a deactivation.
+ *
+ * Deliberately the verification mail's twin — same code block, same expiry line,
+ * same absence of any link at all — because it asks for exactly the same thing:
+ * proof that whoever is clicking is reading this inbox. What changes is the
+ * stakes, and the copy says so: this code closes an account, and the closing
+ * note tells someone who did not ask for it the one thing that matters, which is
+ * that ignoring it leaves the account exactly as it was.
+ */
+const sendDeactivationOtpEmail = async ({ to, name, code, minutes }) => {
+  const { siteName } = await getBranding();
+  const window = `${minutes} minute${minutes === 1 ? '' : 's'}`;
+
+  return send({
+    to,
+    subject: `${code} is your ${siteName} account deactivation code`,
+    text:
+      `Hi ${name},\n\nYour ${siteName} account deactivation code is ${code}.\n\n` +
+      `Enter it on the confirmation screen to close your account. The code expires in ${window}.\n\n` +
+      `If you did not ask to deactivate your account, ignore this email and change your password — ` +
+      `nothing happens until this code is entered.`,
+    title: 'Confirm your account deactivation',
+    hideHeading: true,
+    banner: outcomeBanner(
+      'secure-mail.png',
+      'Confirm Account Deactivation',
+      'One last check before we close your account.'
+    ),
+    body: `
+      <p style="margin:0 0 14px;font:700 16px/1.5 ${FONT};color:${C.ink900}">Hi ${escapeHtml(name)},</p>
+      ${paragraph(
+        `Use the code below to confirm that you want to deactivate the account registered to
+         <b style="color:${C.brand600}">${escapeHtml(to)}</b>.`
+      )}
+      ${codeBox(code)}
+      ${paragraph(
+        `<span style="font-size:14px">This code expires in
+         <b style="color:${C.ink900}">${window}</b> and can only be used once.</span>`
+      )}
+      ${paragraph(
+        `Once it is entered you will be signed out on every device, and you will not be able to
+         sign in again — with your password or with Google — until the account is reactivated.`
+      )}
+      ${toneCard(
+        'help',
+        'Didn&rsquo;t ask for this?',
+        `Ignore this email and your account stays exactly as it is. Nothing changes until the code
+         above is entered. If you did not request it, we&rsquo;d also change your password.`
+      )}`,
+  });
+};
+
+/**
+ * Sent the moment the account actually closes.
+ *
+ * This is the receipt for something irreversible-feeling, so it is written to be
+ * kept: it states the address, the date and the reason on record, which is the
+ * set of facts a reader quotes back to support months later. The way in is named
+ * too — a closure the owner regrets the next morning must not need a support
+ * ticket to undo.
+ */
+const sendAccountDeactivatedEmail = async ({ to, name, reason, at = new Date() }) => {
+  const { siteName } = await getBranding();
+  const when = dateTime(at);
+  const loginUrl = `${env.clientUrl}/login`;
+
+  return send({
+    to,
+    subject: 'Your account has been deactivated',
+    text:
+      `Hi ${name},\n\nYour ${siteName} account has been deactivated as per your request on ${when}.\n\n` +
+      `Email address: ${to}\nDeactivation date: ${when}\n` +
+      `${reason ? `Reason: ${reason}\n` : ''}\n` +
+      `Your account is currently disabled and you will not be able to sign in or access your ` +
+      `account information until it is reactivated. Your order history is retained for accounting purposes.\n\n` +
+      `Changed your mind? Open ${loginUrl} and choose "send a reactivation email" — we will email ` +
+      `you a secure link to start the process.\n\n` +
+      `If you did not request this, contact our support team straight away.`,
+    title: 'Your account has been deactivated',
+    hideHeading: true,
+    banner: deactivatedBanner(siteName),
+    body: `
+      <p style="margin:0 0 14px;font:700 16px/1.5 ${FONT};color:${C.ink900}">Hi ${escapeHtml(name)},</p>
+      ${paragraph(
+        `We&rsquo;re writing to let you know that your
+         <b style="color:${C.brand600}">${escapeHtml(siteName)}</b> account has been
+         <b style="color:${C.ink900}">deactivated</b> as per your request on
+         <b style="color:${C.ink900}">${escapeHtml(when)}</b>.`
+      )}
+      ${toneCard(
+        'info',
+        'What does this mean?',
+        `Your account is currently disabled, and you will not be able to sign in or access your
+         account information until it is reactivated. Your order history is kept for accounting
+         purposes and is not deleted.`
+      )}
+      ${accountFacts('Your Account Details', [
+        ['Email address', escapeHtml(to)],
+        ['Deactivation date', escapeHtml(when)],
+        reason ? ['Reason', escapeHtml(reason)] : null,
+      ])}
+      ${rule(24)}
+      ${paragraph(
+        `Changed your mind? You can ask us for a secure re-activation link at any time from the
+         sign-in page — it takes a couple of minutes and your account comes back with everything
+         still in it.`
+      )}
+      ${button(loginUrl, 'Request Re-activation', { align: 'center', icon: 'lock-white.png' })}
+      ${toneCard(
+        'help',
+        'Need help?',
+        `If you did not request this deactivation, or you have any questions, please contact our
+         support team. We&rsquo;re happy to assist you.`,
+        contactCta()
+      )}`,
+  });
+};
+
+/**
+ * The single-use link that starts a reactivation.
+ *
+ * The button does not reactivate anything, and the copy is careful to say so: it
+ * opens the verification steps. That is the honest description, and it is also
+ * the safe one — a link that flipped an account back on by itself would make
+ * every forwarded copy of this email a working key.
+ */
+const sendReactivationLinkEmail = async ({ to, name, activateUrl, minutes = 10 }) => {
+  const { siteName } = await getBranding();
+  const window = `${minutes} minute${minutes === 1 ? '' : 's'}`;
+
+  return send({
+    to,
+    subject: `Re-activate your ${siteName} account`,
+    text:
+      `Hi ${name},\n\nYou requested to re-activate your ${siteName} account.\n\n` +
+      `Open the link below to verify your identity and submit your re-activation request. ` +
+      `It expires in ${window} and can only be used once.\n\n${activateUrl}\n\n` +
+      `If you did not request this, you can safely ignore this email — your account stays deactivated.`,
+    title: 'Your account is ready to activate',
+    hideHeading: true,
+    banner: reactivateBanner(siteName),
+    body: `
+      <p style="margin:0 0 14px;font:700 16px/1.5 ${FONT};color:${C.ink900}">Hi ${escapeHtml(name)},</p>
+      ${paragraph(
+        `Click the button below to securely start re-activating the account registered to
+         <b style="color:${C.brand600}">${escapeHtml(to)}</b>.`
+      )}
+      ${paragraph(
+        `<span style="font-size:14px">We&rsquo;ll ask you to confirm your registered details and
+         a one-time code before your request goes to our team — the button itself does not
+         re-activate the account.</span>`
+      )}
+      ${button(activateUrl, 'Activate My Account', { align: 'center', icon: 'lock-white.png' })}
+      ${paragraph(
+        `<span style="font-size:14px">This link expires in
+         <b style="color:${C.ink900}">${window}</b> for your security, and can only be used once.</span>`
+      )}
+      ${paragraph(
+        `<span style="font-size:14px">If the button above doesn&rsquo;t work, copy and paste this
+         link into your browser:</span>`
+      )}
+      ${linkBox(activateUrl)}
+      ${reactivateBenefits()}
+      ${toneCard(
+        'help',
+        'Need help?',
+        `If you didn&rsquo;t request this re-activation, you can safely ignore this email &mdash;
+         your account will stay deactivated and this link will expire on its own.`
+      )}`,
+  });
+};
+
+/**
+ * The acknowledgement a submitted request gets.
+ *
+ * Its whole job is the waiting time. Someone who has just proved their identity
+ * twice expects to be let back in immediately, and this is the message that
+ * resets that expectation — so the two-to-three-day window is stated in the
+ * subject, the first paragraph and the summary rows, rather than buried once.
+ */
+const sendReactivationSubmittedEmail = async ({ to, name, requestedAt = new Date(), reason }) => {
+  const { siteName } = await getBranding();
+  const when = dateTime(requestedAt);
+
+  return send({
+    to,
+    subject: 'We have received your re-activation request',
+    text:
+      `Hi ${name},\n\nYour request to re-activate your ${siteName} account has been submitted ` +
+      `on ${when}.\n\nOur team reviews these by hand. Your account will be activated within ` +
+      `2-3 working days, and we will email you as soon as it is.\n\n` +
+      `Email address: ${to}\nRequest date: ${when}\n${reason ? `Original deactivation reason: ${reason}\n` : ''}`,
+    title: 'Re-activation request received',
+    hideHeading: true,
+    banner: outcomeBanner(
+      'account-reactivate.png',
+      'Re-activation request received',
+      'Thank you &mdash; your identity has been verified and your request is with our team.',
+      240
+    ),
+    body: `
+      <p style="margin:0 0 14px;font:700 16px/1.5 ${FONT};color:${C.ink900}">Hi ${escapeHtml(name)},</p>
+      ${paragraph(
+        `Your request to re-activate your
+         <b style="color:${C.brand600}">${escapeHtml(siteName)}</b> account has been submitted
+         successfully.`
+      )}
+      ${toneCard(
+        'info',
+        'What happens next?',
+        `Every re-activation is reviewed by a person. Your account will be activated within
+         <b>2&ndash;3 working days</b>, and we will send you an email the moment it is. There is
+         nothing else you need to do in the meantime.`
+      )}
+      ${accountFacts('Your Request', [
+        ['Email address', escapeHtml(to)],
+        ['Request date', escapeHtml(when)],
+        reason ? ['Original reason', escapeHtml(reason)] : null,
+        ['Status', '<b>Pending review</b>'],
+      ])}
+      ${toneCard(
+        'help',
+        'Need help?',
+        `If you did not submit this request, please contact our support team straight away &mdash;
+         your account stays deactivated until it is approved.`,
+        contactCta()
+      )}`,
+  });
+};
+
+/**
+ * The approval. Short by design: the reader has been waiting days for one fact,
+ * and the button under it is the only thing they want to do next.
+ */
+const sendAccountReactivatedEmail = async ({ to, name, reviewedAt = new Date(), adminNotes }) => {
+  const { siteName } = await getBranding();
+  const when = dateTime(reviewedAt);
+  const loginUrl = `${env.clientUrl}/login`;
+
+  return send({
+    to,
+    subject: `Welcome back — your ${siteName} account is active`,
+    text:
+      `Hi ${name},\n\nGood news: your ${siteName} account has been re-activated on ${when}.\n\n` +
+      `You can sign in again with your email and password, or with Google, exactly as before. ` +
+      `Your orders, addresses and wishlist are all still there.\n\n${loginUrl}\n` +
+      `${adminNotes ? `\nA note from our team: ${adminNotes}\n` : ''}`,
+    title: 'Your account has been reactivated',
+    hideHeading: true,
+    banner: outcomeBanner(
+      'account-reactivate.png',
+      'Welcome back!',
+      'Your account has been re-activated and is ready to use.',
+      240
+    ),
+    body: `
+      <p style="margin:0 0 14px;font:700 16px/1.5 ${FONT};color:${C.ink900}">Hi ${escapeHtml(name)},</p>
+      ${paragraph(
+        `Your <b style="color:${C.brand600}">${escapeHtml(siteName)}</b> account has been
+         re-activated. You can sign in again with your email and password, or with Google,
+         exactly as before.`
+      )}
+      ${toneCard(
+        'info',
+        'Everything is still there',
+        `Your orders, saved addresses and wishlist were kept throughout &mdash; nothing was
+         deleted while the account was closed.`
+      )}
+      ${accountFacts('Your Account', [
+        ['Email address', escapeHtml(to)],
+        ['Re-activated on', escapeHtml(when)],
+        ['Status', '<b>Active</b>'],
+      ])}
+      ${adminNotes ? paragraph(`<span style="font-size:14px">${escapeHtml(adminNotes)}</span>`) : ''}
+      ${button(loginUrl, 'Sign In To My Account', { align: 'center', icon: 'lock-white.png' })}
+      ${reactivateBenefits()}`,
+  });
+};
+
+/**
+ * The refusal.
+ *
+ * The reason an admin typed is printed verbatim and given its own panel, because
+ * a rejection without one reads as arbitrary and sends the reader to support to
+ * ask the question this email should already have answered. The account's state
+ * is restated plainly for the same reason: "rejected" is not self-explanatory,
+ * and someone must not be left wondering whether they have been deleted.
+ */
+const sendReactivationRejectedEmail = async ({ to, name, reason, reviewedAt = new Date() }) => {
+  const { siteName } = await getBranding();
+  const when = dateTime(reviewedAt);
+
+  return send({
+    to,
+    subject: 'About your account re-activation request',
+    text:
+      `Hi ${name},\n\nWe have reviewed your request to re-activate your ${siteName} account, ` +
+      `and we are not able to approve it at this time.\n\n` +
+      `${reason ? `Reason: ${reason}\n\n` : ''}` +
+      `Your account remains deactivated. Nothing has been deleted. If you believe this is a ` +
+      `mistake, please reply to our support team and we will take another look.`,
+    title: 'About your re-activation request',
+    hideHeading: true,
+    banner: outcomeBanner(
+      'account-deactivated.png',
+      'We could not approve your request',
+      'Your account remains deactivated for now.'
+    ),
+    body: `
+      <p style="margin:0 0 14px;font:700 16px/1.5 ${FONT};color:${C.ink900}">Hi ${escapeHtml(name)},</p>
+      ${paragraph(
+        `We have reviewed your request to re-activate your
+         <b style="color:${C.brand600}">${escapeHtml(siteName)}</b> account, and we are not able
+         to approve it at this time.`
+      )}
+      ${reason ? toneCard('info', 'Why', escapeHtml(reason)) : ''}
+      ${accountFacts('Your Request', [
+        ['Email address', escapeHtml(to)],
+        ['Reviewed on', escapeHtml(when)],
+        ['Account status', '<b>Deactivated</b>'],
+      ])}
+      ${paragraph(
+        `Nothing has been deleted &mdash; your orders and account details are all still on record.`
+      )}
+      ${toneCard(
+        'help',
+        'Think this is a mistake?',
+        `Contact our support team with any details that might help, and we will gladly take
+         another look at your request.`,
+        contactCta()
       )}`,
   });
 };
@@ -3187,6 +3766,12 @@ module.exports = {
   sendPasswordResetEmail,
   sendEmailVerificationEmail,
   sendAccountLockedEmail,
+  sendDeactivationOtpEmail,
+  sendAccountDeactivatedEmail,
+  sendReactivationLinkEmail,
+  sendReactivationSubmittedEmail,
+  sendAccountReactivatedEmail,
+  sendReactivationRejectedEmail,
   sendOrderConfirmationEmail,
   sendOrderStatusEmail,
   sendInquiryAckEmail,

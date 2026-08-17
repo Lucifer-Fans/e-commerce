@@ -29,10 +29,10 @@ const FREE_DELIVERY_THRESHOLD = 499;
 
 /**
  * The delivery strip reads off the selected SKU: whether *this* combination clears the
- * free-delivery threshold on its own, and what it weighs — both of which can differ
- * between a 128 GB and a 512 GB unit of the same phone.
+ * free-delivery threshold on its own, which can differ between a 128 GB and a 512 GB
+ * unit of the same phone. The other three promises are the same for every product.
  */
-const deliveryPoints = ({ finalPrice, weight, t }) => {
+const deliveryPoints = ({ finalPrice, t }) => {
   const shipsFree = finalPrice >= FREE_DELIVERY_THRESHOLD;
   return [
     {
@@ -44,30 +44,23 @@ const deliveryPoints = ({ finalPrice, weight, t }) => {
         : t('details.delivery.paidText', { amount: FREE_DELIVERY_THRESHOLD }),
     },
     {
+      id: 'payment',
+      icon: 'shield',
+      title: t('details.delivery.paymentTitle'),
+      text: t('details.delivery.paymentText'),
+    },
+    {
       id: 'returns',
       icon: 'refresh',
       title: t('details.delivery.returnsTitle'),
       text: t('details.delivery.returnsText'),
     },
     {
-      id: 'payment',
-      icon: 'shield',
-      title: t('details.delivery.paymentTitle'),
-      text: t('details.delivery.paymentText'),
+      id: 'genuine',
+      icon: 'package',
+      title: t('details.delivery.genuineTitle'),
+      text: t('details.delivery.genuineText'),
     },
-    weight?.value
-      ? {
-          id: 'weight',
-          icon: 'package',
-          title: t('details.delivery.weightTitle'),
-          text: `${weight.value} ${weight.unit || 'g'}`,
-        }
-      : {
-          id: 'genuine',
-          icon: 'package',
-          title: t('details.delivery.genuineTitle'),
-          text: t('details.delivery.genuineText'),
-        },
   ];
 };
 
@@ -316,6 +309,8 @@ export default function ProductDetails() {
             <ImageGallery
               key={variant?.sku || product._id}
               images={images}
+              // Clips belong to the product, not to a SKU, so every variant shows them.
+              videos={product.videos}
               alt={selectedLabel ? `${product.name} — ${selectedLabel}` : product.name}
             />
           </div>
@@ -458,7 +453,7 @@ export default function ProductDetails() {
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {deliveryPoints({ finalPrice, weight: variant?.weight, t }).map((point) => (
+              {deliveryPoints({ finalPrice, t }).map((point) => (
                 <div key={point.id} className="text-center">
                   <span className="mx-auto mb-1.5 grid h-10 w-10 place-items-center rounded-full bg-brand-50 text-brand-600">
                     <Icon name={point.icon} size={18} />

@@ -20,6 +20,8 @@ export const EVENTS = {
   BANNER_CHANGED: 'banner:changed',
   COUPON_CHANGED: 'coupon:changed',
   SETTINGS_UPDATED: 'settings:updated',
+  CAREER_POSITION_CHANGED: 'career:position-changed',
+  CANCELLATION_REASON_CHANGED: 'cancellation-reason:changed',
 
   REVIEW_CREATED: 'review:created',
   REVIEW_UPDATED: 'review:updated',

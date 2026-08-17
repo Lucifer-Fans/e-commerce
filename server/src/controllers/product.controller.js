@@ -5,6 +5,7 @@ const { sendSuccess, paginationMeta } = require('../utils/apiResponse');
 const { Product, ProductVariant, Category, SubCategory, Brand, Review } = require('../models');
 const { destroyAsset } = require('../config/cloudinary');
 const variantService = require('../services/variant.service');
+const recommendations = require('../services/recommendation.service');
 const broadcast = require('../realtime/broadcast');
 const { localizeAll, localizeProduct, localizeProducts } = require('../utils/localize');
 
@@ -324,14 +325,43 @@ exports.getProductsByIds = asyncHandler(async (req, res) => {
   });
 });
 
-/** GET /products/home-feed — every homepage rail in one round trip. */
+/**
+ * GET /products/home-feed — every homepage rail in one round trip.
+ *
+ * "Top Selling" and "Products For You" are computed, not curated: the first from
+ * real order volume, the second from this shopper's own signals. See
+ * services/recommendation.service.js for how each is derived and what it falls
+ * back to on a shop with no sales yet.
+ *
+ * Personalisation reads whoever `optionalAuth` resolved, plus `?seen=` — the
+ * recently-viewed ids the browser already keeps — so a signed-out visitor, which
+ * is most of them, still gets a rail shaped by what they have been looking at.
+ */
 exports.getHomeFeed = asyncHandler(async (req, res) => {
   const base = { status: 'published' };
   const select = LIST_FIELDS;
 
-  const [forYou, topSelling, newArrivals, bestDeals, topRated] = await Promise.all([
-    Product.find({ ...base, isFeatured: true }).select(select).sort({ createdAt: -1 }).limit(10).lean({ virtuals: true }),
-    Product.find({ ...base, isTopSelling: true }).select(select).sort({ soldCount: -1 }).limit(10).lean({ virtuals: true }),
+  const seenIds = String(req.query.seen || '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter((id) => mongoose.isValidObjectId(id))
+    .slice(0, 20);
+
+  /*
+   * Top Selling is resolved first so its ids can be held out of "For You" — two
+   * rails stacked on the homepage showing the same five products is the thing
+   * that made the manual flags look broken in the first place.
+   */
+  const topSelling = await recommendations.getTopSelling({ select, limit: 10 });
+
+  const [forYou, newArrivals, bestDeals, topRated] = await Promise.all([
+    recommendations.getForYou({
+      userId: req.user?._id,
+      seenIds,
+      excludeIds: topSelling.map((p) => p._id),
+      select,
+      limit: 10,
+    }),
     Product.find(base).select(select).sort({ createdAt: -1 }).limit(10).lean({ virtuals: true }),
     Product.find({ ...base, discountPercent: { $gte: 10 } }).select(select).sort({ discountPercent: -1 }).limit(10).lean({ virtuals: true }),
     Product.find({ ...base, 'ratings.count': { $gt: 0 } }).select(select).sort({ 'ratings.average': -1 }).limit(10).lean({ virtuals: true }),
@@ -345,15 +375,15 @@ exports.getHomeFeed = asyncHandler(async (req, res) => {
    * title/subtitle still ride along as a fallback for any client that has not been
    * updated — but the storefront never displays them.
    *
-   * If the admin hasn't flagged anything yet, each rail falls back to another so
-   * none renders empty.
+   * Empty rails are dropped below, which on a brand-new catalogue is every rail;
+   * the two computed ones fill themselves as long as a single product is published.
    */
   return sendSuccess(res, {
     message: 'Home feed fetched',
     data: {
       sections: [
-        { key: 'for_you', title: 'Products For You', subtitle: 'Handpicked for your taste', products: forYou.length ? forYou : newArrivals },
-        { key: 'top_selling', title: 'Top Selling Products', subtitle: 'What everyone is buying', products: topSelling.length ? topSelling : bestDeals },
+        { key: 'for_you', title: 'Products For You', subtitle: 'Handpicked for your taste', products: forYou },
+        { key: 'top_selling', title: 'Top Selling Products', subtitle: 'What everyone is buying', products: topSelling },
         { key: 'new_arrivals', title: 'New Arrivals', subtitle: 'Fresh in store', products: newArrivals },
         { key: 'best_deals', title: 'Best Deals', subtitle: 'Biggest discounts right now', products: bestDeals },
         { key: 'top_rated', title: 'Top Rated', subtitle: 'Loved by our customers', products: topRated },
@@ -467,6 +497,16 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     }
   }
 
+  // Videos are product-level only — nothing else can be holding a reference.
+  if (Array.isArray(payload.videos)) {
+    const keep = new Set(payload.videos.map((v) => v.publicId));
+    await Promise.all(
+      (product.videos || [])
+        .filter((v) => !keep.has(v.publicId))
+        .map((v) => destroyAsset(v.publicId, { resourceType: 'video' }))
+    );
+  }
+
   Object.assign(product, payload);
   await product.save();
 
@@ -511,7 +551,10 @@ exports.deleteProduct = asyncHandler(async (req, res) => {
     ...variants.flatMap((v) => (v.images || []).map((img) => img.publicId)),
   ]);
 
-  await Promise.all([...assets].filter(Boolean).map((publicId) => destroyAsset(publicId)));
+  await Promise.all([
+    ...[...assets].filter(Boolean).map((publicId) => destroyAsset(publicId)),
+    ...(product.videos || []).map((video) => destroyAsset(video.publicId, { resourceType: 'video' })),
+  ]);
   await ProductVariant.deleteMany({ product: product._id });
   await Review.deleteMany({ product: product._id });
   await product.deleteOne();

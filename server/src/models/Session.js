@@ -91,6 +91,9 @@ const sessionSchema = new mongoose.Schema(
         'password-change',
         'password-reset',
         'account-blocked',
+        // The owner closed the account themselves. Kept apart from
+        // 'account-blocked' so the trail says which of the two happened.
+        'account-deactivated',
         'session-limit',
         'inactivity',
         'expired',

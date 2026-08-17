@@ -100,6 +100,8 @@ function BannerDialog({ initial, onClose, onSaved }) {
             {/* The uploader is array-based; a banner holds exactly one image. */}
             <ImageUploader
               max={1}
+              kind="banners"
+              subject="the banner image"
               value={values.image ? [values.image] : []}
               onChange={(images) => {
                 setValues((v) => ({ ...v, image: images[0] || null }));

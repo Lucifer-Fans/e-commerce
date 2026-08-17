@@ -122,8 +122,8 @@
       "freeText": "ഈ ഇനം സൗജന്യമായി അയക്കുന്നു",
       "paidTitle": "ഡെലിവറി ചാർജ് ബാധകം",
       "paidText": "₹{{amount}} ന് മുകളിൽ സൗജന്യം",
-      "returnsTitle": "7 ദിവസത്തെ മടക്കം",
-      "returnsText": "ബുദ്ധിമുട്ടില്ലാത്ത മാറ്റിനൽകൽ",
+      "returnsTitle": "എളുപ്പമുള്ള മടക്കം",
+      "returnsText": "7 ദിവസത്തിനുള്ളിൽ ബുദ്ധിമുട്ടില്ലാത്ത മടക്കം",
       "paymentTitle": "സുരക്ഷിത പേയ്‌മെന്റ്",
       "paymentText": "Razorpay സംരക്ഷിക്കുന്നു",
       "weightTitle": "ഷിപ്പിംഗ് ഭാരം",
@@ -161,6 +161,7 @@
   },
   "gallery": {
     "viewImage": "ചിത്രം {{index}} കാണുക",
+    "viewVideo": "വീഡിയോ {{index}} പ്ലേ ചെയ്യുക",
     "image": "ചിത്രം {{index}}",
     "hoverToZoom": "സൂം ചെയ്യാൻ ഹോവർ ചെയ്യുക",
     "previousImage": "മുൻ ചിത്രം",

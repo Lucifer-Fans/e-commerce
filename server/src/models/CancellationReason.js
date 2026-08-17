@@ -20,8 +20,11 @@ const cancellationReasonSchema = new mongoose.Schema(
       trim: true,
       maxlength: 120,
     },
-    /** Optional one-liner under the radio — for reasons that need a caveat. */
-    description: { type: String, trim: true, maxlength: 200 },
+    /**
+     * The row's slot in the picklist. The controller keeps these a gap-free
+     * 0..n-1 sequence, so two reasons never share a number and 'order 5' always
+     * names exactly one row.
+     */
     displayOrder: { type: Number, default: 0, index: true },
     isActive: { type: Boolean, default: true, index: true },
   },

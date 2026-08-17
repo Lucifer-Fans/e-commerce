@@ -10,8 +10,10 @@
     "seed": "node src/seed/seed.js",
     "seed:destroy": "node src/seed/seed.js --destroy",
     "email:preview": "node scripts/email-preview.js --open",
+    "coupons:normalise": "node scripts/normalise-coupon-limits.js",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test:suspension": "node scripts/test-suspension.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

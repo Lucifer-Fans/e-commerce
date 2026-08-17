@@ -69,12 +69,6 @@ function ProductCard({ product, className = '' }) {
       <WishlistButton product={product} className="absolute right-2.5 top-2.5 h-9 w-9" />
 
       <div className="flex flex-1 flex-col p-3.5">
-        {product.brand && (
-          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-400">
-            {product.brand}
-          </p>
-        )}
-
         <Link to={detailUrl} className="mb-2 block">
           <h3 className="line-clamp-2 text-sm font-medium leading-snug text-ink-800 transition group-hover:text-brand-600">
             {product.name}

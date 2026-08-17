@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -27,17 +27,14 @@ import StepBasicInfo from '../components/products/StepBasicInfo';
 import StepFeatures from '../components/products/StepFeatures';
 import StepImages from '../components/products/StepImages';
 import StepVariants from '../components/products/StepVariants';
-import StepTranslations from '../components/products/StepTranslations';
 import StepPreview, { PublishChoice } from '../components/products/StepPreview';
-import { pruneTranslations } from '../utils/languages';
 import { fromApiVariant, toApiVariant, validateVariants } from '../utils/variants';
 
 const STEPS = [
   { label: 'Basic Information', hint: 'Name, category, pricing and description' },
   { label: 'Features & FAQs', hint: 'Specification rows, highlights and questions' },
-  { label: 'Product Images', hint: 'Up to 5 images, first one is primary' },
+  { label: 'Product Media', hint: 'Up to 5 images (first is primary) and 2 optional videos' },
   { label: 'Variants', hint: 'Colours, sizes and any other option — one SKU each' },
-  { label: 'Translations', hint: 'Optional — the same copy in the other shipped languages' },
   { label: 'Preview & Publish', hint: 'Review everything before it goes live' },
 ];
 
@@ -45,10 +42,9 @@ const EMPTY = {
   name: '', category: '', subCategory: '', brand: '', sku: '',
   price: '', discountPercent: 0, stock: '', lowStockThreshold: 5,
   shortDescription: '', description: '',
-  tags: [], features: [], highlights: [], faqs: [], images: [],
+  tags: [], features: [], highlights: [], faqs: [], images: [], videos: [],
   hasVariants: false, variantAttributes: [], variants: [],
-  isFeatured: false, isTopSelling: false, status: 'published',
-  translations: {},
+  status: 'published',
 };
 
 /** Per-step validation. Returning {} means the step is complete. */
@@ -56,7 +52,9 @@ function validateStep(step, values) {
   const errors = {};
 
   if (step === 0) {
-    if (values.name.trim().length < 3) errors.name = 'Product name must be at least 3 characters';
+    const name = values.name.trim();
+    if (!name) errors.name = 'Enter product name';
+    else if (name.length < 3) errors.name = 'Product name must be at least 3 characters';
     if (!values.category) errors.category = 'Select a category';
     if (values.price === '' || Number(values.price) < 0) errors.price = 'Enter a valid price';
     const discount = Number(values.discountPercent);
@@ -95,8 +93,19 @@ export default function ProductForm() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
+  /*
+   * "Add product" on a brand card lands here with `?brand=`, so the brand is filled in
+   * for a new product exactly as the parent category is when a sub-category is added
+   * from the Categories page. It is a starting value, not a lock — the field is still
+   * editable, and an edit ignores it in favour of what the product already carries.
+   */
+  const [searchParams] = useSearchParams();
+  const presetBrand = searchParams.get('brand') || '';
+
   const [step, setStep] = useState(0);
-  const [values, setValues] = useState(EMPTY);
+  const [values, setValues] = useState(() =>
+    presetBrand && !isEdit ? { ...EMPTY, brand: presetBrand } : EMPTY
+  );
   const [errors, setErrors] = useState({});
   const [visited, setVisited] = useState(new Set([0]));
   const [saving, setSaving] = useState(false);
@@ -132,14 +141,14 @@ export default function ProductForm() {
       highlights: product.highlights || [],
       faqs: (product.faqs || []).map((f) => ({ question: f.question, answer: f.answer })),
       images: product.images || [],
+      videos: product.videos || [],
       hasVariants: Boolean(product.hasVariants),
       variantAttributes: (product.variantAttributes || []).map((attribute) => ({
         name: attribute.name,
-        // Carried through untouched so the translation step keys on the same slug the
-        // server already assigned rather than re-deriving one that might not match.
+        // Carried through untouched: the slug the server already assigned, not a
+        // re-derived one that might not match.
         slug: attribute.slug,
         inputType: attribute.inputType || 'auto',
-        helpText: attribute.helpText || '',
         values: (attribute.values || []).map((value) => ({
           label: value.label,
           slug: value.slug,
@@ -148,10 +157,7 @@ export default function ProductForm() {
         })),
       })),
       variants: (product.variants || []).map(fromApiVariant),
-      isFeatured: Boolean(product.isFeatured),
-      isTopSelling: Boolean(product.isTopSelling),
       status: product.status || 'published',
-      translations: product.translations || {},
     });
   }, [productQuery.data]);
 
@@ -183,7 +189,7 @@ export default function ProductForm() {
       const found = validateStep(step, values);
       if (Object.keys(found).length) {
         setErrors(found);
-        enqueueSnackbar('Please fix the highlighted fields first', { variant: 'warning' });
+        enqueueSnackbar('Please fill the required fields first', { variant: 'warning' });
         return;
       }
     }
@@ -227,6 +233,13 @@ export default function ProductForm() {
         isPrimary: index === 0,
         displayOrder: index,
       })),
+      videos: values.videos.map((video, index) => ({
+        url: video.url,
+        publicId: video.publicId,
+        thumbnail: video.thumbnail,
+        duration: video.duration,
+        displayOrder: index,
+      })),
       // The attribute definition and the SKU rows travel with the product, so the whole
       // wizard saves in one request and the server reconciles them in one transaction-ish
       // pass. An empty array is meaningful: it removes every variant.
@@ -236,7 +249,6 @@ export default function ProductForm() {
             .map((attribute, index) => ({
               name: attribute.name.trim(),
               inputType: attribute.inputType || 'auto',
-              helpText: attribute.helpText?.trim() || undefined,
               values: attribute.values.map((value, valueIndex) => ({
                 label: value.label,
                 slug: value.slug,
@@ -248,12 +260,7 @@ export default function ProductForm() {
             }))
         : [],
       variants: values.hasVariants ? values.variants.map(toApiVariant) : [],
-      isFeatured: values.isFeatured,
-      isTopSelling: values.isTopSelling,
       status: values.status,
-      // The translated lists are indexed against the same filtered arrays sent above, so
-      // blank source rows dropped there are dropped here too and nothing shifts.
-      translations: pruneTranslations(values.translations) ?? null,
     };
 
     setSaving(true);
@@ -331,8 +338,7 @@ export default function ProductForm() {
           {step === 1 && <StepFeatures {...stepProps} />}
           {step === 2 && <StepImages {...stepProps} />}
           {step === 3 && <StepVariants {...stepProps} />}
-          {step === 4 && <StepTranslations {...stepProps} />}
-          {step === 5 && (
+          {step === 4 && (
             <StepPreview
               values={values}
               categories={categories}

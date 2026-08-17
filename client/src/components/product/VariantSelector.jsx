@@ -86,9 +86,6 @@ function AttributeBlock({ attribute, variants, selection, onSelect, showPriceHin
         <span className="text-sm font-bold text-ink-900">
           {selectedValue?.label || t('variants.selectPrompt')}
         </span>
-        {attribute.helpText && (
-          <span className="text-xs text-ink-400">{attribute.helpText}</span>
-        )}
       </div>
 
       <div

@@ -17,6 +17,7 @@ router.use('/wishlist', require('./wishlist.routes'));
 router.use('/addresses', require('./address.routes'));
 router.use('/orders', require('./order.routes'));
 router.use('/cancellation-reasons', require('./cancellationReason.routes'));
+router.use('/deactivation-reasons', require('./deactivationReason.routes'));
 router.use('/payments', require('./payment.routes'));
 router.use('/coupons', require('./coupon.routes'));
 router.use('/banners', require('./banner.routes'));

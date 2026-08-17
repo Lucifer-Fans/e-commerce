@@ -2,7 +2,7 @@ const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
 const { sendSuccess } = require('../utils/apiResponse');
 const env = require('../config/env');
-const { uploadBuffer, uploadVideoBuffer, destroyAsset } = require('../config/cloudinary');
+const { uploadBuffer, uploadVideoBuffer, destroyAsset, signUpload } = require('../config/cloudinary');
 const { MAX_BYTES, VIDEO_ALLOWED } = require('../middleware/upload');
 
 function assertEnabled() {
@@ -83,19 +83,39 @@ exports.uploadMedia = asyncHandler(async (req, res) => {
 });
 
 /**
+ * POST /uploads/signature (admin)
+ *
+ * Hands the panel a short-lived signature so a photo or clip can go straight from
+ * the browser to Cloudinary. The signature is bound to the folder derived here —
+ * the client cannot widen it — and Cloudinary rejects it about an hour after it
+ * was issued, so a leaked one is worth nothing for long.
+ */
+exports.createUploadSignature = asyncHandler(async (req, res) => {
+  assertEnabled();
+
+  const signed = signUpload({ folder: folderFor(req.body.kind) });
+
+  return sendSuccess(res, { message: 'Upload signature issued', data: { upload: signed } });
+});
+
+/**
  * DELETE /uploads/:publicId — public ids contain slashes, so the route uses a
  * wildcard and we rebuild the full id here.
+ *
+ * Cloudinary keeps images and videos in separate namespaces, so `?type=video`
+ * says which one to destroy; without it a clip's id would match nothing.
  */
 exports.deleteImage = asyncHandler(async (req, res) => {
   assertEnabled();
   const publicId = req.params.publicId || req.params[0];
   if (!publicId) throw ApiError.badRequest('publicId is required');
+  const resourceType = req.query.type === 'video' ? 'video' : 'image';
 
   // Confine deletions to this project's folder so a crafted id can't reach other assets.
   if (!publicId.startsWith(env.cloudinary.folder)) {
     throw ApiError.forbidden('You can only delete assets belonging to this store');
   }
 
-  await destroyAsset(publicId);
-  return sendSuccess(res, { message: 'Image deleted' });
+  await destroyAsset(publicId, { resourceType });
+  return sendSuccess(res, { message: resourceType === 'video' ? 'Video deleted' : 'Image deleted' });
 });

@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -20,20 +21,29 @@ import CircularProgress from '@mui/material/CircularProgress';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
-import { cancellationReasonApi } from '../api/endpoints';
-import useFetch from '../hooks/useFetch';
-import PageHeader from '../components/common/PageHeader';
-import DataTable from '../components/common/DataTable';
-import ConfirmDialog from '../components/common/ConfirmDialog';
+import useFetch from '../../hooks/useFetch';
+import { useLiveRefetch } from '../../realtime/useRealtime';
+import DataTable from '../common/DataTable';
+import ConfirmDialog from '../common/ConfirmDialog';
 
-const EMPTY = { label: '', description: '', displayOrder: 0, isActive: true };
-
-function ReasonDialog({ initial, onClose, onSaved }) {
+/**
+ * A new reason is proposed at the end of the list rather than at 0 — adding one
+ * shouldn't silently push everything else down, and an admin who does want it
+ * first only has to type the number.
+ */
+function ReasonDialog({ initial, nextOrder, api, copy, onClose, onSaved }) {
   const { enqueueSnackbar } = useSnackbar();
-  const [values, setValues] = useState(initial || EMPTY);
+  const [values, setValues] = useState(
+    initial || { label: '', displayOrder: nextOrder, isActive: true }
+  );
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+
+  // An edited row is already in the list, so the furthest it can go is one slot
+  // lower than where a brand-new reason would be appended.
+  const maxOrder = values._id ? Math.max(nextOrder - 1, 0) : nextOrder;
 
   const set = (field) => (e) =>
     setValues((v) => ({
@@ -43,19 +53,24 @@ function ReasonDialog({ initial, onClose, onSaved }) {
 
   const submit = async () => {
     const label = values.label.trim();
-    if (label.length < 3) return setError('Reason must be at least 3 characters');
+    if (!label || label.length < 3) {
+      setError(label ? 'Reason must be at least 3 characters' : 'Enter the reason');
+      enqueueSnackbar('Please fill the required fields first', { variant: 'warning' });
+      return;
+    }
 
     setSaving(true);
     try {
       const payload = {
         label,
-        description: values.description?.trim() || undefined,
-        displayOrder: Number(values.displayOrder) || 0,
+        // Clamped here as well as on the server, so the number the table shows
+        // after saving is the one the field showed while typing.
+        displayOrder: Math.min(Math.max(Number(values.displayOrder) || 0, 0), maxOrder),
         isActive: values.isActive,
       };
 
-      if (values._id) await cancellationReasonApi.update(values._id, payload);
-      else await cancellationReasonApi.create(payload);
+      if (values._id) await api.update(values._id, payload);
+      else await api.create(payload);
 
       enqueueSnackbar(values._id ? 'Reason updated' : 'Reason added', { variant: 'success' });
       onSaved();
@@ -68,7 +83,18 @@ function ReasonDialog({ initial, onClose, onSaved }) {
 
   return (
     <Dialog open onClose={saving ? undefined : onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ fontWeight: 700 }}>{values._id ? 'Edit reason' : 'New reason'}</DialogTitle>
+      <DialogTitle sx={{ fontWeight: 700, pr: 6 }}>
+        {values._id ? 'Edit reason' : 'New reason'}
+        <IconButton
+          onClick={onClose}
+          size="small"
+          disabled={saving}
+          sx={{ position: 'absolute', right: 12, top: 12, color: 'text.secondary' }}
+          aria-label="Close without saving"
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </DialogTitle>
 
       <DialogContent dividers>
         <Grid container spacing={2.5}>
@@ -84,19 +110,8 @@ function ReasonDialog({ initial, onClose, onSaved }) {
                 setValues((v) => ({ ...v, label: e.target.value }));
               }}
               error={Boolean(error)}
-              helperText={error || 'Shown as an option in the storefront cancel dialog'}
+              helperText={error || copy.fieldHelper}
               inputProps={{ maxLength: 120 }}
-            />
-          </Grid>
-
-          <Grid size={12}>
-            <TextField
-              fullWidth
-              label="Helper text"
-              value={values.description || ''}
-              onChange={set('description')}
-              helperText="Optional — a smaller line under the option"
-              inputProps={{ maxLength: 200 }}
             />
           </Grid>
 
@@ -107,8 +122,8 @@ function ReasonDialog({ initial, onClose, onSaved }) {
               label="Display order"
               value={values.displayOrder}
               onChange={set('displayOrder')}
-              helperText="Lower numbers appear first"
-              inputProps={{ min: 0 }}
+              helperText={copy.orderHelper}
+              inputProps={{ min: 0, max: maxOrder }}
             />
           </Grid>
 
@@ -123,9 +138,6 @@ function ReasonDialog({ initial, onClose, onSaved }) {
       </DialogContent>
 
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button onClick={onClose} color="inherit" disabled={saving}>
-          Cancel
-        </Button>
         <Button
           variant="contained"
           onClick={submit}
@@ -140,25 +152,47 @@ function ReasonDialog({ initial, onClose, onSaved }) {
 }
 
 /**
- * The reasons a shopper picks from when cancelling an order.
+ * One curated picklist, whichever it is.
  *
- * Editing or deleting a row only changes what is *offered* — orders already
- * cancelled carry their own copy of the text, so history never rewrites itself.
- * Deactivating rather than deleting is the safer way to retire one: it keeps the
- * row around to bring back.
+ * The two lists on the Reasons screen — why an order was cancelled, why an
+ * account was closed — are managed identically, so they are one component
+ * parameterised by its API and its wording rather than two files that drift
+ * apart the first time either grows a column. `copy` carries only the sentences
+ * that genuinely differ; everything about *how* a picklist behaves is here.
+ *
+ * Editing or deleting a row only changes what is *offered*. Orders already
+ * cancelled and accounts already closed carry their own copy of the text, so
+ * history never rewrites itself. Deactivating rather than deleting is the safer
+ * way to retire one: it keeps the row around to bring back.
  */
-export default function CancellationReasons() {
+export default function ReasonsTab({ api, event, copy }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [dialog, setDialog] = useState(null);
   const [deleting, setDeleting] = useState(null);
 
-  const query = useFetch(useCallback(() => cancellationReasonApi.list(), []), []);
+  const query = useFetch(useCallback(() => api.list(), [api]), [api]);
   const reasons = query.data?.data?.reasons || [];
+
+  // Two admins curating the same picklist shouldn't overwrite each other's edits
+  // from a stale table.
+  useLiveRefetch(query.refetch, event);
+
+  const toggleActive = async (reason) => {
+    const next = !reason.isActive;
+    try {
+      // No displayOrder in the patch — flipping the switch is not a reorder.
+      await api.update(reason._id, { label: reason.label, isActive: next });
+      enqueueSnackbar(next ? 'Reason activated' : 'Reason deactivated', { variant: 'success' });
+      query.refetch();
+    } catch (err) {
+      enqueueSnackbar(err.message || 'Could not update the reason', { variant: 'error' });
+    }
+  };
 
   const remove = async () => {
     try {
-      await cancellationReasonApi.remove(deleting._id);
+      await api.remove(deleting._id);
       enqueueSnackbar('Reason deleted', { variant: 'success' });
       query.refetch();
     } catch (err) {
@@ -172,33 +206,39 @@ export default function CancellationReasons() {
       label: 'Reason',
       minWidth: 260,
       render: (row) => (
-        <Box>
-          <Typography variant="body2" fontWeight={700}>
-            {row.label}
-          </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {row.description || '—'}
-          </Typography>
-        </Box>
+        <Typography variant="body2" fontWeight={700}>
+          {row.label}
+        </Typography>
       ),
     },
     {
       key: 'displayOrder',
-      label: 'Order',
+      label: (
+        <Tooltip title={copy.orderTooltip}>
+          <Box component="span" sx={{ cursor: 'help' }}>
+            Display order
+          </Box>
+        </Tooltip>
+      ),
       align: 'center',
-      width: 100,
+      width: 130,
       render: (row) => <Typography variant="body2">{row.displayOrder}</Typography>,
     },
     {
       key: 'isActive',
       label: 'Status',
       align: 'center',
+      width: 120,
       render: (row) => (
-        <Chip
-          label={row.isActive ? 'Offered' : 'Hidden'}
-          size="small"
-          color={row.isActive ? 'success' : 'default'}
-        />
+        <Tooltip title="Click to toggle active / inactive">
+          <Box component="span" onClick={() => toggleActive(row)} sx={{ cursor: 'pointer' }}>
+            <Chip
+              label={row.isActive ? 'Active' : 'Inactive'}
+              size="small"
+              color={row.isActive ? 'success' : 'default'}
+            />
+          </Box>
+        </Tooltip>
       ),
     },
     {
@@ -221,35 +261,40 @@ export default function CancellationReasons() {
 
   return (
     <Box>
-      <PageHeader
-        title="Cancellation Reasons"
-        subtitle={`${reasons.length} reason(s) configured`}
-        breadcrumbs={[{ label: 'Orders', to: '/orders' }, { label: 'Cancellation Reasons' }]}
-        action={
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setDialog({})}>
-            Add Reason
-          </Button>
-        }
-      />
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        justifyContent="space-between"
+        alignItems={{ xs: 'stretch', sm: 'center' }}
+        spacing={1.5}
+        sx={{ mb: 2 }}
+      >
+        <Typography variant="body2" color="text.secondary">
+          {reasons.length} reason(s) configured
+        </Typography>
+        <Button variant="contained" startIcon={<AddIcon />} onClick={() => setDialog({})}>
+          Add Reason
+        </Button>
+      </Stack>
 
       <Alert severity="info" sx={{ mb: 2.5 }}>
-        Shoppers pick from this list when cancelling an order, and can always write their own under
-        &ldquo;Other&rdquo;. Changes here affect future cancellations only — an order that has
-        already been cancelled keeps the reason it was given.
+        {copy.intro}
       </Alert>
 
       <DataTable
         columns={columns}
         rows={reasons}
         loading={query.loading}
-        emptyTitle="No cancellation reasons"
-        emptyMessage="Add a reason and it will appear in the storefront's cancel dialog."
+        emptyTitle={copy.emptyTitle}
+        emptyMessage={copy.emptyMessage}
         emptyAction={{ label: 'Add Reason', onClick: () => setDialog({}) }}
       />
 
       {dialog && (
         <ReasonDialog
           initial={dialog._id ? dialog : null}
+          nextOrder={reasons.length}
+          api={api}
+          copy={copy}
           onClose={() => setDialog(null)}
           onSaved={() => {
             setDialog(null);
@@ -263,7 +308,7 @@ export default function CancellationReasons() {
         onClose={() => setDeleting(null)}
         onConfirm={remove}
         title="Delete this reason?"
-        message={`"${deleting?.label}" will stop being offered. Orders already cancelled for this reason are unaffected.`}
+        message={copy.deleteMessage(deleting?.label)}
         confirmLabel="Delete"
       />
     </Box>

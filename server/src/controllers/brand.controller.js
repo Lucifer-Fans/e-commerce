@@ -5,6 +5,19 @@ const { Brand, Product } = require('../models');
 const { destroyAsset } = require('../config/cloudinary');
 const broadcast = require('../realtime/broadcast');
 const { localize, localizeAll } = require('../utils/localize');
+const {
+  parseRequestedOrder,
+  nextDisplayOrder,
+  resequence,
+  placeAndResequence,
+} = require('../utils/displayOrder');
+
+/**
+ * How many products travel with each brand in the admin listing. The card scrolls
+ * through them; anything past this is reachable from the products page, which is
+ * where filtering and paging actually belong.
+ */
+const BRAND_PRODUCTS_LIMIT = 20;
 
 /** Escapes a brand name so it can be matched case-insensitively but literally. */
 const exactName = (name) => new RegExp(`^${String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
@@ -17,15 +30,42 @@ exports.listBrands = asyncHandler(async (req, res) => {
 
   const brands = await Brand.find(filter).sort({ displayOrder: 1, name: 1 }).lean();
 
-  // Product counts are what make the list actionable in the admin ("can I delete this?").
+  /*
+   * The admin card lists the products themselves, not just how many there are — the
+   * count answered "can I delete this?" but never "what is actually under this brand?".
+   *
+   * One aggregation for every brand on the page, rather than a request per card: newest
+   * first, then sliced, so a brand with hundreds of products still costs a fixed-size
+   * payload. `productCount` remains the true total, which is what the heading shows.
+   */
   if (includeInactive && brands.length) {
-    const counts = await Product.aggregate([
+    const grouped = await Product.aggregate([
       { $match: { brand: { $in: brands.map((b) => b.name) } } },
-      { $group: { _id: '$brand', count: { $sum: 1 } } },
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: '$brand',
+          count: { $sum: 1 },
+          products: {
+            $push: {
+              _id: '$_id',
+              name: '$name',
+              slug: '$slug',
+              status: '$status',
+              // Only the first image is needed; the rest would be payload for nothing.
+              image: { $arrayElemAt: ['$images.url', 0] },
+            },
+          },
+        },
+      },
+      { $project: { count: 1, products: { $slice: ['$products', BRAND_PRODUCTS_LIMIT] } } },
     ]);
-    const byName = new Map(counts.map((c) => [c._id, c.count]));
+
+    const byName = new Map(grouped.map((row) => [row._id, row]));
     brands.forEach((brand) => {
-      brand.productCount = byName.get(brand.name) || 0;
+      const row = byName.get(brand.name);
+      brand.productCount = row?.count || 0;
+      brand.products = row?.products || [];
     });
   }
 
@@ -49,13 +89,25 @@ exports.getBrand = asyncHandler(async (req, res) => {
   });
 });
 
-/** POST /brands (admin) */
+/**
+ * POST /brands (admin)
+ *
+ * A display order another brand already holds is honoured rather than refused: the
+ * newcomer keeps that position and the incumbent — with everything below it —
+ * slides down one. No order at all means "last", which is what the panel proposes.
+ */
 exports.createBrand = asyncHandler(async (req, res) => {
   if (await Brand.exists({ name: exactName(req.body.name) })) {
     throw ApiError.conflict('A brand with this name already exists');
   }
 
-  const brand = await Brand.create(req.body);
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
+  const brand = await Brand.create({
+    ...req.body,
+    displayOrder: requestedOrder ?? (await nextDisplayOrder(Brand)),
+  });
+
+  await placeAndResequence(Brand, {}, brand, requestedOrder);
   broadcast.brandChanged('created', brand);
 
   return sendSuccess(res, { statusCode: 201, message: 'Brand created', data: { brand } });
@@ -78,8 +130,13 @@ exports.updateBrand = asyncHandler(async (req, res) => {
     await destroyAsset(brand.logo.publicId);
   }
 
+  const requestedOrder = parseRequestedOrder(req.body.displayOrder);
   Object.assign(brand, req.body);
   await brand.save();
+
+  // Re-typing a sibling's number moves this brand onto it and pushes that one down;
+  // a payload that never mentions the order leaves the running order untouched.
+  await placeAndResequence(Brand, {}, brand, requestedOrder);
 
   // Products carry the brand by name, so a rename has to travel with it — otherwise
   // the storefront filter would keep offering a name nothing matches.
@@ -105,6 +162,8 @@ exports.deleteBrand = asyncHandler(async (req, res) => {
   await destroyAsset(brand.logo?.publicId);
   await brand.deleteOne();
 
+  // Close the gap the removed row left, so the column stays a 0, 1, 2 … run.
+  await resequence(Brand);
   broadcast.brandChanged('deleted', brand);
 
   return sendSuccess(res, { message: 'Brand deleted' });

@@ -17,13 +17,15 @@ import Spinner from '../../components/common/Spinner';
 import AuthShell from '../../components/auth/AuthShell';
 import PasswordInput from '../../components/auth/PasswordInput';
 import GoogleButton from '../../components/auth/GoogleButton';
+import ReactivationNotice from '../../components/auth/ReactivationNotice';
+import SuspendedNotice from '../../components/auth/SuspendedNotice';
 
 export default function Login() {
   const { t } = useTranslation(['account', 'common']);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { loading, error, errorCode, isAuthenticated } = useSelector((s) => s.auth);
+  const { loading, error, errorCode, errorDetails, isAuthenticated } = useSelector((s) => s.auth);
 
   const [values, setValues] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
@@ -38,6 +40,23 @@ export default function Login() {
   // Nothing was mistyped when the address simply is not registered, so this one
   // reads as a signpost — amber, and carrying the link that actually fixes it.
   const isNoAccount = errorCode === 'NO_ACCOUNT';
+  /**
+   * The account exists and the password was right — its owner closed it. This is
+   * not a failed sign-in at all, so it does not get the red panel: it gets the
+   * notice with the button that mails a way back.
+   *
+   * Google sign-in lands here too. The slice stores the code from whichever call
+   * failed, and the server tags both doors identically for exactly this reason —
+   * the answer to "my account is closed" cannot depend on which button was pressed.
+   */
+  const isDeactivated = errorCode === 'ACCOUNT_DEACTIVATED';
+  const isReactivationPending = errorCode === 'REACTIVATION_PENDING';
+  /**
+   * Staff closed this one, so none of the above applies: there is no link to mail
+   * and no code to enter, only somebody to ask. It keeps the red panel — this is
+   * a refusal, not a signpost — with the way of asking spelled out underneath.
+   */
+  const isSuspended = errorCode === 'ACCOUNT_SUSPENDED';
 
   useEffect(() => {
     if (isAuthenticated) navigate(redirectTo, { replace: true });
@@ -108,7 +127,19 @@ export default function Login() {
         }
       >
         <form onSubmit={submit} className="space-y-4" noValidate>
-          {error && (
+          {isSuspended && <SuspendedNotice message={error} />}
+
+          {(isDeactivated || isReactivationPending) && (
+            <ReactivationNotice
+              // The server names the account; the typed address is the fallback,
+              // and the only one a Google sign-in could ever have.
+              email={errorDetails?.email || values.email}
+              message={error}
+              pending={isReactivationPending}
+            />
+          )}
+
+          {error && !isDeactivated && !isReactivationPending && !isSuspended && (
             <div
               className={`flex items-start gap-2.5 rounded-lg px-4 py-3 text-sm ${
                 isWarning || isNoAccount ? 'bg-amber-50 text-amber-800' : 'bg-red-50 text-danger'

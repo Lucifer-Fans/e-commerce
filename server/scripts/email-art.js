@@ -349,6 +349,9 @@ const rotate = (shape, cx, cy, deg) => {
  * never appears in the email's own markup.
  */
 const A = {
+  // The pale end of the brand ramp — the tint an avatar disc and an envelope's
+  // folded flaps are drawn on inside the account illustrations.
+  brand100: '#dbeafe',
   brand600: '#2563eb',
   // The deep end of the same ramp, and the tint the reset envelope's back flap
   // is folded in — the two shades that give one flat mark its depth.
@@ -357,6 +360,10 @@ const A = {
   // avatar are drawn in. Nothing in the email suite uses it; the invoice leads
   // with navy and gold the way the mails lead with navy and blue.
   accent700: '#d97706',
+  // tailwind `warning` — the amber the "need help?" card and its shield are
+  // drawn in. A shade deeper than the panel tint behind them so a 30px glyph
+  // still reads against it.
+  amber700: '#b45309',
   // Order hero — the box faces. A shopping bag seen from one corner shows three
   // planes, and each needs its own tint or the mark flattens back into a
   // silhouette: paper-white front, royal-blue side, navy for the rim and the
@@ -696,6 +703,101 @@ function cancelCross() {
   c.save('step-cancel-white.png');
 }
 
+/**
+ * The panel mark for the "your account has been deactivated" mail: a profile
+ * card with the shutter half down and a red cross badge across its corner.
+ *
+ * Deliberately not the padlock the lock-out mail wears. That message is about a
+ * wait; this one is about a door the reader themselves closed, and the thing that
+ * has to read at a glance is *which* door — an account, with a person in it. The
+ * cross is the only red anywhere in the suite outside a cancelled order, and it
+ * earns it here: this is the one account mail that reports something ending.
+ *
+ * 420x420, shown at 210.
+ */
+function accountDeactivated() {
+  const c = new Canvas(420, 420);
+
+  // The soft disc every account illustration stands on.
+  c.fill(circle(210, 208, 186), A.blob);
+
+  // Browser card: navy chrome bar with its three dots, white body under it.
+  c.fill(roundRect(58, 74, 300, 250, 22), A.white);
+  c.fill(and(roundRect(58, 74, 300, 250, 22), rect(0, 74, 420, 44)), A.bagRim);
+  for (const x of [82, 102, 122]) c.fill(circle(x, 96, 6), A.white, 0.9);
+
+  // The account inside it: avatar, then the three bars that stand for its details.
+  c.fill(circle(128, 176, 34), A.brand100);
+  c.fill(circle(128, 167, 13), A.brand600);
+  c.fill(and(circle(128, 196, 22), rect(0, 0, 420, 196)), A.brand600);
+  c.fill(roundRect(178, 158, 148, 15, 7.5), A.bagFrontShade);
+  c.fill(roundRect(178, 186, 108, 15, 7.5), A.bagFrontShade);
+  c.fill(roundRect(84, 232, 242, 15, 7.5), A.bagFrontShade);
+  c.fill(roundRect(84, 262, 170, 15, 7.5), A.bagFrontShade);
+
+  // The badge straddles the card's corner, on a white ring so it lifts off both
+  // the card and the disc rather than merging with either.
+  c.fill(circle(316, 292, 74), A.white);
+  c.fill(circle(316, 292, 60), A.red600);
+  c.fill(or(stroke([[294, 270], [338, 314]], 13), stroke([[338, 270], [294, 314]], 13)), A.white);
+
+  c.save('account-deactivated.png');
+}
+
+/**
+ * The panel mark for the reactivation link: an open envelope with the account
+ * card rising out of it and a green tick badge on the corner.
+ *
+ * The envelope is the reset mail's own subject — "we sent this to your inbox" —
+ * and the tick is what makes this one the opposite of the mark above it. A reader
+ * who has met both should be able to tell, before reading a word, which of the
+ * two arrived. 420x420, shown at 210.
+ */
+function accountReactivate() {
+  const c = new Canvas(420, 420);
+
+  c.fill(circle(210, 210, 186), A.blob);
+
+  // The card lifting out, drawn first so the envelope's front panel covers its
+  // foot — that overlap is the whole of the "coming out of" illusion. It clears
+  // the envelope's rim by enough that both bars stay readable; a card tucked any
+  // lower reads as a letter already posted, which is the opposite message.
+  c.fill(roundRect(126, 52, 168, 154, 16), A.white);
+  c.fill(circle(210, 100, 24), A.brand100);
+  c.fill(circle(210, 94, 9), A.brand600);
+  c.fill(and(circle(210, 114, 15), rect(0, 0, 420, 114)), A.brand600);
+  c.fill(roundRect(150, 142, 120, 13, 6.5), A.bagFrontShade);
+  c.fill(roundRect(168, 166, 84, 13, 6.5), A.bagFrontShade);
+
+  // Envelope, back to front: the back wall, the two side panels the diagonals
+  // cut, then the front. The front is the body *less* a wide V — that notch is
+  // what makes the shape an open envelope rather than a filled arrow.
+  const shell = roundRect(64, 190, 292, 172, 20);
+  c.fill(shell, A.brand100);
+  c.fill(and(shell, triangle([64, 190], [356, 190], [210, 300])), A.bagSmall);
+  c.fill(not(shell, triangle([56, 182], [364, 182], [210, 322])), A.brand600);
+
+  // Tick badge, ringed in white like the cross above.
+  c.fill(circle(322, 320, 68), A.white);
+  c.fill(circle(322, 320, 55), A.green600);
+  c.fill(stroke([[298, 320], [316, 338], [348, 303]], 13), A.white);
+
+  c.save('account-reactivate.png');
+}
+
+/**
+ * Percent sign for the reactivation mail's benefits row — two rings and the bar
+ * between them, cut on the same 44x44 grid and the same stroke weight as the
+ * shield and the headset it sits beside.
+ */
+function percentMark() {
+  const c = new Canvas(44, 44);
+  c.fill(not(circle(14, 14, 6.4), circle(14, 14, 3.4)), A.brand600);
+  c.fill(not(circle(30, 30, 6.4), circle(30, 30, 3.4)), A.brand600);
+  c.fill(stroke([[32, 10], [12, 34]], 3.4), A.brand600);
+  c.save('percent-brand.png');
+}
+
 /* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
@@ -707,6 +809,9 @@ responseHeadset();
 buttonLock();
 chainLink();
 accountLocked();
+accountDeactivated();
+accountReactivate();
+percentMark();
 cancelCross();
 
 // The shield is cut in periwinkle for the illustrations; the order mail's
@@ -742,3 +847,12 @@ recut(path.join(SRC, 'order-return.png'), path.join(OUT, 'step-return-red.png'),
 recut(path.join(SRC, 'inquiry-calendar.png'), path.join(OUT, 'inquiry-calendar-white.png'), A.white);
 recut(path.join(SRC, 'inquiry-user.png'), path.join(OUT, 'inquiry-user-accent.png'), A.accent700);
 recut(path.join(OUT, 'lock-white.png'), path.join(OUT, 'lock-brand.png'), A.brand600);
+
+// The account-lifecycle mails re-use three marks the folder only had in other
+// tints: the shopping bag and the person glyph in brand blue for the benefits
+// row and the "your account details" heading, and the shield in amber for the
+// "need help?" card, which is the one note in the suite painted warm rather
+// than blue — it is an offer of help, not a security claim.
+recut(path.join(SRC, 'inquiry-bag.png'), path.join(OUT, 'bag-brand.png'), A.brand600, 1);
+recut(path.join(SRC, 'inquiry-user.png'), path.join(OUT, 'user-brand.png'), A.brand600, 1);
+recut(path.join(SRC, 'shield-check.png'), path.join(OUT, 'shield-check-amber.png'), A.amber700, 1);
